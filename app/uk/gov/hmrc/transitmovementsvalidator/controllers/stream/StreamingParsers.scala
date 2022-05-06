@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.controllers
+package uk.gov.hmrc.transitmovementsvalidator.controllers.stream
 
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import play.api.mvc.Action
-import play.api.mvc.AnyContent
-import play.api.mvc.ControllerComponents
-import javax.inject.Inject
-import javax.inject.Singleton
-import scala.concurrent.Future
+import akka.stream.Materializer
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
+import play.api.libs.streams.Accumulator
+import play.api.mvc.BaseControllerHelpers
+import play.api.mvc.BodyParser
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject() (cc: ControllerComponents) extends BackendController(cc) {
+trait StreamingParsers {
+  self: BaseControllerHelpers =>
 
-  def hello(): Action[AnyContent] = Action.async {
-    implicit request =>
-      Future.successful(Ok("Hello world"))
+  implicit val materializer: Materializer
+
+  lazy val streamFromMemory: BodyParser[Source[ByteString, _]] = BodyParser {
+    _ =>
+      Accumulator.source[ByteString].map(Right.apply)(materializer.executionContext)
   }
+
 }
