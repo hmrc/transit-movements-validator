@@ -16,16 +16,24 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
+import play.api.libs.json.JsString
+import play.api.libs.json.Writes
+
 /** Common error codes documented in [[https://developer.service.hmrc.gov.uk/api-documentation/docs/reference-guide#errors Developer Hub Reference Guide]]
   */
 object ErrorCode {
-  val FieldName            = "code"
-  val BadRequest           = "BAD_REQUEST"
-  val NotFound             = "NOT_FOUND"
-  val Forbidden            = "FORBIDDEN"
-  val InternalServerError  = "INTERNAL_SERVER_ERROR"
-  val GatewayTimeout       = "GATEWAY_TIMEOUT"
-  val SchemaValidation     = "SCHEMA_VALIDATION"
-  val EntityTooLarge       = "REQUEST_ENTITY_TOO_LARGE"
-  val UnsupportedMediaType = "UNSUPPORTED_MEDIA_TYPE"
+  val BadRequest: ErrorCode           = ErrorCode("BAD_REQUEST")
+  val NotFound: ErrorCode             = ErrorCode("NOT_FOUND")
+  val Forbidden: ErrorCode            = ErrorCode("FORBIDDEN")
+  val InternalServerError: ErrorCode  = ErrorCode("INTERNAL_SERVER_ERROR")
+  val GatewayTimeout: ErrorCode       = ErrorCode("GATEWAY_TIMEOUT")
+  val SchemaValidation: ErrorCode     = ErrorCode("SCHEMA_VALIDATION")
+  val EntityTooLarge: ErrorCode       = ErrorCode("REQUEST_ENTITY_TOO_LARGE")
+  val UnsupportedMediaType: ErrorCode = ErrorCode("UNSUPPORTED_MEDIA_TYPE")
+
+  implicit val errorCodeWrites: Writes[ErrorCode] = Writes {
+    errorCode => JsString(errorCode.value)
+  }
 }
+
+case class ErrorCode private (value: String) extends AnyVal with Product with Serializable

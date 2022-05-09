@@ -27,7 +27,7 @@ import play.api.mvc.ControllerComponents
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.TransitMovementError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
 import javax.inject.Inject
@@ -48,17 +48,17 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
               MimeTypes.XML
             ) => // As an internal service, we can control just sending this mime type as a content type, this should be sufficient (i.e. no charset).
           validationService.validateXML(messageType, request.body).map {
-            case Left(value) => BadRequest(Json.toJson(TransitMovementError.schemaValidationError(value)))
+            case Left(value) => BadRequest(Json.toJson(BaseError.schemaValidationError(value)))
             case Right(_)    => Ok
           }
         case Some(x) =>
           request.body.runWith(Sink.ignore)
           Future.successful(
-            UnsupportedMediaType(Json.toJson(TransitMovementError.unsupportedMediaTypeError(s"Content type $x is not supported.")))
+            UnsupportedMediaType(Json.toJson(BaseError.unsupportedMediaTypeError(s"Content type $x is not supported.")))
           )
         case None =>
           request.body.runWith(Sink.ignore)
-          Future.successful(UnsupportedMediaType(Json.toJson(TransitMovementError.unsupportedMediaTypeError(s"Content type must be specified."))))
+          Future.successful(UnsupportedMediaType(Json.toJson(BaseError.unsupportedMediaTypeError(s"Content type must be specified."))))
       }
   }
 
