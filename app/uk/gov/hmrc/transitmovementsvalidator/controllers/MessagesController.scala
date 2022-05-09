@@ -28,10 +28,6 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.TransitMovementError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.UnsupportedMediaTypeError
-import uk.gov.hmrc.transitmovementsvalidator.models.formats.HttpFormats
-import uk.gov.hmrc.transitmovementsvalidator.models.response.FailedValidationResponse
-import uk.gov.hmrc.transitmovementsvalidator.models.response.SuccessfulValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
 import javax.inject.Inject
@@ -43,8 +39,7 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
   executionContext: ExecutionContext
 ) extends BackendController(cc)
     with Logging
-    with StreamingParsers
-    with HttpFormats {
+    with StreamingParsers {
 
   def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
     implicit request =>
@@ -53,18 +48,17 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
               MimeTypes.XML
             ) => // As an internal service, we can control just sending this mime type as a content type, this should be sufficient (i.e. no charset).
           validationService.validateXML(messageType, request.body).map {
-            case Left(value) =>
-              BadRequest(Json.toJson(FailedValidationResponse(value.toList))) // TODO: Fix validation response error (which will be a 400 probably?)
-            case Right(_) => Ok(Json.toJson(SuccessfulValidationResponse))
+            case Left(value) => BadRequest(Json.toJson(TransitMovementError.schemaValidationError(value)))
+            case Right(_)    => Ok
           }
         case Some(x) =>
           request.body.runWith(Sink.ignore)
           Future.successful(
-            UnsupportedMediaType(Json.toJson(UnsupportedMediaTypeError(s"Content type $x is not supported.").asInstanceOf[TransitMovementError]))
+            UnsupportedMediaType(Json.toJson(TransitMovementError.unsupportedMediaTypeError(s"Content type $x is not supported.")))
           )
         case None =>
           request.body.runWith(Sink.ignore)
-          Future.successful(UnsupportedMediaType(Json.toJson(UnsupportedMediaTypeError(s"Content type must be specified.").asInstanceOf[TransitMovementError])))
+          Future.successful(UnsupportedMediaType(Json.toJson(TransitMovementError.unsupportedMediaTypeError(s"Content type must be specified."))))
       }
   }
 

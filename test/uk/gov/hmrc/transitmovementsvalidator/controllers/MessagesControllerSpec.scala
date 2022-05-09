@@ -70,7 +70,6 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
       val request = FakeRequest("POST", "/messages/cc015b/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate("cc015b")(request)
 
-      contentAsJson(result) mustBe Json.obj("success" -> true)
       status(result) mustBe OK
       reset(mockValidationService)
     }
@@ -85,8 +84,7 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
       val result  = sut.validate("cc015b")(request)
 
       contentAsJson(result) mustBe Json.obj(
-        "success"          -> false,
-        "code"             -> "BAD_REQUEST",
+        "code"             -> "SCHEMA_VALIDATION",
         "message"          -> "Failed to validate object",
         "validationErrors" -> Json.arr("no")
       )
