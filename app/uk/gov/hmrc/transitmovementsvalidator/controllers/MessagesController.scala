@@ -44,9 +44,9 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
   def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
     implicit request =>
       request.headers.get(CONTENT_TYPE) match {
-        case Some(
-              MimeTypes.XML
-            ) => // As an internal service, we can control just sending this mime type as a content type, this should be sufficient (i.e. no charset).
+        // As an internal service, we can control just sending this mime type as a content type,
+        // this should be sufficient (i.e. no charset).
+        case Some(MimeTypes.XML) =>
           validationService.validateXML(messageType, request.body).map {
             case Left(value) => BadRequest(Json.toJson(BaseError.schemaValidationError(value)))
             case Right(_)    => Ok
