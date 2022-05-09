@@ -36,7 +36,10 @@ trait ValidationService {
 
 @Singleton
 class ValidationServiceImpl extends ValidationService {
-  override def validateXML(messageType: String, source: Source[ByteString, _])(implicit materializer: Materializer): Future[Either[NonEmptyList[String], Unit]] = {
+
+  override def validateXML(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer
+  ): Future[Either[NonEmptyList[String], Unit]] = {
     source.runWith(Sink.ignore)
     Future.successful(Right(()))
   }

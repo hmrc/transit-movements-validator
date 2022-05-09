@@ -38,22 +38,31 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
-class MessagesController @Inject() (cc: ControllerComponents, validationService: ValidationService)
-                                   (implicit val materializer: Materializer, executionContext: ExecutionContext)
-  extends BackendController(cc) with Logging with StreamingParsers with HttpFormats {
+class MessagesController @Inject() (cc: ControllerComponents, validationService: ValidationService)(implicit
+  val materializer: Materializer,
+  executionContext: ExecutionContext
+) extends BackendController(cc)
+    with Logging
+    with StreamingParsers
+    with HttpFormats {
 
   def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
     implicit request =>
       request.headers.get(CONTENT_TYPE) match {
-        case Some(MimeTypes.XML) => // As an internal service, we can control just sending this mime type as a content type, this should be sufficient (i.e. no charset).
+        case Some(
+              MimeTypes.XML
+            ) => // As an internal service, we can control just sending this mime type as a content type, this should be sufficient (i.e. no charset).
           validationService.validateXML(messageType, request.body).map {
-            case Left(value) => BadRequest(Json.toJson(FailedValidationResponse(value.toList))) // TODO: Fix validation response error (which will be a 400 probably?)
-            case Right(_)    => Ok(Json.toJson(SuccessfulValidationResponse))
+            case Left(value) =>
+              BadRequest(Json.toJson(FailedValidationResponse(value.toList))) // TODO: Fix validation response error (which will be a 400 probably?)
+            case Right(_) => Ok(Json.toJson(SuccessfulValidationResponse))
           }
-        case Some(x)                =>
+        case Some(x) =>
           request.body.runWith(Sink.ignore)
-          Future.successful(UnsupportedMediaType(Json.toJson(UnsupportedMediaTypeError(s"Content type $x is not supported.").asInstanceOf[TransitMovementError])))
-        case None                   =>
+          Future.successful(
+            UnsupportedMediaType(Json.toJson(UnsupportedMediaTypeError(s"Content type $x is not supported.").asInstanceOf[TransitMovementError]))
+          )
+        case None =>
           request.body.runWith(Sink.ignore)
           Future.successful(UnsupportedMediaType(Json.toJson(UnsupportedMediaTypeError(s"Content type must be specified.").asInstanceOf[TransitMovementError])))
       }

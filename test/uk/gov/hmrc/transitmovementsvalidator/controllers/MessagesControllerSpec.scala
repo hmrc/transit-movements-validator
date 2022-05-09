@@ -48,11 +48,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq
 
-class MessagesControllerSpec extends AnyFreeSpec
-  with Matchers
-  with MockitoSugar
-  with StubControllerComponentsFactory
-  with TestActorSystem {
+class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar with StubControllerComponentsFactory with TestActorSystem {
 
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
@@ -81,13 +77,19 @@ class MessagesControllerSpec extends AnyFreeSpec
 
     // TODO: When the error format is decided, update this
     "on a invalid XML file, with the application/xml content type, return Bad Request and a false value for the successful validation" in {
-      when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer])).thenReturn(Future.successful(Left(NonEmptyList("no", Nil))))
+      when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer]))
+        .thenReturn(Future.successful(Left(NonEmptyList("no", Nil))))
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", "/messages/cc015b/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate("cc015b")(request)
 
-      contentAsJson(result) mustBe Json.obj("success" -> false, "code" -> "BAD_REQUEST", "message" -> "Failed to validate object", "validationErrors" -> Json.arr("no"))
+      contentAsJson(result) mustBe Json.obj(
+        "success"          -> false,
+        "code"             -> "BAD_REQUEST",
+        "message"          -> "Failed to validate object",
+        "validationErrors" -> Json.arr("no")
+      )
       status(result) mustBe BAD_REQUEST
       reset(mockValidationService)
     }
