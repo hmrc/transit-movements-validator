@@ -43,7 +43,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
       val sut    = new ValidationServiceImpl
       val result = sut.validateXML("cc015b", source)
 
-      Await.result(result, 5.seconds) mustBe Right(())
+      Await.result(result, 5.seconds) mustBe Right(Seq.empty)
     }
   }
 

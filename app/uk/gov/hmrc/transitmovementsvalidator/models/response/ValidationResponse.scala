@@ -20,6 +20,7 @@ import play.api.libs.json.Writes
 import play.api.libs.json.__
 
 object ValidationResponse {
+
   implicit val validationResponseWrites: Writes[ValidationResponse] =
     (__ \ "validationErrors").lazyWrite(Writes.seq[String]).contramap(_.validationErrors)
 }

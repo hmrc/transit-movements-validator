@@ -53,7 +53,7 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
           validationService
             .validateXML(messageType, request.body)
             .map {
-              case Left(x) => BadRequest(Json.toJson(BaseError.badRequestError(x)))
+              case Left(x)  => BadRequest(Json.toJson(BaseError.badRequestError(x)))
               case Right(x) => Ok(Json.toJson(ValidationResponse(x)))
             }
             .recover {

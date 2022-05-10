@@ -20,7 +20,6 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
-import cats.data.NonEmptyList
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import org.mockito.Mockito.reset
@@ -29,6 +28,8 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.ContentTypes
+import play.api.http.Status.BAD_REQUEST
+import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
 import play.api.libs.json.Json
@@ -62,8 +63,8 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
 
     val mockValidationService: ValidationService = mock[ValidationService]
 
-    "on a valid XML file, with the application/xml content type, return OK and a true value for the successful validation" in {
-      when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer])).thenReturn(Future.successful(Right(())))
+    "on a valid XML file, with the application/xml content type, return OK and an empty list" in {
+      when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer])).thenReturn(Future.successful(Right(Seq.empty)))
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", "/messages/cc015b/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
@@ -75,9 +76,9 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
     }
 
     // TODO: When the error format is decided, update this
-    "on a invalid XML file, with the application/xml content type, return Bad Request and a false value for the successful validation" in {
+    "on a valid XML file, but not validated, with the application/xml content type, return OK with a list of errors" in {
       when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer]))
-        .thenReturn(Future.successful(Left(NonEmptyList("no", Nil))))
+        .thenReturn(Future.successful(Right(Seq("no"))))
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", "/messages/cc015b/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
@@ -87,6 +88,39 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
         "validationErrors" -> Json.arr("no")
       )
       status(result) mustBe OK
+      reset(mockValidationService)
+    }
+
+    // TODO: When the error format is decided, update this
+    "on an invalid XML file, return Bad Request" in {
+      when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer]))
+        .thenReturn(Future.successful(Left("no")))
+      val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
+      val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", "/messages/cc015b/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+      val result  = sut.validate("cc015b")(request)
+
+      contentAsJson(result) mustBe Json.obj(
+        "code"    -> "BAD_REQUEST",
+        "message" -> "no"
+      )
+      status(result) mustBe BAD_REQUEST
+      reset(mockValidationService)
+    }
+
+    "on an exception, return InternalServiceError" in {
+      when(mockValidationService.validateXML(eqTo("cc015b"), any[Source[ByteString, _]])(any[Materializer]))
+        .thenReturn(Future.failed(new IllegalArgumentException("some problem")))
+      val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
+      val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", "/messages/cc015b/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+      val result  = sut.validate("cc015b")(request)
+
+      contentAsJson(result) mustBe Json.obj(
+        "code"    -> "INTERNAL_SERVER_ERROR",
+        "message" -> "Internal server error"
+      )
+      status(result) mustBe INTERNAL_SERVER_ERROR
       reset(mockValidationService)
     }
 

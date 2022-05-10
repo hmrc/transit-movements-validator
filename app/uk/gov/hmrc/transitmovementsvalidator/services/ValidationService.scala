@@ -20,7 +20,6 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import cats.data.NonEmptyList
 import com.google.inject.ImplementedBy
 import com.google.inject.Singleton
 
