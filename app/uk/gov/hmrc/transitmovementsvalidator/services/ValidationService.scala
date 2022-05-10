@@ -30,7 +30,8 @@ import scala.concurrent.Future
 trait ValidationService {
 
   // TODO: fix signature to be representative of what we want
-  def validateXML(messageType: String, source: Source[ByteString, _])(implicit materializer: Materializer): Future[Either[NonEmptyList[String], Unit]]
+  //  We need a much better object to return - but for now, validation errors on the right, can't parse errors on left.
+  def validateXML(messageType: String, source: Source[ByteString, _])(implicit materializer: Materializer): Future[Either[String, Seq[String]]]
 
 }
 
@@ -39,8 +40,8 @@ class ValidationServiceImpl extends ValidationService {
 
   override def validateXML(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer
-  ): Future[Either[NonEmptyList[String], Unit]] = {
+  ): Future[Either[String, Seq[String]]] = {
     source.runWith(Sink.ignore)
-    Future.successful(Right(()))
+    Future.successful(Right(Seq.empty))
   }
 }

@@ -16,29 +16,12 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models.response
 
-import play.api.libs.json.Json
-import play.api.libs.json.OWrites
 import play.api.libs.json.Writes
 import play.api.libs.json.__
 
 object ValidationResponse {
-  private val validationErrorsFieldName = "validationErrors"
-  private val successJson               = Json.obj(validationErrorsFieldName -> Json.arr())
-
-  private val failedValidationResponseWrites: OWrites[FailedValidationResponse] =
-    (__ \ validationErrorsFieldName).lazyWrite(Writes.seq[String]).contramap(_.validationErrors)
-
-  implicit val validationResponseWrites: Writes[ValidationResponse] = OWrites {
-    case SuccessfulValidationResponse       => successJson
-    case response: FailedValidationResponse => failedValidationResponseWrites.writes(response)
-  }
+  implicit val validationResponseWrites: Writes[ValidationResponse] =
+    (__ \ "validationErrors").lazyWrite(Writes.seq[String]).contramap(_.validationErrors)
 }
 
-sealed trait ValidationResponse {
-  def validationErrors: Seq[String] // TODO: Replace with actual error type
-}
-
-object SuccessfulValidationResponse extends ValidationResponse {
-  val validationErrors: Seq[String] = Seq.empty[String]
-}
-case class FailedValidationResponse(validationErrors: Seq[String]) extends ValidationResponse
+case class ValidationResponse(validationErrors: Seq[String])

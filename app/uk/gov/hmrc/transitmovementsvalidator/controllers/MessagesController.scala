@@ -28,13 +28,14 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
-import uk.gov.hmrc.transitmovementsvalidator.models.response.FailedValidationResponse
-import uk.gov.hmrc.transitmovementsvalidator.models.response.SuccessfulValidationResponse
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
+import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 class MessagesController @Inject() (cc: ControllerComponents, validationService: ValidationService)(implicit
   val materializer: Materializer,
@@ -52,12 +53,13 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
           validationService
             .validateXML(messageType, request.body)
             .map {
-              case Left(value) => FailedValidationResponse(value.toList)
-              case Right(_)    => SuccessfulValidationResponse
+              case Left(x) => BadRequest(Json.toJson(BaseError.badRequestError(x)))
+              case Right(x) => Ok(Json.toJson(ValidationResponse(x)))
             }
-            .map(
-              validationResponse => Ok(Json.toJson(validationResponse))
-            )
+            .recover {
+              case NonFatal(e) =>
+                InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
+            }
         case Some(x) =>
           request.body.runWith(Sink.ignore)
           Future.successful(
