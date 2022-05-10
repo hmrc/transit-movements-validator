@@ -28,6 +28,8 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
+import uk.gov.hmrc.transitmovementsvalidator.models.response.FailedValidationResponse
+import uk.gov.hmrc.transitmovementsvalidator.models.response.SuccessfulValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
 import javax.inject.Inject
@@ -47,10 +49,15 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
         // As an internal service, we can control just sending this mime type as a content type,
         // this should be sufficient (i.e. no charset).
         case Some(MimeTypes.XML) =>
-          validationService.validateXML(messageType, request.body).map {
-            case Left(value) => BadRequest(Json.toJson(BaseError.schemaValidationError(value)))
-            case Right(_)    => Ok
-          }
+          validationService
+            .validateXML(messageType, request.body)
+            .map {
+              case Left(value) => FailedValidationResponse(value.toList)
+              case Right(_)    => SuccessfulValidationResponse
+            }
+            .map(
+              validationResponse => Ok(Json.toJson(validationResponse))
+            )
         case Some(x) =>
           request.body.runWith(Sink.ignore)
           Future.successful(

@@ -29,7 +29,6 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.ContentTypes
-import play.api.http.Status.BAD_REQUEST
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
 import play.api.libs.json.Json
@@ -71,6 +70,7 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
       val result  = sut.validate("cc015b")(request)
 
       status(result) mustBe OK
+      contentAsJson(result) mustBe Json.obj("validationErrors" -> Json.arr())
       reset(mockValidationService)
     }
 
@@ -84,11 +84,9 @@ class MessagesControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar
       val result  = sut.validate("cc015b")(request)
 
       contentAsJson(result) mustBe Json.obj(
-        "code"             -> "SCHEMA_VALIDATION",
-        "message"          -> "Failed to validate object",
         "validationErrors" -> Json.arr("no")
       )
-      status(result) mustBe BAD_REQUEST
+      status(result) mustBe OK
       reset(mockValidationService)
     }
 
