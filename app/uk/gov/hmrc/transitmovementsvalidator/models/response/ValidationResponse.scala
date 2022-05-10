@@ -25,4 +25,4 @@ object ValidationResponse {
     (__ \ "validationErrors").lazyWrite(Writes.seq[String]).contramap(_.validationErrors)
 }
 
-case class ValidationResponse(validationErrors: Seq[String])
+case class ValidationResponse(validationErrors: Seq[String]) extends Product with Serializable
