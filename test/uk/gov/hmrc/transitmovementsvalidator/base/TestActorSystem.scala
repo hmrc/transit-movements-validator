@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.controllers
+package uk.gov.hmrc.transitmovementsvalidator.base
 
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import play.api.mvc.Action
-import play.api.mvc.AnyContent
-import play.api.mvc.ControllerComponents
-import javax.inject.Inject
-import javax.inject.Singleton
-import scala.concurrent.Future
+import akka.actor.ActorSystem
+import org.scalatest.Suite
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject() (cc: ControllerComponents) extends BackendController(cc) {
+object TestActorSystem {
+  val system: ActorSystem = ActorSystem("test")
+}
 
-  def hello(): Action[AnyContent] = Action.async {
-    implicit request =>
-      Future.successful(Ok("Hello world"))
-  }
+trait TestActorSystem { self: Suite =>
+  implicit val system: ActorSystem = TestActorSystem.system
 }

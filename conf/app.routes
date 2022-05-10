@@ -1,3 +1,3 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.transitmovementsvalidator.controllers.MicroserviceHelloWorldController.hello
+POST        /messages/:messageType/validation             uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.validate(messageType)
