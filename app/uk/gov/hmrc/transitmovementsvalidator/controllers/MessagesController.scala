@@ -53,8 +53,11 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
           validationService
             .validateXML(messageType, request.body)
             .map {
-              case Left(x)  => BadRequest(Json.toJson(BaseError.badRequestError(x)))
-              case Right(x) => Ok(Json.toJson(ValidationResponse(x)))
+              case Left(x)  => x.head match {
+                case UnknownError => BadRequest(Json.toJson(BaseError.badRequestError(x.head.message)))
+                case _ => Ok(Json.toJson(ValidationResponse(x)))
+              }
+              case Right(_) => Ok
             }
             .recover {
               case NonFatal(e) =>

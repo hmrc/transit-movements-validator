@@ -16,13 +16,24 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models.response
 
-import play.api.libs.json.Writes
-import play.api.libs.json.__
+import cats.data.NonEmptyList
+import play.api.libs.functional.syntax.toInvariantFunctorOps
+import play.api.libs.json.{Format, Writes, __}
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+
 
 object ValidationResponse {
 
+  implicit def nonEmptyListFormat[A: Format]: Format[NonEmptyList[A]] =
+    Format
+      .of[List[A]]
+      .inmap(
+        NonEmptyList.fromListUnsafe,
+        _.toList
+      )
+
   implicit val validationResponseWrites: Writes[ValidationResponse] =
-    (__ \ "validationErrors").lazyWrite(Writes.seq[String]).contramap(_.validationErrors)
+    (__ \ "validationErrors").lazyWrite(Writes[NonEmptyList[ValidationError]]).contramap(_.validationErrors)
 }
 
-case class ValidationResponse(validationErrors: Seq[String]) extends Product with Serializable
+case class ValidationResponse(validationErrors: NonEmptyList[ValidationError]) extends Product with Serializable
