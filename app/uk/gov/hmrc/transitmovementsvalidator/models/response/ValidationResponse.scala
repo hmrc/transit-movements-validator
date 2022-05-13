@@ -18,7 +18,7 @@ package uk.gov.hmrc.transitmovementsvalidator.models.response
 
 import cats.data.NonEmptyList
 import play.api.libs.functional.syntax.toInvariantFunctorOps
-import play.api.libs.json.{Format, Writes, __}
+import play.api.libs.json.{Format, Json, OWrites}
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 
@@ -32,8 +32,9 @@ object ValidationResponse {
         _.toList
       )
 
-  implicit val validationResponseWrites: Writes[ValidationResponse] =
-    (__ \ "validationErrors").lazyWrite(Writes[NonEmptyList[ValidationError]]).contramap(_.validationErrors)
+  implicit val validationResponseWrites: OWrites[ValidationResponse] = {
+    Json.writes[ValidationResponse]
+  }
 }
 
 case class ValidationResponse(validationErrors: NonEmptyList[ValidationError]) extends Product with Serializable
