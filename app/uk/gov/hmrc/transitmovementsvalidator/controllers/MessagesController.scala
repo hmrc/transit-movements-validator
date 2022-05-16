@@ -58,7 +58,7 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
                 case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
                 case _ => Ok(Json.toJson(ValidationResponse(x)))
               }
-              case Right(_) => Ok
+              case Right(_) => NoContent
             }
             .recover {
               case NonFatal(e) =>
