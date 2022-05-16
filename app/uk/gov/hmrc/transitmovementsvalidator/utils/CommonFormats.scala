@@ -21,9 +21,11 @@ import play.api.libs.functional.syntax.toInvariantFunctorOps
 import play.api.libs.json.Format
 
 trait NonEmptyListFormat {
+
   implicit def nonEmptyListFormat[A: Format]: Format[NonEmptyList[A]] =
     Format
-      .of[List[A]].inmap(NonEmptyList.fromListUnsafe, _.toList)
+      .of[List[A]]
+      .inmap(NonEmptyList.fromListUnsafe, _.toList)
 }
 
 object NonEmptyListFormat extends NonEmptyListFormat

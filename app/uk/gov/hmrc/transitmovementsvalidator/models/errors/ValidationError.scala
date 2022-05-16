@@ -17,8 +17,17 @@
 package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
 import org.xml.sax.SAXParseException
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{Format, JsObject, JsResult, JsValue, Json, OFormat, OWrites, Reads, __}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.functional.syntax.unlift
+import play.api.libs.json.Format
+import play.api.libs.json.JsObject
+import play.api.libs.json.JsResult
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
+import play.api.libs.json.OFormat
+import play.api.libs.json.OWrites
+import play.api.libs.json.Reads
+import play.api.libs.json.__
 
 sealed trait ValidationError {
   def message: String
@@ -34,8 +43,8 @@ object ValidationError {
   implicit lazy val reads: Reads[ValidationError] = Json.reads[ValidationError]
 
   implicit lazy val writes: OWrites[ValidationError] = OWrites {
-    case um: UnknownMessageTypeValidationError    => Json.toJsObject(um)
-    case sve: SchemaValidationError => Json.toJsObject(sve)
+    case um: UnknownMessageTypeValidationError => Json.toJsObject(um)
+    case sve: SchemaValidationError            => Json.toJsObject(sve)
   }
 }
 
@@ -48,6 +57,7 @@ object UnknownMessageTypeValidationError {
 case class SchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends ValidationError
 
 object SchemaValidationError {
+
   def fromSaxParseException(ex: SAXParseException) =
     SchemaValidationError(ex.getLineNumber, ex.getColumnNumber, ex.getMessage)
 
@@ -56,12 +66,12 @@ object SchemaValidationError {
       (__ \ "lineNumber").read[Int] and
         (__ \ "columnNumber").read[Int] and
         (__ \ "message").read[String]
-      )(SchemaValidationError.apply _)
+    )(SchemaValidationError.apply _)
 
   implicit val schemaValidationErrorWrites: OWrites[SchemaValidationError] =
     (
       (__ \ "lineNumber").write[Int] and
         (__ \ "columnNumber").write[Int] and
         (__ \ "message").write[String]
-      )(unlift(SchemaValidationError.unapply))
+    )(unlift(SchemaValidationError.unapply))
 }

@@ -41,8 +41,7 @@ object MessageType {
 //    extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd")
 
   /** E_DEC_DAT (IE015) */
-  case object DeclarationData
-    extends DepartureMessageType("IE015", "CC015C", "/xsd/cc015c.xsd")
+  case object DeclarationData extends DepartureMessageType("IE015", "CC015C", "/xsd/cc015c.xsd")
 
 //  /** E_REQ_REL (IE054) */
 //  case object RequestOfRelease
@@ -55,7 +54,7 @@ object MessageType {
   val departureValues = Set(
 //    DeclarationAmendment,
 //    DeclarationInvalidation,
-    DeclarationData,
+    DeclarationData
 //    RequestOfRelease,
 //    PresentationNotification
   )
@@ -65,12 +64,10 @@ object MessageType {
   // ****************
 
   /** E_REQ_REL (IE054) */
-  case object ArrivalNotification
-    extends ArrivalMessageType("IE007", "CC007C", "/xsd/cc007c.xsd")
+  case object ArrivalNotification extends ArrivalMessageType("IE007", "CC007C", "/xsd/cc007c.xsd")
 
   /** E_PRE_NOT (IE170) */
-  case object UnloadingRemarks
-    extends ArrivalMessageType("IE044", "CC044C", "/xsd/cc044c.xsd")
+  case object UnloadingRemarks extends ArrivalMessageType("IE044", "CC044C", "/xsd/cc044c.xsd")
 
   val arrivalValues = Set(
     ArrivalNotification,

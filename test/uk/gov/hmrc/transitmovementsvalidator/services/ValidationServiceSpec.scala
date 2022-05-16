@@ -23,18 +23,17 @@ import akka.util.Timeout
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import org.scalatest.time.Span
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.{SchemaValidationError, UnknownMessageTypeValidationError, ValidationError}
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import java.nio.charset.StandardCharsets
-import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with TestActorSystem with ScalaFutures{
+class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with TestActorSystem with ScalaFutures {
 
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
@@ -42,7 +41,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
   lazy val validXml: NodeSeq = <test></test>
   lazy val validCode: String = "IE015"
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
+  implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
   "On Validate" - {
     "when valid XML is provided for the given message type, return a Right" in {
@@ -57,10 +56,10 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
     }
 
     "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
-      val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val source      = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val invalidCode = "dummy"
-      val sut = new ValidationServiceImpl
-      val result = sut.validateXML(invalidCode, source)
+      val sut         = new ValidationServiceImpl
+      val result      = sut.validateXML(invalidCode, source)
 
       whenReady(result) {
         r =>
@@ -71,7 +70,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
 
     "when valid message type provided but with unexpected xml, return errors" in {
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
-      val sut = new ValidationServiceImpl
+      val sut    = new ValidationServiceImpl
       val result = sut.validateXML(validCode, source)
 
       whenReady(result) {

@@ -17,16 +17,15 @@
 package uk.gov.hmrc.transitmovementsvalidator.models.response
 
 import cats.data.NonEmptyList
-import play.api.libs.functional.syntax.toInvariantFunctorOps
-import play.api.libs.json.{Format, Json, OWrites}
+import play.api.libs.json.Json
+import play.api.libs.json.OWrites
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
 
 object ValidationResponse extends NonEmptyListFormat {
 
-  implicit val validationResponseWrites: OWrites[ValidationResponse] = {
+  implicit val validationResponseWrites: OWrites[ValidationResponse] =
     Json.writes[ValidationResponse]
-  }
 }
 
 case class ValidationResponse(validationErrors: NonEmptyList[ValidationError]) extends Product with Serializable
