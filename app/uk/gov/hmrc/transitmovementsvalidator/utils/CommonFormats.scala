@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.models.response
+package uk.gov.hmrc.transitmovementsvalidator.utils
 
 import cats.data.NonEmptyList
 import play.api.libs.functional.syntax.toInvariantFunctorOps
-import play.api.libs.json.{Format, Json, OWrites}
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
+import play.api.libs.json.Format
 
-object ValidationResponse extends NonEmptyListFormat {
-
-  implicit val validationResponseWrites: OWrites[ValidationResponse] = {
-    Json.writes[ValidationResponse]
-  }
+trait NonEmptyListFormat {
+  implicit def nonEmptyListFormat[A: Format]: Format[NonEmptyList[A]] =
+    Format
+      .of[List[A]].inmap(NonEmptyList.fromListUnsafe, _.toList)
 }
 
-case class ValidationResponse(validationErrors: NonEmptyList[ValidationError]) extends Product with Serializable
+object NonEmptyListFormat extends NonEmptyListFormat

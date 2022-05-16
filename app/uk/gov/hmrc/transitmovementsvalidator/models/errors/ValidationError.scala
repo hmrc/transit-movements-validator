@@ -17,7 +17,8 @@
 package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
 import org.xml.sax.SAXParseException
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{Format, JsObject, JsResult, JsValue, Json, OFormat, OWrites, Reads, __}
 
 sealed trait ValidationError {
   def message: String
@@ -25,14 +26,23 @@ sealed trait ValidationError {
 
 object ValidationError {
 
-  final case class UnknownMessageTypeValidationError(message: String) extends ValidationError
-
   def fromUnrecognisedMessageType(s: String): UnknownMessageTypeValidationError =
-    UnknownMessageTypeValidationError(s"Unknown Message Type provided: $s is not recognised")
+    UnknownMessageTypeValidationError.apply(s"Unknown Message Type provided: $s is not recognised")
 
-  implicit val validationError: OFormat[ValidationError] =
-    Json.format[ValidationError]
+  implicit lazy val format: OFormat[ValidationError] = OFormat.oFormatFromReadsAndOWrites(reads, writes)
 
+  implicit lazy val reads: Reads[ValidationError] = Json.reads[ValidationError]
+
+  implicit lazy val writes: OWrites[ValidationError] = OWrites {
+    case um: UnknownMessageTypeValidationError    => Json.toJsObject(um)
+    case sve: SchemaValidationError => Json.toJsObject(sve)
+  }
+}
+
+case class UnknownMessageTypeValidationError(message: String) extends ValidationError
+
+object UnknownMessageTypeValidationError {
+  implicit val format: OFormat[UnknownMessageTypeValidationError] = Json.format[UnknownMessageTypeValidationError]
 }
 
 case class SchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends ValidationError
@@ -41,6 +51,17 @@ object SchemaValidationError {
   def fromSaxParseException(ex: SAXParseException) =
     SchemaValidationError(ex.getLineNumber, ex.getColumnNumber, ex.getMessage)
 
-  implicit val schemaValidationError: OFormat[SchemaValidationError] =
-    Json.format[SchemaValidationError]
+  implicit val schemaValidationErrorReads: Reads[SchemaValidationError] =
+    (
+      (__ \ "lineNumber").read[Int] and
+        (__ \ "columnNumber").read[Int] and
+        (__ \ "message").read[String]
+      )(SchemaValidationError.apply _)
+
+  implicit val schemaValidationErrorWrites: OWrites[SchemaValidationError] =
+    (
+      (__ \ "lineNumber").write[Int] and
+        (__ \ "columnNumber").write[Int] and
+        (__ \ "message").write[String]
+      )(unlift(SchemaValidationError.unapply))
 }

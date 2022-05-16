@@ -27,9 +27,7 @@ import play.api.mvc.ControllerComponents
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageTypeValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.{BaseError, InternalServiceError, UnknownMessageTypeValidationError}
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
