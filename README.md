@@ -1,28 +1,42 @@
 
 # Transit Movements Validator
-This is an internal microservice to parse and validate XML payloads. 
+This is a microservice for an internal API to parse and validate XML payloads. 
 
-## Repository 
-- [Project Github Page](https://github.com/hmrc/transit-movements-validator)
+This mircoservice is in [Beta](https://www.gov.uk/help/beta). The signature may change.
 
-## Monitoring
+## Prerequisites
 
-### Kibana
-- [Kibana Logs](https://kibana.tools.production.tax.service.gov.uk/app/kibana#/dashboard/transit-movements-validator?_g=()&_a=(description:%27%27,filters:!(),fullScreenMode:!f,options:(),panels:!((gridData:(h:20,i:%271%27,w:24,x:0,y:0),id:transit-movements-validator-http-requests,panelIndex:%271%27,type:visualization,version:%276.8.23%27),(embeddableConfig:(columns:!(container_id,request),sort:!(%27@timestamp%27,desc)),gridData:(h:20,i:%272%27,w:24,x:0,y:20),id:transit-movements-validator-http-requests,panelIndex:%272%27,type:search,version:%276.8.23%27),(gridData:(h:20,i:%273%27,w:24,x:24,y:0),id:transit-movements-validator-app-exceptions,panelIndex:%273%27,type:visualization,version:%276.8.23%27),(embeddableConfig:(columns:!(app,host,exception),sort:!(%27@timestamp%27,desc)),gridData:(h:20,i:%274%27,w:24,x:24,y:20),id:transit-movements-validator-app-exceptions,panelIndex:%274%27,type:search,version:%276.8.23%27),(gridData:(h:10,i:%275%27,w:24,x:0,y:40),id:transit-movements-validator-ecs-container-notifications,panelIndex:%275%27,type:visualization,version:%276.8.23%27),(embeddableConfig:(columns:!(message,service,service_version),sort:!(%27@timestamp%27,desc)),gridData:(h:10,i:%276%27,w:24,x:24,y:40),id:transit-movements-validator-ecs-container-notifications,panelIndex:%276%27,type:search,version:%276.8.23%27),(gridData:(h:10,i:%277%27,w:24,x:0,y:50),id:transit-movements-validator-container-kill,panelIndex:%277%27,type:visualization,version:%276.8.23%27),(embeddableConfig:(columns:!(service,version,host),sort:!(%27@timestamp%27,desc)),gridData:(h:10,i:%278%27,w:24,x:24,y:50),id:transit-movements-validator-container-kill,panelIndex:%278%27,type:search,version:%276.8.23%27),(gridData:(h:10,i:%279%27,w:24,x:0,y:60),id:transit-movements-validator-service-downstreams,panelIndex:%279%27,type:visualization,version:%276.8.23%27),(embeddableConfig:(columns:!(http_host,request,status),sort:!(%27@timestamp%27,desc)),gridData:(h:10,i:%2710%27,w:24,x:24,y:60),id:transit-movements-validator-service-downstreams,panelIndex:%2710%27,type:search,version:%276.8.23%27),(gridData:(h:10,i:%2711%27,w:24,x:0,y:70),id:transit-movements-validator-service-upstreams,panelIndex:%2711%27,type:visualization,version:%276.8.23%27),(embeddableConfig:(columns:!(http_user_agent,request,status),sort:!(%27@timestamp%27,desc)),gridData:(h:10,i:%2712%27,w:24,x:24,y:70),id:transit-movements-validator-service-upstreams,panelIndex:%2712%27,type:search,version:%276.8.23%27)),query:(language:kuery,query:%27%27),timeRestore:!f,title:transit-movements-validator,viewMode:view))
-- [Kibana Repository](https://github.com/HMRC/kibana-dashboards) 
+- Scala 2.12.15
+- Java 8
+- sbt > 1.5.8
+- [Service Manager](https://github.com/hmrc/service-manager)
 
+## Development Setup
 
-### Grafana
-- [Grafana Graphs](https://grafana.tools.production.tax.service.gov.uk/d/R5w4CHw7z/transit-movements-validator?orgId=1&refresh=15)
-- [Grafana Repository](https://github.com/HMRC/grafana-dashboards)
+Run from the console using: `sbt run`
 
-### Pager Duty
-- TBD
+### Highlighted SBT Tasks
+Task | Description | Command
+:-------|:------------|:-----
+run | Runs the application with the default configured port | ```$ sbt run```
+test | Runs the standard unit tests | ```$ sbt test```
+it:test  | Runs the integration tests | ```$ sbt it:test ```
+dependencyCheck | Runs dependency-check against the current project. It aggregates dependencies and generates a report | ```$ sbt dependencyCheck```
+dependencyUpdates |  Shows a list of project dependencies that can be updated | ```$ sbt dependencyUpdates```
+dependencyUpdatesReport | Writes a list of project dependencies to a file | ```$ sbt dependencyUpdatesReport```
 
-## Documentation
-- [Service Catalog](https://catalogue.tax.service.gov.uk/service/transit-movements-validator)
-- [PRA Confluence Page](https://confluence.tools.tax.service.gov.uk/display/DTRG/Common+Transit+Convention+%28CTC%29+Traders+API+Phase+5+-+Validator)
+## Related API documentation
 
-### License
+- [Common Transit Convention Traders API specifications](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/common-transit-convention-traders/1.0)
+
+## Helpful information
+
+Guides for the related public Common Transit Convention Traders API are on the [HMRC Developer Hub](https://developer.service.hmrc.gov.uk/api-documentation/docs/using-the-hub)
+
+## Reporting Issues
+
+If you have any issues relating to the Common Transit Convention Traders API, please raise them through our [public API](https://github.com/hmrc/common-transit-convention-traders#reporting-issues).
+
+## License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
