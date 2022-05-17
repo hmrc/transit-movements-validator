@@ -1,0 +1,3623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.40" vc:minVersion="1.1">
+    <!--==========================================================-->
+    <!--===== AESCommunicationPurpose                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="AESCommunicationPurposeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC190C, CC191C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== GRN                                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="GRNContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC013C, CC015C, CC026C, CC029C, CC034C, CC037C, CC055C, CC224C, CC225C, CC228C,
+                    CC229C, CC231C, CD150C, CD151C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="GRNType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== LRN                                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="LRNContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC004C, CC009C, CC013C, CC014C, CC015C, CC028C, CC029C, CC056C, CC060C, CC170C,
+                    CC190C, CC191C, CC928C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,22}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== MRN                                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="MRNContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 74/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC017C, CC019C, CC022C, CC023C, CC025C,
+                    CC028C, CC029C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C,
+                    CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC182C, CC190C,
+                    CC191C, CC906C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C,
+                    CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD078C, CD094C, CD095C, CD114C,
+                    CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C,
+                    CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C,
+                    CD209C, CD906C, CD974C, CD975C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="MRNType" />
+    </xs:simpleType>
+    <xs:simpleType name="MRNContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC917C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== PhaseID                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="PhaseIDContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 91/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C,
+                    CC025C, CC026C, CC028C, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C,
+                    CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C,
+                    CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C,
+                    CC906C, CC917C, CC928C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C,
+                    CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD070C, CD071C, CD078C,
+                    CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C,
+                    CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C,
+                    CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD917C, CD971C, CD974C,
+                    CD975C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:enumeration value=" NCTS5.1">
+                <xs:annotation>
+                    <xs:documentation>Phase NCTS 5.1</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NCTS5.0">
+                <xs:annotation>
+                    <xs:documentation>Phase NCTS 5.0</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== TC11DeliveryDate                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="TC11DeliveryDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC141C, CD142C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== TIRCarnet                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="TIRCarnetContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC224C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== TIRCarnetNumber                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="TIRCarnetNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 9/91 messages: CC013C, CC015C, CC029C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="TIRcarnetNumber" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== TIRHolderIdentificationNumber                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="TIRHolderIdentificationNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 26/91 messages: CC004C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC028C,
+                    CC029C, CC035C, CC043C, CC045C, CC051C, CC054C, CC056C, CC060C, CC140C, CC141C,
+                    CC170C, CC928C, CD001C, CD003C, CD012C, CD038C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== UNLocode                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="UNLocodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 18/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CC182C, CC190C, CD001C,
+                    CD003C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== UNNumber                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="UNNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 15/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C,
+                    CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== acceptanceDateAndTime                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="AcceptanceDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== accessCode                                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="AccessCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CC013C, CC015C, CC029C, CC034C, CC224C, CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== accessCodeCurrent                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="AccessCodeCurrentContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC026C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== accessCodeNew                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="AccessCodeNewContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC026C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== additionalDeclarationType                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="AdditionalDeclarationTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== additionalIdentifier                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="AdditionalIdentifierContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 6/91 messages: CC007C, CC013C, CC015C, CC029C, CC170C, CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amendmentAcceptanceDateAndTime                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmendmentAcceptanceDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC004C, CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amendmentNotificationDateAndTime                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmendmentNotificationDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC022C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amendmentSubmissionDateAndTime                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmendmentSubmissionDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC004C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amendmentTypeFlag                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmendmentTypeFlagContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC013C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amountClaimed                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmountClaimedContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC035C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amountConcerned                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmountConcernedContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== amountToBeCovered                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="AmountToBeCoveredContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== arrivalDateAndTime                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="ArrivalDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== arrivalDateAndTimeActual                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="ArrivalDateAndTimeActualContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD006C, CD024C, CD209C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== arrivalDateAndTimeEstimated                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="ArrivalDateAndTimeEstimatedContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C,
+                    CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== arrivalNotificationDateAndTime                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="ArrivalNotificationDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC007C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== authorisationNumber                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="AuthorisationNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 6/91 messages: CC007C, CC013C, CC015C, CC029C, CC170C, CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== authority                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="AuthorityContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 9/91 messages: CC007C, CC043C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== balance                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="BalanceContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== bindingItinerary                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="BindingItineraryContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C,
+                    CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== businessRejectionType                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="BusinessRejectionTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC056C, CC057C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== cancelEnquiryNotificationDateAndTime                -->
+    <!--==========================================================-->
+    <xs:simpleType name="CancelEnquiryNotificationDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD059C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== cancelEnquiryNotificationText                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="CancelEnquiryNotificationTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD059C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== city                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="CityContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 40/91 messages: CC004C, CC007C, CC009C, CC013C, CC015C, CC017C, CC019C, CC023C, CC028C, CC029C,
+                    CC035C, CC037C, CC043C, CC045C, CC054C, CC055C, CC056C, CC060C, CC140C, CC141C,
+                    CC170C, CC182C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C,
+                    CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="CityType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== code                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="CodeContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="RiskAnalysisResultCode" />
+    </xs:simpleType>
+    <xs:simpleType name="CodeContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC055C, CD201C, CD205C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodeContentType03">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 12/91 messages: CC017C, CC029C, CC042C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C,
+                    CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodeContentType04">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C,
+                    CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodeContentType05">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 10/91 messages: CC007C, CC043C, CC182C, CD003C, CD038C, CD115C, CD145C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CodeContentType06">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== collectionDate                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="CollectionDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD152C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== combinedNomenclatureCode                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="CombinedNomenclatureCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 19/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C,
+                    CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="Alphanumeric_2" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== communicationLanguageAtDeparture                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="CommunicationLanguageAtDepartureContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="LanguageCodeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== communicationLanguageAtDestination                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="CommunicationLanguageAtDestinationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC007C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== complementOfInformation                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="ComplementOfInformationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 15/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C,
+                    CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== completeControl                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="CompleteControlContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC017C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== conform                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="ConformContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC044C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== containerIdentificationNumber                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="ContainerIdentificationNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="ContainerIdentificationNumber" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== containerIndicator                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="ContainerIndicatorContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 18/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CC182C, CD001C, CD003C,
+                    CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== continueUnloading                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="ContinueUnloadingContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC043C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== controlNotificationDateAndTime                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="ControlNotificationDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC060C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== controlledBy                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="ControlledByContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC017C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== conveyanceReferenceNumber                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="ConveyanceReferenceNumberContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 5/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="ConveyanceReferenceNumber17" />
+    </xs:simpleType>
+    <xs:simpleType name="ConveyanceReferenceNumberContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="ConveyanceReferenceNumber35" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== copyGiven                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="CopyGivenContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC224C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== counter                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="CounterContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD411D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,9}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== country                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="CountryContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 48/91 messages: CC004C, CC007C, CC009C, CC013C, CC015C, CC017C, CC019C, CC023C, CC028C, CC029C,
+                    CC035C, CC037C, CC043C, CC045C, CC054C, CC055C, CC056C, CC060C, CC140C, CC141C,
+                    CC170C, CC182C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD070C, CD071C, CD115C, CD142C, CD150C, CD151C, CD160C,
+                    CD165C, CD180C, CD181C, CD200C, CD203C, CD411D, CD903D, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="CountryCodeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== countryOfDestination                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="CountryOfDestinationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C,
+                    CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== countryOfDispatch                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="CountryOfDispatchContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 8/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="Alpha_2" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== coveredAmount                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="CoveredAmountContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== currency                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="CurrencyContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 10/91 messages: CC013C, CC015C, CC029C, CC035C, CC037C, CC224C, CC225C, CC228C, CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== cusCode                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="CusCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 18/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{9}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== customsOfficeAtBorderReferenceNumber                -->
+    <!--==========================================================-->
+    <xs:simpleType name="CustomsOfficeAtBorderReferenceNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD038C, CD050C, CD115C,
+                    CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== date                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="DateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 18/91 messages: CC007C, CC017C, CC029C, CC042C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C,
+                    CD038C, CD050C, CD115C, CD142C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== decision                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="DecisionContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC009C, CC014C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== decisionDateAndTime                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="DecisionDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC009C, CC014C, CD010C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== declarationAcceptanceDate                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="DeclarationAcceptanceDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 17/91 messages: CC023C, CC028C, CC029C, CC035C, CC043C, CC055C, CC190C, CD001C, CD003C, CD012C,
+                    CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== declarationGoodsItemNumber                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="DeclarationGoodsItemNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 22/91 messages: CC007C, CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC170C, CC182C,
+                    CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C,
+                    CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== declarationSubmissionDateAndTime                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="DeclarationSubmissionDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC051C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== declarationType                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="DeclarationTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 14/91 messages: CC013C, CC015C, CC017C, CC029C, CC042C, CC043C, CD001C, CD003C, CD012C, CD038C,
+                    CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== descriptionOfGoods                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="DescriptionOfGoodsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== discrepanciesNotificationDate                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="DiscrepanciesNotificationDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC019C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== discrepanciesNotificationText                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="DiscrepanciesNotificationTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC019C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== discrepanciesResolved                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="DiscrepanciesResolvedContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD049C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== documentLineItemNumber                              -->
+    <!--==========================================================-->
+    <xs:simpleType name="DocumentLineItemNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 11/91 messages: CC013C, CC015C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C,
+                    CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== eMailAddress                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="EMailAddressContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 15/91 messages: CC007C, CC013C, CC015C, CC029C, CC037C, CC051C, CC170C, CC190C, CD142C, CD143C,
+                    CD144C, CD145C, CD150C, CD151C, CD152C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="EmailAddressType256" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== endDateAndTime                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="EndDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD070C, CD071C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== enquiryRequestDate                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="EnquiryRequestDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CD144C, CD145C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== enquiryResponseDate                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="EnquiryResponseDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD143C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== errorCode                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="ErrorCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== errorColumnNumber                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="ErrorColumnNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC917C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,9}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== errorLineNumber                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="ErrorLineNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC917C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,9}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== errorPointer                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="ErrorPointerContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== errorReason                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="ErrorReasonContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 5/91 messages: CC022C, CC056C, CC057C, CC906C, CD906C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,7}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== errorText                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="ErrorTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC917C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== expiryDate                                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="ExpiryDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC224C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== explanation                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="ExplanationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD070C, CD071C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== exposure                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="ExposureContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== exposureCounter                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="ExposureCounterContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== flag                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="FlagContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD070C, CD071C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== functionality                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="FunctionalityContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD070C, CD071C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== globalValidationResponse                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="GlobalValidationResponseContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC191C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== goodsItemNumber                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="GoodsItemNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 17/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C,
+                    CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== grossMass                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="GrossMassContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guaranteeAmount                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuaranteeAmountContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC037C, CC225C, CC228C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guaranteeMonitoringCode                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuaranteeMonitoringCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guaranteeNotValidForCountry                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuaranteeNotValidForCountryContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD115C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guaranteeNotValidIn                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuaranteeNotValidInContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC037C, CD201C, CD205C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guaranteeType                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuaranteeTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 10/91 messages: CC013C, CC015C, CC029C, CC037C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphanumericCapital1Type">
+            <xs:pattern value=".{1}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guarantorNotificationDate                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuarantorNotificationDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC023C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== guarantorNotificationText                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="GuarantorNotificationTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC023C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== harmonizedSystemSubHeadingCode                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="HarmonizedSystemSubHeadingCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 19/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C,
+                    CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== houseNumber                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="HouseNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 6/91 messages: CC007C, CC013C, CC015C, CC029C, CC170C, CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== identificationNumber                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="IdentificationNumberContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 51/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C,
+                    CC025C, CC026C, CC028C, CC029C, CC034C, CC035C, CC037C, CC043C, CC044C, CC045C,
+                    CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C, CC190C,
+                    CC224C, CC225C, CC228C, CC229C, CC231C, CC928C, CD001C, CD003C, CD012C, CD038C,
+                    CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD200C, CD201C, CD203C,
+                    CD205C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="IdentificationNumberContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== identifier                                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="IdentifierContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,20}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== incidentFlag                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="IncidentFlagContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC007C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== incidentNotificationDateAndTime                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="IncidentNotificationDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC182C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== informationAvailableFromTrader                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="InformationAvailableFromTraderContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD144C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== informationCode                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="InformationCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD144C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== initiatedByCustoms                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="InitiatedByCustomsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC009C, CC014C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== inlandModeOfTransport                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="InlandModeOfTransportContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 14/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CD001C, CD003C, CD012C, CD038C,
+                    CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== invalidityDate                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="InvalidityDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CC225C, CC228C, CC229C, CC231C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== invalidityReasonCode                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="InvalidityReasonCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC037C, CC225C, CC231C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== invalidityReasonText                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="InvalidityReasonTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC231C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== issueDate                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="IssueDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC224C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== justification                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="JustificationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC009C, CC014C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== latitude                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="LatitudeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C,
+                    CD115C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="GNSSLatitude" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== liabilityLiberationDate                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="LiabilityLiberationDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC228C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== limitDate                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="LimitDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC170C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== limitForResponseDate                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="LimitForResponseDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC140C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== location                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="LocationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD038C, CD050C, CD115C,
+                    CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== lockDate                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="LockDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== longitude                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="LongitudeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C,
+                    CD115C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="GNSSLongitude" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== masterAccessCode                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="MasterAccessCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC026C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== measurementUnitAndQualifier                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="MeasurementUnitAndQualifierContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== messageType                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="MessageTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD903D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== methodOfPayment                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="MethodOfPaymentContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C,
+                    CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaCapital1Type">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== modeOfTransportAtTheBorder                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="ModeOfTransportAtTheBorderContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD012C, CD038C, CD050C,
+                    CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== month                                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="MonthContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CD411D, CD903D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== name                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="NameContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 42/91 messages: CC004C, CC007C, CC009C, CC013C, CC015C, CC017C, CC019C, CC023C, CC028C, CC029C,
+                    CC035C, CC037C, CC043C, CC045C, CC051C, CC054C, CC055C, CC056C, CC060C, CC140C,
+                    CC141C, CC170C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C,
+                    CD038C, CD050C, CD115C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C,
+                    CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== nationality                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="NationalityContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="CountryCodeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== netMass                                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="NetMassContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 17/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C,
+                    CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== noReleaseMotivationCode                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="NoReleaseMotivationCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC051C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== noReleaseMotivationText                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="NoReleaseMotivationTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC051C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== notificationType                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="NotificationTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC060C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== numberOfCertificates                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="NumberOfCertificatesContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC225C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== numberOfPackages                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="NumberOfPackagesContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== numberOfSeals                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="NumberOfSealsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== operation                                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="OperationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CD070C, CD071C, CD411D, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== originalAttributeValue                              -->
+    <!--==========================================================-->
+    <xs:simpleType name="OriginalAttributeValueContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 8/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD903D, CD906C, CD917C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== otherCountry                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="OtherCountryContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD411D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== otherGuaranteeReference                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="OtherGuaranteeReferenceContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== otherThingsToReport                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="OtherThingsToReportContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC017C, CC044C, CD018C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== passageDate                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="PassageDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CD118C, CD168C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== percentageOfReferenceAmount                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="PercentageOfReferenceAmountContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC225C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== periodFromDate                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="PeriodFromDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC034C, CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== periodToDate                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="PeriodToDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC034C, CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== phoneNumber                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="PhoneNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 15/91 messages: CC007C, CC013C, CC015C, CC029C, CC037C, CC051C, CC170C, CC190C, CD142C, CD143C,
+                    CD144C, CD145C, CD150C, CD151C, CD152C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== place                                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="PlaceContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 9/91 messages: CC007C, CC043C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== postcode                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="PostcodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 40/91 messages: CC004C, CC007C, CC009C, CC013C, CC015C, CC017C, CC019C, CC023C, CC028C, CC029C,
+                    CC035C, CC037C, CC043C, CC045C, CC054C, CC055C, CC056C, CC060C, CC140C, CC141C,
+                    CC170C, CC182C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C,
+                    CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="PostalCodeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== qualifierOfIdentification                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="QualifierOfIdentificationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C,
+                    CD115C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== quantity                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="QuantityContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== queryIdentifier                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="QueryIdentifierContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC034C, CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== recoveryAcceptance                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="RecoveryAcceptanceContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD151C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="Numeric_1" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== recoveryCommunicationDate                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="RecoveryCommunicationDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CC048C, CD063C, CD150C, CD151C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== recoveryNotificationDate                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="RecoveryNotificationDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC035C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== recoveryNotificationText                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="RecoveryNotificationTextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC035C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== reducedDatasetIndicator                             -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReducedDatasetIndicatorContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CD001C, CD003C, CD038C, CD050C,
+                    CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== referenceAmount                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReferenceAmountContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC225C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== referenceNumber                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReferenceNumberContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 77/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C,
+                    CC025C, CC026C, CC028C, CC029C, CC035C, CC037C, CC042C, CC043C, CC044C, CC045C,
+                    CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C,
+                    CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC928C, CD001C,
+                    CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C,
+                    CD050C, CD059C, CD063C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C,
+                    CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C,
+                    CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="CORefNumType" />
+    </xs:simpleType>
+    <xs:simpleType name="ReferenceNumberContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CC007C, CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ReferenceNumberContentType03">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== referenceNumberUCR                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReferenceNumberUCRContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CC013C, CC015C, CC017C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="UCRReferenceNumber35" />
+    </xs:simpleType>
+    <xs:simpleType name="ReferenceNumberUCRContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 9/91 messages: CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="UCRReferenceNumber70" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== rejectionCode                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="RejectionCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC056C, CC057C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== rejectionDateAndTime                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="RejectionDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC056C, CC057C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== rejectionReason                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="RejectionReasonContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC056C, CC057C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== releaseDate                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReleaseDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 12/91 messages: CC025C, CC029C, CC037C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C,
+                    CD165C, CD204C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== releaseIndicator                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReleaseIndicatorContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC025C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== releaseRequestDateAndTime                           -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReleaseRequestDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC017C, CC054C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== releaseRequested                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReleaseRequestedContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC017C, CC054C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== releaseType                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReleaseTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC025C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== remark                                              -->
+    <!--==========================================================-->
+    <xs:simpleType name="RemarkContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC017C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== requestDateAndTime                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="RequestDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC009C, CC014C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== requestOnNonArrivedMovementDate                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="RequestOnNonArrivedMovementDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC140C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== requestRejectionReasonCode                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="RequestRejectionReasonCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== responseCode                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="ResponseCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD143C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== responseDateAndTime                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="ResponseDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC191C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== restrictedUseForSuspendedGoods                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="RestrictedUseForSuspendedGoodsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== restrictedUseSuspendedGoods                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="RestrictedUseSuspendedGoodsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC225C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== resultIndicator                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="ResultIndicatorContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC191C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== returnCopyReturnedDate                              -->
+    <!--==========================================================-->
+    <xs:simpleType name="ReturnCopyReturnedDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD143C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== riskAreaCode                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="RiskAreaCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,7}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== role                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="RoleContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC034C, CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RoleContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C,
+                    CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]{1,3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== security                                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="SecurityContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC191C, CD001C, CD003C, CD038C, CD050C,
+                    CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== securityIndicatorFromExportDeclaration              -->
+    <!--==========================================================-->
+    <xs:simpleType name="SecurityIndicatorFromExportDeclarationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 11/91 messages: CC017C, CC029C, CC043C, CC044C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C,
+                    CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== sequenceNumber                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="SequenceNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 49/91 messages: CC007C, CC013C, CC015C, CC017C, CC022C, CC025C, CC029C, CC034C, CC037C, CC042C,
+                    CC043C, CC044C, CC048C, CC055C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C,
+                    CC228C, CD001C, CD003C, CD010C, CD012C, CD018C, CD024C, CD038C, CD050C, CD063C,
+                    CD070C, CD071C, CD115C, CD144C, CD145C, CD150C, CD151C, CD160C, CD165C, CD180C,
+                    CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== shippingMarks                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="ShippingMarksContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== simplifiedProcedure                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="SimplifiedProcedureContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC007C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== specificCircumstanceIndicator                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="SpecificCircumstanceIndicatorContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C,
+                    CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== startDateAndTime                                    -->
+    <!--==========================================================-->
+    <xs:simpleType name="StartDateAndTimeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD070C, CD071C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateTimeType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== stateOfSeals                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="StateOfSealsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC044C, CD018C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== statisticsType                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="StatisticsTypeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD411D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="Alphanumeric_4" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== statisticsTypeSupport                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="StatisticsTypeSupportContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD411D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== status                                              -->
+    <!--==========================================================-->
+    <xs:simpleType name="StatusContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CD038C, CD094C, CD095C, CD975C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StatusContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 5/91 messages: CC013C, CC015C, CC029C, CC056C, CC170C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== streetAndNumber                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="StreetAndNumberContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 40/91 messages: CC004C, CC007C, CC009C, CC013C, CC015C, CC017C, CC019C, CC023C, CC028C, CC029C,
+                    CC035C, CC037C, CC043C, CC045C, CC054C, CC055C, CC056C, CC060C, CC140C, CC141C,
+                    CC170C, CC182C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C,
+                    CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== supplementaryUnits                                  -->
+    <!--==========================================================-->
+    <xs:simpleType name="SupplementaryUnitsContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CC013C, CC015C, CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== systemCode                                          -->
+    <!--==========================================================-->
+    <xs:simpleType name="SystemCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD411D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== text                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="TextContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 30/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC055C, CC141C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD070C, CD071C, CD115C, CD142C, CD143C,
+                    CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD165C, CD180C, CD181C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== transitProcedureCategory                            -->
+    <!--==========================================================-->
+    <xs:simpleType name="TransitProcedureCategoryContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== type                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="TypeContentType01">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 4/91 messages: CC007C, CC013C, CC015C, CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TypeContentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TypeContentType03">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 3/91 messages: CD070C, CD071C, CD971C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== typeOfIdentification                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="TypeOfIdentificationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C,
+                    CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== typeOfLocation                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="TypeOfLocationContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 6/91 messages: CC007C, CC013C, CC015C, CC029C, CC170C, CC190C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[A-Za-z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== typeOfPackages                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="TypeOfPackagesContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C,
+                    CD018C, CD038C, CD050C, CD115C, CD160C, CD165C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== unloadingCompletion                                 -->
+    <!--==========================================================-->
+    <xs:simpleType name="UnloadingCompletionContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC044C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== unloadingDate                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="UnloadingDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC044C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== unloadingRemark                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="UnloadingRemarkContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC044C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== usageCancellationDate                               -->
+    <!--==========================================================-->
+    <xs:simpleType name="UsageCancellationDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD204C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== validityDate                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="ValidityDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC225C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== validityEndDate                                     -->
+    <!--==========================================================-->
+    <xs:simpleType name="ValidityEndDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== validityStartDate                                   -->
+    <!--==========================================================-->
+    <xs:simpleType name="ValidityStartDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC037C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== voucherAmount                                       -->
+    <!--==========================================================-->
+    <xs:simpleType name="VoucherAmountContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC037C, CC224C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:totalDigits value="16" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== warningCode                                         -->
+    <!--==========================================================-->
+    <xs:simpleType name="WarningCodeContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD903D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== warningPointer                                      -->
+    <!--==========================================================-->
+    <xs:simpleType name="WarningPointerContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CD903D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value=".{1,512}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== writeOffDate                                        -->
+    <!--==========================================================-->
+    <xs:simpleType name="WriteOffDateContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC045C, CD049C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="DateType" />
+    </xs:simpleType>
+    <!--==========================================================-->
+    <!--===== year                                                -->
+    <!--==========================================================-->
+    <xs:simpleType name="YearContentType">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CD411D, CD903D</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="YearType" />
+    </xs:simpleType>
+    <xs:simpleType name="AlphaCapital1Type">
+        <xs:restriction base="AlphaCapitalType">
+            <xs:length value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphaCapital2Type">
+        <xs:restriction base="AlphaCapitalType">
+            <xs:length value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphaCapital3Type">
+        <xs:restriction base="AlphaCapitalType">
+            <xs:length value="3" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphaCapital4Type">
+        <xs:restriction base="AlphaCapitalType">
+            <xs:length value="4" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphaCapitalMax3Type">
+        <xs:restriction base="AlphaCapitalType">
+            <xs:maxLength value="3" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphaCapitalType">
+        <xs:restriction base="AlphaType">
+            <xs:pattern value="[A-Z]*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphaNumType">
+        <xs:annotation>
+            <xs:documentation>Base class for all anN and an..N types</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token" />
+    </xs:simpleType>
+    <xs:simpleType name="AlphaType">
+        <xs:annotation>
+            <xs:documentation>Base class for all aN and a..N
+                types</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token" />
+    </xs:simpleType>
+    <xs:simpleType name="Alpha_1">
+        <xs:restriction base="AlphaType">
+            <xs:length value="1" />
+            <xs:pattern value="[a-zA-Z]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alpha_2">
+        <xs:restriction base="AlphaType">
+            <xs:length value="2" />
+            <xs:pattern value="[a-zA-Z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alpha_3">
+        <xs:restriction base="AlphaType">
+            <xs:length value="3" />
+            <xs:pattern value="[a-zA-Z]{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alpha_4">
+        <xs:restriction base="AlphaType">
+            <xs:length value="4" />
+            <xs:pattern value="[a-zA-Z]{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alpha_Max8">
+        <xs:restriction base="AlphaType">
+            <xs:maxLength value="8" />
+            <xs:pattern value="[a-zA-Z]{1,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapital1Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:length value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapital2Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:length value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapital3Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:length value="3" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapital5Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:length value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalMax2Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:maxLength value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalMax3Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:maxLength value="3" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalMax4Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:maxLength value="4" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalMax5Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:maxLength value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalMax6Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:maxLength value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalMax9Type">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:maxLength value="9" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalType">
+        <xs:restriction base="AlphaNumType">
+            <xs:pattern value="[A-Z0-9]*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericCapitalTypeOfDeclaration">
+        <xs:restriction base="AlphanumericCapitalMax9Type">
+            <xs:pattern value="[A-Z0-9]+-?" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="AlphanumericSpecMax35Type">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="35" />
+            <xs:pattern value="[a-zA-Z]{2}.{1,33}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_1">
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="1" />
+            <xs:pattern value=".{1}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_2">
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="2" />
+            <xs:pattern value=".{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_3">
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="3" />
+            <xs:pattern value=".{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_4">
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="4" />
+            <xs:pattern value=".{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_5">
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="5" />
+            <xs:pattern value=".{5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_8">
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="8" />
+            <xs:pattern value=".{8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Capital_5">
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:length value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max14">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="14" />
+            <xs:pattern value=".{1,14}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max140">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="140" />
+            <xs:pattern value=".{1,140}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max15">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="15" />
+            <xs:pattern value=".{1,15}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max17">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="17" />
+            <xs:pattern value=".{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max175">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="175" />
+            <xs:pattern value=".{1,175}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max2">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="2" />
+            <xs:pattern value=".{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max20">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="20" />
+            <xs:pattern value=".{1,20}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max21">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="21" />
+            <xs:pattern value=".{1,21}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max210">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="210" />
+            <xs:pattern value=".{1,210}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max22">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="22" />
+            <xs:pattern value=".{1,22}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max27">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="27" />
+            <xs:pattern value=".{1,27}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max280">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="280" />
+            <xs:pattern value=".{1,280}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max29">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="29" />
+            <xs:pattern value=".{1,29}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max3">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="3" />
+            <xs:pattern value=".{1,3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max35">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="35" />
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max350">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="350" />
+            <xs:pattern value=".{1,350}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max4">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="4" />
+            <xs:pattern value=".{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max42">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="42" />
+            <xs:pattern value=".{1,42}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max5">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="5" />
+            <xs:pattern value=".{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max6">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="6" />
+            <xs:pattern value=".{1,6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max70">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="70" />
+            <xs:pattern value=".{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Alphanumeric_Max8">
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="8" />
+            <xs:pattern value=".{1,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CORefNumType">
+        <xs:annotation>
+            <xs:documentation>Customs Office Reference Number
+                (format:an8)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:length value="8" />
+            <xs:pattern value="[A-Z]{2}[A-Z0-9]{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CityType">
+        <xs:annotation>
+            <xs:documentation>Trader City (format:
+                an..35)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="35" />
+            <xs:pattern value=".{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContainerIdentificationNumber">
+        <xs:annotation>
+            <xs:documentation>Container Identification Number (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="17" />
+            <xs:pattern value="[ -~]{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ConveyanceReferenceNumber17">
+        <xs:annotation>
+            <xs:documentation>Applicable at 'Conveyance reference number' (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="17" />
+            <xs:pattern value="[ -~]{1,17}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ConveyanceReferenceNumber35">
+        <xs:annotation>
+            <xs:documentation>Applicable at 'Conveyance reference number' (format: an..35)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="35" />
+            <xs:pattern value="[ -~]{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CountryCodeType">
+        <xs:annotation>
+            <xs:documentation>Country Code (format:a2)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaType">
+            <xs:length value="2" />
+            <xs:pattern value="[A-Z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DateTimeType">
+        <xs:annotation>
+            <xs:documentation>The date is in the Common Era (minus sign in years is not permitted) and time zone although not included UTC is implied</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:dateTime">
+            <xs:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?" />
+        </xs:restriction>
+        <!-- Updated -->
+    </xs:simpleType>
+    <xs:simpleType name="DateType">
+        <xs:annotation>
+            <xs:documentation>Calendar dates are represented yyyy-mm-dd format, following ISO 8601. This is a W3C XML Schema date type, but without the optional timezone data.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:date">
+            <xs:pattern value="\d{4}-\d{2}-\d{2}(\.\d+)?" />
+        </xs:restriction>
+        <!-- Updated -->
+    </xs:simpleType>
+    <xs:simpleType name="DayInTheMonthType">
+        <xs:annotation>
+            <xs:documentation>Day in the Month (format:
+                DD)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="NumType">
+            <xs:length value="2" />
+            <xs:pattern value="[0][1-9]|[1-2][0-9]|[3][0-1]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DecType">
+        <xs:annotation>
+            <xs:documentation>Base class for all n..N,M types</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal" />
+    </xs:simpleType>
+    <xs:simpleType name="Decimal_11_3">
+        <xs:restriction base="DecType">
+            <xs:totalDigits value="11" />
+            <xs:fractionDigits value="3" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Decimal_15_2">
+        <xs:restriction base="DecType">
+            <xs:totalDigits value="15" />
+            <xs:fractionDigits value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Decimal_6_5">
+        <xs:restriction base="DecType">
+            <xs:totalDigits value="6" />
+            <xs:fractionDigits value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Decimal_8_6">
+        <xs:restriction base="DecType">
+            <xs:totalDigits value="8" />
+            <xs:fractionDigits value="6" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EmailAddressType256">
+        <xs:restriction base="StringLatin1">
+            <xs:maxLength value="256" />
+            <xs:pattern value="[^@]+@[^\.]+\..+" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GNSSLatitude">
+        <xs:annotation>
+            <xs:documentation>GNSS Latitude (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:pattern value="[+-]?([0-8]?[0-9]\.[0-9]{5,7}|90.000000?0?)" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GNSSLongitude">
+        <xs:annotation>
+            <xs:documentation>GNSS Longitude (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:pattern value="[+-]?((0?[0-9]?|1[0-7])[0-9]\.[0-9]{5,7}|180.000000?0?)" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="GRNType">
+        <xs:annotation>
+            <xs:documentation>GRN (format: an..24)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphanumericCapitalType">
+            <xs:pattern value="[0-9]{2}[A-Z]{2}[A-Z0-9]{12}[0-9]([A-Z][0-9]{6})?" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="IdentificationNumber35">
+        <xs:annotation>
+            <xs:documentation>Applicable at 'LOCATION OF GOODS' (format: an..35)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="35" />
+            <xs:pattern value="[ -~]{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="LanguageCodeType">
+        <xs:annotation>
+            <xs:documentation>Language Code (format: a2)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaType">
+            <xs:length value="2" />
+            <xs:pattern value="[A-Z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="MRNType">
+        <xs:annotation>
+            <xs:documentation>MRN (format: an18), (alias: MRNType)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:pattern value="([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]" />
+            <!-- ================================================================== -->
+            <!-- 'Legacy’ MRN structure - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- ================================================================== -->
+            <!-- Definition of the structure of the MRN produced by an NCTS-P4 - -  -->
+            <!-- application for an NCTS-P4 movement (i.e. initiated during the - - -->
+            <!-- Transitional Period) - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- Until the end of 2024, the NCTS-P5 applications will use this - -  -->
+            <!-- pattern to validate any MRN received (i.e. MRN received for - - -  -->
+            <!-- movements initiated by an NCTS-P4 application and  MRN received  - -->
+            <!-- for movements initiated by an NCTS-P5 application) - - - - - - - - -->
+            <!-- ================================================================== -->
+            <xs:pattern value="([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]" />
+            <!-- ================================================================== -->
+            <!-- 'To Be’ MRN structure (NCTS-P5)- - - - - - - - - - - - - - - - - - -->
+            <!-- ================================================================== -->
+            <!-- Definition of the structure of the MRN produced by an NCTS-P5 - -  -->
+            <!-- application for NCTS-P5 movements initiated *after* 01.01.2024 - - -->
+            <!-- (considering the date of the end of Transitional Period in 2023)-  -->
+            <!-- From 01.01.2024, the NCTS-P5 applications will use this pattern to -->
+            <!-- validate any MRN *received*  - - - - - - - - - - - - - - - - - - - -->
+            <!-- The structure of the MRN *produced* by the NCTS-P5 applications -  -->
+            <!-- will be  "([2][1-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]" - - -->
+            <!-- for the first NTAs starting Phase 5 operations in 2021. - - - - -  -->
+            <!-- ================================================================== -->
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="NumType">
+        <xs:annotation>
+            <xs:documentation>Base class for all nN and n..N
+                types</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token" />
+    </xs:simpleType>
+    <xs:simpleType name="Numeric2">
+        <xs:restriction base="NumType">
+            <xs:length value="2" />
+            <xs:pattern value="[0-9]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric2Max">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="8" />
+            <xs:pattern value="[0-9]{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric3">
+        <xs:restriction base="NumType">
+            <xs:length value="3" />
+            <xs:pattern value="[0-9]{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric4">
+        <xs:restriction base="NumType">
+            <xs:length value="4" />
+            <xs:pattern value="[0-9]{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric6Max">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="8" />
+            <xs:pattern value="[0-9]{1,6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric8Max">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="8" />
+            <xs:pattern value="[0-9]{1,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="NumericMin4Max8">
+        <xs:restriction base="NumType">
+            <xs:pattern value="[0-9]{4,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="NumericMin4Max8Type">
+        <xs:restriction base="NumType">
+            <xs:pattern value="[0-9]{4,8}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_1">
+        <xs:restriction base="NumType">
+            <xs:length value="1" />
+            <xs:pattern value="[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_2">
+        <xs:restriction base="NumType">
+            <xs:length value="2" />
+            <xs:pattern value="[0-9]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_3">
+        <xs:restriction base="NumType">
+            <xs:length value="3" />
+            <xs:pattern value="[0-9]{3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_4">
+        <xs:restriction base="NumType">
+            <xs:length value="4" />
+            <xs:pattern value="[0-9]{4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max11">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="11" />
+            <xs:pattern value="[0-9]{1,11}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max2">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="2" />
+            <xs:pattern value="[0-9]{1,2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max3">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="3" />
+            <xs:pattern value="[0-9]{1,3}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max4">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="4" />
+            <xs:pattern value="[0-9]{1,4}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max5">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="5" />
+            <xs:pattern value="[0-9]{1,5}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max6">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="6" />
+            <xs:pattern value="[0-9]{1,6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max7">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="7" />
+            <xs:pattern value="[0-9]{1,7}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Numeric_Max9">
+        <xs:restriction base="NumType">
+            <xs:maxLength value="9" />
+            <xs:pattern value="[0-9]{1,9}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PostalCodeType">
+        <xs:annotation>
+            <xs:documentation>Trader Postal Code (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="17" />
+            <xs:pattern value=".{1,17}" />
+        </xs:restriction>
+        <!-- Updated -->
+    </xs:simpleType>
+    <xs:simpleType name="RiskAnalysisResultCode">
+        <xs:annotation>
+            <xs:documentation>RISK ANALYSIS.RISK ANALYSIS RESULT.Code (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="17" />
+            <xs:pattern value=".{1,4}[DEZ]" />
+            <!-- for upgrade purposes -->
+            <xs:pattern value="[!-~]{1,16}E" />
+            <!-- for new phases -->
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StreetNumType">
+        <xs:annotation>
+            <xs:documentation>Trader Street and Number (format: an..70)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="70" />
+            <xs:pattern value=".{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StringLatin1">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\p{IsBasicLatin}+" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TINNewType">
+        <xs:annotation>
+            <xs:documentation>EORI or TCUI Number (format: an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="3" />
+            <xs:maxLength value="17" />
+            <xs:pattern value="[A-Z]{2}[!-~]{1,15}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TINType">
+        <xs:annotation>
+            <xs:documentation>Trader Identification Number (format:
+                an..17)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="StringLatin1">
+            <xs:minLength value="3" />
+            <xs:maxLength value="17" />
+            <xs:pattern value="[A-Z]{2}[^\n\r]*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TIRcarnetNumber">
+        <xs:annotation>
+            <xs:documentation>Applicable at 'TIR carnet number' (format: an..12)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="12" />
+            <xs:pattern value="([1-9][0-9]{0,6}|(1[0-9]|2[0-4])[0-9]{0,6}|25000000|(X[A-Z]|[A-Z]X)(2[5-9]|[3-9][0-9]|[1-9][0-9][0-9])[0-9]{6})" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TimeType">
+        <xs:annotation>
+            <xs:documentation>The time zone although not included UTC is implied</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:time">
+            <xs:pattern value="\d{2}:\d{2}:\d{2}(\.\d+)?" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TradNameType">
+        <xs:annotation>
+            <xs:documentation>Trader Name (format: an..70)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:maxLength value="70" />
+            <xs:pattern value=".{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="UCRReferenceNumber35">
+        <xs:annotation>
+            <xs:documentation>UCR Reference Number (format: an..35)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="35" />
+            <xs:pattern value="[ -~]{1,35}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="UCRReferenceNumber70">
+        <xs:annotation>
+            <xs:documentation>UCR Reference Number (format: an..70)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="AlphaNumType">
+            <xs:minLength value="1" />
+            <xs:maxLength value="70" />
+            <xs:pattern value="[ -~]{1,70}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="YearType">
+        <xs:annotation>
+            <xs:documentation>Format for Year (format: YYYY)</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="NumType">
+            <xs:length value="4" />
+            <xs:pattern value="[2][0][1-9][0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="emailAddressType">
+        <xs:restriction base="StringLatin1">
+            <xs:maxLength value="70" />
+            <xs:pattern value="[^@]+@[^\.]+\..+" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="phaseIDtype">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value=" NCTS5.1">
+                <xs:annotation>
+                    <xs:documentation>Phase NCTS 5.1</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NCTS5.0">
+                <xs:annotation>
+                    <xs:documentation>Phase NCTS 5.0</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

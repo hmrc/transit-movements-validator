@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.40" vc:minVersion="1.1">
+  <!--==========================================================-->
+  <!--===== IE015:E_DEC_DAT                                     -->
+  <!--===== DECLARATION DATA                                    -->
+  <!--===== NCTS P5 Phase Definition                            -->
+  <!--===== XSD version 51.40                                   -->
+  <!--==========================================================-->
+  <!--==========================================================-->
+  <!--===== Includes                                            -->
+  <!--==========================================================-->
+  <xs:include schemaLocation="ctypes.xsd" />
+  <xs:include schemaLocation="htypes.xsd" />
+  <!--==========================================================-->
+  <!--===== Root Element                                        -->
+  <!--==========================================================-->
+  <xs:element name="CC015C" type="CC015CType" />
+  <!--==========================================================-->
+  <!--===== Root Element Content                                -->
+  <!--==========================================================-->
+  <xs:complexType name="CC015CType">
+    <xs:sequence>
+      <xs:group ref="MESSAGE" />
+      <xs:element name="TransitOperation" type="TransitOperationType08">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="TRANSIT OPERATION" />
+            <optionality value="R" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Authorisation" minOccurs="0" maxOccurs="9" type="AuthorisationType01">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="AUTHORISATION" />
+            <optionality value="D" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CustomsOfficeOfDeparture" type="CustomsOfficeOfDepartureType">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="CUSTOMS OFFICE OF DEPARTURE" />
+            <optionality value="R" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CustomsOfficeOfDestinationDeclared" type="CustomsOfficeOfDestinationDeclaredType">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="CUSTOMS OFFICE OF DESTINATION (DECLARED)" />
+            <optionality value="R" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CustomsOfficeOfTransitDeclared" minOccurs="0" maxOccurs="9" type="CustomsOfficeOfTransitDeclaredType01">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="CUSTOMS OFFICE OF TRANSIT (DECLARED)" />
+            <optionality value="D" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CustomsOfficeOfExitForTransitDeclared" minOccurs="0" maxOccurs="9" type="CustomsOfficeOfExitForTransitDeclaredType">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="CUSTOMS OFFICE OF EXIT FOR TRANSIT (DECLARED)" />
+            <optionality value="D" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="HolderOfTheTransitProcedure" type="HolderOfTheTransitProcedureType03">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="HOLDER OF THE TRANSIT PROCEDURE" />
+            <optionality value="R" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Representative" minOccurs="0" type="RepresentativeType02">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="REPRESENTATIVE" />
+            <optionality value="O" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Guarantee" maxOccurs="9" type="GuaranteeType03">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="GUARANTEE" />
+            <optionality value="R" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Consignment" type="ConsignmentType14">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="CONSIGNMENT" />
+            <optionality value="R" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="PhaseID" type="PhaseIDContentType" />
+  </xs:complexType>
+</xs:schema>

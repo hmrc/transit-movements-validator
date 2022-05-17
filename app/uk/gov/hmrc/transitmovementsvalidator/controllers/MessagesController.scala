@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.UnknownMessageTypeValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
@@ -53,8 +54,12 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
           validationService
             .validateXML(messageType, request.body)
             .map {
-              case Left(x)  => BadRequest(Json.toJson(BaseError.badRequestError(x)))
-              case Right(x) => Ok(Json.toJson(ValidationResponse(x)))
+              case Left(x) =>
+                x.head match {
+                  case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
+                  case _                                    => Ok(Json.toJson(ValidationResponse(x)))
+                }
+              case Right(_) => NoContent
             }
             .recover {
               case NonFatal(e) =>
