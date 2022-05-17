@@ -2,7 +2,7 @@
 # Transit Movements Validator
 This is a microservice for an internal API to parse and validate XML payloads. 
 
-This mircoservice is in [Beta](https://www.gov.uk/help/beta). The signature may change.
+This microservice is in [Beta](https://www.gov.uk/help/beta). The signature may change.
 
 ## Prerequisites
 
