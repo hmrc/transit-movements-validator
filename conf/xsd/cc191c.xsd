@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.0" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== IE007: E_ARR_NOT                                                          -->
-  <!--===== ARRIVAL NOTIFICATION                                                      -->
+  <!--===== IE191: N_XFT_RSP                                                          -->
+  <!--===== TRANSIT PRESENTATION NOTIFICATION RESPONSE                                -->
   <!--===== NCTS P5 Phase Definition                                                  -->
   <!--===== XSD Version 51.8.0                                                        -->
   <!--================================================================================-->
@@ -14,14 +14,14 @@
   <!--================================================================================-->
   <!--===== Root Element                                                              -->
   <!--================================================================================-->
-  <xs:element name="CC007C" type="CC007CType" />
+  <xs:element name="CC191C" type="CC191CType" />
   <!--================================================================================-->
   <!--===== Root Element Content                                                      -->
   <!--================================================================================-->
-  <xs:complexType name="CC007CType">
+  <xs:complexType name="CC191CType">
     <xs:sequence>
       <xs:group ref="MESSAGE" />
-      <xs:element name="TransitOperation" type="TransitOperationType02">
+      <xs:element name="TransitOperation" type="TransitOperationType25">
         <xs:annotation>
           <xs:documentation>
             <description value="TRANSIT OPERATION" />
@@ -29,34 +29,26 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Authorisation" minOccurs="0" maxOccurs="9" type="AuthorisationType01">
+      <xs:element name="CustomsOfficeOfExit" type="CustomsOfficeOfExitType">
         <xs:annotation>
           <xs:documentation>
-            <description value="AUTHORISATION" />
-            <optionality value="D" />
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="CustomsOfficeOfDestinationActual" type="CustomsOfficeOfDestinationActualType03">
-        <xs:annotation>
-          <xs:documentation>
-            <description value="CUSTOMS OFFICE OF DESTINATION (ACTUAL)" />
+            <description value="CUSTOMS OFFICE OF EXIT" />
             <optionality value="R" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="TraderAtDestination" type="TraderAtDestinationType01">
+      <xs:element name="CustomsOfficeOfDeparture" type="CustomsOfficeOfDepartureType03">
         <xs:annotation>
           <xs:documentation>
-            <description value="TRADER AT DESTINATION" />
+            <description value="CUSTOMS OFFICE OF DEPARTURE" />
             <optionality value="R" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Consignment" type="ConsignmentType01">
+      <xs:element name="AESResults" type="AESResultsType">
         <xs:annotation>
           <xs:documentation>
-            <description value="CONSIGNMENT" />
+            <description value="AES RESULTS" />
             <optionality value="R" />
           </xs:documentation>
         </xs:annotation>
