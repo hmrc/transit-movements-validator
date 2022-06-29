@@ -7,8 +7,10 @@
   <xs:include schemaLocation="tcl.xsd" />
   <xs:include schemaLocation="stypes.xsd" />
   <xs:group name="MESSAGE">
+  <!-- CTC Start: We don't accept a message sender from traders, we so create groups to -->
+  <!-- include and exclude the message sender -->
     <xs:annotation>
-      <xs:documentation>Used by all messages</xs:documentation>
+      <xs:documentation>Used by messages to the Trader</xs:documentation>
     </xs:annotation>
     <xs:sequence>
       <xs:element name="messageSender" type="MessageSenderContentType">
@@ -18,6 +20,30 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+    </xs:sequence>
+    <xs:group ref="MESSAGE_1" />
+  </xs:group>
+  <xs:group name="MESSAGE_FROM_TRADER">
+    <xs:annotation>
+      <xs:documentation>Used by messages from the Trader</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="messageSender" type="MessageSenderContentType" minOccurs="0" maxOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="Message sender" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:group ref="MESSAGE_1" />
+  </xs:group>
+  <xs:group name="MESSAGE_1">
+  <!-- CTC End -->
+    <xs:annotation>
+      <xs:documentation>Used by all messages</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
       <xs:element name="messageRecipient" type="MessageRecipientContentType">
         <xs:annotation>
           <xs:documentation>
