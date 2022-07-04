@@ -20,8 +20,8 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:group ref="MESSAGE_1" />
     </xs:sequence>
-    <xs:group ref="MESSAGE_1" />
   </xs:group>
   <xs:group name="MESSAGE_FROM_TRADER">
     <xs:annotation>
@@ -35,8 +35,8 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:group ref="MESSAGE_1" />
     </xs:sequence>
-    <xs:group ref="MESSAGE_1" />
   </xs:group>
   <xs:group name="MESSAGE_1">
   <!-- CTC End -->
