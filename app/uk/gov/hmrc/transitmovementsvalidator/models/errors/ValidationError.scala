@@ -19,10 +19,6 @@ package uk.gov.hmrc.transitmovementsvalidator.models.errors
 import org.xml.sax.SAXParseException
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
-import play.api.libs.json.Format
-import play.api.libs.json.JsObject
-import play.api.libs.json.JsResult
-import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import play.api.libs.json.OFormat
 import play.api.libs.json.OWrites

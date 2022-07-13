@@ -17,7 +17,6 @@
 package uk.gov.hmrc.transitmovementsvalidator.controllers
 
 import akka.stream.Materializer
-import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import play.api.Logging
@@ -35,7 +34,6 @@ import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 class MessagesController @Inject() (cc: ControllerComponents, validationService: ValidationService)(implicit
@@ -43,37 +41,49 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
   executionContext: ExecutionContext
 ) extends BackendController(cc)
     with Logging
-    with StreamingParsers {
+    with StreamingParsers
+    with ContentTypeRouting {
 
-  def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
+  def validate(messageType: String): Action[Source[ByteString, _]] =
+    contentTypeRoute {
+      case Some(MimeTypes.XML)  => validateXML(messageType)
+      case Some(MimeTypes.JSON) => validateJSON(messageType)
+    }
+
+  def validateXML(messageType: String): Action[Source[ByteString, _]] =
+    Action.async(streamFromMemory) {
+      implicit request =>
+        validationService
+          .validateXML(messageType, request.body)
+          .map {
+            case Left(x) =>
+              x.head match {
+                case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
+                case _                                    => Ok(Json.toJson(ValidationResponse(x)))
+              }
+            case Right(_) => NoContent
+          }
+          .recover {
+            case NonFatal(e) =>
+              InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
+          }
+    }
+
+  def validateJSON(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
     implicit request =>
-      request.headers.get(CONTENT_TYPE) match {
-        // As an internal service, we can control just sending this mime type as a content type,
-        // this should be sufficient (i.e. no charset).
-        case Some(MimeTypes.XML) =>
-          validationService
-            .validateXML(messageType, request.body)
-            .map {
-              case Left(x) =>
-                x.head match {
-                  case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
-                  case _                                    => Ok(Json.toJson(ValidationResponse(x)))
-                }
-              case Right(_) => NoContent
+      validationService
+        .validateJSON(messageType, request.body)
+        .map {
+          case Left(x) =>
+            x.head match {
+              case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
+              case _                                    => Ok(Json.toJson(ValidationResponse(x)))
             }
-            .recover {
-              case NonFatal(e) =>
-                InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
-            }
-        case Some(x) =>
-          request.body.runWith(Sink.ignore)
-          Future.successful(
-            UnsupportedMediaType(Json.toJson(BaseError.unsupportedMediaTypeError(s"Content type $x is not supported.")))
-          )
-        case None =>
-          request.body.runWith(Sink.ignore)
-          Future.successful(UnsupportedMediaType(Json.toJson(BaseError.unsupportedMediaTypeError(s"Content type must be specified."))))
-      }
+          case Right(_) => NoContent
+        }
+        .recover {
+          case NonFatal(e) =>
+            InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
+        }
   }
-
 }

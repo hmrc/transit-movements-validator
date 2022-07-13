@@ -23,7 +23,6 @@ import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
 import cats.data.NonEmptyList
 import com.google.inject.ImplementedBy
-import com.google.inject.Singleton
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
@@ -37,46 +36,29 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import javax.inject.Inject
-import javax.xml.XMLConstants
-import javax.xml.parsers.SAXParserFactory
-import javax.xml.validation.SchemaFactory
 import scala.collection.mutable
 
 @ImplementedBy(classOf[ValidationServiceImpl])
 trait ValidationService {
 
-  def validateXML(messageType: String, source: Source[ByteString, _])(implicit materializer: Materializer): Future[Either[NonEmptyList[ValidationError], Unit]]
+  def validateXML(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): Future[Either[NonEmptyList[ValidationError], Unit]]
 
+  def validateJSON(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): Future[Either[NonEmptyList[ValidationError], Unit]]
 }
 
-class ValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends ValidationService {
+class ValidationServiceImpl @Inject() extends ValidationService with XmlValidation {
 
-  val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
-    MessageType.values.map {
-      typ =>
-        typ -> Future(buildParser(typ))
-    }.toMap
-
-  def buildParser(messageType: MessageType): SAXParserFactory = {
-    val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-    val parser        = SAXParserFactory.newInstance()
-    val schemaUrl     = getClass.getResource(messageType.xsdPath)
-
-    val schema = schemaFactory.newSchema(schemaUrl)
-    parser.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
-    parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
-    parser.setFeature("http://xml.org/sax/features/external-general-entities", false)
-    parser.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
-    parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-    parser.setNamespaceAware(true)
-    parser.setXIncludeAware(false)
-    parser.setSchema(schema)
-
-    parser
-  }
+  //implicit override def ec: ExecutionContext = implicitly
 
   override def validateXML(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer
+    materializer: Materializer,
+    ec: ExecutionContext
   ): Future[Either[NonEmptyList[ValidationError], Unit]] =
     MessageType.values.find(_.code == messageType) match {
       case None =>
@@ -117,7 +99,10 @@ class ValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends Va
               .map(Either.left)
               .getOrElse(parseXml)
         }
-
     }
 
+  override def validateJSON(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): Future[Either[NonEmptyList[ValidationError], Unit]] = Future.successful(Right(()))
 }
