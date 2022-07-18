@@ -31,6 +31,15 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
+import com.eclipsesource.schema.SchemaType
+import com.eclipsesource.schema.SchemaValidator
+import com.eclipsesource.schema.drafts.Version4.schemaTypeReads
+import com.eclipsesource.schema.drafts.Version7
+import play.api.libs.json.JsError
+import play.api.libs.json.JsResult
+import play.api.libs.json.JsSuccess
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -54,8 +63,6 @@ trait ValidationService {
 
 class ValidationServiceImpl @Inject() extends ValidationService with XmlValidation {
 
-  //implicit override def ec: ExecutionContext = implicitly
-
   override def validateXML(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
@@ -75,8 +82,10 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
 
             parser.setErrorHandler(new ErrorHandler {
               override def warning(error: SAXParseException): Unit = {}
+
               override def error(error: SAXParseException): Unit =
                 errorBuffer += SchemaValidationError.fromSaxParseException(error)
+
               override def fatalError(error: SAXParseException): Unit =
                 errorBuffer += SchemaValidationError.fromSaxParseException(error)
             })
@@ -104,5 +113,38 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
   override def validateJSON(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]] = Future.successful(Right(()))
+  ): Future[Either[NonEmptyList[ValidationError], Unit]] =
+    MessageType.values.find(_.code == messageType) match {
+      case None =>
+        //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+        source.runWith(Sink.ignore)
+        Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
+      case Some(mType) =>
+        val validator = SchemaValidator(Some(Version7))
+        val schema = Json
+          .fromJson[SchemaType](Json.parse("""json_schema""".stripMargin))
+          .get
+
+        val result = source
+          .map(_.utf8String)
+          .map(Json.parse)
+          .map(validator.validate(schema, _))
+          .runWith(Sink.head[JsResult[JsValue]])
+
+        result.map {
+          case JsError(errors) =>
+            errors.map {
+              e =>
+                val messages = e._2.map(
+                  error => error.message
+                )
+                ValidationError(s"Error in path ${e._1}: $messages")
+            }
+            val validationErrors = NonEmptyList.fromList(errors.toList).get
+            Left(validationErrors)
+          case JsSuccess(_, _) => Right(())
+        }
+
+    }
+
 }

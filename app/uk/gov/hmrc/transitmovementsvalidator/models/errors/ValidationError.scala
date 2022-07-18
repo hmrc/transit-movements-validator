@@ -52,6 +52,8 @@ object UnknownMessageTypeValidationError {
 
 case class SchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends ValidationError
 
+case class JsonSchemaValidationError(path: String, message: String) extends ValidationError
+
 object SchemaValidationError {
 
   def fromSaxParseException(ex: SAXParseException) =
