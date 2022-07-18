@@ -16,17 +16,17 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models
 
-sealed trait MessageType {
+sealed trait MessageTypeXml {
   def code: String
   def rootNode: String
   def xsdPath: String
 }
 
-sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String) extends MessageType
+sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
 
-sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String) extends MessageType
+sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
 
-object MessageType {
+object MessageTypeXml {
 
   // *******************
   // Departures Requests

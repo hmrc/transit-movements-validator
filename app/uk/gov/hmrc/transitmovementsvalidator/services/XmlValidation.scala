@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeXml
 
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
@@ -26,15 +26,15 @@ import scala.concurrent.Future
 
 trait XmlValidation {
 
-  def parsersByType(messageType: MessageType)(implicit ec: ExecutionContext): Future[SAXParserFactory] =
-    MessageType.values
+  def parsersByType(messageType: MessageTypeXml)(implicit ec: ExecutionContext): Future[SAXParserFactory] =
+    MessageTypeXml.values
       .find(_ == messageType)
       .map(
         x => Future(buildParser(x))
       )
       .get
 
-  def buildParser(messageType: MessageType): SAXParserFactory = {
+  def buildParser(messageType: MessageTypeXml): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
     val parser        = SAXParserFactory.newInstance()
     val schemaUrl     = getClass.getResource(messageType.xsdPath)

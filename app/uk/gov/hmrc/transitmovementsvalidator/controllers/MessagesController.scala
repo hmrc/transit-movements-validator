@@ -16,9 +16,16 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.controllers
 
+import akka.NotUsed
+import akka.stream.FlowShape
 import akka.stream.Materializer
+import akka.stream.scaladsl.Broadcast
+import akka.stream.scaladsl.Flow
+import akka.stream.scaladsl.GraphDSL
 import akka.stream.scaladsl.Source
+import akka.stream.scaladsl.ZipWith
 import akka.util.ByteString
+import jdk.internal.jimage.decompressor.SignatureParser.ParseResult
 import play.api.Logging
 import play.api.libs.json.Json
 import play.api.mvc.Action
@@ -32,6 +39,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.UnknownMessageTypeVal
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 
+import java.time.OffsetDateTime
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
@@ -69,21 +77,22 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
           }
     }
 
-  def validateJSON(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
-    implicit request =>
-      validationService
-        .validateJSON(messageType, request.body)
-        .map {
-          case Left(x) =>
-            x.head match {
-              case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
-              case _                                    => Ok(Json.toJson(ValidationResponse(x)))
-            }
-          case Right(_) => NoContent
-        }
-        .recover {
-          case NonFatal(e) =>
-            InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
-        }
-  }
+  def validateJSON(messageType: String): Action[Source[ByteString, _]] =
+    Action.async(streamFromMemory) {
+      implicit request =>
+        validationService
+          .validateJSON(messageType, request.body)
+          .map {
+            case Left(x) =>
+              x.head match {
+                case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
+                case _                                    => Ok(Json.toJson(ValidationResponse(x)))
+              }
+            case Right(_) => NoContent
+          }
+          .recover {
+            case NonFatal(e) =>
+              InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
+          }
+    }
 }

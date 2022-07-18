@@ -19,6 +19,7 @@ package uk.gov.hmrc.transitmovementsvalidator.models.errors
 import org.xml.sax.SAXParseException
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
+import play.api.libs.json.JsPath
 import play.api.libs.json.Json
 import play.api.libs.json.OFormat
 import play.api.libs.json.OWrites
@@ -52,8 +53,6 @@ object UnknownMessageTypeValidationError {
 
 case class SchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends ValidationError
 
-case class JsonSchemaValidationError(path: String, message: String) extends ValidationError
-
 object SchemaValidationError {
 
   def fromSaxParseException(ex: SAXParseException) =
@@ -73,3 +72,5 @@ object SchemaValidationError {
         (__ \ "message").write[String]
     )(unlift(SchemaValidationError.unapply))
 }
+
+case class JsonSchemaValidationError(message: String) extends ValidationError
