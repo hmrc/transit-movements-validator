@@ -25,7 +25,7 @@ class JsonValidator extends AnyFreeSpec with Matchers with MockitoSugar {
   "On validate CC015c" - {
     "when valid json payload is provided should result in a successful validation" in new Setup {
 
-      val payload = extractJson("c0015c-generated-from-json-schema.json")
+      val payload = extractJson("cc015c-generated-from-json-schema.json")
 
       val actual: JsResult[JsValue] = validator.validate(schema, payload)
       val expected                  = JsSuccess("") // JsString("exceeds maximum length of 22")
@@ -34,7 +34,7 @@ class JsonValidator extends AnyFreeSpec with Matchers with MockitoSugar {
 
     "when an invalid json payload is provided should result in an unsuccessful validation" in new Setup {
 
-      val payload  = extractJson("c0015c-LRN-too-long.json")
+      val payload  = extractJson("cc015c-LRN-too-long.json")
       val actual   = validator.validate(schema, payload)
       val expected = "exceeds maximum length of 22"
       actual shouldBe a[JsError]
@@ -45,7 +45,7 @@ class JsonValidator extends AnyFreeSpec with Matchers with MockitoSugar {
   trait Setup {
 
     val schema = Json
-      .fromJson[SchemaType](extractJson("c0015c-schema.json"))
+      .fromJson[SchemaType](extractJson("cc015c-schema.json"))
       .getOrElse(throw new IllegalStateException("Unable to extract Schema"))
 
     val validator = SchemaValidator(Some(Version7))
