@@ -1,3 +1,19 @@
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.transitmovementsvalidator.models
 
 sealed trait MessageTypeJson {
@@ -5,9 +21,9 @@ sealed trait MessageTypeJson {
   def schemaPath: String
 }
 
-sealed abstract class DepartureMessageType(val code: String, val schemaPath: String) extends MessageTypeJson
+sealed abstract class DepartureMessageTypeJson(val code: String, val schemaPath: String) extends MessageTypeJson
 
-sealed abstract class ArrivalMessageType(val code: String, val schemaPath: String) extends MessageTypeJson
+sealed abstract class ArrivalMessageTypeJson(val code: String, val schemaPath: String) extends MessageTypeJson
 
 object MessageTypeJson {
 
@@ -24,7 +40,7 @@ object MessageTypeJson {
   //    extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd")
 
   /** E_DEC_DAT (IE015) */
-  case object DeclarationData extends DepartureMessageType("IE015", "/jsonSchema/cc015c.json")
+  case object DeclarationDataJson extends DepartureMessageTypeJson("IE015", "/jsonSchema/cc015c.json")
 
   //  /** E_REQ_REL (IE054) */
   //  case object RequestOfRelease
@@ -37,7 +53,7 @@ object MessageTypeJson {
   val departureValues = Set(
     //    DeclarationAmendment,
     //    DeclarationInvalidation,
-    DeclarationData
+    DeclarationDataJson
     //    RequestOfRelease,
     //    PresentationNotification
   )

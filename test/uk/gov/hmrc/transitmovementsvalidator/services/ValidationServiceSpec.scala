@@ -17,6 +17,7 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
+import akka.stream.scaladsl.FileIO
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
@@ -24,11 +25,14 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import java.nio.charset.StandardCharsets
+import java.nio.file.Paths
 import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +47,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
-  "On Validate" - {
+  "On Validate XML" - {
     "when valid XML is provided for the given message type, return a Right" in {
       val source = Source.single(ByteString(exampleIE015XML.mkString, StandardCharsets.UTF_8))
       val sut    = new ValidationServiceImpl
@@ -72,6 +76,44 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val sut    = new ValidationServiceImpl
       val result = sut.validateXML(validCode, source)
+
+      whenReady(result) {
+        r =>
+          r.isLeft mustBe true
+          r.left.get.head.isInstanceOf[SchemaValidationError]
+      }
+    }
+  }
+
+  "On Validate JSON" - {
+    "when valid JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get("/data/cc015c-generated-from-json-schema.json"))
+      val sut    = new ValidationServiceImpl
+      val result = sut.validateJSON(validCode, source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
+    "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
+      val source      = FileIO.fromPath(Paths.get("/data/cc015c-generated-from-json-schema.json"))
+      val invalidCode = "dummy"
+      val sut         = new ValidationServiceImpl
+      val result      = sut.validateJSON(invalidCode, source)
+
+      whenReady(result) {
+        r =>
+          r.isLeft mustBe true
+          r.left.get.head mustBe ValidationError.fromUnrecognisedMessageType(invalidCode)
+      }
+    }
+
+    "when valid message type provided but with unexpected json, return errors" in {
+      val source = FileIO.fromPath(Paths.get("/data/cc015c-LRN-too-long.json"))
+      val sut    = new ValidationServiceImpl
+      val result = sut.validateJSON(validCode, source)
 
       whenReady(result) {
         r =>

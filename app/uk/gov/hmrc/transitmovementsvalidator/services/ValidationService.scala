@@ -40,14 +40,19 @@ import play.api.libs.json.JsResult
 import play.api.libs.json.JsSuccess
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
+import play.api.mvc.Results.InternalServerError
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeJson
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeXml
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import javax.inject.Inject
 import scala.collection.mutable
+import scala.util.Failure
+import scala.util.Success
+import scala.util.control.NonFatal
 
 @ImplementedBy(classOf[ValidationServiceImpl])
 trait ValidationService {
@@ -122,30 +127,22 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
         source.runWith(Sink.ignore)
         Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
       case Some(mType) =>
-        val validator = SchemaValidator(Some(Version7))
+        (
+          for {
+            jsonSchema <- parseJsonSchema(mType.schemaPath)
+            schemaType = Json.fromJson[SchemaType](jsonSchema).getOrElse(throw new IllegalStateException("Unable to extract schema"))
+            result <- validate(source, schemaType)
+          } yield result
+        ).map {
+          case JsError(errors) =>
+            val jsonSchemaValidationErrors = for {
+              jsError         <- errors
+              validationError <- jsError._2
+            } yield JsonSchemaValidationError(validationError.message)
 
-        parseJsonSchema(mType.schemaPath)
-          .map {
-            Json.fromJson[SchemaType](_).getOrElse(throw new IllegalStateException("Unable to extract Schema"))
-          }
-          .map {
-            schemaType =>
-              source
-                .via(toStringFlow)
-                .via(jsonParseFlow)
-                .map(validator.validate(schemaType, _))
-                .runWith(Sink.head[JsResult[JsValue]])
-          }
-          .map {
-            case JsError(errors) =>
-              val jsonSchemaValidationErrors = for {
-                jsError         <- errors
-                validationError <- jsError._2
-              } yield JsonSchemaValidationError(validationError.message)
-
-              Left(NonEmptyList.fromList(jsonSchemaValidationErrors.toList).get)
-            case JsSuccess(_, _) => Right(())
-          }
+            Left(NonEmptyList.fromList(jsonSchemaValidationErrors.toList).get)
+          case JsSuccess(_, _) => Right(())
+        }
     }
 
 }

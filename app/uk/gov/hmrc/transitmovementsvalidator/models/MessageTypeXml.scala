@@ -22,9 +22,9 @@ sealed trait MessageTypeXml {
   def xsdPath: String
 }
 
-sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
+sealed abstract class DepartureMessageTypeXml(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
 
-sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
+sealed abstract class ArrivalMessageTypeXml(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
 
 object MessageTypeXml {
 
@@ -41,7 +41,7 @@ object MessageTypeXml {
 //    extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd")
 
   /** E_DEC_DAT (IE015) */
-  case object DeclarationData extends DepartureMessageType("IE015", "CC015C", "/xsd/cc015c.xsd")
+  case object DeclarationDataXml extends DepartureMessageTypeXml("IE015", "CC015C", "/xsd/cc015c.xsd")
 
 //  /** E_REQ_REL (IE054) */
 //  case object RequestOfRelease
@@ -54,7 +54,7 @@ object MessageTypeXml {
   val departureValues = Set(
 //    DeclarationAmendment,
 //    DeclarationInvalidation,
-    DeclarationData
+    DeclarationDataXml
 //    RequestOfRelease,
 //    PresentationNotification
   )
@@ -64,14 +64,14 @@ object MessageTypeXml {
   // ****************
 
   /** E_REQ_REL (IE054) */
-  case object ArrivalNotification extends ArrivalMessageType("IE007", "CC007C", "/xsd/cc007c.xsd")
+  case object ArrivalNotificationXml extends ArrivalMessageTypeXml("IE007", "CC007C", "/xsd/cc007c.xsd")
 
   /** E_PRE_NOT (IE170) */
-  case object UnloadingRemarks extends ArrivalMessageType("IE044", "CC044C", "/xsd/cc044c.xsd")
+  case object UnloadingRemarksXml extends ArrivalMessageTypeXml("IE044", "CC044C", "/xsd/cc044c.xsd")
 
   val arrivalValues = Set(
-    ArrivalNotification,
-    UnloadingRemarks
+    ArrivalNotificationXml,
+    UnloadingRemarksXml
   )
 
   val values = arrivalValues ++ departureValues
