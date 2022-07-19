@@ -21,28 +21,34 @@ import akka.stream.scaladsl.FileIO
 import akka.stream.scaladsl.Flow
 import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
+import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
 import com.eclipsesource.schema.SchemaType
 import com.eclipsesource.schema.SchemaValidator
 import com.eclipsesource.schema.drafts.Version7
+import org.xml.sax.InputSource
 import play.api.libs.json.JsResult
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 
 import java.nio.file.Paths
 import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
 
 trait JsonValidation {
 
-  val toStringFlow = Flow[ByteString].map(_.utf8String)
-
-  val jsonParseFlow = Flow[String].map(Json.parse)
-
   val validator = SchemaValidator(Some(Version7))
 
-  def parseJsonSchema(path: String)(implicit materializer: Materializer): Future[JsValue] =
-    FileIO.fromPath(Paths.get(path)).via(toStringFlow).via(jsonParseFlow).runWith(Sink.head[JsValue])
+  def extractJson(filepath: String): JsValue = {
+    val stream = getClass.getResourceAsStream(filepath)
+    val raw    = scala.io.Source.fromInputStream(stream).getLines.mkString
+    Json.parse(raw)
+  }
 
-  def validate(source: Source[ByteString, _], schemaType: SchemaType)(implicit materializer: Materializer): Future[JsResult[JsValue]] =
-    source.via(toStringFlow).via(jsonParseFlow).map(validator.validate(schemaType, _)).runWith(Sink.head[JsResult[JsValue]])
+  def validateJson(source: Source[ByteString, _], schemaType: SchemaType)(implicit materializer: Materializer): Future[JsResult[JsValue]] = {
+    val stream = source.runWith(StreamConverters.asInputStream(20.seconds))
+    val raw    = scala.io.Source.fromInputStream(stream).getLines.mkString
+    val json   = Json.parse(raw)
+    Future.successful(validator.validate(schemaType, json))
+  }
 }

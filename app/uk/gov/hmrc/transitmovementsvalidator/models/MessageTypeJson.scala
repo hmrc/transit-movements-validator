@@ -40,7 +40,7 @@ object MessageTypeJson {
   //    extends DepartureMessageType("IE014", "CC014C", "/json/cc014c.xsd")
 
   /** E_DEC_DAT (IE015) */
-  case object DeclarationDataJson extends DepartureMessageTypeJson("IE015", "./conf/json/cc015c.json")
+  case object DeclarationDataJson extends DepartureMessageTypeJson("IE015", "/json/cc015c-schema.json")
 
   //  /** E_REQ_REL (IE054) */
   //  case object RequestOfRelease
@@ -66,7 +66,7 @@ object MessageTypeJson {
 //  case object ArrivalNotification extends ArrivalMessageType("IE007", "/json/cc007c.json")
 //
 //  /** E_PRE_NOT (IE170) */
-//  case object UnloadingRemarks extends ArrivalMessageType("IE044", "/json/cc044c.json")
+//  case object UnloadingRemarks extends ArrivalMessageType("IE044", "./json/cc044c.json")
 //
 //  val arrivalValues = Set(
 //    ArrivalNotification,

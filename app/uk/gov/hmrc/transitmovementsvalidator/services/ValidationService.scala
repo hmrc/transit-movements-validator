@@ -127,13 +127,10 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
         source.runWith(Sink.ignore)
         Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
       case Some(mType) =>
-        (
-          for {
-            jsonSchema <- parseJsonSchema(mType.schemaPath)
-            schemaType = Json.fromJson[SchemaType](jsonSchema).getOrElse(throw new IllegalStateException("Unable to extract schema"))
-            result <- validate(source, schemaType)
-          } yield result
-        ).map {
+        val jsonSchema = extractJson(mType.schemaPath)
+        val schemaType = Json.fromJson[SchemaType](jsonSchema).getOrElse(throw new IllegalStateException("Unable to extract schema"))
+
+        validateJson(source, schemaType).map {
           case JsError(errors) =>
             val jsonSchemaValidationErrors = for {
               jsError         <- errors
