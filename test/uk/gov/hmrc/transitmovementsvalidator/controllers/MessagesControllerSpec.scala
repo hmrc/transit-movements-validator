@@ -30,6 +30,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.BAD_REQUEST
+import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.http.Status.NO_CONTENT
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
@@ -42,7 +43,8 @@ import play.api.test.FakeRequest
 import play.api.test.StubControllerComponentsFactory
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
@@ -65,9 +67,6 @@ class MessagesControllerSpec
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
 
-  lazy val validXml: NodeSeq = <test></test>
-  lazy val validJson: String = "{}"
-
   // the execution context for testing
   import system.dispatcher
 
@@ -77,11 +76,12 @@ class MessagesControllerSpec
     reset(mockValidationService)
     super.beforeEach()
   }
+  val validCode   = "IE015"
+  val invalidCode = "dummy"
 
-  "On validate" - {
+  "On validate XML" - {
 
-    val validCode   = "IE015"
-    val invalidCode = "dummy"
+    lazy val validXml: NodeSeq = <test></test>
 
     "on a valid XML file, with the application/xml content type, return No Content" in {
       when(mockValidationService.validateXML(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
@@ -94,7 +94,7 @@ class MessagesControllerSpec
       status(result) mustBe NO_CONTENT
     }
 
-    "on a valid XML file, but no valid message type, return BadRequest with a list of errors" in {
+    "on a valid XML file, but no valid message type, return BadRequest with an error message" in {
       when(mockValidationService.validateXML(eqTo(invalidCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenReturn(Future.successful(Left(NonEmptyList(ValidationError.fromUnrecognisedMessageType("dummy"), Nil))))
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
@@ -110,7 +110,7 @@ class MessagesControllerSpec
     }
 
     "on an invalid XML file, return Ok with a list of errors" in {
-      val errorList = NonEmptyList(SchemaValidationError(1, 1, "text1"), List(SchemaValidationError(2, 2, "text2")))
+      val errorList = NonEmptyList(XmlSchemaValidationError(1, 1, "text1"), List(XmlSchemaValidationError(2, 2, "text2")))
 
       when(mockValidationService.validateXML(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenReturn(Future.successful(Left(errorList)))
@@ -125,18 +125,36 @@ class MessagesControllerSpec
       status(result) mustBe OK
     }
 
+    "on an exception being thrown during xml validation, must return Internal Server Error" in {
+      when(mockValidationService.validateXML(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenReturn(Future.failed(new Exception("Unable to extract schema")))
+      val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
+      val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+      val result  = sut.validate(validCode)(request)
+
+      contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
+      status(result) mustBe INTERNAL_SERVER_ERROR
+    }
+  }
+
+  "On validate JSON" - {
+
+    lazy val validJson: String   = "{}"
+    lazy val invalidJson: String = "{"
+
     "on a valid JSON file, with the application/json content type, return No Content" in {
       when(mockValidationService.validateJSON(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenReturn(Future.successful(Right(())))
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
-      val source  = Source.single(ByteString(validJson.mkString, StandardCharsets.UTF_8))
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode)(request)
 
       status(result) mustBe NO_CONTENT
     }
 
-    "on a valid JSON file, with no content type, must return a 415" in {
+    "on a valid JSON file, with no content type, must return Unsupported Media Type" in {
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(), source)
@@ -146,11 +164,11 @@ class MessagesControllerSpec
       status(result) mustBe UNSUPPORTED_MEDIA_TYPE
     }
 
-    "on a valid JSON file, but no valid message type, return BadRequest with a list of errors" in {
+    "on a valid JSON file, but no valid message type, return BadRequest with an error message" in {
       when(mockValidationService.validateJSON(eqTo(invalidCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenReturn(Future.successful(Left(NonEmptyList(ValidationError.fromUnrecognisedMessageType("dummy"), Nil))))
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
-      val source  = Source.single(ByteString(validJson.mkString, StandardCharsets.UTF_8))
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$invalidCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(invalidCode)(request)
 
@@ -161,13 +179,14 @@ class MessagesControllerSpec
       status(result) mustBe BAD_REQUEST
     }
 
-    "on an invalid JSON file, return Ok with a list of errors" ignore {
-      val errorList = NonEmptyList(SchemaValidationError(1, 1, "text1"), List(SchemaValidationError(2, 2, "text2")))
+    "on an invalid JSON file, return Ok with a list of errors" in {
+      val errorList = NonEmptyList(JsonSchemaValidationError("LRN", "'123456' exceeds maximum length of 4."), Nil)
 
       when(mockValidationService.validateJSON(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenReturn(Future.successful(Left(errorList)))
+
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
-      val source  = Source.single(ByteString(validJson.mkString, StandardCharsets.UTF_8))
+      val source  = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode)(request)
 
@@ -177,7 +196,7 @@ class MessagesControllerSpec
       status(result) mustBe OK
     }
 
-    "on receiving an invalid content type, must return a 415" in {
+    "on receiving an invalid content type, must return Unsupported Media Type" in {
       val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.TEXT)), source)
@@ -185,6 +204,18 @@ class MessagesControllerSpec
 
       contentAsJson(result) mustBe Json.obj("code" -> "UNSUPPORTED_MEDIA_TYPE", "message" -> "Content type text/plain is not supported.")
       status(result) mustBe UNSUPPORTED_MEDIA_TYPE
+    }
+
+    "on an exception being thrown during json validation, must return Internal Server Error" in {
+      when(mockValidationService.validateJSON(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenReturn(Future.failed(new Exception("Unable to extract schema")))
+      val sut     = new MessagesController(stubControllerComponents(), mockValidationService)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
+      val result  = sut.validate(validCode)(request)
+
+      contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
+      status(result) mustBe INTERNAL_SERVER_ERROR
     }
 
   }

@@ -19,7 +19,6 @@ package uk.gov.hmrc.transitmovementsvalidator.models.errors
 import org.xml.sax.SAXParseException
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
-import play.api.libs.json.JsPath
 import play.api.libs.json.Json
 import play.api.libs.json.OFormat
 import play.api.libs.json.OWrites
@@ -41,7 +40,8 @@ object ValidationError {
 
   implicit lazy val writes: OWrites[ValidationError] = OWrites {
     case um: UnknownMessageTypeValidationError => Json.toJsObject(um)
-    case sve: SchemaValidationError            => Json.toJsObject(sve)
+    case sve: XmlSchemaValidationError         => Json.toJsObject(sve)
+    case jve: JsonSchemaValidationError        => Json.toJsObject(jve)
   }
 }
 
@@ -51,30 +51,41 @@ object UnknownMessageTypeValidationError {
   implicit val format: OFormat[UnknownMessageTypeValidationError] = Json.format[UnknownMessageTypeValidationError]
 }
 
-case class JsonSchemaValidationError(message: String) extends ValidationError
+case class JsonSchemaValidationError(path: String, message: String) extends ValidationError
 
 object JsonSchemaValidationError {
-  implicit val format: OFormat[JsonSchemaValidationError] = Json.format[JsonSchemaValidationError]
+
+  implicit val jsonValidationErrorReads: Reads[JsonSchemaValidationError] =
+    (
+      (__ \ "path").read[String] and
+        (__ \ "message").read[String]
+    )(JsonSchemaValidationError.apply _)
+
+  implicit val jsonValidationErrorWrites: OWrites[JsonSchemaValidationError] =
+    (
+      (__ \ "path").write[String] and
+        (__ \ "message").write[String]
+    )(unlift(JsonSchemaValidationError.unapply))
 }
 
-case class SchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends ValidationError
+case class XmlSchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends ValidationError
 
-object SchemaValidationError {
+object XmlSchemaValidationError {
 
   def fromSaxParseException(ex: SAXParseException) =
-    SchemaValidationError(ex.getLineNumber, ex.getColumnNumber, ex.getMessage)
+    XmlSchemaValidationError(ex.getLineNumber, ex.getColumnNumber, ex.getMessage)
 
-  implicit val schemaValidationErrorReads: Reads[SchemaValidationError] =
+  implicit val schemaValidationErrorReads: Reads[XmlSchemaValidationError] =
     (
       (__ \ "lineNumber").read[Int] and
         (__ \ "columnNumber").read[Int] and
         (__ \ "message").read[String]
-    )(SchemaValidationError.apply _)
+    )(XmlSchemaValidationError.apply _)
 
-  implicit val schemaValidationErrorWrites: OWrites[SchemaValidationError] =
+  implicit val schemaValidationErrorWrites: OWrites[XmlSchemaValidationError] =
     (
       (__ \ "lineNumber").write[Int] and
         (__ \ "columnNumber").write[Int] and
         (__ \ "message").write[String]
-    )(unlift(SchemaValidationError.unapply))
+    )(unlift(XmlSchemaValidationError.unapply))
 }

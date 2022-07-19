@@ -26,7 +26,8 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import java.nio.charset.StandardCharsets
@@ -78,7 +79,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
       whenReady(result) {
         r =>
           r.isLeft mustBe true
-          r.left.get.head.isInstanceOf[SchemaValidationError]
+          r.left.get.head.isInstanceOf[XmlSchemaValidationError]
       }
     }
   }
@@ -116,7 +117,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
       whenReady(result) {
         r =>
           r.isLeft mustBe true
-          r.left.get.head.isInstanceOf[SchemaValidationError]
+          r.left.get.head.isInstanceOf[JsonSchemaValidationError]
       }
     }
   }

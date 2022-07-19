@@ -31,28 +31,16 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
-import com.eclipsesource.schema.SchemaType
-import com.eclipsesource.schema.SchemaValidator
-import com.eclipsesource.schema.drafts.Version4.schemaTypeReads
-import com.eclipsesource.schema.drafts.Version7
 import play.api.libs.json.JsError
-import play.api.libs.json.JsResult
 import play.api.libs.json.JsSuccess
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
-import play.api.mvc.Results.InternalServerError
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeJson
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeXml
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import javax.inject.Inject
 import scala.collection.mutable
-import scala.util.Failure
-import scala.util.Success
-import scala.util.control.NonFatal
 
 @ImplementedBy(classOf[ValidationServiceImpl])
 trait ValidationService {
@@ -84,17 +72,17 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
           saxParser =>
             val parser = saxParser.newSAXParser.getParser
 
-            val errorBuffer: mutable.ListBuffer[SchemaValidationError] =
-              new mutable.ListBuffer[SchemaValidationError]
+            val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
+              new mutable.ListBuffer[XmlSchemaValidationError]
 
             parser.setErrorHandler(new ErrorHandler {
               override def warning(error: SAXParseException): Unit = {}
 
               override def error(error: SAXParseException): Unit =
-                errorBuffer += SchemaValidationError.fromSaxParseException(error)
+                errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
 
               override def fatalError(error: SAXParseException): Unit =
-                errorBuffer += SchemaValidationError.fromSaxParseException(error)
+                errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
             })
 
             val xmlInput = source.runWith(StreamConverters.asInputStream(20.seconds))
@@ -107,7 +95,7 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
               }
               .leftMap {
                 exc =>
-                  NonEmptyList.of(SchemaValidationError.fromSaxParseException(exc))
+                  NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc))
               }
 
             NonEmptyList
@@ -127,17 +115,15 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
         source.runWith(Sink.ignore)
         Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
       case Some(mType) =>
-        val jsonSchema = extractJson(mType.schemaPath)
-        val schemaType = Json.fromJson[SchemaType](jsonSchema).getOrElse(throw new IllegalStateException("Unable to extract schema"))
+        val schemaType = getSchemaType(mType.schemaPath)
 
         validateJson(source, schemaType).map {
           case JsError(errors) =>
-            val jsonSchemaValidationErrors = for {
-              jsError         <- errors
-              validationError <- jsError._2
-            } yield JsonSchemaValidationError(validationError.message)
+            val validationErrors = errors.map(
+              e => JsonSchemaValidationError(e._1.toJsonString, e._2.map(_.message).mkString(","))
+            )
 
-            Left(NonEmptyList.fromList(jsonSchemaValidationErrors.toList).get)
+            Left(NonEmptyList.fromList(validationErrors.toList).get)
           case JsSuccess(_, _) => Right(())
         }
     }
