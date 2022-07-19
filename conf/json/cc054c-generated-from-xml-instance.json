@@ -1,0 +1,30 @@
+{
+	"n1:CC054C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC054C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"releaseRequested": "0",
+			"releaseRequestDateAndTime": "0231-11-23T10:03:02"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "!",
+			"TIRHolderIdentificationNumber": "!",
+			"name": "!",
+			"Address": {
+				"streetAndNumber": "!",
+				"postcode": "!",
+				"city": "!",
+				"country": "AA"
+			}
+		}
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"n1:CC191C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD050C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"LRN": "",
+			"MRN": "00AA00000000000000"
+		},
+		"CustomsOfficeOfExit": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"AESResults": {
+			"AESCommunicationPurpose": "0",
+			"responseDateAndTime": "0231-11-23T10:03:02",
+			"globalValidationResponse": "1",
+			"ExportOperation": [
+				{
+					"sequenceNumber": "0",
+					"MRN": "00AA00000000000000",
+					"security": "0",
+					"resultIndicator": "!!",
+					"GoodsShipment": {
+						"GoodsItem": [
+							{
+								"exportDeclarationGoodsItemNumber": 1,
+								"transitDeclarationGoodsItemNumber": 1,
+								"PreviousDocument": {
+									"type": "#! \"",
+									"referenceNumber": ""
+								}
+							}
+						]
+					}
+				}
+			]
+		}
+	}
+}

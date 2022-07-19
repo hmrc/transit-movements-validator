@@ -1,0 +1,434 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC044C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"Consignment": {
+			"#": "String",
+			"AdditionalReference": [
+				{
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"DepartureTransportMeans": [
+				{
+					"#": "String",
+					"identificationNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"nationality": {
+						"#": "String",
+						"$": "AA"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"typeOfIdentification": {
+						"#": "String",
+						"$": "00"
+					}
+				}
+			],
+			"HouseConsignment": [
+				{
+					"#": "String",
+					"AdditionalReference": [
+						{
+							"#": "String",
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"ConsignmentItem": [
+						{
+							"#": "String",
+							"AdditionalReference": [
+								{
+									"#": "String",
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									}
+								}
+							],
+							"Commodity": {
+								"#": "String",
+								"CommodityCode": {
+									"#": "String",
+									"combinedNomenclatureCode": {
+										"#": "String",
+										"$": "AB"
+									},
+									"harmonizedSystemSubHeadingCode": {
+										"#": "String",
+										"$": "      "
+									}
+								},
+								"GoodsMeasure": {
+									"#": "String",
+									"grossMass": {
+										"#": "String",
+										"$": 0.1
+									},
+									"netMass": {
+										"#": "String",
+										"$": 0.1
+									}
+								},
+								"cusCode": {
+									"#": "String",
+									"$": "         "
+								},
+								"descriptionOfGoods": {
+									"#": "String",
+									"$": " "
+								}
+							},
+							"Packaging": [
+								{
+									"#": "String",
+									"numberOfPackages": {
+										"#": "String",
+										"$": 0
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"shippingMarks": {
+										"#": "String",
+										"$": " "
+									},
+									"typeOfPackages": {
+										"#": "String",
+										"$": "  "
+									}
+								}
+							],
+							"SupportingDocument": [
+								{
+									"#": "String",
+									"complementOfInformation": {
+										"#": "String",
+										"$": " "
+									},
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									}
+								}
+							],
+							"TransportDocument": [
+								{
+									"#": "String",
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									}
+								}
+							],
+							"declarationGoodsItemNumber": {
+								"#": "String",
+								"$": 1
+							},
+							"goodsItemNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"DepartureTransportMeans": [
+						{
+							"#": "String",
+							"identificationNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"nationality": {
+								"#": "String",
+								"$": "AA"
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"typeOfIdentification": {
+								"#": "String",
+								"$": "00"
+							}
+						}
+					],
+					"SupportingDocument": [
+						{
+							"#": "String",
+							"complementOfInformation": {
+								"#": "String",
+								"$": " "
+							},
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"TransportDocument": [
+						{
+							"#": "String",
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"grossMass": {
+						"#": "String",
+						"$": 0.1
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			],
+			"SupportingDocument": [
+				{
+					"#": "String",
+					"complementOfInformation": {
+						"#": "String",
+						"$": " "
+					},
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"TransportDocument": [
+				{
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"TransportEquipment": [
+				{
+					"#": "String",
+					"GoodsReference": [
+						{
+							"#": "String",
+							"declarationGoodsItemNumber": {
+								"#": "String",
+								"$": 1
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"Seal": [
+						{
+							"#": "String",
+							"identifier": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"containerIdentificationNumber": {
+						"#": "String",
+						"$": "!"
+					},
+					"numberOfSeals": {
+						"#": "String",
+						"$": 0
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			],
+			"grossMass": {
+				"#": "String",
+				"$": 0.1
+			}
+		},
+		"CustomsOfficeOfDestinationActual": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"TraderAtDestination": {
+			"#": "String",
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"TransitOperation": {
+			"#": "String",
+			"MRN": {
+				"#": "String",
+				"$": "0AA00000000000000"
+			},
+			"otherThingsToReport": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"UnloadingRemark": {
+			"#": "String",
+			"conform": {
+				"#": "String",
+				"$": "0"
+			},
+			"stateOfSeals": {
+				"#": "String",
+				"$": "0"
+			},
+			"unloadingCompletion": {
+				"#": "String",
+				"$": "0"
+			},
+			"unloadingDate": {
+				"#": "String",
+				"$": "0000-00-00"
+			},
+			"unloadingRemark": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageSender": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"n1:CC022C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD411D",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"amendmentNotificationDateAndTime": "0231-11-23T10:03:02"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "",
+			"TIRHolderIdentificationNumber": "",
+			"name": "",
+			"Address": {
+				"streetAndNumber": "",
+				"postcode": "",
+				"city": "",
+				"country": "AA"
+			}
+		},
+		"FunctionalError": [
+			{
+				"sequenceNumber": "0",
+				"errorPointer": "",
+				"errorCode": "93",
+				"errorReason": "",
+				"originalAttributeValue": ""
+			}
+		]
+	}
+}

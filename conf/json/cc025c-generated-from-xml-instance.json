@@ -1,0 +1,63 @@
+{
+	"n1:CC025C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD144C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"releaseDate": "0111-10-11",
+			"releaseIndicator": "0"
+		},
+		"CustomsOfficeOfDestinationActual": {
+			"referenceNumber": "AA000000"
+		},
+		"TraderAtDestination": {
+			"identificationNumber": ""
+		},
+		"Consignment": {
+			"HouseConsignment": [
+				{
+					"sequenceNumber": "0",
+					"releaseType": "0",
+					"ConsignmentItem": [
+						{
+							"goodsItemNumber": "0",
+							"declarationGoodsItemNumber": 1,
+							"releaseType": "0",
+							"Commodity": {
+								"descriptionOfGoods": "",
+								"cusCode": "%$& $$& \"",
+								"CommodityCode": {
+									"harmonizedSystemSubHeadingCode": "$\"#! %",
+									"combinedNomenclatureCode": ""
+								},
+								"DangerousGoods": [
+									{
+										"sequenceNumber": "0",
+										"UNNumber": "#! \""
+									}
+								],
+								"GoodsMeasure": {
+									"grossMass": 0,
+									"netMass": 1
+								}
+							},
+							"Packaging": [
+								{
+									"sequenceNumber": "0",
+									"typeOfPackages": "!!",
+									"numberOfPackages": 0,
+									"shippingMarks": ""
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+}

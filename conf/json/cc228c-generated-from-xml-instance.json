@@ -1,0 +1,43 @@
+{
+	"n1:CC228C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD018C",
+		"correlationIdentifier": "!",
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "",
+			"name": "",
+			"Address": {
+				"streetAndNumber": "",
+				"postcode": "",
+				"city": "",
+				"country": "AA"
+			}
+		},
+		"Guarantor": {
+			"identificationNumber": "",
+			"name": "",
+			"Address": {
+				"postcode": "",
+				"city": "",
+				"country": "AT"
+			}
+		},
+		"GuaranteeReference": [
+			{
+				"sequenceNumber": "0",
+				"GRN": "00AA0000000000000",
+				"currency": "AAA",
+				"guaranteeAmount": 0,
+				"invalidityDate": "0111-10-11",
+				"liabilityLiberationDate": "0111-10-11",
+				"CustomsOfficeOfGuarantee": {
+					"referenceNumber": "AA000000"
+				}
+			}
+		]
+	}
+}

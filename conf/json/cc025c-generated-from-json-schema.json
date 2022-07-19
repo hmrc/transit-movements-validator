@@ -1,0 +1,178 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC025C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"Consignment": {
+			"#": "String",
+			"HouseConsignment": [
+				{
+					"#": "String",
+					"ConsignmentItem": [
+						{
+							"#": "String",
+							"Commodity": {
+								"#": "String",
+								"CommodityCode": {
+									"#": "String",
+									"combinedNomenclatureCode": {
+										"#": "String",
+										"$": "  "
+									},
+									"harmonizedSystemSubHeadingCode": {
+										"#": "String",
+										"$": "      "
+									}
+								},
+								"DangerousGoods": [
+									{
+										"#": "String",
+										"UNNumber": {
+											"#": "String",
+											"$": "    "
+										},
+										"sequenceNumber": {
+											"#": "String",
+											"$": "0"
+										}
+									}
+								],
+								"GoodsMeasure": {
+									"#": "String",
+									"grossMass": {
+										"#": "String",
+										"$": 0.1
+									},
+									"netMass": {
+										"#": "String",
+										"$": 0.1
+									}
+								},
+								"cusCode": {
+									"#": "String",
+									"$": "         "
+								},
+								"descriptionOfGoods": {
+									"#": "String",
+									"$": " "
+								}
+							},
+							"Packaging": [
+								{
+									"#": "String",
+									"numberOfPackages": {
+										"#": "String",
+										"$": 0
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"shippingMarks": {
+										"#": "String",
+										"$": " "
+									},
+									"typeOfPackages": {
+										"#": "String",
+										"$": "  "
+									}
+								}
+							],
+							"declarationGoodsItemNumber": {
+								"#": "String",
+								"$": 1
+							},
+							"goodsItemNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"releaseType": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"releaseType": {
+						"#": "String",
+						"$": "0"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			]
+		},
+		"CustomsOfficeOfDestinationActual": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"TraderAtDestination": {
+			"#": "String",
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"TransitOperation": {
+			"#": "String",
+			"MRN": {
+				"#": "String",
+				"$": "0AA00000000000000"
+			},
+			"releaseDate": {
+				"#": "String",
+				"$": "0000-00-00"
+			},
+			"releaseIndicator": {
+				"#": "String",
+				"$": "0"
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageSender": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}

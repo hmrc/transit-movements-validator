@@ -1,0 +1,131 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC045C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"CustomsOfficeOfDeparture": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"Guarantor": {
+			"#": "String",
+			"Address": {
+				"#": "String",
+				"city": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AD"
+				},
+				"postcode": {
+					"#": "String",
+					"$": " "
+				},
+				"streetAndNumber": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"name": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"HolderOfTheTransitProcedure": {
+			"#": "String",
+			"Address": {
+				"#": "String",
+				"city": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AA"
+				},
+				"postcode": {
+					"#": "String",
+					"$": " "
+				},
+				"streetAndNumber": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"TIRHolderIdentificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"name": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"TransitOperation": {
+			"#": "String",
+			"MRN": {
+				"#": "String",
+				"$": "0AA00000000000000"
+			},
+			"writeOffDate": {
+				"#": "String",
+				"$": "0000-00-00"
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageSender": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}

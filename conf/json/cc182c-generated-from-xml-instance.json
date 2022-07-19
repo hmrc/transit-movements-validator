@@ -1,0 +1,77 @@
+{
+	"n1:CC182C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD095C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"incidentNotificationDateAndTime": "0231-11-23T10:03:02"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfIncidentRegistration": {
+			"referenceNumber": "AA000000"
+		},
+		"Consignment": {
+			"Incident": [
+				{
+					"sequenceNumber": "0",
+					"code": "0",
+					"text": "",
+					"Endorsement": {
+						"date": "0111-10-11",
+						"authority": "",
+						"place": "",
+						"country": "AA"
+					},
+					"Location": {
+						"qualifierOfIdentification": "A",
+						"UNLocode": "!",
+						"country": "AA",
+						"GNSS": {
+							"latitude": "0.00000",
+							"longitude": "0.00000"
+						},
+						"Address": {
+							"streetAndNumber": "",
+							"postcode": "",
+							"city": ""
+						}
+					},
+					"TransportEquipment": [
+						{
+							"sequenceNumber": "0",
+							"containerIdentificationNumber": "",
+							"numberOfSeals": 0,
+							"Seal": [
+								{
+									"sequenceNumber": "0",
+									"identifier": ""
+								}
+							],
+							"GoodsReference": [
+								{
+									"sequenceNumber": "0",
+									"declarationGoodsItemNumber": 1
+								}
+							]
+						}
+					],
+					"Transhipment": {
+						"containerIndicator": "0",
+						"TransportMeans": {
+							"typeOfIdentification": "00",
+							"identificationNumber": "",
+							"nationality": "AA"
+						}
+					}
+				}
+			]
+		}
+	}
+}

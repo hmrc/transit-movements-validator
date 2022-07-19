@@ -1,0 +1,141 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC228C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"GuaranteeReference": [
+			{
+				"#": "String",
+				"CustomsOfficeOfGuarantee": {
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": "AA000000"
+					}
+				},
+				"GRN": {
+					"#": "String",
+					"$": "00AA0000000000000"
+				},
+				"currency": {
+					"#": "String",
+					"$": "AAA"
+				},
+				"guaranteeAmount": {
+					"#": "String",
+					"$": 0.1
+				},
+				"invalidityDate": {
+					"#": "String",
+					"$": "0000-00-00"
+				},
+				"liabilityLiberationDate": {
+					"#": "String",
+					"$": "0000-00-00"
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				}
+			}
+		],
+		"Guarantor": {
+			"#": "String",
+			"Address": {
+				"#": "String",
+				"city": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AD"
+				},
+				"postcode": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"name": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"HolderOfTheTransitProcedure": {
+			"#": "String",
+			"Address": {
+				"#": "String",
+				"city": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AA"
+				},
+				"postcode": {
+					"#": "String",
+					"$": " "
+				},
+				"streetAndNumber": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"name": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageSender": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}

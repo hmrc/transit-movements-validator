@@ -1,0 +1,40 @@
+{
+	"n1:CC019C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC009C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"discrepanciesNotificationDate": "0111-10-11",
+			"discrepanciesNotificationText": ""
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "",
+			"TIRHolderIdentificationNumber": "",
+			"name": "",
+			"Address": {
+				"streetAndNumber": "",
+				"postcode": "",
+				"city": "",
+				"country": "AA"
+			}
+		},
+		"Guarantor": {
+			"identificationNumber": "",
+			"name": "",
+			"Address": {
+				"streetAndNumber": "",
+				"postcode": "",
+				"city": "",
+				"country": "BG"
+			}
+		}
+	}
+}

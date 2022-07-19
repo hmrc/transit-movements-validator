@@ -1,0 +1,85 @@
+{
+	"n1:CC190C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC015C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"AESCommunicationPurpose": "0",
+			"LRN": "",
+			"MRN": "00AA00000000000000",
+			"TIRCarnetNumber": "1",
+			"declarationAcceptanceDate": "0111-10-11",
+			"amendmentAcceptanceDateAndTime": "0231-11-23T10:03:02",
+			"ExportOperation": [
+				{
+					"sequenceNumber": "0",
+					"MRN": "00AA00000000000000",
+					"transitProcedureCategory": "0"
+				}
+			]
+		},
+		"CustomsOfficeOfExit": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"Consignment": {
+			"LocationOfGoods": {
+				"typeOfLocation": "A",
+				"qualifierOfIdentification": "A",
+				"authorisationNumber": "",
+				"additionalIdentifier": "",
+				"UNLocode": "!",
+				"CustomsOffice": {
+					"referenceNumber": "AA000000"
+				},
+				"GNSS": {
+					"latitude": "0.00000",
+					"longitude": "0.00000"
+				},
+				"EconomicOperator": {
+					"identificationNumber": "AA!"
+				},
+				"Address": {
+					"streetAndNumber": "",
+					"postcode": "",
+					"city": "",
+					"country": "AA"
+				},
+				"PostcodeAddress": {
+					"houseNumber": "",
+					"postcode": "",
+					"country": "AA"
+				},
+				"ContactPerson": {
+					"name": "",
+					"phoneNumber": "",
+					"eMailAddress": " @ . "
+				}
+			},
+			"HouseConsignment": {
+				"ConsignmentItem": [
+					{
+						"goodsItemNumber": 1,
+						"declarationGoodsItemNumber": 1,
+						"Commodity": {
+							"CommodityCode": {
+								"harmonizedSystemSubHeadingCode": "$\"#! %",
+								"combinedNomenclatureCode": ""
+							},
+							"GoodsMeasure": {
+								"netMass": 1,
+								"supplementaryUnits": 1
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

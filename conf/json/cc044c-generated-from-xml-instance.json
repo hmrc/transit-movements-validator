@@ -1,0 +1,164 @@
+{
+	"n1:CC044C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC182C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"otherThingsToReport": "!"
+		},
+		"CustomsOfficeOfDestinationActual": {
+			"referenceNumber": "AA000000"
+		},
+		"TraderAtDestination": {
+			"identificationNumber": "!"
+		},
+		"UnloadingRemark": {
+			"conform": "1",
+			"unloadingCompletion": "0",
+			"unloadingDate": "0111-10-11",
+			"stateOfSeals": "1",
+			"unloadingRemark": "!"
+		},
+		"Consignment": {
+			"grossMass": 0,
+			"TransportEquipment": [
+				{
+					"sequenceNumber": "0",
+					"containerIdentificationNumber": "!",
+					"numberOfSeals": 0,
+					"Seal": [
+						{
+							"sequenceNumber": "0",
+							"identifier": "!"
+						}
+					],
+					"GoodsReference": [
+						{
+							"sequenceNumber": "0",
+							"declarationGoodsItemNumber": 1
+						}
+					]
+				}
+			],
+			"DepartureTransportMeans": [
+				{
+					"sequenceNumber": "0",
+					"typeOfIdentification": "00",
+					"identificationNumber": "!",
+					"nationality": "AA"
+				}
+			],
+			"SupportingDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!",
+					"complementOfInformation": "!"
+				}
+			],
+			"TransportDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!"
+				}
+			],
+			"AdditionalReference": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!"
+				}
+			],
+			"HouseConsignment": [
+				{
+					"sequenceNumber": "0",
+					"grossMass": 1,
+					"DepartureTransportMeans": [
+						{
+							"sequenceNumber": "0",
+							"typeOfIdentification": "00",
+							"identificationNumber": "!",
+							"nationality": "AA"
+						}
+					],
+					"SupportingDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!",
+							"complementOfInformation": "!"
+						}
+					],
+					"TransportDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!"
+						}
+					],
+					"AdditionalReference": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!"
+						}
+					],
+					"ConsignmentItem": [
+						{
+							"goodsItemNumber": "0",
+							"declarationGoodsItemNumber": 1,
+							"Commodity": {
+								"descriptionOfGoods": "!",
+								"cusCode": "%$& $$& \"",
+								"CommodityCode": {
+									"harmonizedSystemSubHeadingCode": "$\"#! %",
+									"combinedNomenclatureCode": "!!"
+								},
+								"GoodsMeasure": {
+									"grossMass": 0,
+									"netMass": 1
+								}
+							},
+							"Packaging": [
+								{
+									"sequenceNumber": "0",
+									"typeOfPackages": "!!",
+									"numberOfPackages": 0,
+									"shippingMarks": "!"
+								}
+							],
+							"SupportingDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!",
+									"complementOfInformation": "!"
+								}
+							],
+							"TransportDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!"
+								}
+							],
+							"AdditionalReference": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+}

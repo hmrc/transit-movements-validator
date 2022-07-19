@@ -1,0 +1,32 @@
+{
+	"n1:CC057C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD975C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"businessRejectionType": "! \"",
+			"rejectionDateAndTime": "0231-11-23T10:03:02",
+			"rejectionCode": "0",
+			"rejectionReason": ""
+		},
+		"CustomsOfficeOfDestinationActual": {
+			"referenceNumber": "AA000000"
+		},
+		"TraderAtDestination": {
+			"identificationNumber": ""
+		},
+		"FunctionalError": [
+			{
+				"errorPointer": "",
+				"errorCode": "90",
+				"errorReason": "",
+				"originalAttributeValue": ""
+			}
+		]
+	}
+}

@@ -1,0 +1,377 @@
+{
+	"n1:CC017C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC043C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"declarationType": "!",
+			"security": "0",
+			"reducedDatasetIndicator": "1",
+			"specificCircumstanceIndicator": "! \"",
+			"bindingItinerary": "0",
+			"releaseRequested": "0",
+			"releaseRequestDateAndTime": "0231-11-23T10:03:02",
+			"otherThingsToReport": "!"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfDestinationDeclared": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfTransitDeclared": [
+			{
+				"sequenceNumber": "0",
+				"referenceNumber": "AA000000",
+				"arrivalDateAndTimeEstimated": "0231-11-23T10:03:02"
+			}
+		],
+		"CustomsOfficeOfExitForTransitDeclared": [
+			{
+				"sequenceNumber": "0",
+				"referenceNumber": "AA000000"
+			}
+		],
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "!",
+			"TIRHolderIdentificationNumber": "!",
+			"name": "!",
+			"Address": {
+				"streetAndNumber": "!",
+				"postcode": "!",
+				"city": "!",
+				"country": "AA"
+			}
+		},
+		"ControlResult": {
+			"code": "!!",
+			"date": "0111-10-11",
+			"controlledBy": "!",
+			"remark": "!",
+			"text": "!"
+		},
+		"Consignment": {
+			"countryOfDispatch": "AA",
+			"countryOfDestination": "AA",
+			"containerIndicator": "0",
+			"inlandModeOfTransport": "0",
+			"modeOfTransportAtTheBorder": "0",
+			"grossMass": 0,
+			"referenceNumberUCR": "!",
+			"Carrier": {
+				"identificationNumber": "AA!"
+			},
+			"Consignor": {
+				"identificationNumber": "!",
+				"name": "!",
+				"Address": {
+					"streetAndNumber": "!",
+					"postcode": "!",
+					"city": "!",
+					"country": "AA"
+				}
+			},
+			"Consignee": {
+				"identificationNumber": "!",
+				"name": "!",
+				"Address": {
+					"streetAndNumber": "!",
+					"postcode": "!",
+					"city": "!",
+					"country": "AA"
+				}
+			},
+			"AdditionalSupplyChainActor": [
+				{
+					"sequenceNumber": "0",
+					"role": "A",
+					"identificationNumber": "AA!"
+				}
+			],
+			"TransportEquipment": [
+				{
+					"sequenceNumber": "0",
+					"containerIdentificationNumber": "!",
+					"numberOfSeals": 0,
+					"Seal": [
+						{
+							"sequenceNumber": "0",
+							"identifier": "!"
+						}
+					],
+					"GoodsReference": [
+						{
+							"sequenceNumber": "0",
+							"declarationGoodsItemNumber": 1
+						}
+					]
+				}
+			],
+			"DepartureTransportMeans": [
+				{
+					"sequenceNumber": "0",
+					"typeOfIdentification": "00",
+					"identificationNumber": "!",
+					"nationality": "AA"
+				}
+			],
+			"CountryOfRoutingOfConsignment": [
+				{
+					"sequenceNumber": "0",
+					"country": "AA"
+				}
+			],
+			"ActiveBorderTransportMeans": [
+				{
+					"sequenceNumber": "0",
+					"customsOfficeAtBorderReferenceNumber": "%$$\"#! %",
+					"typeOfIdentification": "00",
+					"identificationNumber": "!",
+					"nationality": "AA",
+					"conveyanceReferenceNumber": "!"
+				}
+			],
+			"PlaceOfLoading": {
+				"UNLocode": "!",
+				"country": "AA",
+				"location": "!"
+			},
+			"PlaceOfUnloading": {
+				"UNLocode": "!",
+				"country": "AA",
+				"location": "!"
+			},
+			"PreviousDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!",
+					"complementOfInformation": "!",
+					"completeControl": "0"
+				}
+			],
+			"SupportingDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!",
+					"complementOfInformation": "!",
+					"completeControl": "0"
+				}
+			],
+			"TransportDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!"
+				}
+			],
+			"AdditionalReference": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!"
+				}
+			],
+			"AdditionalInformation": [
+				{
+					"sequenceNumber": "0",
+					"code": "\"#! %",
+					"text": "!",
+					"completeControl": "0"
+				}
+			],
+			"TransportCharges": {
+				"methodOfPayment": "A"
+			},
+			"HouseConsignment": [
+				{
+					"sequenceNumber": "0",
+					"countryOfDispatch": "AA",
+					"grossMass": 1,
+					"referenceNumberUCR": "!",
+					"securityIndicatorFromExportDeclaration": "0",
+					"Consignor": {
+						"identificationNumber": "!",
+						"name": "!",
+						"Address": {
+							"streetAndNumber": "!",
+							"postcode": "!",
+							"city": "!",
+							"country": "AA"
+						}
+					},
+					"Consignee": {
+						"identificationNumber": "!",
+						"name": "!",
+						"Address": {
+							"streetAndNumber": "!",
+							"postcode": "!",
+							"city": "!",
+							"country": "AA"
+						}
+					},
+					"AdditionalSupplyChainActor": [
+						{
+							"sequenceNumber": "0",
+							"role": "A",
+							"identificationNumber": "AA!"
+						}
+					],
+					"DepartureTransportMeans": [
+						{
+							"sequenceNumber": "0",
+							"typeOfIdentification": "00",
+							"identificationNumber": "!",
+							"nationality": "AA"
+						}
+					],
+					"PreviousDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!",
+							"complementOfInformation": "!"
+						}
+					],
+					"SupportingDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!",
+							"complementOfInformation": "!",
+							"completeControl": "1"
+						}
+					],
+					"TransportDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!"
+						}
+					],
+					"AdditionalReference": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!"
+						}
+					],
+					"AdditionalInformation": [
+						{
+							"sequenceNumber": "0",
+							"code": "\"#! %",
+							"text": "!",
+							"completeControl": "1"
+						}
+					],
+					"TransportCharges": {
+						"methodOfPayment": "A"
+					},
+					"ConsignmentItem": [
+						{
+							"goodsItemNumber": "0",
+							"declarationGoodsItemNumber": 1,
+							"declarationType": "!",
+							"countryOfDispatch": "AA",
+							"countryOfDestination": "AA",
+							"referenceNumberUCR": "!",
+							"Consignee": {
+								"identificationNumber": "",
+								"name": "!",
+								"Address": {
+									"streetAndNumber": "!",
+									"postcode": "!",
+									"city": "!",
+									"country": "AA"
+								}
+							},
+							"AdditionalSupplyChainActor": [
+								{
+									"sequenceNumber": "0",
+									"role": "A",
+									"identificationNumber": "AA!"
+								}
+							],
+							"Commodity": {
+								"descriptionOfGoods": "!",
+								"cusCode": "%$& $$& \"",
+								"CommodityCode": {
+									"harmonizedSystemSubHeadingCode": "$\"#! %",
+									"combinedNomenclatureCode": "!!"
+								},
+								"DangerousGoods": [
+									{
+										"sequenceNumber": "0",
+										"UNNumber": "#! \""
+									}
+								],
+								"GoodsMeasure": {
+									"grossMass": 0,
+									"netMass": 1
+								}
+							},
+							"Packaging": [
+								{
+									"sequenceNumber": "0",
+									"typeOfPackages": "!!",
+									"numberOfPackages": 0,
+									"shippingMarks": "!"
+								}
+							],
+							"PreviousDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!",
+									"goodsItemNumber": 1,
+									"complementOfInformation": "!",
+									"completeControl": "0"
+								}
+							],
+							"SupportingDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!",
+									"complementOfInformation": "!",
+									"completeControl": "1"
+								}
+							],
+							"TransportDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!"
+								}
+							],
+							"AdditionalReference": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!"
+								}
+							],
+							"AdditionalInformation": [
+								{
+									"sequenceNumber": "0",
+									"code": "\"#! %",
+									"text": "!",
+									"completeControl": "1"
+								}
+							],
+							"TransportCharges": {
+								"methodOfPayment": "A"
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}

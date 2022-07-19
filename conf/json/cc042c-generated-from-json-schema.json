@@ -1,0 +1,105 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC042C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"CustomsOfficeOfDeparture": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"CustomsOfficeOfDestination": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"CustomsOfficeOfExit": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"ExportOperation": [
+			{
+				"#": "String",
+				"ControlResult": {
+					"#": "String",
+					"code": {
+						"#": "String",
+						"$": "  "
+					},
+					"date": {
+						"#": "String",
+						"$": "0000-00-00"
+					}
+				},
+				"MRN": {
+					"#": "String",
+					"$": "0AA00000000000000"
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				}
+			}
+		],
+		"TransitOperation": {
+			"#": "String",
+			"MRN": {
+				"#": "String",
+				"$": "0AA00000000000000"
+			},
+			"declarationType": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageSender": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}

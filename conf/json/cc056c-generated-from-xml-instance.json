@@ -1,0 +1,45 @@
+{
+	"n1:CC056C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC228C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"LRN": "",
+			"MRN": "00AA00000000000000",
+			"businessRejectionType": "! \"",
+			"rejectionDateAndTime": "0231-11-23T10:03:02",
+			"rejectionCode": "0",
+			"rejectionReason": ""
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "",
+			"TIRHolderIdentificationNumber": "",
+			"name": "",
+			"Address": {
+				"streetAndNumber": "",
+				"postcode": "",
+				"city": "",
+				"country": "AA"
+			}
+		},
+		"Representative": {
+			"identificationNumber": "",
+			"status": "0"
+		},
+		"FunctionalError": [
+			{
+				"errorPointer": "",
+				"errorCode": "26",
+				"errorReason": "",
+				"originalAttributeValue": ""
+			}
+		]
+	}
+}

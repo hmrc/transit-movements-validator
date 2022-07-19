@@ -1,0 +1,34 @@
+{
+	"n1:CC042C": {
+		"@PhaseID": "NCTS5.0",
+		"messageSender": "!",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CC023C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"MRN": "00AA00000000000000",
+			"declarationType": ""
+		},
+		"ExportOperation": [
+			{
+				"sequenceNumber": "0",
+				"MRN": "00AA00000000000000",
+				"ControlResult": {
+					"code": "!!",
+					"date": "0111-10-11"
+				}
+			}
+		],
+		"CustomsOfficeOfExit": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfDestination": {
+			"referenceNumber": "AA000000"
+		}
+	}
+}
