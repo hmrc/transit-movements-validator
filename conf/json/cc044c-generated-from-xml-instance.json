@@ -1,11 +1,10 @@
 {
 	"n1:CC044C": {
 		"@PhaseID": "NCTS5.0",
-		"messageSender": "!",
 		"messageRecipient": "!",
 		"preparationDateAndTime": "0231-11-23T10:03:02",
 		"messageIdentification": "!",
-		"messageType": "CC182C",
+		"messageType": "CC170C",
 		"correlationIdentifier": "!",
 		"TransitOperation": {
 			"MRN": "00AA00000000000000",
@@ -18,7 +17,7 @@
 			"identificationNumber": "!"
 		},
 		"UnloadingRemark": {
-			"conform": "1",
+			"conform": "0",
 			"unloadingCompletion": "0",
 			"unloadingDate": "0111-10-11",
 			"stateOfSeals": "1",

@@ -90,7 +90,7 @@
 									"#": "String",
 									"combinedNomenclatureCode": {
 										"#": "String",
-										"$": "AB"
+										"$": "YZ"
 									},
 									"harmonizedSystemSubHeadingCode": {
 										"#": "String",
@@ -398,10 +398,6 @@
 			"$": " "
 		},
 		"messageRecipient": {
-			"#": "String",
-			"$": " "
-		},
-		"messageSender": {
 			"#": "String",
 			"$": " "
 		},
