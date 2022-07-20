@@ -1,23 +1,22 @@
 {
   "n1:CC015C": {
     "@PhaseID": "NCTS5.0",
-    "messageSender": "!",
     "messageRecipient": "!",
     "preparationDateAndTime": "0231-11-23T10:03:02",
     "messageIdentification": "!",
-    "messageType": "CD971C",
+    "messageType": "CC029C",
     "correlationIdentifier": "!",
     "TransitOperation": {
-      "LRN": "12345678901234567890123",
+      "LRN": "!",
       "declarationType": "!",
       "additionalDeclarationType": "A",
       "TIRCarnetNumber": "1",
       "presentationOfTheGoodsDateAndTime": "0231-11-23T10:03:02",
       "security": "0",
-      "reducedDatasetIndicator": "1",
+      "reducedDatasetIndicator": "0",
       "specificCircumstanceIndicator": "! \"",
       "communicationLanguageAtDeparture": "AA",
-      "bindingItinerary": "1",
+      "bindingItinerary": "0",
       "limitDate": "0111-10-11"
     },
     "Authorisation": [
