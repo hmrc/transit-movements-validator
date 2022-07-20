@@ -1,0 +1,341 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC007C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"Authorisation": [
+			{
+				"#": "String",
+				"referenceNumber": {
+					"#": "String",
+					"$": " "
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				},
+				"type": {
+					"#": "String",
+					"$": " "
+				}
+			}
+		],
+		"Consignment": {
+			"#": "String",
+			"Incident": [
+				{
+					"#": "String",
+					"Endorsement": {
+						"#": "String",
+						"authority": {
+							"#": "String",
+							"$": " "
+						},
+						"country": {
+							"#": "String",
+							"$": "AA"
+						},
+						"date": {
+							"#": "String",
+							"$": "0000-00-00"
+						},
+						"place": {
+							"#": "String",
+							"$": " "
+						}
+					},
+					"Location": {
+						"#": "String",
+						"Address": {
+							"#": "String",
+							"city": {
+								"#": "String",
+								"$": " "
+							},
+							"postcode": {
+								"#": "String",
+								"$": " "
+							},
+							"streetAndNumber": {
+								"#": "String",
+								"$": " "
+							}
+						},
+						"GNSS": {
+							"#": "String",
+							"latitude": {
+								"#": "String",
+								"$": ""
+							},
+							"longitude": {
+								"#": "String",
+								"$": ""
+							}
+						},
+						"UNLocode": {
+							"#": "String",
+							"$": " "
+						},
+						"country": {
+							"#": "String",
+							"$": "AA"
+						},
+						"qualifierOfIdentification": {
+							"#": "String",
+							"$": "A"
+						}
+					},
+					"Transhipment": {
+						"#": "String",
+						"TransportMeans": {
+							"#": "String",
+							"identificationNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"nationality": {
+								"#": "String",
+								"$": "AA"
+							},
+							"typeOfIdentification": {
+								"#": "String",
+								"$": "00"
+							}
+						},
+						"containerIndicator": {
+							"#": "String",
+							"$": "0"
+						}
+					},
+					"TransportEquipment": [
+						{
+							"#": "String",
+							"GoodsReference": [
+								{
+									"#": "String",
+									"declarationGoodsItemNumber": {
+										"#": "String",
+										"$": 1
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									}
+								}
+							],
+							"Seal": [
+								{
+									"#": "String",
+									"identifier": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									}
+								}
+							],
+							"containerIdentificationNumber": {
+								"#": "String",
+								"$": "!"
+							},
+							"numberOfSeals": {
+								"#": "String",
+								"$": 0
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"code": {
+						"#": "String",
+						"$": "0"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"text": {
+						"#": "String",
+						"$": " "
+					}
+				}
+			],
+			"LocationOfGoods": {
+				"#": "String",
+				"Address": {
+					"#": "String",
+					"city": {
+						"#": "String",
+						"$": " "
+					},
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"postcode": {
+						"#": "String",
+						"$": " "
+					},
+					"streetAndNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"ContactPerson": {
+					"#": "String",
+					"eMailAddress": {
+						"#": "String",
+						"$": " @ . "
+					},
+					"name": {
+						"#": "String",
+						"$": " "
+					},
+					"phoneNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"CustomsOffice": {
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": "AA000000"
+					}
+				},
+				"EconomicOperator": {
+					"#": "String",
+					"identificationNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"GNSS": {
+					"#": "String",
+					"latitude": {
+						"#": "String",
+						"$": ""
+					},
+					"longitude": {
+						"#": "String",
+						"$": ""
+					}
+				},
+				"PostcodeAddress": {
+					"#": "String",
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"houseNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"postcode": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"UNLocode": {
+					"#": "String",
+					"$": " "
+				},
+				"additionalIdentifier": {
+					"#": "String",
+					"$": " "
+				},
+				"authorisationNumber": {
+					"#": "String",
+					"$": " "
+				},
+				"qualifierOfIdentification": {
+					"#": "String",
+					"$": "A"
+				},
+				"typeOfLocation": {
+					"#": "String",
+					"$": "A"
+				}
+			}
+		},
+		"CustomsOfficeOfDestinationActual": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"TraderAtDestination": {
+			"#": "String",
+			"communicationLanguageAtDestination": {
+				"#": "String",
+				"$": "AA"
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"TransitOperation": {
+			"#": "String",
+			"MRN": {
+				"#": "String",
+				"$": "0AA00000000000000"
+			},
+			"arrivalNotificationDateAndTime": {
+				"#": "String",
+				"$": "0000-00-00T00:00:00"
+			},
+			"incidentFlag": {
+				"#": "String",
+				"$": "0"
+			},
+			"simplifiedProcedure": {
+				"#": "String",
+				"$": "0"
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}
