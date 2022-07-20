@@ -1,0 +1,1269 @@
+{
+	"#": "String",
+	"@xmlns:n1": "http://ncts.dgtaxud.ec",
+	"n1:CC013C": {
+		"#": "String",
+		"@PhaseID": "NCTS5.1",
+		"Authorisation": [
+			{
+				"#": "String",
+				"referenceNumber": {
+					"#": "String",
+					"$": " "
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				},
+				"type": {
+					"#": "String",
+					"$": " "
+				}
+			}
+		],
+		"Consignment": {
+			"#": "String",
+			"ActiveBorderTransportMeans": [
+				{
+					"#": "String",
+					"conveyanceReferenceNumber": {
+						"#": "String",
+						"$": "!"
+					},
+					"customsOfficeAtBorderReferenceNumber": {
+						"#": "String",
+						"$": "        "
+					},
+					"identificationNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"nationality": {
+						"#": "String",
+						"$": "AA"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"typeOfIdentification": {
+						"#": "String",
+						"$": "00"
+					}
+				}
+			],
+			"AdditionalInformation": [
+				{
+					"#": "String",
+					"code": {
+						"#": "String",
+						"$": "     "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"text": {
+						"#": "String",
+						"$": " "
+					}
+				}
+			],
+			"AdditionalReference": [
+				{
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"AdditionalSupplyChainActor": [
+				{
+					"#": "String",
+					"identificationNumber": {
+						"#": "String",
+						"$": "AA!"
+					},
+					"role": {
+						"#": "String",
+						"$": "A"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			],
+			"Carrier": {
+				"#": "String",
+				"ContactPerson": {
+					"#": "String",
+					"eMailAddress": {
+						"#": "String",
+						"$": " @ . "
+					},
+					"name": {
+						"#": "String",
+						"$": " "
+					},
+					"phoneNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"identificationNumber": {
+					"#": "String",
+					"$": "AA!"
+				}
+			},
+			"Consignee": {
+				"#": "String",
+				"Address": {
+					"#": "String",
+					"city": {
+						"#": "String",
+						"$": " "
+					},
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"postcode": {
+						"#": "String",
+						"$": " "
+					},
+					"streetAndNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"identificationNumber": {
+					"#": "String",
+					"$": " "
+				},
+				"name": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"Consignor": {
+				"#": "String",
+				"Address": {
+					"#": "String",
+					"city": {
+						"#": "String",
+						"$": " "
+					},
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"postcode": {
+						"#": "String",
+						"$": " "
+					},
+					"streetAndNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"ContactPerson": {
+					"#": "String",
+					"eMailAddress": {
+						"#": "String",
+						"$": " @ . "
+					},
+					"name": {
+						"#": "String",
+						"$": " "
+					},
+					"phoneNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"identificationNumber": {
+					"#": "String",
+					"$": " "
+				},
+				"name": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"CountryOfRoutingOfConsignment": [
+				{
+					"#": "String",
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			],
+			"DepartureTransportMeans": [
+				{
+					"#": "String",
+					"identificationNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"nationality": {
+						"#": "String",
+						"$": "AA"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"typeOfIdentification": {
+						"#": "String",
+						"$": "00"
+					}
+				}
+			],
+			"HouseConsignment": [
+				{
+					"#": "String",
+					"AdditionalInformation": [
+						{
+							"#": "String",
+							"code": {
+								"#": "String",
+								"$": "     "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"text": {
+								"#": "String",
+								"$": " "
+							}
+						}
+					],
+					"AdditionalReference": [
+						{
+							"#": "String",
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"AdditionalSupplyChainActor": [
+						{
+							"#": "String",
+							"identificationNumber": {
+								"#": "String",
+								"$": "AA!"
+							},
+							"role": {
+								"#": "String",
+								"$": "A"
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"Consignee": {
+						"#": "String",
+						"Address": {
+							"#": "String",
+							"city": {
+								"#": "String",
+								"$": " "
+							},
+							"country": {
+								"#": "String",
+								"$": "AA"
+							},
+							"postcode": {
+								"#": "String",
+								"$": " "
+							},
+							"streetAndNumber": {
+								"#": "String",
+								"$": " "
+							}
+						},
+						"identificationNumber": {
+							"#": "String",
+							"$": " "
+						},
+						"name": {
+							"#": "String",
+							"$": " "
+						}
+					},
+					"ConsignmentItem": [
+						{
+							"#": "String",
+							"AdditionalInformation": [
+								{
+									"#": "String",
+									"code": {
+										"#": "String",
+										"$": "     "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"text": {
+										"#": "String",
+										"$": " "
+									}
+								}
+							],
+							"AdditionalReference": [
+								{
+									"#": "String",
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									}
+								}
+							],
+							"AdditionalSupplyChainActor": [
+								{
+									"#": "String",
+									"identificationNumber": {
+										"#": "String",
+										"$": "AA!"
+									},
+									"role": {
+										"#": "String",
+										"$": "A"
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									}
+								}
+							],
+							"Commodity": {
+								"#": "String",
+								"CommodityCode": {
+									"#": "String",
+									"combinedNomenclatureCode": {
+										"#": "String",
+										"$": "YZ"
+									},
+									"harmonizedSystemSubHeadingCode": {
+										"#": "String",
+										"$": "      "
+									}
+								},
+								"DangerousGoods": [
+									{
+										"#": "String",
+										"UNNumber": {
+											"#": "String",
+											"$": "    "
+										},
+										"sequenceNumber": {
+											"#": "String",
+											"$": "0"
+										}
+									}
+								],
+								"GoodsMeasure": {
+									"#": "String",
+									"grossMass": {
+										"#": "String",
+										"$": 0.1
+									},
+									"netMass": {
+										"#": "String",
+										"$": 0.1
+									},
+									"supplementaryUnits": {
+										"#": "String",
+										"$": 0.1
+									}
+								},
+								"cusCode": {
+									"#": "String",
+									"$": "         "
+								},
+								"descriptionOfGoods": {
+									"#": "String",
+									"$": " "
+								}
+							},
+							"Consignee": {
+								"#": "String",
+								"Address": {
+									"#": "String",
+									"city": {
+										"#": "String",
+										"$": " "
+									},
+									"country": {
+										"#": "String",
+										"$": "AA"
+									},
+									"postcode": {
+										"#": "String",
+										"$": " "
+									},
+									"streetAndNumber": {
+										"#": "String",
+										"$": " "
+									}
+								},
+								"identificationNumber": {
+									"#": "String",
+									"$": " "
+								},
+								"name": {
+									"#": "String",
+									"$": " "
+								}
+							},
+							"Packaging": [
+								{
+									"#": "String",
+									"numberOfPackages": {
+										"#": "String",
+										"$": 0
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"shippingMarks": {
+										"#": "String",
+										"$": " "
+									},
+									"typeOfPackages": {
+										"#": "String",
+										"$": "  "
+									}
+								}
+							],
+							"PreviousDocument": [
+								{
+									"#": "String",
+									"complementOfInformation": {
+										"#": "String",
+										"$": " "
+									},
+									"goodsItemNumber": {
+										"#": "String",
+										"$": 1
+									},
+									"measurementUnitAndQualifier": {
+										"#": "String",
+										"$": " "
+									},
+									"numberOfPackages": {
+										"#": "String",
+										"$": 1
+									},
+									"quantity": {
+										"#": "String",
+										"$": 0.1
+									},
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									},
+									"typeOfPackages": {
+										"#": "String",
+										"$": "  "
+									}
+								}
+							],
+							"SupportingDocument": [
+								{
+									"#": "String",
+									"complementOfInformation": {
+										"#": "String",
+										"$": " "
+									},
+									"documentLineItemNumber": {
+										"#": "String",
+										"$": 1
+									},
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									}
+								}
+							],
+							"TransportCharges": {
+								"#": "String",
+								"methodOfPayment": {
+									"#": "String",
+									"$": "Z"
+								}
+							},
+							"TransportDocument": [
+								{
+									"#": "String",
+									"referenceNumber": {
+										"#": "String",
+										"$": " "
+									},
+									"sequenceNumber": {
+										"#": "String",
+										"$": "0"
+									},
+									"type": {
+										"#": "String",
+										"$": "    "
+									}
+								}
+							],
+							"countryOfDestination": {
+								"#": "String",
+								"$": "AA"
+							},
+							"countryOfDispatch": {
+								"#": "String",
+								"$": "AA"
+							},
+							"declarationGoodsItemNumber": {
+								"#": "String",
+								"$": 1
+							},
+							"declarationType": {
+								"#": "String",
+								"$": " "
+							},
+							"goodsItemNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"referenceNumberUCR": {
+								"#": "String",
+								"$": "!"
+							}
+						}
+					],
+					"Consignor": {
+						"#": "String",
+						"Address": {
+							"#": "String",
+							"city": {
+								"#": "String",
+								"$": " "
+							},
+							"country": {
+								"#": "String",
+								"$": "AA"
+							},
+							"postcode": {
+								"#": "String",
+								"$": " "
+							},
+							"streetAndNumber": {
+								"#": "String",
+								"$": " "
+							}
+						},
+						"ContactPerson": {
+							"#": "String",
+							"eMailAddress": {
+								"#": "String",
+								"$": " @ . "
+							},
+							"name": {
+								"#": "String",
+								"$": " "
+							},
+							"phoneNumber": {
+								"#": "String",
+								"$": " "
+							}
+						},
+						"identificationNumber": {
+							"#": "String",
+							"$": " "
+						},
+						"name": {
+							"#": "String",
+							"$": " "
+						}
+					},
+					"DepartureTransportMeans": [
+						{
+							"#": "String",
+							"identificationNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"nationality": {
+								"#": "String",
+								"$": "AA"
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"typeOfIdentification": {
+								"#": "String",
+								"$": "00"
+							}
+						}
+					],
+					"PreviousDocument": [
+						{
+							"#": "String",
+							"complementOfInformation": {
+								"#": "String",
+								"$": " "
+							},
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"SupportingDocument": [
+						{
+							"#": "String",
+							"complementOfInformation": {
+								"#": "String",
+								"$": " "
+							},
+							"documentLineItemNumber": {
+								"#": "String",
+								"$": 1
+							},
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"TransportCharges": {
+						"#": "String",
+						"methodOfPayment": {
+							"#": "String",
+							"$": "Z"
+						}
+					},
+					"TransportDocument": [
+						{
+							"#": "String",
+							"referenceNumber": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							},
+							"type": {
+								"#": "String",
+								"$": "    "
+							}
+						}
+					],
+					"countryOfDispatch": {
+						"#": "String",
+						"$": "AA"
+					},
+					"grossMass": {
+						"#": "String",
+						"$": 0.1
+					},
+					"referenceNumberUCR": {
+						"#": "String",
+						"$": "!"
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			],
+			"LocationOfGoods": {
+				"#": "String",
+				"Address": {
+					"#": "String",
+					"city": {
+						"#": "String",
+						"$": " "
+					},
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"postcode": {
+						"#": "String",
+						"$": " "
+					},
+					"streetAndNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"ContactPerson": {
+					"#": "String",
+					"eMailAddress": {
+						"#": "String",
+						"$": " @ . "
+					},
+					"name": {
+						"#": "String",
+						"$": " "
+					},
+					"phoneNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"CustomsOffice": {
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": "AA000000"
+					}
+				},
+				"EconomicOperator": {
+					"#": "String",
+					"identificationNumber": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"GNSS": {
+					"#": "String",
+					"latitude": {
+						"#": "String",
+						"$": ""
+					},
+					"longitude": {
+						"#": "String",
+						"$": ""
+					}
+				},
+				"PostcodeAddress": {
+					"#": "String",
+					"country": {
+						"#": "String",
+						"$": "AA"
+					},
+					"houseNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"postcode": {
+						"#": "String",
+						"$": " "
+					}
+				},
+				"UNLocode": {
+					"#": "String",
+					"$": " "
+				},
+				"additionalIdentifier": {
+					"#": "String",
+					"$": " "
+				},
+				"authorisationNumber": {
+					"#": "String",
+					"$": " "
+				},
+				"qualifierOfIdentification": {
+					"#": "String",
+					"$": "A"
+				},
+				"typeOfLocation": {
+					"#": "String",
+					"$": "A"
+				}
+			},
+			"PlaceOfLoading": {
+				"#": "String",
+				"UNLocode": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AA"
+				},
+				"location": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"PlaceOfUnloading": {
+				"#": "String",
+				"UNLocode": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AA"
+				},
+				"location": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"PreviousDocument": [
+				{
+					"#": "String",
+					"complementOfInformation": {
+						"#": "String",
+						"$": " "
+					},
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"SupportingDocument": [
+				{
+					"#": "String",
+					"complementOfInformation": {
+						"#": "String",
+						"$": " "
+					},
+					"documentLineItemNumber": {
+						"#": "String",
+						"$": 1
+					},
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"TransportCharges": {
+				"#": "String",
+				"methodOfPayment": {
+					"#": "String",
+					"$": "Z"
+				}
+			},
+			"TransportDocument": [
+				{
+					"#": "String",
+					"referenceNumber": {
+						"#": "String",
+						"$": " "
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					},
+					"type": {
+						"#": "String",
+						"$": "    "
+					}
+				}
+			],
+			"TransportEquipment": [
+				{
+					"#": "String",
+					"GoodsReference": [
+						{
+							"#": "String",
+							"declarationGoodsItemNumber": {
+								"#": "String",
+								"$": 1
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"Seal": [
+						{
+							"#": "String",
+							"identifier": {
+								"#": "String",
+								"$": " "
+							},
+							"sequenceNumber": {
+								"#": "String",
+								"$": "0"
+							}
+						}
+					],
+					"containerIdentificationNumber": {
+						"#": "String",
+						"$": "!"
+					},
+					"numberOfSeals": {
+						"#": "String",
+						"$": 0
+					},
+					"sequenceNumber": {
+						"#": "String",
+						"$": "0"
+					}
+				}
+			],
+			"containerIndicator": {
+				"#": "String",
+				"$": "0"
+			},
+			"countryOfDestination": {
+				"#": "String",
+				"$": "AA"
+			},
+			"countryOfDispatch": {
+				"#": "String",
+				"$": "AA"
+			},
+			"grossMass": {
+				"#": "String",
+				"$": 0.1
+			},
+			"inlandModeOfTransport": {
+				"#": "String",
+				"$": "0"
+			},
+			"modeOfTransportAtTheBorder": {
+				"#": "String",
+				"$": "0"
+			},
+			"referenceNumberUCR": {
+				"#": "String",
+				"$": "!"
+			}
+		},
+		"CustomsOfficeOfDeparture": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"CustomsOfficeOfDestinationDeclared": {
+			"#": "String",
+			"referenceNumber": {
+				"#": "String",
+				"$": "AA000000"
+			}
+		},
+		"CustomsOfficeOfExitForTransitDeclared": [
+			{
+				"#": "String",
+				"referenceNumber": {
+					"#": "String",
+					"$": "AA000000"
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				}
+			}
+		],
+		"CustomsOfficeOfTransitDeclared": [
+			{
+				"#": "String",
+				"arrivalDateAndTimeEstimated": {
+					"#": "String",
+					"$": "0000-00-00T00:00:00"
+				},
+				"referenceNumber": {
+					"#": "String",
+					"$": "AA000000"
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				}
+			}
+		],
+		"Guarantee": [
+			{
+				"#": "String",
+				"GuaranteeReference": [
+					{
+						"#": "String",
+						"GRN": {
+							"#": "String",
+							"$": "00AA0000000000000"
+						},
+						"accessCode": {
+							"#": "String",
+							"$": "WXYZ"
+						},
+						"amountToBeCovered": {
+							"#": "String",
+							"$": 0.1
+						},
+						"currency": {
+							"#": "String",
+							"$": "AAA"
+						},
+						"sequenceNumber": {
+							"#": "String",
+							"$": "0"
+						}
+					}
+				],
+				"guaranteeType": {
+					"#": "String",
+					"$": "Z"
+				},
+				"otherGuaranteeReference": {
+					"#": "String",
+					"$": " "
+				},
+				"sequenceNumber": {
+					"#": "String",
+					"$": "0"
+				}
+			}
+		],
+		"HolderOfTheTransitProcedure": {
+			"#": "String",
+			"Address": {
+				"#": "String",
+				"city": {
+					"#": "String",
+					"$": " "
+				},
+				"country": {
+					"#": "String",
+					"$": "AA"
+				},
+				"postcode": {
+					"#": "String",
+					"$": " "
+				},
+				"streetAndNumber": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"ContactPerson": {
+				"#": "String",
+				"eMailAddress": {
+					"#": "String",
+					"$": " @ . "
+				},
+				"name": {
+					"#": "String",
+					"$": " "
+				},
+				"phoneNumber": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"TIRHolderIdentificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"name": {
+				"#": "String",
+				"$": " "
+			}
+		},
+		"Representative": {
+			"#": "String",
+			"ContactPerson": {
+				"#": "String",
+				"eMailAddress": {
+					"#": "String",
+					"$": " @ . "
+				},
+				"name": {
+					"#": "String",
+					"$": " "
+				},
+				"phoneNumber": {
+					"#": "String",
+					"$": " "
+				}
+			},
+			"identificationNumber": {
+				"#": "String",
+				"$": " "
+			},
+			"status": {
+				"#": "String",
+				"$": "0"
+			}
+		},
+		"TransitOperation": {
+			"#": "String",
+			"LRN": {
+				"#": "String",
+				"$": " "
+			},
+			"MRN": {
+				"#": "String",
+				"$": "0AA00000000000000"
+			},
+			"TIRCarnetNumber": {
+				"#": "String",
+				"$": "1"
+			},
+			"additionalDeclarationType": {
+				"#": "String",
+				"$": "A"
+			},
+			"amendmentTypeFlag": {
+				"#": "String",
+				"$": "0"
+			},
+			"bindingItinerary": {
+				"#": "String",
+				"$": "0"
+			},
+			"communicationLanguageAtDeparture": {
+				"#": "String",
+				"$": "AA"
+			},
+			"declarationType": {
+				"#": "String",
+				"$": " "
+			},
+			"limitDate": {
+				"#": "String",
+				"$": "0000-00-00"
+			},
+			"presentationOfTheGoodsDateAndTime": {
+				"#": "String",
+				"$": "0000-00-00T00:00:00"
+			},
+			"reducedDatasetIndicator": {
+				"#": "String",
+				"$": "0"
+			},
+			"security": {
+				"#": "String",
+				"$": "0"
+			},
+			"specificCircumstanceIndicator": {
+				"#": "String",
+				"$": "   "
+			}
+		},
+		"correlationIdentifier": {
+			"#": "String",
+			"$": " "
+		},
+		"messageIdentification": {
+			"#": "String",
+			"$": " "
+		},
+		"messageRecipient": {
+			"#": "String",
+			"$": " "
+		},
+		"messageType": {
+			"#": "String",
+			"$": "CC004C"
+		},
+		"preparationDateAndTime": {
+			"#": "String",
+			"$": "0000-00-00T00:00:00"
+		}
+	},
+	"n1:codeList": {
+		"#": "String",
+		"@name": "String",
+		"@type": "String"
+	},
+	"n1:condition": {
+		"#": "String",
+		"@name": "String"
+	},
+	"n1:description": {
+		"#": "String",
+		"@value": "String"
+	},
+	"n1:rule": {
+		"#": "String",
+		"@name": "String"
+	}
+}

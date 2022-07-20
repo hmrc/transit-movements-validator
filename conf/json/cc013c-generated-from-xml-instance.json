@@ -1,0 +1,457 @@
+{
+	"n1:CC013C": {
+		"@PhaseID": "NCTS5.0",
+		"messageRecipient": "!",
+		"preparationDateAndTime": "0231-11-23T10:03:02",
+		"messageIdentification": "!",
+		"messageType": "CD049C",
+		"correlationIdentifier": "!",
+		"TransitOperation": {
+			"LRN": "!",
+			"MRN": "00AA00000000000000",
+			"declarationType": "!",
+			"additionalDeclarationType": "A",
+			"TIRCarnetNumber": "1",
+			"presentationOfTheGoodsDateAndTime": "0231-11-23T10:03:02",
+			"security": "0",
+			"reducedDatasetIndicator": "1",
+			"specificCircumstanceIndicator": "! \"",
+			"communicationLanguageAtDeparture": "AA",
+			"bindingItinerary": "1",
+			"amendmentTypeFlag": "0",
+			"limitDate": "0111-10-11"
+		},
+		"Authorisation": [
+			{
+				"sequenceNumber": "0",
+				"type": "!",
+				"referenceNumber": "!"
+			}
+		],
+		"CustomsOfficeOfDeparture": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfDestinationDeclared": {
+			"referenceNumber": "AA000000"
+		},
+		"CustomsOfficeOfTransitDeclared": [
+			{
+				"sequenceNumber": "0",
+				"referenceNumber": "AA000000",
+				"arrivalDateAndTimeEstimated": "0231-11-23T10:03:02"
+			}
+		],
+		"CustomsOfficeOfExitForTransitDeclared": [
+			{
+				"sequenceNumber": "0",
+				"referenceNumber": "AA000000"
+			}
+		],
+		"HolderOfTheTransitProcedure": {
+			"identificationNumber": "!",
+			"TIRHolderIdentificationNumber": "!",
+			"name": "!",
+			"Address": {
+				"streetAndNumber": "!",
+				"postcode": "!",
+				"city": "!",
+				"country": "AA"
+			},
+			"ContactPerson": {
+				"name": "!",
+				"phoneNumber": "!",
+				"eMailAddress": "!@ .!"
+			}
+		},
+		"Representative": {
+			"identificationNumber": "!",
+			"status": "0",
+			"ContactPerson": {
+				"name": "!",
+				"phoneNumber": "!",
+				"eMailAddress": "!@ .!"
+			}
+		},
+		"Guarantee": [
+			{
+				"sequenceNumber": "0",
+				"guaranteeType": "0",
+				"otherGuaranteeReference": "!",
+				"GuaranteeReference": [
+					{
+						"sequenceNumber": "0",
+						"GRN": "00AA0000000000000",
+						"accessCode": "!!!!",
+						"amountToBeCovered": 0,
+						"currency": "AAA"
+					}
+				]
+			}
+		],
+		"Consignment": {
+			"countryOfDispatch": "AA",
+			"countryOfDestination": "AA",
+			"containerIndicator": "1",
+			"inlandModeOfTransport": "0",
+			"modeOfTransportAtTheBorder": "0",
+			"grossMass": 1,
+			"referenceNumberUCR": "!",
+			"Carrier": {
+				"identificationNumber": "AA!",
+				"ContactPerson": {
+					"name": "!",
+					"phoneNumber": "!",
+					"eMailAddress": "!@ .!"
+				}
+			},
+			"Consignor": {
+				"identificationNumber": "!",
+				"name": "!",
+				"Address": {
+					"streetAndNumber": "!",
+					"postcode": "!",
+					"city": "!",
+					"country": "AA"
+				},
+				"ContactPerson": {
+					"name": "!",
+					"phoneNumber": "!",
+					"eMailAddress": "!@ .!"
+				}
+			},
+			"Consignee": {
+				"identificationNumber": "!",
+				"name": "!",
+				"Address": {
+					"streetAndNumber": "!",
+					"postcode": "!",
+					"city": "!",
+					"country": "AA"
+				}
+			},
+			"AdditionalSupplyChainActor": [
+				{
+					"sequenceNumber": "0",
+					"role": "A",
+					"identificationNumber": "AA!"
+				}
+			],
+			"TransportEquipment": [
+				{
+					"sequenceNumber": "0",
+					"containerIdentificationNumber": "!",
+					"numberOfSeals": 0,
+					"Seal": [
+						{
+							"sequenceNumber": "0",
+							"identifier": "!"
+						}
+					],
+					"GoodsReference": [
+						{
+							"sequenceNumber": "0",
+							"declarationGoodsItemNumber": 1
+						}
+					]
+				}
+			],
+			"LocationOfGoods": {
+				"typeOfLocation": "A",
+				"qualifierOfIdentification": "A",
+				"authorisationNumber": "!",
+				"additionalIdentifier": "!",
+				"UNLocode": "!",
+				"CustomsOffice": {
+					"referenceNumber": "AA000000"
+				},
+				"GNSS": {
+					"latitude": "0.00000",
+					"longitude": "0.00000"
+				},
+				"EconomicOperator": {
+					"identificationNumber": "!"
+				},
+				"Address": {
+					"streetAndNumber": "!",
+					"postcode": "!",
+					"city": "!",
+					"country": "AA"
+				},
+				"PostcodeAddress": {
+					"houseNumber": "!",
+					"postcode": "!",
+					"country": "AA"
+				},
+				"ContactPerson": {
+					"name": "!",
+					"phoneNumber": "!",
+					"eMailAddress": "!@ .!"
+				}
+			},
+			"DepartureTransportMeans": [
+				{
+					"sequenceNumber": "0",
+					"typeOfIdentification": "00",
+					"identificationNumber": "!",
+					"nationality": "AA"
+				}
+			],
+			"CountryOfRoutingOfConsignment": [
+				{
+					"sequenceNumber": "0",
+					"country": "AA"
+				}
+			],
+			"ActiveBorderTransportMeans": [
+				{
+					"sequenceNumber": "0",
+					"customsOfficeAtBorderReferenceNumber": "%$$\"#! %",
+					"typeOfIdentification": "00",
+					"identificationNumber": "!",
+					"nationality": "AA",
+					"conveyanceReferenceNumber": "!"
+				}
+			],
+			"PlaceOfLoading": {
+				"UNLocode": "!",
+				"country": "AA",
+				"location": "!"
+			},
+			"PlaceOfUnloading": {
+				"UNLocode": "!",
+				"country": "AA",
+				"location": "!"
+			},
+			"PreviousDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!",
+					"complementOfInformation": "!"
+				}
+			],
+			"SupportingDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!",
+					"documentLineItemNumber": 1,
+					"complementOfInformation": "!"
+				}
+			],
+			"TransportDocument": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!"
+				}
+			],
+			"AdditionalReference": [
+				{
+					"sequenceNumber": "0",
+					"type": "#! \"",
+					"referenceNumber": "!"
+				}
+			],
+			"AdditionalInformation": [
+				{
+					"sequenceNumber": "0",
+					"code": "\"#! %",
+					"text": "!"
+				}
+			],
+			"TransportCharges": {
+				"methodOfPayment": "A"
+			},
+			"HouseConsignment": [
+				{
+					"sequenceNumber": "0",
+					"countryOfDispatch": "AA",
+					"grossMass": 1,
+					"referenceNumberUCR": "!",
+					"Consignor": {
+						"identificationNumber": "!",
+						"name": "!",
+						"Address": {
+							"streetAndNumber": "!",
+							"postcode": "!",
+							"city": "!",
+							"country": "AA"
+						},
+						"ContactPerson": {
+							"name": "!",
+							"phoneNumber": "!",
+							"eMailAddress": "!@ .!"
+						}
+					},
+					"Consignee": {
+						"identificationNumber": "!",
+						"name": "!",
+						"Address": {
+							"streetAndNumber": "!",
+							"postcode": "!",
+							"city": "!",
+							"country": "AA"
+						}
+					},
+					"AdditionalSupplyChainActor": [
+						{
+							"sequenceNumber": "0",
+							"role": "A",
+							"identificationNumber": "AA!"
+						}
+					],
+					"DepartureTransportMeans": [
+						{
+							"sequenceNumber": "0",
+							"typeOfIdentification": "00",
+							"identificationNumber": "!",
+							"nationality": "AA"
+						}
+					],
+					"PreviousDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!",
+							"complementOfInformation": "!"
+						}
+					],
+					"SupportingDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!",
+							"documentLineItemNumber": 1,
+							"complementOfInformation": "!"
+						}
+					],
+					"TransportDocument": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!"
+						}
+					],
+					"AdditionalReference": [
+						{
+							"sequenceNumber": "0",
+							"type": "#! \"",
+							"referenceNumber": "!"
+						}
+					],
+					"AdditionalInformation": [
+						{
+							"sequenceNumber": "0",
+							"code": "\"#! %",
+							"text": "!"
+						}
+					],
+					"TransportCharges": {
+						"methodOfPayment": "A"
+					},
+					"ConsignmentItem": [
+						{
+							"goodsItemNumber": "0",
+							"declarationGoodsItemNumber": 1,
+							"declarationType": "!",
+							"countryOfDispatch": "AA",
+							"countryOfDestination": "AA",
+							"referenceNumberUCR": "!",
+							"Consignee": {
+								"identificationNumber": "!",
+								"name": "!",
+								"Address": {
+									"streetAndNumber": "!",
+									"postcode": "!",
+									"city": "!",
+									"country": "AA"
+								}
+							},
+							"AdditionalSupplyChainActor": [
+								{
+									"sequenceNumber": "0",
+									"role": "A",
+									"identificationNumber": "AA!"
+								}
+							],
+							"Commodity": {
+								"descriptionOfGoods": "!",
+								"cusCode": "%$& $$& \"",
+								"CommodityCode": {
+									"harmonizedSystemSubHeadingCode": "$\"#! %",
+									"combinedNomenclatureCode": "!!"
+								},
+								"DangerousGoods": [
+									{
+										"sequenceNumber": "0",
+										"UNNumber": "#! \""
+									}
+								],
+								"GoodsMeasure": {
+									"grossMass": 0,
+									"netMass": 1,
+									"supplementaryUnits": 1
+								}
+							},
+							"Packaging": [
+								{
+									"sequenceNumber": "0",
+									"typeOfPackages": "!!",
+									"numberOfPackages": 0,
+									"shippingMarks": "!"
+								}
+							],
+							"PreviousDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!",
+									"goodsItemNumber": 1,
+									"typeOfPackages": "!!",
+									"numberOfPackages": 1,
+									"measurementUnitAndQualifier": "!",
+									"quantity": 1,
+									"complementOfInformation": "!"
+								}
+							],
+							"SupportingDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!",
+									"documentLineItemNumber": 1,
+									"complementOfInformation": "!"
+								}
+							],
+							"TransportDocument": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!"
+								}
+							],
+							"AdditionalReference": [
+								{
+									"sequenceNumber": "0",
+									"type": "#! \"",
+									"referenceNumber": "!"
+								}
+							],
+							"AdditionalInformation": [
+								{
+									"sequenceNumber": "0",
+									"code": "\"#! %",
+									"text": "!"
+								}
+							],
+							"TransportCharges": {
+								"methodOfPayment": "A"
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}
