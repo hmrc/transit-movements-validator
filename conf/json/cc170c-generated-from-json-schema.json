@@ -344,10 +344,6 @@
 			"#": "String",
 			"$": " "
 		},
-		"messageSender": {
-			"#": "String",
-			"$": " "
-		},
 		"messageType": {
 			"#": "String",
 			"$": "CC004C"

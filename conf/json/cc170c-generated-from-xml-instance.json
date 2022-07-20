@@ -1,11 +1,10 @@
 {
 	"n1:CC170C": {
 		"@PhaseID": "NCTS5.0",
-		"messageSender": "!",
 		"messageRecipient": "!",
 		"preparationDateAndTime": "0231-11-23T10:03:02",
 		"messageIdentification": "!",
-		"messageType": "CD917C",
+		"messageType": "CD006C",
 		"correlationIdentifier": "!",
 		"TransitOperation": {
 			"LRN": "!",
@@ -35,7 +34,7 @@
 			}
 		},
 		"Consignment": {
-			"containerIndicator": "0",
+			"containerIndicator": "1",
 			"inlandModeOfTransport": "0",
 			"modeOfTransportAtTheBorder": "0",
 			"TransportEquipment": [
