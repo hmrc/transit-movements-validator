@@ -115,16 +115,14 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
         source.runWith(Sink.ignore)
         Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
       case Some(mType) =>
-        val schemaType = getSchemaType(mType.schemaPath)
-
-        validateJson(source, schemaType).map {
-          case JsError(errors) =>
+        validateJson(source, mType.schemaPath) match {
+          case errors if errors.isEmpty => Future.successful(Right())
+          case errors =>
             val validationErrors = errors.map(
-              e => JsonSchemaValidationError(e._1.toJsonString, e._2.map(_.message).mkString(","))
+              e => JsonSchemaValidationError(e.getPath, e.getSchemaPath, e.getMessage)
             )
 
-            Left(NonEmptyList.fromList(validationErrors.toList).get)
-          case JsSuccess(_, _) => Right(())
+            Future.successful(Left(NonEmptyList.fromList(validationErrors.toList).get))
         }
     }
 

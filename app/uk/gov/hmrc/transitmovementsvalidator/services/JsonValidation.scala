@@ -17,35 +17,27 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
-import com.eclipsesource.schema.drafts.Version7.schemaTypeReads
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
-import com.eclipsesource.schema.SchemaType
-import com.eclipsesource.schema.SchemaValidator
-import com.eclipsesource.schema.drafts.Version7
-import play.api.libs.json.JsResult
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
-
-import scala.concurrent.Future
+import com.networknt.schema.JsonSchemaFactory
+import com.networknt.schema.SpecVersion
+import com.networknt.schema.ValidationMessage
+import play.libs.Json.mapper
+import scala.collection.JavaConverters._
 import scala.concurrent.duration.DurationInt
 
 trait JsonValidation {
 
-  val validator = SchemaValidator(Some(Version7))
+  val factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
 
-  def getSchemaType(filepath: String): SchemaType = {
-    val stream     = getClass.getResourceAsStream(filepath)
-    val raw        = scala.io.Source.fromInputStream(stream).getLines.mkString
-    val jsonSchema = Json.parse(raw)
-    Json.fromJson[SchemaType](jsonSchema).get
-  }
+  def validateJson(source: Source[ByteString, _], filepath: String)(implicit materializer: Materializer): Set[ValidationMessage] = {
+    val schemaStream    = getClass.getResourceAsStream(filepath)
+    val schemaValidator = factory.getSchema(schemaStream)
 
-  def validateJson(source: Source[ByteString, _], schemaType: SchemaType)(implicit materializer: Materializer): Future[JsResult[JsValue]] = {
-    val stream = source.runWith(StreamConverters.asInputStream(20.seconds))
-    val raw    = scala.io.Source.fromInputStream(stream).getLines.mkString
-    val json   = Json.parse(raw)
-    Future.successful(validator.validate(schemaType, json))
+    val jsonInput = source.runWith(StreamConverters.asInputStream(20.seconds))
+
+    val jsonNode = mapper.readTree(jsonInput)
+    schemaValidator.validate(jsonNode).asScala.toSet
   }
 }

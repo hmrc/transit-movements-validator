@@ -1,5 +1,7 @@
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
+import sbt.Keys.resolvers
+import sbt.Resolver
 
 val appName = "transit-movements-validator"
 
@@ -8,10 +10,10 @@ val silencerVersion = "1.7.7"
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(
-    majorVersion                     := 0,
-    scalaVersion                     := "2.12.15",
-    PlayKeys.playDefaultPort         := 9496,
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
+    majorVersion := 0,
+    scalaVersion := "2.12.15",
+    PlayKeys.playDefaultPort := 9496,
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     // ***************
     // Use the silencer plugin to suppress warnings
     scalacOptions += "-P:silencer:pathFilters=routes",
@@ -26,5 +28,13 @@ lazy val microservice = Project(appName, file("."))
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
-  .settings(resolvers += Resolver.jcenterRepo)
+  .settings(
+    resolvers ++= Seq(
+      Resolver.jcenterRepo,
+      Resolver.typesafeRepo("releases"),
+      Resolver.DefaultMavenRepository,
+      Resolver.jcenterRepo,
+      "jitpack" at "https://jitpack.io"
+    )
+  )
   .settings(CodeCoverageSettings.settings: _*)
