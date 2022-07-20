@@ -1,11 +1,10 @@
 {
 	"n1:CC014C": {
 		"@PhaseID": "NCTS5.0",
-		"messageSender": "!",
 		"messageRecipient": "!",
 		"preparationDateAndTime": "0231-11-23T10:03:02",
 		"messageIdentification": "!",
-		"messageType": "CD145C",
+		"messageType": "CC055C",
 		"correlationIdentifier": "!",
 		"TransitOperation": {
 			"LRN": "!",
@@ -14,7 +13,7 @@
 		"Invalidation": {
 			"requestDateAndTime": "0231-11-23T10:03:02",
 			"decisionDateAndTime": "0231-11-23T10:03:02",
-			"decision": "0",
+			"decision": "1",
 			"initiatedByCustoms": "0",
 			"justification": "!"
 		},
