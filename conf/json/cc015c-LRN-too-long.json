@@ -378,7 +378,7 @@
                   "#": "String",
                   "combinedNomenclatureCode": {
                     "#": "String",
-                    "$": "AB"
+                    "$": "YZ"
                   },
                   "harmonizedSystemSubHeadingCode": {
                     "#": "String",
@@ -543,7 +543,7 @@
                 "#": "String",
                 "methodOfPayment": {
                   "#": "String",
-                  "$": "B"
+                  "$": "Z"
                 }
               },
               "TransportDocument": [
@@ -705,7 +705,7 @@
             "#": "String",
             "methodOfPayment": {
               "#": "String",
-              "$": "B"
+              "$": "Z"
             }
           },
           "TransportDocument": [
@@ -920,7 +920,7 @@
         "#": "String",
         "methodOfPayment": {
           "#": "String",
-          "$": "B"
+          "$": "Z"
         }
       },
       "TransportDocument": [
@@ -1068,7 +1068,7 @@
             },
             "accessCode": {
               "#": "String",
-              "$": "1234"
+              "$": "WXYZ"
             },
             "amountToBeCovered": {
               "#": "String",
@@ -1086,7 +1086,7 @@
         ],
         "guaranteeType": {
           "#": "String",
-          "$": "D"
+          "$": "Z"
         },
         "otherGuaranteeReference": {
           "#": "String",
@@ -1229,10 +1229,6 @@
       "$": " "
     },
     "messageRecipient": {
-      "#": "String",
-      "$": " "
-    },
-    "messageSender": {
       "#": "String",
       "$": " "
     },
