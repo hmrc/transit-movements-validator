@@ -31,8 +31,6 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
-import play.api.libs.json.JsError
-import play.api.libs.json.JsSuccess
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeJson
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeXml
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
@@ -116,7 +114,7 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
         Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
       case Some(mType) =>
         validateJson(source, mType.schemaPath) match {
-          case errors if errors.isEmpty => Future.successful(Right())
+          case errors if errors.isEmpty => Future.successful(Right(()))
           case errors =>
             val validationErrors = errors.map(
               e => JsonSchemaValidationError(e.getPath, e.getSchemaPath, e.getMessage)

@@ -36,7 +36,7 @@ import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with TestActorSystem with ScalaFutures with JsonValidation {
+class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with TestActorSystem with ScalaFutures {
 
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)

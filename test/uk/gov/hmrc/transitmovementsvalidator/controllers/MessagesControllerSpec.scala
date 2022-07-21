@@ -180,7 +180,7 @@ class MessagesControllerSpec
     }
 
     "on an invalid JSON file, return Ok with a list of errors" in {
-      val errorList = NonEmptyList(JsonSchemaValidationError("LRN", "'123456' exceeds maximum length of 4."), Nil)
+      val errorList = NonEmptyList(JsonSchemaValidationError("LRN", "IE015C:LRN", "'123456' exceeds maximum length of 4."), Nil)
 
       when(mockValidationService.validateJSON(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenReturn(Future.successful(Left(errorList)))

@@ -28,13 +28,4 @@ lazy val microservice = Project(appName, file("."))
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
-  .settings(
-    resolvers ++= Seq(
-      Resolver.jcenterRepo,
-      Resolver.typesafeRepo("releases"),
-      Resolver.DefaultMavenRepository,
-      Resolver.jcenterRepo,
-      "jitpack" at "https://jitpack.io"
-    )
-  )
   .settings(CodeCoverageSettings.settings: _*)

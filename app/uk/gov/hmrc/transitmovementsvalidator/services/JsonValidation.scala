@@ -20,24 +20,28 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidationMessage
-import play.libs.Json.mapper
+
 import scala.collection.JavaConverters._
 import scala.concurrent.duration.DurationInt
 
 trait JsonValidation {
 
-  val factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
+  private val mapper  = new ObjectMapper
+  private val factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
 
   def validateJson(source: Source[ByteString, _], filepath: String)(implicit materializer: Materializer): Set[ValidationMessage] = {
-    val schemaStream    = getClass.getResourceAsStream(filepath)
-    val schemaValidator = factory.getSchema(schemaStream)
+    val schemaStream                = getClass.getResourceAsStream(filepath)
+    val schemaValidator: JsonSchema = factory.getSchema(schemaStream)
 
     val jsonInput = source.runWith(StreamConverters.asInputStream(20.seconds))
 
-    val jsonNode = mapper.readTree(jsonInput)
+    val jsonNode: JsonNode = mapper.readTree(jsonInput)
     schemaValidator.validate(jsonNode).asScala.toSet
   }
 }
