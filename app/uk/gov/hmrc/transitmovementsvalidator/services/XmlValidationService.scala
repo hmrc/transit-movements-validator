@@ -31,36 +31,39 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeJson
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeXml
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import javax.inject.Inject
+import javax.xml.XMLConstants
+import javax.xml.parsers.SAXParserFactory
+import javax.xml.validation.SchemaFactory
 import scala.collection.mutable
 
-@ImplementedBy(classOf[ValidationServiceImpl])
-trait ValidationService {
+@ImplementedBy(classOf[XmlValidationServiceImpl])
+trait XmlValidationService {
 
-  def validateXML(messageType: String, source: Source[ByteString, _])(implicit
+  def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): Future[Either[NonEmptyList[ValidationError], Unit]]
 
-  def validateJSON(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]]
 }
 
-class ValidationServiceImpl @Inject() extends ValidationService with XmlValidation with JsonValidation {
+class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
 
-  override def validateXML(messageType: String, source: Source[ByteString, _])(implicit
+  val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
+    MessageType.values.map {
+      typ =>
+        typ -> Future(buildParser(typ))
+    }.toMap
+
+  override def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): Future[Either[NonEmptyList[ValidationError], Unit]] =
-    MessageTypeXml.values.find(_.code == messageType) match {
+    MessageType.values.find(_.code == messageType) match {
       case None =>
         //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
         source.runWith(Sink.ignore)
@@ -103,26 +106,22 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
         }
     }
 
-  override def validateJSON(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]] =
-    MessageTypeJson.values.find(_.code == messageType) match {
-      case None =>
-        //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
-        source.runWith(Sink.ignore)
-        Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
-      case Some(mType) =>
-        val schemaValidator = schemaValidators(mType.code)
-        validateJson(source, schemaValidator) match {
-          case errors if errors.isEmpty => Future.successful(Right(()))
-          case errors =>
-            val validationErrors = errors.map(
-              e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
-            )
+  def buildParser(messageType: MessageType): SAXParserFactory = {
+    val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+    val parser        = SAXParserFactory.newInstance()
+    val schemaUrl     = getClass.getResource(messageType.xsdPath)
 
-            Future.successful(Left(NonEmptyList.fromList(validationErrors.toList).get))
-        }
-    }
+    val schema = schemaFactory.newSchema(schemaUrl)
+    parser.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
+    parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
+    parser.setFeature("http://xml.org/sax/features/external-general-entities", false)
+    parser.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
+    parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+    parser.setNamespaceAware(true)
+    parser.setXIncludeAware(false)
+    parser.setSchema(schema)
+
+    parser
+  }
 
 }

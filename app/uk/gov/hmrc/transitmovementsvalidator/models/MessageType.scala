@@ -16,17 +16,18 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models
 
-sealed trait MessageTypeXml {
+sealed trait MessageType {
   def code: String
   def rootNode: String
   def xsdPath: String
+  def jsonSchemaPath: String
 }
 
-sealed abstract class DepartureMessageTypeXml(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
+sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType
 
-sealed abstract class ArrivalMessageTypeXml(val code: String, val rootNode: String, val xsdPath: String) extends MessageTypeXml
+sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType
 
-object MessageTypeXml {
+object MessageType {
 
   // *******************
   // Departures Requests
@@ -34,27 +35,27 @@ object MessageTypeXml {
 
 //  /** E_DEC_AMD (IE013) */
 //  case object DeclarationAmendment
-//    extends DepartureMessageType("IE013", "CC013C", "/xsd/cc013c.xsd")
+//    extends DepartureMessageType("IE013", "CC013C", "/xsd/cc013c.xsd", "/json/cc013c-schema.json")
 //
 //  /** E_DEC_INV (IE014) */
 //  case object DeclarationInvalidation
-//    extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd")
+//    extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd", "/json/cc014c-schema.json")
 
   /** E_DEC_DAT (IE015) */
-  case object DeclarationDataXml extends DepartureMessageTypeXml("IE015", "CC015C", "/xsd/cc015c.xsd")
+  case object DeclarationData extends DepartureMessageType("IE015", "CC015C", "/xsd/cc015c.xsd", "/json/cc015c-schema.json")
 
 //  /** E_REQ_REL (IE054) */
 //  case object RequestOfRelease
-//    extends DepartureMessageType("IE054", "CC054C", "/xsd/cc054c.xsd")
+//    extends DepartureMessageType("IE054", "CC054C", "/xsd/cc054c.xsd", "/json/cc054c-schema.json")
 //
 //  /** E_PRE_NOT (IE170) */
 //  case object PresentationNotification
-//    extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd")
+//    extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
 
   val departureValues = Set(
 //    DeclarationAmendment,
 //    DeclarationInvalidation,
-    DeclarationDataXml
+    DeclarationData
 //    RequestOfRelease,
 //    PresentationNotification
   )
@@ -64,14 +65,14 @@ object MessageTypeXml {
   // ****************
 
   /** E_REQ_REL (IE054) */
-  case object ArrivalNotificationXml extends ArrivalMessageTypeXml("IE007", "CC007C", "/xsd/cc007c.xsd")
+  case object ArrivalNotification extends ArrivalMessageType("IE007", "CC007C", "/xsd/cc007c.xsd", "/json/cc007c-schema.json")
 
   /** E_PRE_NOT (IE170) */
-  case object UnloadingRemarksXml extends ArrivalMessageTypeXml("IE044", "CC044C", "/xsd/cc044c.xsd")
+  case object UnloadingRemarks extends ArrivalMessageType("IE044", "CC044C", "/xsd/cc044c.xsd", "/json/cc044c-schema.json")
 
   val arrivalValues = Set(
-    ArrivalNotificationXml,
-    UnloadingRemarksXml
+    ArrivalNotification,
+    UnloadingRemarks
   )
 
   val values = arrivalValues ++ departureValues

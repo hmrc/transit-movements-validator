@@ -30,13 +30,14 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.UnknownMessageTypeValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
-import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
-class MessagesController @Inject() (cc: ControllerComponents, validationService: ValidationService)(implicit
+class MessagesController @Inject() (cc: ControllerComponents, XmlValidationService: XmlValidationService, JsonValidationService: JsonValidationService)(implicit
   val materializer: Materializer,
   executionContext: ExecutionContext
 ) extends BackendController(cc)
@@ -53,8 +54,8 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
   def validateXML(messageType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        validationService
-          .validateXML(messageType, request.body)
+        XmlValidationService
+          .validate(messageType, request.body)
           .map {
             case Left(x) =>
               x.head match {
@@ -72,8 +73,8 @@ class MessagesController @Inject() (cc: ControllerComponents, validationService:
   def validateJSON(messageType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        validationService
-          .validateJSON(messageType, request.body)
+        JsonValidationService
+          .validate(messageType, request.body)
           .map {
             case Left(x) =>
               x.head match {
