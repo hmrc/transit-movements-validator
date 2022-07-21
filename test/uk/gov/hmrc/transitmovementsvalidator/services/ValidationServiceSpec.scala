@@ -44,6 +44,8 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
   lazy val validXml: NodeSeq = <test></test>
   lazy val validCode: String = "IE015"
 
+  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
+
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
   "On Validate XML" - {
@@ -86,7 +88,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
 
   "On Validate JSON" - {
     "when valid JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get("./conf/json/cc015c-generated-from-json-schema.json"))
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-generated-from-json-schema.json"))
       val sut    = new ValidationServiceImpl
       val result = sut.validateJSON(validCode, source)
 
@@ -97,7 +99,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
     }
 
     "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
-      val source      = FileIO.fromPath(Paths.get("./conf/json/cc015c-generated-from-json-schema.json"))
+      val source      = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-generated-from-json-schema.json"))
       val invalidCode = "dummy"
       val sut         = new ValidationServiceImpl
       val result      = sut.validateJSON(invalidCode, source)
@@ -110,7 +112,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
     }
 
     "when valid message type provided but with unexpected json, return errors" in {
-      val source = FileIO.fromPath(Paths.get("./conf/json/cc015c-LRN-too-long.json"))
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-LRN-too-long.json"))
       val sut    = new ValidationServiceImpl
       val result = sut.validateJSON(validCode, source)
 

@@ -9,7 +9,8 @@ object AppDependencies {
     "uk.gov.hmrc"               %% "bootstrap-backend-play-28" % "5.24.0",
     "org.typelevel"             %% "cats-core"                 % catsVersion,
     "com.networknt"              % "json-schema-validator"     % "1.0.70",
-    "com.fasterxml.jackson.core" % "jackson-databind"          % "2.12.6"
+    "com.fasterxml.jackson.core" % "jackson-databind"          % "2.12.6",
+    "org.slf4j"                  % "slf4j-api"                 % "1.7.36"
   )
 
   val test = Seq(
