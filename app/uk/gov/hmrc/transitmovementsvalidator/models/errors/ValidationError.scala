@@ -51,21 +51,19 @@ object UnknownMessageTypeValidationError {
   implicit val format: OFormat[UnknownMessageTypeValidationError] = Json.format[UnknownMessageTypeValidationError]
 }
 
-case class JsonSchemaValidationError(path: String, schemaPath: String, message: String) extends ValidationError
+case class JsonSchemaValidationError(schemaPath: String, message: String) extends ValidationError
 
 object JsonSchemaValidationError {
 
   implicit val jsonValidationErrorReads: Reads[JsonSchemaValidationError] =
     (
-      (__ \ "path").read[String] and
-        (__ \ "schemaPath").read[String] and
+      (__ \ "schemaPath").read[String] and
         (__ \ "message").read[String]
     )(JsonSchemaValidationError.apply _)
 
   implicit val jsonValidationErrorWrites: OWrites[JsonSchemaValidationError] =
     (
-      (__ \ "path").write[String] and
-        (__ \ "schemaPath").write[String] and
+      (__ \ "schemaPath").write[String] and
         (__ \ "message").write[String]
     )(unlift(JsonSchemaValidationError.unapply))
 }

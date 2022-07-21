@@ -118,7 +118,7 @@ class ValidationServiceImpl @Inject() extends ValidationService with XmlValidati
           case errors if errors.isEmpty => Future.successful(Right(()))
           case errors =>
             val validationErrors = errors.map(
-              e => JsonSchemaValidationError(e.getPath, e.getSchemaPath, e.getMessage)
+              e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
             )
 
             Future.successful(Left(NonEmptyList.fromList(validationErrors.toList).get))

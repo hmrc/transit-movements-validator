@@ -1181,7 +1181,7 @@
       },
       "TIRCarnetNumber": {
         "#": "String",
-        "$": "1"
+        "$": "123"
       },
       "additionalDeclarationType": {
         "#": "String",

@@ -112,7 +112,7 @@ class ValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar 
     }
 
     "when valid message type provided but with unexpected json, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-LRN-too-long.json"))
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-data.json"))
       val sut    = new ValidationServiceImpl
       val result = sut.validateJSON(validCode, source)
 
