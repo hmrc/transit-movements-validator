@@ -29,3 +29,9 @@ lazy val microservice = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
   .settings(CodeCoverageSettings.settings: _*)
+  .settings(inThisBuild(buildSettings))
+
+// Settings for the whole build
+lazy val buildSettings = Def.settings(
+  scalafmtOnCompile := true
+)
