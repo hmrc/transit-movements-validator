@@ -26,6 +26,7 @@ import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidationMessage
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageTypeJson
 
 import scala.collection.JavaConverters._
 import scala.concurrent.duration.DurationInt
@@ -35,12 +36,14 @@ trait JsonValidation {
   private val mapper  = new ObjectMapper
   private val factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
 
-  def validateJson(source: Source[ByteString, _], filepath: String)(implicit materializer: Materializer): Set[ValidationMessage] = {
-    val schemaStream                = getClass.getResourceAsStream(filepath)
-    val schemaValidator: JsonSchema = factory.getSchema(schemaStream)
+  val schemaValidators = MessageTypeJson.values
+    .map(
+      msgType => msgType.code -> factory.getSchema(getClass.getResourceAsStream(msgType.schemaPath))
+    )
+    .toMap
 
-    val jsonInput = source.runWith(StreamConverters.asInputStream(20.seconds))
-
+  def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Set[ValidationMessage] = {
+    val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
     val jsonNode: JsonNode = mapper.readTree(jsonInput)
     schemaValidator.validate(jsonNode).asScala.toSet
   }
