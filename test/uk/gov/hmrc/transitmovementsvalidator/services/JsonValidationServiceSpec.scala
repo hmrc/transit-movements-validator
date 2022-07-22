@@ -88,8 +88,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result) {
         r =>
-          r.isLeft mustBe true
-          r.left.get.head.isInstanceOf[JsonSchemaValidationError]
+          r.isRight mustBe true
       }
     }
   }
