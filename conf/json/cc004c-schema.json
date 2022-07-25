@@ -2,8 +2,8 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"additionalProperties": false,
 	"definitions": {
-		".n1:CC013C": {
-			"$ref": "#/definitions/n1:CC013CType"
+		".n1:CC004C": {
+			"$ref": "#/definitions/n1:CC004CType"
 		},
 		".n1:codeList": {
 			"additionalProperties": false,
@@ -6197,7 +6197,7 @@
 			"pattern": "^([\\w\\D]{3,3})$",
 			"type": "string"
 		},
-		"n1:CC013CType": {
+		"n1:CC004CType": {
 			"additionalProperties": false,
 			"patternProperties": {
 				"^@xmlns(:\\w+)?$": {
@@ -6217,48 +6217,14 @@
 				"@PhaseID": {
 					"$ref": "#/definitions/n1:phaseIDtype"
 				},
-				"Authorisation": {
-					"items": {
-						"$ref": "#/definitions/n1:AuthorisationType03"
-					},
-					"type": "array"
-				},
-				"Consignment": {
-					"$ref": "#/definitions/n1:ConsignmentType20"
-				},
 				"CustomsOfficeOfDeparture": {
 					"$ref": "#/definitions/n1:CustomsOfficeOfDepartureType03"
 				},
-				"CustomsOfficeOfDestinationDeclared": {
-					"$ref": "#/definitions/n1:CustomsOfficeOfDestinationDeclaredType01"
-				},
-				"CustomsOfficeOfExitForTransitDeclared": {
-					"items": {
-						"$ref": "#/definitions/n1:CustomsOfficeOfExitForTransitDeclaredType02"
-					},
-					"type": "array"
-				},
-				"CustomsOfficeOfTransitDeclared": {
-					"items": {
-						"$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType03"
-					},
-					"type": "array"
-				},
-				"Guarantee": {
-					"items": {
-						"$ref": "#/definitions/n1:GuaranteeType01"
-					},
-					"minItems": 1,
-					"type": "array"
-				},
 				"HolderOfTheTransitProcedure": {
-					"$ref": "#/definitions/n1:HolderOfTheTransitProcedureType14"
-				},
-				"Representative": {
-					"$ref": "#/definitions/n1:RepresentativeType05"
+					"$ref": "#/definitions/n1:HolderOfTheTransitProcedureType20"
 				},
 				"TransitOperation": {
-					"$ref": "#/definitions/n1:TransitOperationType04"
+					"$ref": "#/definitions/n1:TransitOperationType01"
 				},
 				"correlationIdentifier": {
 					"additionalProperties": false,
@@ -6344,6 +6310,34 @@
 						"boolean"
 					]
 				},
+				"messageSender": {
+					"additionalProperties": false,
+					"patternProperties": {
+						"^@xmlns(:\\w+)?$": {
+							"type": "string"
+						},
+						"^@xsi:\\w+$": {
+							"type": "string"
+						},
+						"^\\?\\w+$": {
+							"type": "string"
+						}
+					},
+					"properties": {
+						"#": {
+							"type": "string"
+						},
+						"$": {
+							"$ref": "#/definitions/n1:MessageSenderContentType"
+						}
+					},
+					"type": [
+						"object",
+						"string",
+						"number",
+						"boolean"
+					]
+				},
 				"messageType": {
 					"additionalProperties": false,
 					"patternProperties": {
@@ -6402,14 +6396,12 @@
 				}
 			},
 			"required": [
-				"Consignment",
 				"CustomsOfficeOfDeparture",
-				"CustomsOfficeOfDestinationDeclared",
-				"Guarantee",
 				"HolderOfTheTransitProcedure",
 				"TransitOperation",
 				"messageIdentification",
 				"messageRecipient",
+				"messageSender",
 				"messageType",
 				"preparationDateAndTime"
 			],
@@ -54190,8 +54182,8 @@
 		"@xmlns:n1": {
 			"default": "http://ncts.dgtaxud.ec"
 		},
-		"n1:CC013C": {
-			"$ref": "#/definitions/.n1:CC013C"
+		"n1:CC004C": {
+			"$ref": "#/definitions/.n1:CC004C"
 		},
 		"n1:codeList": {
 			"$ref": "#/definitions/.n1:codeList"

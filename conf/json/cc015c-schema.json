@@ -130,7 +130,7 @@
       "type": "string"
     },
     "n1:AESCommunicationPurposeContentType": {
-      "description": "\n        Used by 2/91 messages: CC190C, CC191C\n      ",
+      "description": "Used by 2/91 messages: CC190C, CC191C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -257,31 +257,31 @@
       "type": "object"
     },
     "n1:AcceptanceDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:AccessCodeContentType01": {
-      "description": "\n        Used by 3/91 messages: CC029C, CD200C, CD203C\n      ",
+      "description": "Used by 3/91 messages: CC029C, CD200C, CD203C",
       "maxLength": 4,
       "pattern": "^([\\w\\D]{1,4})$",
       "type": "string"
     },
     "n1:AccessCodeContentType02": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC034C, CC224C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC034C, CC224C",
       "maxLength": 4,
       "minLength": 4,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:AccessCodeCurrentContentType": {
-      "description": "\n        Used by 1/91 messages: CC026C\n      ",
+      "description": "Used by 1/91 messages: CC026C",
       "maxLength": 4,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:AccessCodeNewContentType": {
-      "description": "\n        Used by 1/91 messages: CC026C\n      ",
+      "description": "Used by 1/91 messages: CC026C",
       "maxLength": 4,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -1311,18 +1311,18 @@
       "type": "object"
     },
     "n1:AdditionalDeclarationTypeContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
     "n1:AdditionalIdentifierContentType01": {
-      "description": "\n        Used by 2/91 messages: CC029C, CC190C\n      ",
+      "description": "Used by 2/91 messages: CC029C, CC190C",
       "maxLength": 4,
       "pattern": "^([\\w\\D]{1,4})$",
       "type": "string"
     },
     "n1:AdditionalIdentifierContentType02": {
-      "description": "\n        Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C",
       "maxLength": 4,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -5930,65 +5930,65 @@
       "type": "string"
     },
     "n1:AmendmentAcceptanceDateAndTimeContentType": {
-      "description": "\n        Used by 2/91 messages: CC004C, CC190C\n      ",
+      "description": "Used by 2/91 messages: CC004C, CC190C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:AmendmentNotificationDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC022C\n      ",
+      "description": "Used by 1/91 messages: CC022C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:AmendmentSubmissionDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC004C\n      ",
+      "description": "Used by 1/91 messages: CC004C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:AmendmentTypeFlagContentType": {
-      "description": "\n        Used by 1/91 messages: CC013C\n      ",
+      "description": "Used by 1/91 messages: CC013C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:AmountClaimedContentType": {
-      "description": "\n        Used by 1/91 messages: CC035C\n      ",
+      "description": "Used by 1/91 messages: CC035C",
       "type": "number"
     },
     "n1:AmountConcernedContentType": {
-      "description": "\n        Used by 2/91 messages: CD200C, CD203C\n      ",
+      "description": "Used by 2/91 messages: CD200C, CD203C",
       "type": "number"
     },
     "n1:AmountToBeCoveredContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "type": "number"
     },
     "n1:ArrivalDateAndTimeActualContentType": {
-      "description": "\n        Used by 3/91 messages: CD006C, CD024C, CD209C\n      ",
+      "description": "Used by 3/91 messages: CD006C, CD024C, CD209C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ArrivalDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ArrivalDateAndTimeEstimatedContentType": {
-      "description": "\n        Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ArrivalNotificationDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC007C\n      ",
+      "description": "Used by 1/91 messages: CC007C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:AuthorisationNumberContentType01": {
-      "description": "\n        Used by 2/91 messages: CC029C, CC190C\n      ",
+      "description": "Used by 2/91 messages: CC029C, CC190C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:AuthorisationNumberContentType02": {
-      "description": "\n        Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -6333,28 +6333,28 @@
       "type": "object"
     },
     "n1:AuthorityContentType01": {
-      "description": "\n        Used by 1/91 messages: CC007C\n      ",
+      "description": "Used by 1/91 messages: CC007C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:AuthorityContentType02": {
-      "description": "\n        Used by 8/91 messages: CC043C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 8/91 messages: CC043C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:BalanceContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "type": "number"
     },
     "n1:BindingItineraryContentType": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:BusinessRejectionTypeContentType": {
-      "description": "\n        Used by 2/91 messages: CC056C, CC057C\n      ",
+      "description": "Used by 2/91 messages: CC056C, CC057C",
       "pattern": "^([\\w\\D]{3,3})$",
       "type": "string"
     },
@@ -6423,7 +6423,6 @@
         },
         "correlationIdentifier": {
           "additionalProperties": false,
-          "description": "\n\t\t\t\t\t\t\n\t\t\t\t\t",
           "patternProperties": {
             "^@xmlns(:\\w+)?$": {
               "type": "string"
@@ -6452,7 +6451,6 @@
         },
         "messageIdentification": {
           "additionalProperties": false,
-          "description": "\n\t\t\t\t\t\t\n\t\t\t\t\t",
           "patternProperties": {
             "^@xmlns(:\\w+)?$": {
               "type": "string"
@@ -6481,7 +6479,6 @@
         },
         "messageRecipient": {
           "additionalProperties": false,
-          "description": "\n\t\t\t\t\t\t\n\t\t\t\t\t",
           "patternProperties": {
             "^@xmlns(:\\w+)?$": {
               "type": "string"
@@ -6510,7 +6507,6 @@
         },
         "messageType": {
           "additionalProperties": false,
-          "description": "\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t",
           "patternProperties": {
             "^@xmlns(:\\w+)?$": {
               "type": "string"
@@ -6539,7 +6535,6 @@
         },
         "preparationDateAndTime": {
           "additionalProperties": false,
-          "description": "\n\t\t\t\t\t\t\n\t\t\t\t\t",
           "patternProperties": {
             "^@xmlns(:\\w+)?$": {
               "type": "string"
@@ -6642,12 +6637,12 @@
       "type": "object"
     },
     "n1:CancelEnquiryNotificationDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CD059C\n      ",
+      "description": "Used by 1/91 messages: CD059C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:CancelEnquiryNotificationTextContentType": {
-      "description": "\n        Used by 1/91 messages: CD059C\n      ",
+      "description": "Used by 1/91 messages: CD059C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
@@ -6873,19 +6868,19 @@
       "type": "object"
     },
     "n1:CityContentType01": {
-      "description": "\n        Used by 32/91 messages: CC004C, CC009C, CC019C, CC023C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 32/91 messages: CC004C, CC009C, CC019C, CC023C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:CityContentType02": {
-      "description": "\n        Used by 4/91 messages: CC014C, CC022C, CC026C, CC051C\n      ",
+      "description": "Used by 4/91 messages: CC014C, CC022C, CC026C, CC051C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:CityContentType03": {
-      "description": "\n        Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C\n      ",
+      "description": "Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -6897,22 +6892,22 @@
       "type": "string"
     },
     "n1:CodeContentType01": {
-      "description": "\n        Used by 10/91 messages: CC007C, CC043C, CC182C, CD003C, CD038C, CD115C, CD145C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 10/91 messages: CC007C, CC043C, CC182C, CD003C, CD038C, CD115C, CD145C, CD165C, CD180C, CD181C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:CodeContentType02": {
-      "description": "\n        Used by 12/91 messages: CC017C, CC029C, CC042C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC017C, CC029C, CC042C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
     "n1:CodeContentType03": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{5,5})$",
       "type": "string"
     },
     "n1:CodeContentType04": {
-      "description": "\n        Used by 3/91 messages: CC055C, CD201C, CD205C\n      ",
+      "description": "Used by 3/91 messages: CC055C, CD201C, CD205C",
       "pattern": "^([\\w\\D]{1,3})$",
       "type": "string"
     },
@@ -6925,30 +6920,30 @@
           "pattern": "^([\\!-~]{1,16}E)$"
         }
       ],
-      "description": "\n        Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 17,
       "minLength": 1,
       "type": "string"
     },
     "n1:CodeContentType06": {
-      "description": "\n        Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
     "n1:CollectionDateContentType": {
-      "description": "\n        Used by 1/91 messages: CD152C\n      ",
+      "description": "Used by 1/91 messages: CD152C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:CombinedNomenclatureCodeContentType01": {
-      "description": "\n        Used by 15/91 messages: CC025C, CC029C, CC043C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C\n      ",
+      "description": "Used by 15/91 messages: CC025C, CC029C, CC043C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C",
       "maxLength": 2,
       "minLength": 2,
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
     "n1:CombinedNomenclatureCodeContentType02": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C",
       "maxLength": 2,
       "minLength": 2,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
@@ -8298,14 +8293,14 @@
       "type": "object"
     },
     "n1:CommunicationLanguageAtDepartureContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "maxLength": 2,
       "minLength": 2,
       "pattern": "^([A-Z]{2,2})$",
       "type": "string"
     },
     "n1:CommunicationLanguageAtDestinationContentType": {
-      "description": "\n        Used by 1/91 messages: CC007C\n      ",
+      "description": "Used by 1/91 messages: CC007C",
       "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
@@ -8424,19 +8419,19 @@
       "type": "object"
     },
     "n1:ComplementOfInformationContentType01": {
-      "description": "\n        Used by 11/91 messages: CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 11/91 messages: CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:ComplementOfInformationContentType02": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:CompleteControlContentType": {
-      "description": "\n        Used by 1/91 messages: CC017C\n      ",
+      "description": "Used by 1/91 messages: CC017C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -8795,7 +8790,7 @@
       "type": "object"
     },
     "n1:ConformContentType": {
-      "description": "\n        Used by 1/91 messages: CC044C\n      ",
+      "description": "Used by 1/91 messages: CC044C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -17026,7 +17021,7 @@
       "type": "object"
     },
     "n1:ContactDetailsInCountryOfCompetentAuthorityContentType": {
-      "description": "\n        Used by 2/91 messages: CD150C, CD151C\n      ",
+      "description": "Used by 2/91 messages: CD150C, CD151C",
       "pattern": "^([\\w\\D]{1,140})$",
       "type": "string"
     },
@@ -17709,14 +17704,14 @@
       "type": "string"
     },
     "n1:ContainerIdentificationNumberContentType01": {
-      "description": "\n        Used by 14/91 messages: CC029C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 14/91 messages: CC029C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 17,
       "minLength": 1,
       "pattern": "^([ -~]{1,17})$",
       "type": "string"
     },
     "n1:ContainerIdentificationNumberContentType02": {
-      "description": "\n        Used by 6/91 messages: CC007C, CC013C, CC015C, CC017C, CC044C, CC170C\n      ",
+      "description": "Used by 6/91 messages: CC007C, CC013C, CC015C, CC017C, CC044C, CC170C",
       "maxLength": 17,
       "minLength": 1,
       "pattern": "^([\\!-~]|[ -~]{1,15}|[\\!-~]|[\\!-~]{1,2})$",
@@ -17729,18 +17724,18 @@
       "type": "string"
     },
     "n1:ContainerIndicatorContentType": {
-      "description": "\n        Used by 18/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CC182C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 18/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CC182C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:ContinueUnloadingContentType": {
-      "description": "\n        Used by 1/91 messages: CC043C\n      ",
+      "description": "Used by 1/91 messages: CC043C",
       "maximum": 9,
       "minimum": 1,
       "type": "integer"
     },
     "n1:ControlNotificationDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC060C\n      ",
+      "description": "Used by 1/91 messages: CC060C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -18618,13 +18613,13 @@
       "type": "object"
     },
     "n1:ControlledByContentType01": {
-      "description": "\n        Used by 1/91 messages: CC017C\n      ",
+      "description": "Used by 1/91 messages: CC017C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:ControlledByContentType02": {
-      "description": "\n        Used by 1/91 messages: CC029C\n      ",
+      "description": "Used by 1/91 messages: CC029C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
@@ -18650,28 +18645,28 @@
       "type": "string"
     },
     "n1:ConveyanceReferenceNumberContentType01": {
-      "description": "\n        Used by 1/91 messages: CC029C\n      ",
+      "description": "Used by 1/91 messages: CC029C",
       "maxLength": 17,
       "minLength": 1,
       "pattern": "^([ -~]{1,17})$",
       "type": "string"
     },
     "n1:ConveyanceReferenceNumberContentType02": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC170C",
       "maxLength": 17,
       "minLength": 1,
       "pattern": "^([\\!-~]|[ -~]{1,15}|[\\!-~]|[\\!-~]{1,2})$",
       "type": "string"
     },
     "n1:ConveyanceReferenceNumberContentType03": {
-      "description": "\n        Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 35,
       "minLength": 1,
       "pattern": "^([ -~]{1,35})$",
       "type": "string"
     },
     "n1:CopyGivenContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC224C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC224C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -18680,7 +18675,7 @@
       "type": "string"
     },
     "n1:CounterContentType": {
-      "description": "\n        Used by 1/91 messages: CD411D\n      ",
+      "description": "Used by 1/91 messages: CD411D",
       "maximum": 999999999,
       "minimum": 0,
       "type": "integer"
@@ -18736,7 +18731,7 @@
       "type": "string"
     },
     "n1:CountryContentType": {
-      "description": "\n        Used by 52/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC054C, CC055C, CC056C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD070C, CD071C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C, CD200C, CD203C, CD411D, CD903D, CD971C\n      ",
+      "description": "Used by 52/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC054C, CC055C, CC056C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC224C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD070C, CD071C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C, CD200C, CD203C, CD411D, CD903D, CD971C",
       "maxLength": 2,
       "minLength": 2,
       "pattern": "^([A-Z]{2,2})$",
@@ -18826,12 +18821,12 @@
       "type": "object"
     },
     "n1:CountryOfDestinationContentType": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
     "n1:CountryOfDispatchContentType": {
-      "description": "\n        Used by 8/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C\n      ",
+      "description": "Used by 8/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C",
       "maxLength": 2,
       "minLength": 2,
       "pattern": "^([A-Za-z]{2,2})$",
@@ -19158,21 +19153,21 @@
       "type": "object"
     },
     "n1:CoveredAmountContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "type": "number"
     },
     "n1:CurrencyContentType": {
-      "description": "\n        Used by 10/91 messages: CC013C, CC015C, CC029C, CC035C, CC037C, CC224C, CC225C, CC228C, CD200C, CD203C\n      ",
+      "description": "Used by 10/91 messages: CC013C, CC015C, CC029C, CC035C, CC037C, CC224C, CC225C, CC228C, CD200C, CD203C",
       "pattern": "^([A-Za-z]{3,3})$",
       "type": "string"
     },
     "n1:CusCodeContentType": {
-      "description": "\n        Used by 18/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C\n      ",
+      "description": "Used by 18/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C",
       "pattern": "^([\\w\\D]{9,9})$",
       "type": "string"
     },
     "n1:CustomsOfficeAtBorderReferenceNumberContentType": {
-      "description": "\n        Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{8,8})$",
       "type": "string"
     },
@@ -21810,7 +21805,7 @@
       "type": "object"
     },
     "n1:DateContentType": {
-      "description": "\n        Used by 18/91 messages: CC007C, CC017C, CC029C, CC042C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD142C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 18/91 messages: CC007C, CC017C, CC029C, CC042C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD142C, CD160C, CD165C, CD180C, CD181C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -21860,28 +21855,28 @@
       "type": "number"
     },
     "n1:DecisionContentType": {
-      "description": "\n        Used by 2/91 messages: CC009C, CC014C\n      ",
+      "description": "Used by 2/91 messages: CC009C, CC014C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:DecisionDateAndTimeContentType": {
-      "description": "\n        Used by 3/91 messages: CC009C, CC014C, CD010C\n      ",
+      "description": "Used by 3/91 messages: CC009C, CC014C, CD010C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:DeclarationAcceptanceDateContentType": {
-      "description": "\n        Used by 17/91 messages: CC023C, CC028C, CC029C, CC035C, CC043C, CC055C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C\n      ",
+      "description": "Used by 17/91 messages: CC023C, CC028C, CC029C, CC035C, CC043C, CC055C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:DeclarationGoodsItemNumberContentType01": {
-      "description": "\n        Used by 22/91 messages: CC007C, CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC170C, CC182C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 22/91 messages: CC007C, CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC170C, CC182C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "maximum": 1999,
       "minimum": 1,
       "type": "integer"
     },
     "n1:DeclarationGoodsItemNumberContentType02": {
-      "description": "\n        Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maximum": 1999,
       "minimum": 0,
       "type": "integer"
@@ -21897,18 +21892,18 @@
       "type": "integer"
     },
     "n1:DeclarationSubmissionDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC051C\n      ",
+      "description": "Used by 1/91 messages: CC051C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:DeclarationTypeContentType01": {
-      "description": "\n        Used by 1/91 messages: CC042C\n      ",
+      "description": "Used by 1/91 messages: CC042C",
       "maxLength": 5,
       "pattern": "^([\\w\\D]{1,5})$",
       "type": "string"
     },
     "n1:DeclarationTypeContentType02": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{1,5})$",
       "type": "string"
     },
@@ -22759,47 +22754,47 @@
       "type": "object"
     },
     "n1:DescriptionContentType": {
-      "description": "\n        Used by 1/91 messages: CC060C\n      ",
+      "description": "Used by 1/91 messages: CC060C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:DescriptionOfGoodsContentType01": {
-      "description": "\n        Used by 12/91 messages: CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:DescriptionOfGoodsContentType02": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:DiscrepanciesNotificationDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC019C\n      ",
+      "description": "Used by 1/91 messages: CC019C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:DiscrepanciesNotificationTextContentType": {
-      "description": "\n        Used by 1/91 messages: CC019C\n      ",
+      "description": "Used by 1/91 messages: CC019C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:DiscrepanciesResolvedContentType": {
-      "description": "\n        Used by 1/91 messages: CD049C\n      ",
+      "description": "Used by 1/91 messages: CD049C",
       "pattern": "^([\\w\\D])$",
       "type": "string"
     },
     "n1:DocumentLineItemNumberContentType": {
-      "description": "\n        Used by 11/91 messages: CC013C, CC015C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 11/91 messages: CC013C, CC015C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maximum": 99999,
       "minimum": 1,
       "type": "integer"
     },
     "n1:DocumentTypeContentType": {
-      "description": "\n        Used by 1/91 messages: CC060C\n      ",
+      "description": "Used by 1/91 messages: CC060C",
       "pattern": "^([\\w\\D]{4,4})$",
       "type": "string"
     },
@@ -22812,7 +22807,7 @@
           "pattern": "^([\\s\\u0000-\\u0008\\v-\\f\\u000e-\\u001f\\!-\\u007f]+)$"
         }
       ],
-      "description": "\n        Used by 14/91 messages: CC009C, CC014C, CC029C, CC037C, CC051C, CC060C, CC190C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C\n      ",
+      "description": "Used by 14/91 messages: CC009C, CC014C, CC029C, CC037C, CC051C, CC060C, CC190C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C",
       "maxLength": 256,
       "type": "string"
     },
@@ -22825,7 +22820,7 @@
           "pattern": "^([\\s\\u0000-\\u0008\\v-\\f\\u000e-\\u001f\\!-\\u007f]+)$"
         }
       ],
-      "description": "\n        Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C",
       "maxLength": 256,
       "type": "string"
     },
@@ -23013,7 +23008,7 @@
       "type": "string"
     },
     "n1:EndDateAndTimeContentType": {
-      "description": "\n        Used by 3/91 messages: CD070C, CD071C, CD971C\n      ",
+      "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -23445,12 +23440,12 @@
       "type": "object"
     },
     "n1:EnquiryRequestDateContentType": {
-      "description": "\n        Used by 2/91 messages: CD144C, CD145C\n      ",
+      "description": "Used by 2/91 messages: CD144C, CD145C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:EnquiryResponseDateContentType": {
-      "description": "\n        Used by 1/91 messages: CD143C\n      ",
+      "description": "Used by 1/91 messages: CD143C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -23952,36 +23947,36 @@
       "type": "object"
     },
     "n1:ErrorCodeContentType": {
-      "description": "\n        Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C\n      ",
+      "description": "Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C",
       "pattern": "^([0-9]{2,2})$",
       "type": "string"
     },
     "n1:ErrorColumnNumberContentType": {
-      "description": "\n        Used by 2/91 messages: CC917C, CD917C\n      ",
+      "description": "Used by 2/91 messages: CC917C, CD917C",
       "maximum": 999999999,
       "minimum": 0,
       "type": "integer"
     },
     "n1:ErrorLineNumberContentType": {
-      "description": "\n        Used by 2/91 messages: CC917C, CD917C\n      ",
+      "description": "Used by 2/91 messages: CC917C, CD917C",
       "maximum": 999999999,
       "minimum": 0,
       "type": "integer"
     },
     "n1:ErrorPointerContentType": {
-      "description": "\n        Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C\n      ",
+      "description": "Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:ErrorReasonContentType": {
-      "description": "\n        Used by 5/91 messages: CC022C, CC056C, CC057C, CC906C, CD906C\n      ",
+      "description": "Used by 5/91 messages: CC022C, CC056C, CC057C, CC906C, CD906C",
       "maxLength": 7,
       "pattern": "^([\\w\\D]{1,7})$",
       "type": "string"
     },
     "n1:ErrorTextContentType": {
-      "description": "\n        Used by 2/91 messages: CC917C, CD917C\n      ",
+      "description": "Used by 2/91 messages: CC917C, CD917C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
@@ -24127,17 +24122,17 @@
       "type": "object"
     },
     "n1:ExpiryDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC224C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC224C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ExplanationContentType": {
-      "description": "\n        Used by 3/91 messages: CD070C, CD071C, CD971C\n      ",
+      "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
     "n1:ExportDeclarationGoodsItemNumberContentType": {
-      "description": "\n        Used by 1/91 messages: CC191C\n      ",
+      "description": "Used by 1/91 messages: CC191C",
       "maximum": 999,
       "minimum": 1,
       "type": "integer"
@@ -24627,11 +24622,11 @@
       "type": "object"
     },
     "n1:ExposureContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "type": "number"
     },
     "n1:ExposureCounterContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "maximum": 99999999,
       "minimum": 1,
       "type": "integer"
@@ -24869,7 +24864,7 @@
       "type": "string"
     },
     "n1:FlagContentType": {
-      "description": "\n        Used by 3/91 messages: CD070C, CD071C, CD971C\n      ",
+      "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -25469,7 +25464,7 @@
       "type": "object"
     },
     "n1:FunctionalityContentType": {
-      "description": "\n        Used by 3/91 messages: CD070C, CD071C, CD971C\n      ",
+      "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
@@ -25579,18 +25574,18 @@
       "type": "string"
     },
     "n1:GlobalValidationResponseContentType": {
-      "description": "\n        Used by 1/91 messages: CC191C\n      ",
+      "description": "Used by 1/91 messages: CC191C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:GoodsItemNumberContentType01": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maximum": 99999,
       "minimum": 1,
       "type": "integer"
     },
     "n1:GoodsItemNumberContentType02": {
-      "description": "\n        Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9]{1,5})$",
       "type": "string"
     },
@@ -26319,33 +26314,33 @@
           "pattern": "^([0-9A-Z]*)$"
         }
       ],
-      "description": "\n        Used by 20/91 messages: CC013C, CC015C, CC026C, CC029C, CC034C, CC037C, CC055C, CC224C, CC225C, CC228C, CC229C, CC231C, CD150C, CD151C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C\n      ",
+      "description": "Used by 20/91 messages: CC013C, CC015C, CC026C, CC029C, CC034C, CC037C, CC055C, CC224C, CC225C, CC228C, CC229C, CC231C, CD150C, CD151C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C",
       "type": "string"
     },
     "n1:GrossMassContentType01": {
-      "description": "\n        Used by 15/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 15/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "type": "number"
     },
     "n1:GrossMassContentType02": {
-      "description": "\n        Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "type": "number"
     },
     "n1:GuaranteeAmountContentType": {
-      "description": "\n        Used by 3/91 messages: CC037C, CC225C, CC228C\n      ",
+      "description": "Used by 3/91 messages: CC037C, CC225C, CC228C",
       "type": "number"
     },
     "n1:GuaranteeMonitoringCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:GuaranteeNotValidForCountryContentType": {
-      "description": "\n        Used by 1/91 messages: CD115C\n      ",
+      "description": "Used by 1/91 messages: CD115C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:GuaranteeNotValidInContentType": {
-      "description": "\n        Used by 3/91 messages: CC037C, CD201C, CD205C\n      ",
+      "description": "Used by 3/91 messages: CC037C, CD201C, CD205C",
       "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
@@ -29540,19 +29535,19 @@
       "type": "object"
     },
     "n1:GuaranteeTypeContentType": {
-      "description": "\n        Used by 10/91 messages: CC013C, CC015C, CC029C, CC037C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C\n      ",
+      "description": "Used by 10/91 messages: CC013C, CC015C, CC029C, CC037C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C",
       "maxLength": 1,
       "minLength": 1,
       "pattern": "^([0-9A-Z]*)$",
       "type": "string"
     },
     "n1:GuarantorNotificationDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC023C\n      ",
+      "description": "Used by 1/91 messages: CC023C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:GuarantorNotificationTextContentType": {
-      "description": "\n        Used by 1/91 messages: CC023C\n      ",
+      "description": "Used by 1/91 messages: CC023C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
@@ -30200,7 +30195,7 @@
       "type": "object"
     },
     "n1:HarmonizedSystemSubHeadingCodeContentType": {
-      "description": "\n        Used by 19/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C\n      ",
+      "description": "Used by 19/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C",
       "pattern": "^([\\w\\D]{6,6})$",
       "type": "string"
     },
@@ -34681,13 +34676,13 @@
       "type": "object"
     },
     "n1:HouseNumberContentType01": {
-      "description": "\n        Used by 2/91 messages: CC029C, CC190C\n      ",
+      "description": "Used by 2/91 messages: CC029C, CC190C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]{1,17})$",
       "type": "string"
     },
     "n1:HouseNumberContentType02": {
-      "description": "\n        Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -34700,61 +34695,61 @@
       "type": "string"
     },
     "n1:IdentificationNumberContentType01": {
-      "description": "\n        Used by 12/91 messages: CC007C, CC013C, CC014C, CC015C, CC017C, CC026C, CC034C, CC044C, CC054C, CC141C, CC170C, CC224C\n      ",
+      "description": "Used by 12/91 messages: CC007C, CC013C, CC014C, CC015C, CC017C, CC026C, CC034C, CC044C, CC054C, CC141C, CC170C, CC224C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:IdentificationNumberContentType02": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 17,
       "minLength": 3,
       "pattern": "^([A-Z]{2,2}[\\!-~]{1,15})$",
       "type": "string"
     },
     "n1:IdentificationNumberContentType03": {
-      "description": "\n        Used by 14/91 messages: CC029C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 14/91 messages: CC029C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:IdentificationNumberContentType04": {
-      "description": "\n        Used by 40/91 messages: CC004C, CC009C, CC017C, CC019C, CC022C, CC023C, CC025C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC057C, CC060C, CC140C, CC224C, CC225C, CC228C, CC229C, CC231C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD200C, CD201C, CD203C, CD205C\n      ",
+      "description": "Used by 40/91 messages: CC004C, CC009C, CC017C, CC019C, CC022C, CC023C, CC025C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC057C, CC060C, CC140C, CC224C, CC225C, CC228C, CC229C, CC231C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD200C, CD201C, CD203C, CD205C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]{1,17})$",
       "type": "string"
     },
     "n1:IdentificationNumberContentType05": {
-      "description": "\n        Used by 5/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C\n      ",
+      "description": "Used by 5/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C",
       "maxLength": 17,
       "minLength": 1,
       "type": "string"
     },
     "n1:IdentificationNumberContentType06": {
-      "description": "\n        Used by 6/91 messages: CC007C, CC013C, CC015C, CC017C, CC044C, CC170C\n      ",
+      "description": "Used by 6/91 messages: CC007C, CC013C, CC015C, CC017C, CC044C, CC170C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:IdentifierContentType01": {
-      "description": "\n        Used by 14/91 messages: CC029C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 14/91 messages: CC029C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 20,
       "pattern": "^([\\w\\D]{1,20})$",
       "type": "string"
     },
     "n1:IdentifierContentType02": {
-      "description": "\n        Used by 6/91 messages: CC007C, CC013C, CC015C, CC017C, CC044C, CC170C\n      ",
+      "description": "Used by 6/91 messages: CC007C, CC013C, CC015C, CC017C, CC044C, CC170C",
       "maxLength": 20,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:IncidentFlagContentType": {
-      "description": "\n        Used by 1/91 messages: CC007C\n      ",
+      "description": "Used by 1/91 messages: CC007C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:IncidentNotificationDateAndTimeContentType": {
-      "description": "\n        Used by 3/91 messages: CC182C, CD180C, CD181C\n      ",
+      "description": "Used by 3/91 messages: CC182C, CD180C, CD181C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -35585,22 +35580,22 @@
       "type": "object"
     },
     "n1:InformationAvailableFromTraderContentType": {
-      "description": "\n        Used by 1/91 messages: CD144C\n      ",
+      "description": "Used by 1/91 messages: CD144C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:InformationCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CD144C\n      ",
+      "description": "Used by 1/91 messages: CD144C",
       "pattern": "^([0-9]{2,2})$",
       "type": "string"
     },
     "n1:InitiatedByCustomsContentType": {
-      "description": "\n        Used by 2/91 messages: CC009C, CC014C\n      ",
+      "description": "Used by 2/91 messages: CC009C, CC014C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:InlandModeOfTransportContentType": {
-      "description": "\n        Used by 14/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 14/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -36161,46 +36156,46 @@
       "type": "object"
     },
     "n1:InvalidityDateContentType": {
-      "description": "\n        Used by 4/91 messages: CC225C, CC228C, CC229C, CC231C\n      ",
+      "description": "Used by 4/91 messages: CC225C, CC228C, CC229C, CC231C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:InvalidityReasonCodeContentType": {
-      "description": "\n        Used by 3/91 messages: CC037C, CC225C, CC231C\n      ",
+      "description": "Used by 3/91 messages: CC037C, CC225C, CC231C",
       "pattern": "^([\\w\\D]{3,3})$",
       "type": "string"
     },
     "n1:InvalidityReasonTextContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC231C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC231C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:IssueDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC224C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC224C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:JustificationContentType01": {
-      "description": "\n        Used by 1/91 messages: CC009C\n      ",
+      "description": "Used by 1/91 messages: CC009C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:JustificationContentType02": {
-      "description": "\n        Used by 1/91 messages: CC014C\n      ",
+      "description": "Used by 1/91 messages: CC014C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:LRNContentType01": {
-      "description": "\n        Used by 1/91 messages: CC917C\n      ",
+      "description": "Used by 1/91 messages: CC917C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:LRNContentType03": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC014C, CC015C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC014C, CC015C, CC170C",
       "maxLength": 22,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -36213,38 +36208,38 @@
       "type": "string"
     },
     "n1:LatitudeContentType": {
-      "description": "\n        Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
       "pattern": "^([\\+\\-]?([0-8]?|[0-9]|\\.|[0-9]{5,7}|90[\\w\\D]000000?0?))$",
       "type": "string"
     },
     "n1:LiabilityLiberationDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC228C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC228C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:LimitDateContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC170C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC170C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:LimitForResponseDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC140C\n      ",
+      "description": "Used by 1/91 messages: CC140C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:LimitForTheEnquiryResponseDateContentType": {
-      "description": "\n        Used by 1/91 messages: CD142C\n      ",
+      "description": "Used by 1/91 messages: CD142C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:LocationContentType01": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC170C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC170C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:LocationContentType02": {
-      "description": "\n        Used by 8/91 messages: CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 8/91 messages: CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
@@ -37460,28 +37455,28 @@
       "type": "object"
     },
     "n1:LockDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:LongitudeContentType": {
-      "description": "\n        Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
       "pattern": "^([\\+\\-]?((0?|[0-9]?|1[0-7])|[0-9]|\\.|[0-9]{5,7}|180[\\w\\D]000000?0?))$",
       "type": "string"
     },
     "n1:LrnContentType02": {
-      "description": "\n        Used by 10/91 messages: CC004C, CC009C, CC028C, CC029C, CC056C, CC060C, CC190C, CC191C, CC906C, CC928C\n      ",
+      "description": "Used by 10/91 messages: CC004C, CC009C, CC028C, CC029C, CC056C, CC060C, CC190C, CC191C, CC906C, CC928C",
       "maxLength": 22,
       "pattern": "^([\\w\\D]{1,22})$",
       "type": "string"
     },
     "n1:MRNContentType01": {
-      "description": "\n        Used by 1/91 messages: CC917C\n      ",
+      "description": "Used by 1/91 messages: CC917C",
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:MRNContentType02": {
-      "description": "\n        Used by 1/91 messages: CD917C\n      ",
+      "description": "Used by 1/91 messages: CD917C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
@@ -37495,7 +37490,7 @@
           "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[A-E][0-9])$"
         }
       ],
-      "description": "\n        Used by 5/91 messages: CC042C, CC048C, CC190C, CC191C, CD078C\n      ",
+      "description": "Used by 5/91 messages: CC042C, CC048C, CC190C, CC191C, CD078C",
       "type": "string"
     },
     "n1:MRNContentType04": {
@@ -37507,7 +37502,7 @@
           "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
         }
       ],
-      "description": "\n        Used by 6/91 messages: CC040C, CC042C, CC048C, CC190C, CC191C, CD078C\n      ",
+      "description": "Used by 6/91 messages: CC040C, CC042C, CC048C, CC190C, CC191C, CD078C",
       "type": "string"
     },
     "n1:MRNType": {
@@ -37523,13 +37518,13 @@
       "type": "string"
     },
     "n1:MasterAccessCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CC026C\n      ",
+      "description": "Used by 1/91 messages: CC026C",
       "maxLength": 4,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:MeasurementUnitAndQualifierContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "pattern": "^([\\w\\D]{1,4})$",
       "type": "string"
     },
@@ -37546,7 +37541,7 @@
       "type": "string"
     },
     "n1:MessageTypeContentType": {
-      "description": "\n        Used by 91/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD917C, CD971C, CD974C, CD975C\n      ",
+      "description": "Used by 91/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD917C, CD971C, CD974C, CD975C",
       "pattern": "^([\\w\\D]{6,6})$",
       "type": "string"
     },
@@ -37648,14 +37643,14 @@
       "type": "string"
     },
     "n1:MethodOfPaymentContentType": {
-      "description": "\n        Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 1,
       "minLength": 1,
       "pattern": "^([A-Z]*)$",
       "type": "string"
     },
     "n1:ModeOfTransportAtTheBorderContentType": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC170C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -37669,7 +37664,7 @@
       "type": "string"
     },
     "n1:MonthContentType": {
-      "description": "\n        Used by 2/91 messages: CD411D, CD903D\n      ",
+      "description": "Used by 2/91 messages: CD411D, CD903D",
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
@@ -37699,7 +37694,7 @@
           "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
         }
       ],
-      "description": "\n        Used by 68/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC017C, CC019C, CC022C, CC023C, CC025C, CC028C, CC029C, CC035C, CC037C, CC043C, CC044C, CC045C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC182C, CC906C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD906C, CD974C, CD975C\n      ",
+      "description": "Used by 68/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC017C, CC019C, CC022C, CC023C, CC025C, CC028C, CC029C, CC035C, CC037C, CC043C, CC044C, CC045C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC182C, CC906C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD906C, CD974C, CD975C",
       "type": "string"
     },
     "n1:NCTS-P5_DeclarationGoodsItemNumberType": {
@@ -37720,41 +37715,41 @@
       "type": "string"
     },
     "n1:NameContentType01": {
-      "description": "\n        Used by 37/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD165C\n      ",
+      "description": "Used by 37/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD165C",
       "maxLength": 70,
       "pattern": "^([\\w\\D]{1,70})$",
       "type": "string"
     },
     "n1:NameContentType02": {
-      "description": "\n        Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C\n      ",
+      "description": "Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C",
       "maxLength": 70,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:NationalityContentType": {
-      "description": "\n        Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 2,
       "minLength": 2,
       "pattern": "^([A-Z]{2,2})$",
       "type": "string"
     },
     "n1:NetMassContentType": {
-      "description": "\n        Used by 17/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 17/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "type": "number"
     },
     "n1:NoReleaseMotivationCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CC051C\n      ",
+      "description": "Used by 1/91 messages: CC051C",
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
     "n1:NoReleaseMotivationTextContentType": {
-      "description": "\n        Used by 1/91 messages: CC051C\n      ",
+      "description": "Used by 1/91 messages: CC051C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:NotificationTypeContentType": {
-      "description": "\n        Used by 1/91 messages: CC060C\n      ",
+      "description": "Used by 1/91 messages: CC060C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -37763,25 +37758,25 @@
       "type": "string"
     },
     "n1:NumberOfCertificatesContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC225C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC225C",
       "maximum": 99999999,
       "minimum": 0,
       "type": "integer"
     },
     "n1:NumberOfPackagesContentType01": {
-      "description": "\n        Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maximum": 99999999,
       "minimum": 0,
       "type": "integer"
     },
     "n1:NumberOfPackagesContentType02": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "maximum": 99999999,
       "minimum": 1,
       "type": "integer"
     },
     "n1:NumberOfSealsContentType": {
-      "description": "\n        Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "maximum": 9999,
       "minimum": 0,
       "type": "integer"
@@ -37932,41 +37927,41 @@
       "type": "string"
     },
     "n1:OperationContentType": {
-      "description": "\n        Used by 4/91 messages: CD070C, CD071C, CD411D, CD971C\n      ",
+      "description": "Used by 4/91 messages: CD070C, CD071C, CD411D, CD971C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
     "n1:OriginalAttributeValueContentType": {
-      "description": "\n        Used by 8/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD903D, CD906C, CD917C\n      ",
+      "description": "Used by 8/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD903D, CD906C, CD917C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:OtherCountryContentType": {
-      "description": "\n        Used by 1/91 messages: CD411D\n      ",
+      "description": "Used by 1/91 messages: CD411D",
       "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
     "n1:OtherGuaranteeReferenceContentType01": {
-      "description": "\n        Used by 1/91 messages: CC029C\n      ",
+      "description": "Used by 1/91 messages: CC029C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:OtherGuaranteeReferenceContentType02": {
-      "description": "\n        Used by 2/91 messages: CC013C, CC015C\n      ",
+      "description": "Used by 2/91 messages: CC013C, CC015C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:OtherThingsToReportContentType01": {
-      "description": "\n        Used by 1/91 messages: CD018C\n      ",
+      "description": "Used by 1/91 messages: CD018C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:OtherThingsToReportContentType02": {
-      "description": "\n        Used by 2/91 messages: CC017C, CC044C\n      ",
+      "description": "Used by 2/91 messages: CC017C, CC044C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -38675,51 +38670,51 @@
       "type": "object"
     },
     "n1:PassageDateContentType": {
-      "description": "\n        Used by 2/91 messages: CD118C, CD168C\n      ",
+      "description": "Used by 2/91 messages: CD118C, CD168C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:PercentageOfReferenceAmountContentType01": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "maximum": 999,
       "minimum": 1,
       "type": "integer"
     },
     "n1:PercentageOfReferenceAmountContentType02": {
-      "description": "\n        Used by 1/91 messages: CC225C\n      ",
+      "description": "Used by 1/91 messages: CC225C",
       "maximum": 999,
       "minimum": 0,
       "type": "integer"
     },
     "n1:PeriodFromDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC034C, CC037C\n      ",
+      "description": "Used by 2/91 messages: CC034C, CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:PeriodToDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC034C, CC037C\n      ",
+      "description": "Used by 2/91 messages: CC034C, CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:PhoneNumberContentType01": {
-      "description": "\n        Used by 11/91 messages: CC029C, CC037C, CC051C, CC190C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C\n      ",
+      "description": "Used by 11/91 messages: CC029C, CC037C, CC051C, CC190C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:PhoneNumberContentType02": {
-      "description": "\n        Used by 7/91 messages: CC007C, CC009C, CC013C, CC014C, CC015C, CC060C, CC170C\n      ",
+      "description": "Used by 7/91 messages: CC007C, CC009C, CC013C, CC014C, CC015C, CC060C, CC170C",
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:PlaceContentType01": {
-      "description": "\n        Used by 1/91 messages: CC007C\n      ",
+      "description": "Used by 1/91 messages: CC007C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:PlaceContentType02": {
-      "description": "\n        Used by 8/91 messages: CC043C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 8/91 messages: CC043C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
@@ -39603,13 +39598,13 @@
       "type": "object"
     },
     "n1:PostcodeContentType01": {
-      "description": "\n        Used by 36/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 36/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]{1,17})$",
       "type": "string"
     },
     "n1:PostcodeContentType02": {
-      "description": "\n        Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C\n      ",
+      "description": "Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -39619,7 +39614,7 @@
       "type": "string"
     },
     "n1:PresentationOfTheGoodsDateAndTimeContentType": {
-      "description": "\n        Used by 2/91 messages: CC013C, CC015C\n      ",
+      "description": "Used by 2/91 messages: CC013C, CC015C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -41563,38 +41558,38 @@
       "type": "object"
     },
     "n1:QualifierOfIdentificationContentType": {
-      "description": "\n        Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
     "n1:QuantityContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "type": "number"
     },
     "n1:QueryIdentifierContentType": {
-      "description": "\n        Used by 2/91 messages: CC034C, CC037C\n      ",
+      "description": "Used by 2/91 messages: CC034C, CC037C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:RecoveryAcceptanceContentType": {
-      "description": "\n        Used by 1/91 messages: CD151C\n      ",
+      "description": "Used by 1/91 messages: CD151C",
       "maxLength": 1,
       "minLength": 1,
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:RecoveryCommunicationDateContentType": {
-      "description": "\n        Used by 4/91 messages: CC048C, CD063C, CD150C, CD151C\n      ",
+      "description": "Used by 4/91 messages: CC048C, CD063C, CD150C, CD151C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:RecoveryNotificationDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC035C\n      ",
+      "description": "Used by 1/91 messages: CC035C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:RecoveryNotificationTextContentType": {
-      "description": "\n        Used by 1/91 messages: CC035C\n      ",
+      "description": "Used by 1/91 messages: CC035C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
@@ -42018,109 +42013,109 @@
       "type": "object"
     },
     "n1:ReducedDatasetIndicatorContentType": {
-      "description": "\n        Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:ReferenceAmountContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC225C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC225C",
       "type": "number"
     },
     "n1:ReferenceNumberContentType01": {
-      "description": "\n        Used by 1/91 messages: CC029C\n      ",
+      "description": "Used by 1/91 messages: CC029C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
     },
     "n1:ReferenceNumberContentType02": {
-      "description": "\n        Used by 12/91 messages: CC029C, CC043C, CC191C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC029C, CC043C, CC191C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 70,
       "pattern": "^([\\w\\D]{1,70})$",
       "type": "string"
     },
     "n1:ReferenceNumberContentType03": {
-      "description": "\n        Used by 3/91 messages: CC007C, CC013C, CC015C\n      ",
+      "description": "Used by 3/91 messages: CC007C, CC013C, CC015C",
       "maxLength": 35,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:ReferenceNumberContentType04": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C",
       "maxLength": 70,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:ReferenceNumberContentType05": {
-      "description": "\n        Used by 77/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC029C, CC035C, CC037C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC928C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C\n      ",
+      "description": "Used by 77/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC029C, CC035C, CC037C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC928C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C",
       "maxLength": 8,
       "minLength": 8,
       "pattern": "^([A-Z]{2,2}[0-9A-Z]{6,6})$",
       "type": "string"
     },
     "n1:ReferenceNumberUCRContentType01": {
-      "description": "\n        Used by 1/91 messages: CC029C\n      ",
+      "description": "Used by 1/91 messages: CC029C",
       "maxLength": 35,
       "minLength": 1,
       "pattern": "^([ -~]{1,35})$",
       "type": "string"
     },
     "n1:ReferenceNumberUCRContentType02": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC017C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC017C",
       "maxLength": 35,
       "minLength": 1,
       "pattern": "^([\\!-~]|[ -~]{1,33}|[\\!-~]|[\\!-~]{1,2})$",
       "type": "string"
     },
     "n1:ReferenceNumberUCRContentType03": {
-      "description": "\n        Used by 9/91 messages: CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 9/91 messages: CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 70,
       "minLength": 1,
       "pattern": "^([ -~]{1,70})$",
       "type": "string"
     },
     "n1:RejectionCodeContentType": {
-      "description": "\n        Used by 2/91 messages: CC056C, CC057C\n      ",
+      "description": "Used by 2/91 messages: CC056C, CC057C",
       "pattern": "^([0-9]{1,2})$",
       "type": "string"
     },
     "n1:RejectionDateAndTimeContentType": {
-      "description": "\n        Used by 2/91 messages: CC056C, CC057C\n      ",
+      "description": "Used by 2/91 messages: CC056C, CC057C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:RejectionReasonContentType": {
-      "description": "\n        Used by 2/91 messages: CC056C, CC057C\n      ",
+      "description": "Used by 2/91 messages: CC056C, CC057C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:ReleaseDateContentType": {
-      "description": "\n        Used by 12/91 messages: CC025C, CC029C, CC037C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD204C\n      ",
+      "description": "Used by 12/91 messages: CC025C, CC029C, CC037C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD204C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ReleaseIndicatorContentType": {
-      "description": "\n        Used by 1/91 messages: CC025C\n      ",
+      "description": "Used by 1/91 messages: CC025C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:ReleaseRequestDateAndTimeContentType": {
-      "description": "\n        Used by 2/91 messages: CC017C, CC054C\n      ",
+      "description": "Used by 2/91 messages: CC017C, CC054C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ReleaseRequestedContentType": {
-      "description": "\n        Used by 2/91 messages: CC017C, CC054C\n      ",
+      "description": "Used by 2/91 messages: CC017C, CC054C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:ReleaseTypeContentType": {
-      "description": "\n        Used by 1/91 messages: CC025C\n      ",
+      "description": "Used by 1/91 messages: CC025C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:RemarkContentType": {
-      "description": "\n        Used by 1/91 messages: CC017C\n      ",
+      "description": "Used by 1/91 messages: CC017C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -42527,17 +42522,17 @@
       "type": "object"
     },
     "n1:RequestDateAndTimeContentType": {
-      "description": "\n        Used by 2/91 messages: CC009C, CC014C\n      ",
+      "description": "Used by 2/91 messages: CC009C, CC014C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:RequestOnNonArrivedMovementDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC140C\n      ",
+      "description": "Used by 1/91 messages: CC140C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:RequestRejectionReasonCodeContentType": {
-      "description": "\n        Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C\n      ",
+      "description": "Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C",
       "pattern": "^([0-9]{1,2})$",
       "type": "string"
     },
@@ -42932,12 +42927,12 @@
       "type": "object"
     },
     "n1:ResponseCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CD143C\n      ",
+      "description": "Used by 1/91 messages: CD143C",
       "pattern": "^([0-9]{1,2})$",
       "type": "string"
     },
     "n1:ResponseDateAndTimeContentType": {
-      "description": "\n        Used by 1/91 messages: CC191C\n      ",
+      "description": "Used by 1/91 messages: CC191C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -43054,22 +43049,22 @@
       "type": "object"
     },
     "n1:RestrictedUseForSuspendedGoodsContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:RestrictedUseSuspendedGoodsContentType": {
-      "description": "\n        Used by 1/91 messages: CC225C\n      ",
+      "description": "Used by 1/91 messages: CC225C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:ResultIndicatorContentType": {
-      "description": "\n        Used by 1/91 messages: CC191C\n      ",
+      "description": "Used by 1/91 messages: CC191C",
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
     "n1:ReturnCopyReturnedDateContentType": {
-      "description": "\n        Used by 1/91 messages: CD143C\n      ",
+      "description": "Used by 1/91 messages: CD143C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -43379,17 +43374,17 @@
       "type": "object"
     },
     "n1:RiskAreaCodeContentType": {
-      "description": "\n        Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 7/91 messages: CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{1,7})$",
       "type": "string"
     },
     "n1:RoleContentType01": {
-      "description": "\n        Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([A-Za-z]{1,3})$",
       "type": "string"
     },
     "n1:RoleContentType02": {
-      "description": "\n        Used by 2/91 messages: CC034C, CC037C\n      ",
+      "description": "Used by 2/91 messages: CC034C, CC037C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -43807,12 +43802,12 @@
       "type": "object"
     },
     "n1:SecurityContentType": {
-      "description": "\n        Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC191C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC191C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:SecurityIndicatorFromExportDeclarationContentType": {
-      "description": "\n        Used by 10/91 messages: CC017C, CC029C, CC043C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 10/91 messages: CC017C, CC029C, CC043C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -43939,7 +43934,7 @@
       "type": "object"
     },
     "n1:SequenceNumberContentType": {
-      "description": "\n        Used by 50/91 messages: CC007C, CC013C, CC015C, CC017C, CC022C, CC025C, CC029C, CC034C, CC037C, CC042C, CC043C, CC044C, CC048C, CC055C, CC060C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CD001C, CD003C, CD010C, CD012C, CD018C, CD024C, CD038C, CD050C, CD063C, CD070C, CD071C, CD115C, CD144C, CD145C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD971C\n      ",
+      "description": "Used by 50/91 messages: CC007C, CC013C, CC015C, CC017C, CC022C, CC025C, CC029C, CC034C, CC037C, CC042C, CC043C, CC044C, CC048C, CC055C, CC060C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CD001C, CD003C, CD010C, CD012C, CD018C, CD024C, CD038C, CD050C, CD063C, CD070C, CD071C, CD115C, CD144C, CD145C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD971C",
       "pattern": "^([0-9]{1,5})$",
       "type": "string"
     },
@@ -44056,34 +44051,34 @@
       "type": "object"
     },
     "n1:ShippingMarksContentType01": {
-      "description": "\n        Used by 12/91 messages: CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 12/91 messages: CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:ShippingMarksContentType02": {
-      "description": "\n        Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C\n      ",
+      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:SimplifiedProcedureContentType": {
-      "description": "\n        Used by 1/91 messages: CC007C\n      ",
+      "description": "Used by 1/91 messages: CC007C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:SpecificCircumstanceIndicatorContentType": {
-      "description": "\n        Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{3,3})$",
       "type": "string"
     },
     "n1:StartDateAndTimeContentType": {
-      "description": "\n        Used by 3/91 messages: CD070C, CD071C, CD971C\n      ",
+      "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:StateOfSealsContentType": {
-      "description": "\n        Used by 2/91 messages: CC044C, CD018C\n      ",
+      "description": "Used by 2/91 messages: CC044C, CD018C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -44238,42 +44233,42 @@
       "type": "object"
     },
     "n1:StatisticsTypeContentType": {
-      "description": "\n        Used by 1/91 messages: CD411D\n      ",
+      "description": "Used by 1/91 messages: CD411D",
       "maxLength": 4,
       "minLength": 4,
       "pattern": "^([\\w\\D]{4,4})$",
       "type": "string"
     },
     "n1:StatisticsTypeSupportContentType": {
-      "description": "\n        Used by 1/91 messages: CD411D\n      ",
+      "description": "Used by 1/91 messages: CD411D",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:StatusContentType01": {
-      "description": "\n        Used by 1/91 messages: CD975C\n      ",
+      "description": "Used by 1/91 messages: CD975C",
       "maxLength": 3,
       "minLength": 3,
       "pattern": "^([\\w\\D]{3,3})$",
       "type": "string"
     },
     "n1:StatusContentType02": {
-      "description": "\n        Used by 3/91 messages: CD038C, CD094C, CD095C\n      ",
+      "description": "Used by 3/91 messages: CD038C, CD094C, CD095C",
       "pattern": "^([\\w\\D]{3,3})$",
       "type": "string"
     },
     "n1:StatusContentType03": {
-      "description": "\n        Used by 6/91 messages: CC013C, CC015C, CC029C, CC056C, CC060C, CC170C\n      ",
+      "description": "Used by 6/91 messages: CC013C, CC015C, CC029C, CC056C, CC060C, CC170C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:StreetAndNumberContentType01": {
-      "description": "\n        Used by 36/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 36/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 70,
       "pattern": "^([\\w\\D]{1,70})$",
       "type": "string"
     },
     "n1:StreetAndNumberContentType02": {
-      "description": "\n        Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C\n      ",
+      "description": "Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C",
       "maxLength": 70,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -44289,7 +44284,7 @@
       "type": "string"
     },
     "n1:SupplementaryUnitsContentType": {
-      "description": "\n        Used by 3/91 messages: CC013C, CC015C, CC190C\n      ",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC190C",
       "type": "number"
     },
     "n1:SupportingDocumentType01": {
@@ -45319,7 +45314,7 @@
       "type": "object"
     },
     "n1:SystemCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CD411D\n      ",
+      "description": "Used by 1/91 messages: CD411D",
       "pattern": "^([0-9]{1,2})$",
       "type": "string"
     },
@@ -45333,7 +45328,7 @@
       "type": "string"
     },
     "n1:TC11DeliveryDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC141C, CD142C\n      ",
+      "description": "Used by 2/91 messages: CC141C, CD142C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -45364,25 +45359,25 @@
       "type": "string"
     },
     "n1:TIRCarnetContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC224C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC224C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:TIRCarnetNumberContentType": {
-      "description": "\n        Used by 9/91 messages: CC013C, CC015C, CC029C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C\n      ",
+      "description": "Used by 9/91 messages: CC013C, CC015C, CC029C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C",
       "maxLength": 12,
       "minLength": 1,
       "pattern": "^(([1-9]|[0-9]{0,6}|(1|[0-9]|2[0-4])|[0-9]{0,6}|2|5|0|0|0|0|0|0|(X|[A-Z]|[A-Z]X)(2|[5-9]|[3-9]|[0-9]|[1-9][0-9][0-9])[0-9]{6,6}))$",
       "type": "string"
     },
     "n1:TIRHolderIdentificationNumberContentType01": {
-      "description": "\n        Used by 19/91 messages: CC004C, CC009C, CC019C, CC022C, CC023C, CC028C, CC029C, CC035C, CC043C, CC045C, CC051C, CC056C, CC060C, CC140C, CC928C, CD001C, CD003C, CD012C, CD038C\n      ",
+      "description": "Used by 19/91 messages: CC004C, CC009C, CC019C, CC022C, CC023C, CC028C, CC029C, CC035C, CC043C, CC045C, CC051C, CC056C, CC060C, CC140C, CC928C, CD001C, CD003C, CD012C, CD038C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]{1,17})$",
       "type": "string"
     },
     "n1:TIRHolderIdentificationNumberContentType02": {
-      "description": "\n        Used by 7/91 messages: CC013C, CC014C, CC015C, CC017C, CC054C, CC141C, CC170C\n      ",
+      "description": "Used by 7/91 messages: CC013C, CC014C, CC015C, CC017C, CC054C, CC141C, CC170C",
       "maxLength": 17,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -45395,13 +45390,13 @@
       "type": "string"
     },
     "n1:TextContentType01": {
-      "description": "\n        Used by 26/91 messages: CC029C, CC043C, CC055C, CC060C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD070C, CD071C, CD115C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD165C, CD180C, CD181C, CD971C\n      ",
+      "description": "Used by 26/91 messages: CC029C, CC043C, CC055C, CC060C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD070C, CD071C, CD115C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD165C, CD180C, CD181C, CD971C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:TextContentType02": {
-      "description": "\n        Used by 5/91 messages: CC007C, CC013C, CC015C, CC017C, CC141C\n      ",
+      "description": "Used by 5/91 messages: CC007C, CC013C, CC015C, CC017C, CC141C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -45722,7 +45717,7 @@
       "type": "object"
     },
     "n1:TransitDeclarationGoodsItemNumberContentType": {
-      "description": "\n        Used by 1/91 messages: CC191C\n      ",
+      "description": "Used by 1/91 messages: CC191C",
       "maximum": 1999,
       "minimum": 1,
       "type": "integer"
@@ -53307,7 +53302,7 @@
       "type": "object"
     },
     "n1:TransitProcedureCategoryContentType": {
-      "description": "\n        Used by 1/91 messages: CC190C\n      ",
+      "description": "Used by 1/91 messages: CC190C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
@@ -54916,23 +54911,23 @@
       "type": "object"
     },
     "n1:TypeContentType01": {
-      "description": "\n        Used by 1/91 messages: CC060C\n      ",
+      "description": "Used by 1/91 messages: CC060C",
       "maxLength": 3,
       "pattern": "^([\\w\\D]{1,3})$",
       "type": "string"
     },
     "n1:TypeContentType02": {
-      "description": "\n        Used by 16/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC191C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 16/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC191C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{4,4})$",
       "type": "string"
     },
     "n1:TypeContentType03": {
-      "description": "\n        Used by 3/91 messages: CD070C, CD071C, CD971C\n      ",
+      "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
     "n1:TypeContentType04": {
-      "description": "\n        Used by 4/91 messages: CC007C, CC013C, CC015C, CC029C\n      ",
+      "description": "Used by 4/91 messages: CC007C, CC013C, CC015C, CC029C",
       "pattern": "^([\\w\\D]{1,4})$",
       "type": "string"
     },
@@ -55049,17 +55044,17 @@
       "type": "object"
     },
     "n1:TypeOfIdentificationContentType": {
-      "description": "\n        Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 20/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CC170C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "pattern": "^([0-9]{2,2})$",
       "type": "string"
     },
     "n1:TypeOfLocationContentType": {
-      "description": "\n        Used by 6/91 messages: CC007C, CC013C, CC015C, CC029C, CC170C, CC190C\n      ",
+      "description": "Used by 6/91 messages: CC007C, CC013C, CC015C, CC029C, CC170C, CC190C",
       "pattern": "^([A-Za-z])$",
       "type": "string"
     },
     "n1:TypeOfPackagesContentType": {
-      "description": "\n        Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{2,2})$",
       "type": "string"
     },
@@ -55084,12 +55079,12 @@
       "type": "string"
     },
     "n1:UNLocodeContentType": {
-      "description": "\n        Used by 18/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CC182C, CC190C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C\n      ",
+      "description": "Used by 18/91 messages: CC007C, CC013C, CC015C, CC017C, CC029C, CC043C, CC170C, CC182C, CC190C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
       "pattern": "^([\\w\\D]{1,17})$",
       "type": "string"
     },
     "n1:UNNumberContentType": {
-      "description": "\n        Used by 15/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C\n      ",
+      "description": "Used by 15/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "pattern": "^([\\w\\D]{4,4})$",
       "type": "string"
     },
@@ -55329,17 +55324,17 @@
       "type": "object"
     },
     "n1:UnloadingCompletionContentType": {
-      "description": "\n        Used by 1/91 messages: CC044C\n      ",
+      "description": "Used by 1/91 messages: CC044C",
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:UnloadingDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC044C\n      ",
+      "description": "Used by 1/91 messages: CC044C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:UnloadingRemarkContentType": {
-      "description": "\n        Used by 1/91 messages: CC044C\n      ",
+      "description": "Used by 1/91 messages: CC044C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
@@ -55516,7 +55511,7 @@
       "type": "object"
     },
     "n1:UsageCancellationDateContentType": {
-      "description": "\n        Used by 1/91 messages: CD204C\n      ",
+      "description": "Used by 1/91 messages: CD204C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -55752,12 +55747,12 @@
       "type": "object"
     },
     "n1:ValidityDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC225C\n      ",
+      "description": "Used by 1/91 messages: CC225C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:ValidityEndDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -55845,27 +55840,27 @@
       "type": "object"
     },
     "n1:ValidityStartDateContentType": {
-      "description": "\n        Used by 1/91 messages: CC037C\n      ",
+      "description": "Used by 1/91 messages: CC037C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:VoucherAmountContentType": {
-      "description": "\n        Used by 2/91 messages: CC037C, CC224C\n      ",
+      "description": "Used by 2/91 messages: CC037C, CC224C",
       "type": "number"
     },
     "n1:WarningCodeContentType": {
-      "description": "\n        Used by 1/91 messages: CD903D\n      ",
+      "description": "Used by 1/91 messages: CD903D",
       "pattern": "^([\\w\\D]{6,6})$",
       "type": "string"
     },
     "n1:WarningPointerContentType": {
-      "description": "\n        Used by 1/91 messages: CD903D\n      ",
+      "description": "Used by 1/91 messages: CD903D",
       "maxLength": 512,
       "pattern": "^([\\w\\D]{1,512})$",
       "type": "string"
     },
     "n1:WriteOffDateContentType": {
-      "description": "\n        Used by 2/91 messages: CC045C, CD049C\n      ",
+      "description": "Used by 2/91 messages: CC045C, CD049C",
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
@@ -56092,7 +56087,7 @@
       "type": "string"
     },
     "n1:YearContentType": {
-      "description": "\n        Used by 2/91 messages: CD411D, CD903D\n      ",
+      "description": "Used by 2/91 messages: CD411D, CD903D",
       "maxLength": 4,
       "minLength": 4,
       "pattern": "^([2][0][1-9][0-9])$",
