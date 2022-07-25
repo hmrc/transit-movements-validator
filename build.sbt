@@ -1,7 +1,5 @@
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
-import sbt.Keys.resolvers
-import sbt.Resolver
 
 val appName = "transit-movements-validator"
 
