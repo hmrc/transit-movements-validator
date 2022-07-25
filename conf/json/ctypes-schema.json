@@ -2,9 +2,6 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"additionalProperties": false,
 	"definitions": {
-		".n1:CC013C": {
-			"$ref": "#/definitions/n1:CC013CType"
-		},
 		".n1:codeList": {
 			"additionalProperties": false,
 			"patternProperties": {
@@ -6196,224 +6193,6 @@
 			"description": "Used by 2/91 messages: CC056C, CC057C",
 			"pattern": "^([\\w\\D]{3,3})$",
 			"type": "string"
-		},
-		"n1:CC013CType": {
-			"additionalProperties": false,
-			"patternProperties": {
-				"^@xmlns(:\\w+)?$": {
-					"type": "string"
-				},
-				"^@xsi:\\w+$": {
-					"type": "string"
-				},
-				"^\\?\\w+$": {
-					"type": "string"
-				}
-			},
-			"properties": {
-				"#": {
-					"type": "string"
-				},
-				"@PhaseID": {
-					"$ref": "#/definitions/n1:phaseIDtype"
-				},
-				"Authorisation": {
-					"items": {
-						"$ref": "#/definitions/n1:AuthorisationType03"
-					},
-					"type": "array"
-				},
-				"Consignment": {
-					"$ref": "#/definitions/n1:ConsignmentType20"
-				},
-				"CustomsOfficeOfDeparture": {
-					"$ref": "#/definitions/n1:CustomsOfficeOfDepartureType03"
-				},
-				"CustomsOfficeOfDestinationDeclared": {
-					"$ref": "#/definitions/n1:CustomsOfficeOfDestinationDeclaredType01"
-				},
-				"CustomsOfficeOfExitForTransitDeclared": {
-					"items": {
-						"$ref": "#/definitions/n1:CustomsOfficeOfExitForTransitDeclaredType02"
-					},
-					"type": "array"
-				},
-				"CustomsOfficeOfTransitDeclared": {
-					"items": {
-						"$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType03"
-					},
-					"type": "array"
-				},
-				"Guarantee": {
-					"items": {
-						"$ref": "#/definitions/n1:GuaranteeType01"
-					},
-					"minItems": 1,
-					"type": "array"
-				},
-				"HolderOfTheTransitProcedure": {
-					"$ref": "#/definitions/n1:HolderOfTheTransitProcedureType14"
-				},
-				"Representative": {
-					"$ref": "#/definitions/n1:RepresentativeType05"
-				},
-				"TransitOperation": {
-					"$ref": "#/definitions/n1:TransitOperationType04"
-				},
-				"correlationIdentifier": {
-					"additionalProperties": false,
-					"patternProperties": {
-						"^@xmlns(:\\w+)?$": {
-							"type": "string"
-						},
-						"^@xsi:\\w+$": {
-							"type": "string"
-						},
-						"^\\?\\w+$": {
-							"type": "string"
-						}
-					},
-					"properties": {
-						"#": {
-							"type": "string"
-						},
-						"$": {
-							"$ref": "#/definitions/n1:CorrelationIdentifierContentType"
-						}
-					},
-					"type": [
-						"object",
-						"string",
-						"number",
-						"boolean"
-					]
-				},
-				"messageIdentification": {
-					"additionalProperties": false,
-					"patternProperties": {
-						"^@xmlns(:\\w+)?$": {
-							"type": "string"
-						},
-						"^@xsi:\\w+$": {
-							"type": "string"
-						},
-						"^\\?\\w+$": {
-							"type": "string"
-						}
-					},
-					"properties": {
-						"#": {
-							"type": "string"
-						},
-						"$": {
-							"$ref": "#/definitions/n1:MessageIdentificationContentType"
-						}
-					},
-					"type": [
-						"object",
-						"string",
-						"number",
-						"boolean"
-					]
-				},
-				"messageRecipient": {
-					"additionalProperties": false,
-					"patternProperties": {
-						"^@xmlns(:\\w+)?$": {
-							"type": "string"
-						},
-						"^@xsi:\\w+$": {
-							"type": "string"
-						},
-						"^\\?\\w+$": {
-							"type": "string"
-						}
-					},
-					"properties": {
-						"#": {
-							"type": "string"
-						},
-						"$": {
-							"$ref": "#/definitions/n1:MessageRecipientContentType"
-						}
-					},
-					"type": [
-						"object",
-						"string",
-						"number",
-						"boolean"
-					]
-				},
-				"messageType": {
-					"additionalProperties": false,
-					"patternProperties": {
-						"^@xmlns(:\\w+)?$": {
-							"type": "string"
-						},
-						"^@xsi:\\w+$": {
-							"type": "string"
-						},
-						"^\\?\\w+$": {
-							"type": "string"
-						}
-					},
-					"properties": {
-						"#": {
-							"type": "string"
-						},
-						"$": {
-							"$ref": "#/definitions/n1:MessageTypes"
-						}
-					},
-					"type": [
-						"object",
-						"string",
-						"number",
-						"boolean"
-					]
-				},
-				"preparationDateAndTime": {
-					"additionalProperties": false,
-					"patternProperties": {
-						"^@xmlns(:\\w+)?$": {
-							"type": "string"
-						},
-						"^@xsi:\\w+$": {
-							"type": "string"
-						},
-						"^\\?\\w+$": {
-							"type": "string"
-						}
-					},
-					"properties": {
-						"#": {
-							"type": "string"
-						},
-						"$": {
-							"$ref": "#/definitions/n1:PreparationDateAndTimeContentType"
-						}
-					},
-					"type": [
-						"object",
-						"string",
-						"number",
-						"boolean"
-					]
-				}
-			},
-			"required": [
-				"Consignment",
-				"CustomsOfficeOfDeparture",
-				"CustomsOfficeOfDestinationDeclared",
-				"Guarantee",
-				"HolderOfTheTransitProcedure",
-				"TransitOperation",
-				"messageIdentification",
-				"messageRecipient",
-				"messageType",
-				"preparationDateAndTime"
-			],
-			"type": "object"
 		},
 		"n1:CORefNumType": {
 			"description": "Customs Office Reference Number\n\t\t\t\t(format:an8)",
@@ -17887,10 +17666,6 @@
 		"n1:CopyGivenContentType": {
 			"description": "Used by 2/91 messages: CC037C, CC224C",
 			"pattern": "^([0-9])$",
-			"type": "string"
-		},
-		"n1:CorrelationIdentifierContentType": {
-			"pattern": "^([\\w\\D]{1,35})$",
 			"type": "string"
 		},
 		"n1:CounterContentType": {
@@ -36096,18 +35871,6 @@
 			"pattern": "^([\\w\\D]{1,4})$",
 			"type": "string"
 		},
-		"n1:MessageIdentificationContentType": {
-			"pattern": "^([\\w\\D]{1,35})$",
-			"type": "string"
-		},
-		"n1:MessageRecipientContentType": {
-			"pattern": "^([\\w\\D]{1,35})$",
-			"type": "string"
-		},
-		"n1:MessageSenderContentType": {
-			"pattern": "^([\\w\\D]{1,35})$",
-			"type": "string"
-		},
 		"n1:MessageTypeContentType": {
 			"description": "Used by 91/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD917C, CD971C, CD974C, CD975C",
 			"pattern": "^([\\w\\D]{6,6})$",
@@ -38131,10 +37894,6 @@
 			"description": "Used by 8/91 messages: CC007C, CC013C, CC015C, CC017C, CC054C, CC141C, CC170C, CC224C",
 			"maxLength": 17,
 			"pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
-			"type": "string"
-		},
-		"n1:PreparationDateAndTimeContentType": {
-			"pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
 			"type": "string"
 		},
 		"n1:PresentationOfTheGoodsDateAndTimeContentType": {
@@ -54189,9 +53948,6 @@
 		},
 		"@xmlns:n1": {
 			"default": "http://ncts.dgtaxud.ec"
-		},
-		"n1:CC013C": {
-			"$ref": "#/definitions/.n1:CC013C"
 		},
 		"n1:codeList": {
 			"$ref": "#/definitions/.n1:codeList"
