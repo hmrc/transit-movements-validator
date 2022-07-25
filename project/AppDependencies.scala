@@ -6,8 +6,10 @@ object AppDependencies {
   val catsVersion = "2.7.0"
 
   val compile = Seq(
-    "uk.gov.hmrc"   %% "bootstrap-backend-play-28" % "5.24.0",
-    "org.typelevel" %% "cats-core"                 % catsVersion
+    "uk.gov.hmrc"               %% "bootstrap-backend-play-28" % "5.24.0",
+    "org.typelevel"             %% "cats-core"                 % catsVersion,
+    "com.networknt"              % "json-schema-validator"     % "1.0.70" exclude ("org.slf4j", "slf4j-api"),
+    "com.fasterxml.jackson.core" % "jackson-databind"          % "2.12.6"
   )
 
   val test = Seq(
