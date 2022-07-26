@@ -47,11 +47,11 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
-      case Some(MimeTypes.XML)  => validate(messageType, MimeTypes.XML)
-      case Some(MimeTypes.JSON) => validate(messageType, MimeTypes.JSON)
+      case Some(MimeTypes.XML)  => validateMessage(messageType, MimeTypes.XML)
+      case Some(MimeTypes.JSON) => validateMessage(messageType, MimeTypes.JSON)
     }
 
-  def validate(messageType: String, contentType: String): Action[Source[ByteString, _]] =
+  def validateMessage(messageType: String, contentType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
         val validationResponse =
