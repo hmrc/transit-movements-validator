@@ -54,11 +54,11 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
   def validateMessage(messageType: String, contentType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        val validationResponse =
-          if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, request.body)
-          else jsonValidationService.validate(messageType, request.body)
-
-        validationResponse
+        (for {
+          validationResponse <-
+            if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, request.body)
+            else jsonValidationService.validate(messageType, request.body)
+        } yield validationResponse)
           .map {
             case Left(x) =>
               x.head match {
