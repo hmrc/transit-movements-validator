@@ -37,7 +37,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
-class MessagesController @Inject() (cc: ControllerComponents, XmlValidationService: XmlValidationService, JsonValidationService: JsonValidationService)(implicit
+class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
   val materializer: Materializer,
   executionContext: ExecutionContext
 ) extends BackendController(cc)
@@ -54,7 +54,7 @@ class MessagesController @Inject() (cc: ControllerComponents, XmlValidationServi
   def validateXML(messageType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        XmlValidationService
+        xmlValidationService
           .validate(messageType, request.body)
           .map {
             case Left(x) =>
@@ -73,7 +73,7 @@ class MessagesController @Inject() (cc: ControllerComponents, XmlValidationServi
   def validateJSON(messageType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        JsonValidationService
+        jsonValidationService
           .validate(messageType, request.body)
           .map {
             case Left(x) =>
