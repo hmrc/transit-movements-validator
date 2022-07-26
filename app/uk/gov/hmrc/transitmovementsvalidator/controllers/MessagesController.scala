@@ -47,15 +47,18 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
-      case Some(MimeTypes.XML)  => validateXML(messageType)
-      case Some(MimeTypes.JSON) => validateJSON(messageType)
+      case Some(MimeTypes.XML)  => validate(messageType, MimeTypes.XML)
+      case Some(MimeTypes.JSON) => validate(messageType, MimeTypes.JSON)
     }
 
-  def validateXML(messageType: String): Action[Source[ByteString, _]] =
+  def validate(messageType: String, contentType: String): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        xmlValidationService
-          .validate(messageType, request.body)
+        val validationResponse =
+          if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, request.body)
+          else jsonValidationService.validate(messageType, request.body)
+
+        validationResponse
           .map {
             case Left(x) =>
               x.head match {
@@ -70,22 +73,4 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
           }
     }
 
-  def validateJSON(messageType: String): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
-      implicit request =>
-        jsonValidationService
-          .validate(messageType, request.body)
-          .map {
-            case Left(x) =>
-              x.head match {
-                case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
-                case _                                    => Ok(Json.toJson(ValidationResponse(x)))
-              }
-            case Right(_) => NoContent
-          }
-          .recover {
-            case NonFatal(e) =>
-              InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
-          }
-    }
 }
