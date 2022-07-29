@@ -22,6 +22,7 @@ import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
 import cats.data.NonEmptyList
+import com.fasterxml.jackson.core.JsonParseException
 import com.google.inject.ImplementedBy
 
 import scala.concurrent.ExecutionContext
@@ -39,6 +40,9 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import javax.inject.Inject
 import scala.collection.JavaConverters.asScalaSetConverter
+import scala.util.Try
+import scala.util.Success
+import scala.util.Failure
 
 @ImplementedBy(classOf[JsonValidationServiceImpl])
 trait JsonValidationService {
@@ -72,20 +76,21 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       case Some(mType) =>
         val schemaValidator = schemaValidators(mType.code)
         validateJson(source, schemaValidator) match {
-          case errors if errors.isEmpty => Future.successful(Right(()))
-          case errors =>
+          case Success(errors) if errors.isEmpty => Future.successful(Right(()))
+          case Success(errors) =>
             val validationErrors = errors.map(
               e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
             )
 
             Future.successful(Left(NonEmptyList.fromList(validationErrors.toList).get))
+          case Failure(thr) => Future.failed(thr)
         }
     }
 
-  def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Set[ValidationMessage] = {
-    val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
-    val jsonNode: JsonNode = mapper.readTree(jsonInput)
-    schemaValidator.validate(jsonNode).asScala.toSet
-  }
-
+  def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
+    Try {
+      val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
+      val jsonNode: JsonNode = mapper.readTree(jsonInput)
+      schemaValidator.validate(jsonNode).asScala.toSet
+    }
 }
