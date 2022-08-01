@@ -43,11 +43,13 @@ import play.api.test.FakeRequest
 import play.api.test.StubControllerComponentsFactory
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider.singleUseStringSource
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationServiceImpl
+import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
 
 import java.nio.charset.StandardCharsets
@@ -222,6 +224,24 @@ class MessagesControllerSpec
 
       contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
       status(result) mustBe INTERNAL_SERVER_ERROR
+    }
+
+    val sut          = new JsonValidationServiceImpl
+    val failedFuture = sut.validate(validCode, singleUseStringSource("{'ABC':''}"))
+    "on an JsonParseException being thrown during json validation, must return Bad Request" in {
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenReturn(failedFuture)
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
+      val result  = sut.validate(validCode)(request)
+
+      contentAsJson(result) mustBe Json.obj(
+        "code"    -> "BAD_REQUEST",
+        "message" -> "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at [Source: (akka.stream.impl.io.InputStreamAdapter); line: 1, column: 3]"
+      )
+      status(result) mustBe BAD_REQUEST
     }
 
   }
