@@ -33,31 +33,23 @@ object MessageType {
   // Departures Requests
   // *******************
 
-//  /** E_DEC_AMD (IE013) */
-//  case object DeclarationAmendment
-//    extends DepartureMessageType("IE013", "CC013C", "/xsd/cc013c.xsd", "/json/cc013c-schema.json")
-//
-//  /** E_DEC_INV (IE014) */
-//  case object DeclarationInvalidation
-//    extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd", "/json/cc014c-schema.json")
+  /** E_DEC_AMD (IE013) */
+  case object DeclarationAmendment extends DepartureMessageType("IE013", "CC013C", "/xsd/cc013c.xsd", "/json/cc013c-schema.json")
+
+  /** E_DEC_INV (IE014) */
+  case object DeclarationInvalidation extends DepartureMessageType("IE014", "CC014C", "/xsd/cc014c.xsd", "/json/cc014c-schema.json")
 
   /** E_DEC_DAT (IE015) */
   case object DeclarationData extends DepartureMessageType("IE015", "CC015C", "/xsd/cc015c.xsd", "/json/cc015c-schema.json")
 
-//  /** E_REQ_REL (IE054) */
-//  case object RequestOfRelease
-//    extends DepartureMessageType("IE054", "CC054C", "/xsd/cc054c.xsd", "/json/cc054c-schema.json")
-//
-//  /** E_PRE_NOT (IE170) */
-//  case object PresentationNotification
-//    extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
+  /** E_PRE_NOT (IE170) */
+  case object PresentationNotificationForPreLodgedDec extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
 
   val departureValues = Set(
-//    DeclarationAmendment,
-//    DeclarationInvalidation,
-    DeclarationData
-//    RequestOfRelease,
-//    PresentationNotification
+    DeclarationAmendment,
+    DeclarationInvalidation,
+    DeclarationData,
+    PresentationNotificationForPreLodgedDec
   )
 
   // ****************

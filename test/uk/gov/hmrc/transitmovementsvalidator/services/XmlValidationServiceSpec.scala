@@ -46,15 +46,61 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
   "On Validate XML" - {
-    "when valid XML is provided for the given message type, return a Right" in {
-      val source = Source.single(ByteString(exampleIE015XML.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationServiceImpl
-      val result = sut.validate(validCode, source)
 
-      whenReady(result) {
-        r =>
-          r.isRight mustBe true
-      }
+    "when valid XML IE013 is provided for the given message type, return a Right" in {
+      val ie13File = scala.io.Source.fromFile(testDataPath + "/cc013c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie13File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate("IE013", source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie13File.close
+    }
+
+    "when valid XML IE014 is provided for the given message type, return a Right" in {
+      val ie14File = scala.io.Source.fromFile(testDataPath + "/cc014c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie14File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate("IE014", source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie14File.close
+    }
+
+    "when valid XML IE015 is provided for the given message type, return a Right" in {
+      val ie15File = scala.io.Source.fromFile(testDataPath + "/cc015c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(validCode, source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie15File.close
+    }
+
+    "when valid XML IE170 is provided for the given message type, return a Right" in {
+      val ie170File = scala.io.Source.fromFile(testDataPath + "/cc170c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie170File.mkString, StandardCharsets.UTF_8)) //exampleIE170XML.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate("IE170", source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie170File.close()
     }
 
     "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
@@ -82,53 +128,4 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       }
     }
   }
-
-  val exampleIE015XML: NodeSeq =
-    <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-      <messageRecipient>3pekcCFaMGmCMz1CPGUlhyml9gJCV6</messageRecipient>
-      <preparationDateAndTime>2022-07-02T03:11:04</preparationDateAndTime>
-      <messageIdentification>wrxe</messageIdentification>
-      <messageType>CC015C</messageType>
-      <TransitOperation>
-        <LRN>DHbrfgDQJRm</LRN>
-        <declarationType>gJ</declarationType>
-        <additionalDeclarationType>h</additionalDeclarationType>
-        <security>7</security>
-        <reducedDatasetIndicator>1</reducedDatasetIndicator>
-        <bindingItinerary>1</bindingItinerary>
-      </TransitOperation>
-      <CustomsOfficeOfDeparture>
-        <referenceNumber>BN3KMA8M</referenceNumber>
-      </CustomsOfficeOfDeparture>
-      <CustomsOfficeOfDestinationDeclared>
-        <referenceNumber>BN3KMA8M</referenceNumber>
-      </CustomsOfficeOfDestinationDeclared>
-      <HolderOfTheTransitProcedure>
-        <identificationNumber>ezv3Z</identificationNumber>
-      </HolderOfTheTransitProcedure>
-      <Guarantee>
-        <sequenceNumber>66710</sequenceNumber>
-        <guaranteeType>P</guaranteeType>
-        <otherGuaranteeReference>iNkM2E</otherGuaranteeReference>
-      </Guarantee>
-      <Consignment>
-        <grossMass>4380979244.527545</grossMass>
-        <HouseConsignment>
-          <sequenceNumber>66710</sequenceNumber>
-          <grossMass>4380979244.527545</grossMass>
-          <ConsignmentItem>
-            <goodsItemNumber>34564</goodsItemNumber>
-            <declarationGoodsItemNumber>25</declarationGoodsItemNumber>
-            <Commodity>
-              <descriptionOfGoods>fds9YFrlk6DX7pnwQNgJmksfZ4z9uGjDy6Kaucb13r3kEleTuLHD5zKtbAKUU005AaZeVdTgdAnJKzuGliZGRb1E83Y0Z8IuyeFfnXgT7NwX81eGFb3vRXAWUFswwwprqZBcffnBLwLObF45W7evl7C6J4Tihj1d1a2ZKcAU6ttLNy</descriptionOfGoods>
-            </Commodity>
-            <Packaging>
-              <sequenceNumber>66710</sequenceNumber>
-              <typeOfPackages>Nu</typeOfPackages>
-            </Packaging>
-          </ConsignmentItem>
-        </HouseConsignment>
-      </Consignment>
-    </ncts:CC015C>
-
 }

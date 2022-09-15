@@ -1,0 +1,130 @@
+{
+  "n1:CC170C": {
+    "preparationDateAndTime": "2007-10-26T07:36:28",
+    "TransitOperation": {
+      "LRN": "string",
+      "limitDate": "2014-06-09+01:00"
+    },
+    "CustomsOfficeOfDeparture": {
+      "referenceNumber": "stringst"
+    },
+    "messageType": "CC170C",
+    "@PhaseID": "NCTS5.0",
+    "correlationIdentifier": "token",
+    "messageRecipient": "token",
+    "HolderOfTheTransitProcedure": {
+      "identificationNumber": "string",
+      "TIRHolderIdentificationNumber": "string",
+      "name": "string",
+      "Address": {
+        "streetAndNumber": "string",
+        "postcode": "string",
+        "city": "string",
+        "country": "st"
+      }
+    },
+    "Consignment": {
+      "containerIndicator": "1",
+      "inlandModeOfTransport": "token",
+      "modeOfTransportAtTheBorder": "token",
+      "TransportEquipment": [
+        {
+          "sequenceNumber": "token",
+          "containerIdentificationNumber": "string",
+          "numberOfSeals": 100,
+          "Seal": [
+            {
+              "sequenceNumber": "token",
+              "identifier": "string"
+            }
+          ],
+          "GoodsReference": [
+            {
+              "sequenceNumber": "token",
+              "declarationGoodsItemNumber": 100
+            }
+          ]
+        }
+      ],
+      "LocationOfGoods": {
+        "typeOfLocation": "token",
+        "qualifierOfIdentification": "token",
+        "authorisationNumber": "string",
+        "additionalIdentifier": "stri",
+        "UNLocode": "token",
+        "CustomsOffice": {
+          "referenceNumber": "stringst"
+        },
+        "GNSS": {
+          "latitude": "string",
+          "longitude": "string"
+        },
+        "EconomicOperator": {
+          "identificationNumber": "string"
+        },
+        "Address": {
+          "streetAndNumber": "string",
+          "postcode": "string",
+          "city": "string",
+          "country": "st"
+        },
+        "PostcodeAddress": {
+          "houseNumber": "string",
+          "postcode": "string",
+          "country": "st"
+        },
+        "ContactPerson": {
+          "name": "string",
+          "phoneNumber": "token",
+          "eMailAddress": "string"
+        }
+      },
+      "DepartureTransportMeans": [
+        {
+          "sequenceNumber": "token",
+          "typeOfIdentification": "token",
+          "identificationNumber": "string",
+          "nationality": "st"
+        }
+      ],
+      "ActiveBorderTransportMeans": [
+        {
+          "sequenceNumber": "token",
+          "customsOfficeAtBorderReferenceNumber": "token",
+          "typeOfIdentification": "token",
+          "identificationNumber": "string",
+          "nationality": "st",
+          "conveyanceReferenceNumber": "string"
+        }
+      ],
+      "PlaceOfLoading": {
+        "UNLocode": "token",
+        "country": "st",
+        "location": "string"
+      },
+      "HouseConsignment": [
+        {
+          "sequenceNumber": "token",
+          "DepartureTransportMeans": [
+            {
+              "sequenceNumber": "token",
+              "typeOfIdentification": "token",
+              "identificationNumber": "string",
+              "nationality": "st"
+            }
+          ]
+        }
+      ]
+    },
+    "Representative": {
+      "identificationNumber": "string",
+      "status": "token",
+      "ContactPerson": {
+        "name": "string",
+        "phoneNumber": "token",
+        "eMailAddress": "string"
+      }
+    },
+    "messageIdentification": "token"
+  }
+}

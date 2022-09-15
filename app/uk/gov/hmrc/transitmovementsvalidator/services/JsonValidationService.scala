@@ -22,7 +22,6 @@ import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
 import cats.data.NonEmptyList
-import com.fasterxml.jackson.core.JsonParseException
 import com.google.inject.ImplementedBy
 
 import scala.concurrent.ExecutionContext

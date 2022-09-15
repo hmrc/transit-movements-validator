@@ -47,10 +47,43 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
   "On Validate" - {
-    "when valid JSON is provided for the given message type, return a Right" in {
+    "when valid CC013C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE013", source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
+    "when valid CC014C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE014", source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
+    "when valid CC015C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate(validCode, source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
+    "when valid CC170C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE170", source)
 
       whenReady(result) {
         r =>
