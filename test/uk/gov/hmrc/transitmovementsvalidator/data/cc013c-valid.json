@@ -2,383 +2,203 @@
   "n1:CC013C": {
     "preparationDateAndTime": "2007-10-26T07:36:28",
     "TransitOperation": {
-      "LRN": "string",
-      "MRN": "string",
       "declarationType": "token",
-      "additionalDeclarationType": "token",
-      "TIRCarnetNumber": "string",
-      "presentationOfTheGoodsDateAndTime": "2014-06-09T16:15:04+01:00",
-      "security": "token",
+      "additionalDeclarationType": "A",
+      "security": "0",
       "reducedDatasetIndicator": "1",
-      "specificCircumstanceIndicator": "token",
-      "communicationLanguageAtDeparture": "st",
       "bindingItinerary": "1",
-      "amendmentTypeFlag": "0",
-      "limitDate": "2017-05-15"
+      "amendmentTypeFlag": "0"
     },
     "CustomsOfficeOfDeparture": {
-      "referenceNumber": "stringst"
+      "referenceNumber": "AB123456"
     },
     "Consignment": {
-      "countryOfDispatch": "st",
-      "countryOfDestination": "token",
-      "containerIndicator": "1",
-      "inlandModeOfTransport": "token",
-      "modeOfTransportAtTheBorder": "token",
       "grossMass": 1000,
-      "referenceNumberUCR": "string",
-      "Carrier": {
-        "identificationNumber": "string",
-        "ContactPerson": {
-          "name": "string",
-          "phoneNumber": "token",
-          "eMailAddress": "string"
-        }
-      },
-      "Consignor": {
-        "identificationNumber": "string",
-        "name": "string",
-        "Address": {
-          "streetAndNumber": "string",
-          "postcode": "string",
-          "city": "string",
-          "country": "st"
-        },
-        "ContactPerson": {
-          "name": "string",
-          "phoneNumber": "token",
-          "eMailAddress": "string"
-        }
-      },
-      "Consignee": {
-        "identificationNumber": "string",
-        "name": "string",
-        "Address": {
-          "streetAndNumber": "string",
-          "postcode": "string",
-          "city": "string",
-          "country": "st"
-        }
-      },
       "AdditionalSupplyChainActor": [
         {
-          "sequenceNumber": "token",
-          "role": "token",
-          "identificationNumber": "string"
+          "sequenceNumber": "12345",
+          "role": "ABC",
+          "identificationNumber": "GB123"
         }
       ],
       "TransportEquipment": [
         {
-          "sequenceNumber": "token",
-          "containerIdentificationNumber": "string",
+          "sequenceNumber": "12345",
           "numberOfSeals": 100,
           "Seal": [
             {
-              "sequenceNumber": "token",
+              "sequenceNumber": "12345",
               "identifier": "string"
             }
           ],
           "GoodsReference": [
             {
-              "sequenceNumber": "token",
+              "sequenceNumber": "12345",
               "declarationGoodsItemNumber": 100
             }
           ]
         }
       ],
-      "LocationOfGoods": {
-        "typeOfLocation": "token",
-        "qualifierOfIdentification": "token",
-        "authorisationNumber": "string",
-        "additionalIdentifier": "stri",
-        "UNLocode": "token",
-        "CustomsOffice": {
-          "referenceNumber": "stringst"
-        },
-        "GNSS": {
-          "latitude": "string",
-          "longitude": "string"
-        },
-        "EconomicOperator": {
-          "identificationNumber": "string"
-        },
-        "Address": {
-          "streetAndNumber": "string",
-          "postcode": "string",
-          "city": "string",
-          "country": "st"
-        },
-        "PostcodeAddress": {
-          "houseNumber": "string",
-          "postcode": "string",
-          "country": "st"
-        },
-        "ContactPerson": {
-          "name": "string",
-          "phoneNumber": "token",
-          "eMailAddress": "string"
-        }
-      },
       "DepartureTransportMeans": [
         {
-          "sequenceNumber": "token",
-          "typeOfIdentification": "token",
-          "identificationNumber": "string",
-          "nationality": "st"
+          "sequenceNumber": "12345"
         }
       ],
       "CountryOfRoutingOfConsignment": [
         {
-          "sequenceNumber": "token",
-          "country": "st"
+          "sequenceNumber": "12345",
+          "country": "GB"
         }
       ],
       "ActiveBorderTransportMeans": [
         {
-          "sequenceNumber": "token",
-          "customsOfficeAtBorderReferenceNumber": "token",
-          "typeOfIdentification": "token",
-          "identificationNumber": "string",
-          "nationality": "st",
-          "conveyanceReferenceNumber": "string"
+          "sequenceNumber": "12345"
         }
       ],
-      "PlaceOfLoading": {
-        "UNLocode": "token",
-        "country": "st",
-        "location": "string"
-      },
-      "PlaceOfUnloading": {
-        "UNLocode": "token",
-        "country": "st",
-        "location": "string"
-      },
       "PreviousDocument": [
         {
-          "sequenceNumber": "token",
-          "type": "token",
-          "referenceNumber": "string",
-          "complementOfInformation": "string"
+          "sequenceNumber": "12345",
+          "type": "ABCD",
+          "referenceNumber": "AB123456"
         }
       ],
       "SupportingDocument": [
         {
-          "sequenceNumber": "token",
-          "type": "token",
-          "referenceNumber": "string",
-          "documentLineItemNumber": 100,
-          "complementOfInformation": "string"
+          "sequenceNumber": "12345",
+          "type": "ABCD",
+          "referenceNumber": "AB123456"
         }
       ],
       "TransportDocument": [
         {
-          "sequenceNumber": "token",
-          "type": "token",
-          "referenceNumber": "string"
+          "sequenceNumber": "12345",
+          "type": "ABCD",
+          "referenceNumber": "AB123456"
         }
       ],
       "AdditionalReference": [
         {
-          "sequenceNumber": "token",
-          "type": "token",
-          "referenceNumber": "string"
+          "sequenceNumber": "12345",
+          "type": "ABCD"
         }
       ],
       "AdditionalInformation": [
         {
-          "sequenceNumber": "token",
-          "code": "token",
-          "text": "string"
+          "sequenceNumber": "12345",
+          "code": "token"
         }
       ],
-      "TransportCharges": {
-        "methodOfPayment": "s"
-      },
       "HouseConsignment": [
         {
-          "sequenceNumber": "token",
-          "countryOfDispatch": "st",
+          "sequenceNumber": "12345",
           "grossMass": 1000,
-          "referenceNumberUCR": "string",
-          "Consignor": {
-            "identificationNumber": "string",
-            "name": "string",
-            "Address": {
-              "streetAndNumber": "string",
-              "postcode": "string",
-              "city": "string",
-              "country": "st"
-            },
-            "ContactPerson": {
-              "name": "string",
-              "phoneNumber": "token",
-              "eMailAddress": "string"
-            }
-          },
-          "Consignee": {
-            "identificationNumber": "string",
-            "name": "string",
-            "Address": {
-              "streetAndNumber": "string",
-              "postcode": "string",
-              "city": "string",
-              "country": "st"
-            }
-          },
           "AdditionalSupplyChainActor": [
             {
-              "sequenceNumber": "token",
-              "role": "token",
-              "identificationNumber": "string"
+              "sequenceNumber": "12345",
+              "role": "ABC",
+              "identificationNumber": "GB123"
             }
           ],
           "DepartureTransportMeans": [
             {
-              "sequenceNumber": "token",
-              "typeOfIdentification": "token",
-              "identificationNumber": "string",
-              "nationality": "st"
+              "sequenceNumber": "12345",
+              "typeOfIdentification": "01",
+              "identificationNumber": "GB123",
+              "nationality": "GB"
             }
           ],
           "PreviousDocument": [
             {
-              "sequenceNumber": "token",
-              "type": "token",
-              "referenceNumber": "string",
-              "complementOfInformation": "string"
+              "sequenceNumber": "12345",
+              "type": "ABCD",
+              "referenceNumber": "AB123456"
             }
           ],
           "SupportingDocument": [
             {
-              "sequenceNumber": "token",
-              "type": "token",
-              "referenceNumber": "string",
-              "documentLineItemNumber": 100,
-              "complementOfInformation": "string"
+              "sequenceNumber": "12345",
+              "type": "ABCD",
+              "referenceNumber": "AB123456"
             }
           ],
           "TransportDocument": [
             {
-              "sequenceNumber": "token",
-              "type": "token",
-              "referenceNumber": "string"
+              "sequenceNumber": "12345",
+              "type": "ABCD",
+              "referenceNumber": "AB123456"
             }
           ],
           "AdditionalReference": [
             {
-              "sequenceNumber": "token",
-              "type": "token",
-              "referenceNumber": "string"
+              "sequenceNumber": "12345",
+              "type": "ABCD"
             }
           ],
           "AdditionalInformation": [
             {
-              "sequenceNumber": "token",
-              "code": "token",
-              "text": "string"
+              "sequenceNumber": "12345",
+              "code": "token"
             }
           ],
-          "TransportCharges": {
-            "methodOfPayment": "s"
-          },
           "ConsignmentItem": [
             {
-              "goodsItemNumber": "token",
+              "goodsItemNumber": "12345",
               "declarationGoodsItemNumber": 100,
-              "declarationType": "token",
-              "countryOfDispatch": "st",
-              "countryOfDestination": "token",
-              "referenceNumberUCR": "string",
-              "Consignee": {
-                "identificationNumber": "string",
-                "name": "string",
-                "Address": {
-                  "streetAndNumber": "string",
-                  "postcode": "string",
-                  "city": "string",
-                  "country": "st"
-                }
-              },
               "AdditionalSupplyChainActor": [
                 {
-                  "sequenceNumber": "token",
-                  "role": "token",
-                  "identificationNumber": "string"
+                  "sequenceNumber": "12345",
+                  "role": "ABC",
+                  "identificationNumber": "GB123"
                 }
               ],
               "Commodity": {
                 "descriptionOfGoods": "string",
-                "cusCode": "token",
-                "CommodityCode": {
-                  "harmonizedSystemSubHeadingCode": "token",
-                  "combinedNomenclatureCode": "st"
-                },
                 "DangerousGoods": [
                   {
-                    "sequenceNumber": "token",
-                    "UNNumber": "token"
+                    "sequenceNumber": "12345",
+                    "UNNumber": "1234"
                   }
-                ],
-                "GoodsMeasure": {
-                  "grossMass": 1000,
-                  "netMass": 1000,
-                  "supplementaryUnits": 1000
-                }
+                ]
               },
               "Packaging": [
                 {
-                  "sequenceNumber": "token",
-                  "typeOfPackages": "token",
-                  "numberOfPackages": 100,
-                  "shippingMarks": "string"
+                  "sequenceNumber": "12345",
+                  "typeOfPackages": "11"
                 }
               ],
               "PreviousDocument": [
                 {
-                  "sequenceNumber": "token",
-                  "type": "token",
-                  "referenceNumber": "string",
-                  "goodsItemNumber": 100,
-                  "typeOfPackages": "token",
-                  "numberOfPackages": 100,
-                  "measurementUnitAndQualifier": "token",
-                  "quantity": 1000,
-                  "complementOfInformation": "string"
+                  "sequenceNumber": "12345",
+                  "type": "ABCD",
+                  "referenceNumber": "AB123456"
                 }
               ],
               "SupportingDocument": [
                 {
-                  "sequenceNumber": "token",
-                  "type": "token",
-                  "referenceNumber": "string",
-                  "documentLineItemNumber": 100,
-                  "complementOfInformation": "string"
+                  "sequenceNumber": "12345",
+                  "type": "ABCD",
+                  "referenceNumber": "AB123456"
                 }
               ],
               "TransportDocument": [
                 {
-                  "sequenceNumber": "token",
-                  "type": "token",
-                  "referenceNumber": "string"
+                  "sequenceNumber": "12345",
+                  "type": "ABCD",
+                  "referenceNumber": "AB123456"
                 }
               ],
               "AdditionalReference": [
                 {
-                  "sequenceNumber": "token",
-                  "type": "token",
-                  "referenceNumber": "string"
+                  "sequenceNumber": "12345",
+                  "type": "ABCD"
                 }
               ],
               "AdditionalInformation": [
                 {
-                  "sequenceNumber": "token",
-                  "code": "token",
-                  "text": "string"
+                  "sequenceNumber": "12345",
+                  "code": "token"
                 }
-              ],
-              "TransportCharges": {
-                "methodOfPayment": "s"
-              }
+              ]
             }
           ]
         }
@@ -386,69 +206,37 @@
     },
     "CustomsOfficeOfExitForTransitDeclared": [
       {
-        "sequenceNumber": "token",
-        "referenceNumber": "stringst"
+        "sequenceNumber": "12345",
+        "referenceNumber": "AB123456"
       }
     ],
     "CustomsOfficeOfTransitDeclared": [
       {
-        "sequenceNumber": "token",
-        "referenceNumber": "stringst",
-        "arrivalDateAndTimeEstimated": "2013-12-21T11:32:42Z"
+        "sequenceNumber": "12345",
+        "referenceNumber": "AB123456"
       }
     ],
     "CustomsOfficeOfDestinationDeclared": {
-      "referenceNumber": "stringst"
+      "referenceNumber": "AB123456"
     },
     "messageType": "CC013C",
     "@PhaseID": "NCTS5.0",
-    "correlationIdentifier": "token",
     "Authorisation": [
       {
-        "sequenceNumber": "token",
-        "type": "token",
-        "referenceNumber": "string"
+        "sequenceNumber": "12345",
+        "type": "tokn",
+        "referenceNumber": "GB444"
       }
     ],
     "messageRecipient": "token",
-    "HolderOfTheTransitProcedure": {
-      "identificationNumber": "string",
-      "TIRHolderIdentificationNumber": "string",
-      "name": "string",
-      "Address": {
-        "streetAndNumber": "string",
-        "postcode": "string",
-        "city": "string",
-        "country": "st"
-      },
-      "ContactPerson": {
-        "name": "string",
-        "phoneNumber": "token",
-        "eMailAddress": "string"
-      }
-    },
-    "Representative": {
-      "identificationNumber": "string",
-      "status": "token",
-      "ContactPerson": {
-        "name": "string",
-        "phoneNumber": "token",
-        "eMailAddress": "string"
-      }
-    },
+    "HolderOfTheTransitProcedure": {},
     "messageIdentification": "token",
     "Guarantee": [
       {
-        "sequenceNumber": "token",
-        "guaranteeType": "s",
-        "otherGuaranteeReference": "string",
+        "sequenceNumber": "12345",
         "GuaranteeReference": [
           {
-            "sequenceNumber": "token",
-            "GRN": "string",
-            "accessCode": "stri",
-            "amountToBeCovered": 1000,
-            "currency": "token"
+            "sequenceNumber": "12345"
           }
         ]
       }
