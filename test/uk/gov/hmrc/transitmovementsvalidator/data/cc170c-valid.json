@@ -3,10 +3,10 @@
     "preparationDateAndTime": "2007-10-26T07:36:28",
     "TransitOperation": {
       "LRN": "string",
-      "limitDate": "2014-06-09+01:00"
+      "limitDate": "2014-06-09"
     },
     "CustomsOfficeOfDeparture": {
-      "referenceNumber": "stringst"
+      "referenceNumber": "AB123456"
     },
     "messageType": "CC170C",
     "@PhaseID": "NCTS5.0",
@@ -20,44 +20,44 @@
         "streetAndNumber": "string",
         "postcode": "string",
         "city": "string",
-        "country": "st"
+        "country": "GB"
       }
     },
     "Consignment": {
       "containerIndicator": "1",
-      "inlandModeOfTransport": "token",
-      "modeOfTransportAtTheBorder": "token",
+      "inlandModeOfTransport": "0",
+      "modeOfTransportAtTheBorder": "0",
       "TransportEquipment": [
         {
-          "sequenceNumber": "token",
+          "sequenceNumber": "1234",
           "containerIdentificationNumber": "string",
           "numberOfSeals": 100,
           "Seal": [
             {
-              "sequenceNumber": "token",
+              "sequenceNumber": "1234",
               "identifier": "string"
             }
           ],
           "GoodsReference": [
             {
-              "sequenceNumber": "token",
+              "sequenceNumber": "1234",
               "declarationGoodsItemNumber": 100
             }
           ]
         }
       ],
       "LocationOfGoods": {
-        "typeOfLocation": "token",
-        "qualifierOfIdentification": "token",
+        "typeOfLocation": "b",
+        "qualifierOfIdentification": "a",
         "authorisationNumber": "string",
         "additionalIdentifier": "stri",
         "UNLocode": "token",
         "CustomsOffice": {
-          "referenceNumber": "stringst"
+          "referenceNumber": "AB123456"
         },
         "GNSS": {
-          "latitude": "string",
-          "longitude": "string"
+          "latitude": "+1",
+          "longitude": "+1"
         },
         "EconomicOperator": {
           "identificationNumber": "string"
@@ -66,12 +66,12 @@
           "streetAndNumber": "string",
           "postcode": "string",
           "city": "string",
-          "country": "st"
+          "country": "GB"
         },
         "PostcodeAddress": {
           "houseNumber": "string",
           "postcode": "string",
-          "country": "st"
+          "country": "GB"
         },
         "ContactPerson": {
           "name": "string",
@@ -81,36 +81,36 @@
       },
       "DepartureTransportMeans": [
         {
-          "sequenceNumber": "token",
-          "typeOfIdentification": "token",
+          "sequenceNumber": "1234",
+          "typeOfIdentification": "12",
           "identificationNumber": "string",
-          "nationality": "st"
+          "nationality": "GB"
         }
       ],
       "ActiveBorderTransportMeans": [
         {
-          "sequenceNumber": "token",
-          "customsOfficeAtBorderReferenceNumber": "token",
-          "typeOfIdentification": "token",
+          "sequenceNumber": "1234",
+          "customsOfficeAtBorderReferenceNumber": "GB123456",
+          "typeOfIdentification": "12",
           "identificationNumber": "string",
-          "nationality": "st",
+          "nationality": "GB",
           "conveyanceReferenceNumber": "string"
         }
       ],
       "PlaceOfLoading": {
         "UNLocode": "token",
-        "country": "st",
+        "country": "GB",
         "location": "string"
       },
       "HouseConsignment": [
         {
-          "sequenceNumber": "token",
+          "sequenceNumber": "123",
           "DepartureTransportMeans": [
             {
-              "sequenceNumber": "token",
-              "typeOfIdentification": "token",
+              "sequenceNumber": "1234",
+              "typeOfIdentification": "12",
               "identificationNumber": "string",
-              "nationality": "st"
+              "nationality": "GB"
             }
           ]
         }
@@ -118,7 +118,7 @@
     },
     "Representative": {
       "identificationNumber": "string",
-      "status": "token",
+      "status": "0",
       "ContactPerson": {
         "name": "string",
         "phoneNumber": "token",
