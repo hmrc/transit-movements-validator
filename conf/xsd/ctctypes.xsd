@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.0" vc:minVersion="1.1">
+  <xs:simpleType name="MessageType007">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC007C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MessageType013">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC013C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MessageType014">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC014C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MessageType015">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC015C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MessageType044">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC044C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MessageType054">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC054C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MessageType170">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CC170C"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

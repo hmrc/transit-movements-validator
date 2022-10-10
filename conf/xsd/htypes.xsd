@@ -21,6 +21,9 @@
         </xs:annotation>
       </xs:element>
       <xs:group ref="MESSAGE_1" />
+      <!-- Include message type and correlation ID -->
+      <xs:group ref="MESSAGE_TYPE" />
+      <xs:group ref="CORRELATION_IDENTIFIER" />
     </xs:sequence>
   </xs:group>
   <xs:group name="MESSAGE_FROM_TRADER">
@@ -65,6 +68,12 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <!-- CTC Start - messageType and correlationIdentifier will be done elsewhere -->
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="MESSAGE_TYPE">
+    <xs:sequence>
+      <!-- CTC End -->
       <xs:element name="messageType" type="MessageTypes">
         <xs:annotation>
           <xs:documentation>
@@ -73,6 +82,12 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <!-- CTC Start: continuation of splitting from above -->
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="CORRELATION_IDENTIFIER">
+    <xs:sequence>
+      <!-- CTC End -->
       <xs:element name="correlationIdentifier" type="CorrelationIdentifierContentType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
