@@ -11,6 +11,8 @@
   <!--================================================================================-->
   <xs:include schemaLocation="ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
+  <!-- CTC -->
+  <xs:include schemaLocation="ctctypes.xsd" />
   <!--================================================================================-->
   <!--===== Root Element                                                              -->
   <!--================================================================================-->
@@ -23,6 +25,16 @@
       <!-- CTC: We don't accept a message sender -->
       <!-- <xs:group ref="MESSAGE" /> -->
       <xs:group ref="MESSAGE_FROM_TRADER" />
+      <!-- CTC Start -->
+      <xs:element name="messageType" type="MessageType054">
+        <xs:annotation>
+          <xs:documentation>
+            <description value="Message type" />
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:group ref="CORRELATION_IDENTIFIER" />
+      <!-- CTC End -->
       <xs:element name="TransitOperation" type="TransitOperationType19">
         <xs:annotation>
           <xs:documentation>
