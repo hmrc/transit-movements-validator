@@ -10100,12 +10100,12 @@
     },
     "n1:GNSSLatitude": {
       "description": "GNSS Latitude (format: an..17)",
-      "pattern": "^([\\+\\-]?([0-8]?|[0-9]|\\.|[0-9]{5,7}|90[\\w\\D]000000?0?))$",
+      "pattern": "[+-]?([0-8]?[0-9]\\.[0-9]{5,7}|90.000000?0?)",
       "type": "string"
     },
     "n1:GNSSLongitude": {
       "description": "GNSS Longitude (format: an..17)",
-      "pattern": "^([\\+\\-]?((0?|[0-9]?|1[0-7])|[0-9]|\\.|[0-9]{5,7}|180[\\w\\D]000000?0?))$",
+      "pattern": "[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7}|180.000000?0?)",
       "type": "string"
     },
     "n1:GNSSType": {
@@ -14092,7 +14092,7 @@
     },
     "n1:LatitudeContentType": {
       "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
-      "pattern": "^([\\+\\-]?([0-8]?|[0-9]|\\.|[0-9]{5,7}|90[\\w\\D]000000?0?))$",
+      "pattern": "^[+-]?([0-8]?[0-9]\\.[0-9]{5,7}|90.000000?0?)$",
       "type": "string"
     },
     "n1:LiabilityLiberationDateContentType": {
@@ -14504,7 +14504,7 @@
     },
     "n1:LongitudeContentType": {
       "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
-      "pattern": "^([\\+\\-]?((0?|[0-9]?|1[0-7])|[0-9]|\\.|[0-9]{5,7}|180[\\w\\D]000000?0?))$",
+      "pattern": "^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7}|180.000000?0?)$",
       "type": "string"
     },
     "n1:LrnContentType02": {
