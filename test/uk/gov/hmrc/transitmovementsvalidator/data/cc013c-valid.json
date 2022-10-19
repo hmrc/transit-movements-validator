@@ -3,7 +3,7 @@
     "preparationDateAndTime": "2007-10-26T07:36:28",
     "TransitOperation": {
       "LRN": "string",
-      "MRN": "2AB1234567890ABJ0",
+      "MRN": "29GMFMHYWWCFCWRVJ3",
       "declarationType": "token",
       "additionalDeclarationType": "a",
       "TIRCarnetNumber": "123456",
@@ -96,8 +96,8 @@
           "referenceNumber": "GB123456"
         },
         "GNSS": {
-          "latitude": "+1",
-          "longitude": "+1"
+          "latitude": "+1.00000",
+          "longitude": "+1.00000"
         },
         "EconomicOperator": {
           "identificationNumber": "string"
