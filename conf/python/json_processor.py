@@ -21,8 +21,8 @@ import glob
 
 """
 This script is intended for internal use, where a set of schema to be processed
-fresh from XMLSpy are placed in the directory "old", with an empty directory "new", 
-and running this script will perform the processing required. 
+fresh from XMLSpy are placed in "old", and running this script will perform the processing
+required.
 
 Note that the filename for each message type should contain "ccXXXc", where XXX is the number
 of the message.
@@ -39,6 +39,41 @@ def hook(fname):
 
 def createHook(code=None):
 
+    def gnsslatitude(dct):
+        dct['pattern'] = r'^[+-]?([0-8]?[0-9]\.[0-9]{5,7}|90.000000?0?)$'
+
+    def gnsslongitude(dct):
+        dct['pattern'] = r'^[+-]?((0?[0-9]?|1[0-7])[0-9]\.[0-9]{5,7}|180.000000?0?)$'
+
+    def grntype(dct):
+        dct['anyOf'] = [{'pattern': r'^([0-9]{2,2}[A-Z]{2,2}[0-9A-Z]{12,12}[0-9]([A-Z][0-9]{6,6})?)'}]
+
+    def aes_mrntype(dct):
+        dct['anyOf'] = [
+            {'pattern': r'^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$'},
+            {'pattern': r'^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[A-E][0-9]$'}
+        ]
+
+    def mrntype(dct):
+        dct['anyOf'] = [
+            {'pattern': r'^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$'},
+            {'pattern': r'^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]$'}
+        ]
+
+    values_to_correct = {
+        'n1:GNSSLatitude': gnsslatitude,
+        'n1:GNSSLongitude': gnsslongitude,
+        'n1:LatitudeContentType': gnsslatitude,
+        'n1:LongitudeContentType': gnsslongitude,
+        'n1:GRNType': grntype,
+        'n1:MRNContentType03': aes_mrntype,
+        'n1:AES-P1_MRNType': aes_mrntype,
+        'n1:MRNContentType04': mrntype,
+        'n1:MrnContentType05': mrntype,
+        'n1:MRNType': mrntype,
+        'n1:NCTS-P5_MRNType': mrntype
+    }
+
     def properties_object_hook(dct):
         """
         Takes a dictionary and determines if it's a candidate for transformation
@@ -53,6 +88,10 @@ def createHook(code=None):
         :param dct: The dictionary to inspect
         :return: The modified dictionary
         """
+        for child in values_to_correct:
+            if child in dct:
+                values_to_correct[child](dct[child])
+
         if code is not None and 'n1:MessageTypes' in dct:
             properties = dct['n1:MessageTypes']
             properties['enum'] = [code]
