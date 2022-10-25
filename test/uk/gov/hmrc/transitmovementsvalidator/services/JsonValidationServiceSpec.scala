@@ -19,6 +19,7 @@ package uk.gov.hmrc.transitmovementsvalidator.services
 import akka.stream.Materializer
 import akka.stream.scaladsl.FileIO
 import akka.util.Timeout
+import cats.data.NonEmptyList
 import com.fasterxml.jackson.core.JsonParseException
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
@@ -113,6 +114,44 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
         r =>
           r.isLeft mustBe true
           r.left.get.head.isInstanceOf[JsonSchemaValidationError]
+      }
+    }
+
+    "when an invalid CC014C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-date-time.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE014", source)
+
+      whenReady(result) {
+        r =>
+          r mustBe Left(
+            NonEmptyList(
+              JsonSchemaValidationError(
+                "#/definitions/n1:PreparationDateAndTimeContentType",
+                "$.n1:CC014C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+              ),
+              Nil
+            )
+          )
+      }
+    }
+
+    "when an invalid CC013C provided with schema invalid date in the limitDate field, return errors" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-date.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE013", source)
+
+      whenReady(result) {
+        r =>
+          r mustBe Left(
+            NonEmptyList(
+              JsonSchemaValidationError(
+                "#/definitions/n1:LimitDateContentType",
+                "$.n1:CC013C.TransitOperation.limitDate: does not match the date pattern - date provided is invalid."
+              ),
+              Nil
+            )
+          )
       }
     }
 
