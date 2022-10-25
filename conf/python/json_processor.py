@@ -92,6 +92,13 @@ def createHook(code=None):
             if child in dct:
                 values_to_correct[child](dct[child])
 
+        # date time format addition
+        if 'pattern' in dct and 'type' in dct and 'format' not in dct:
+            if r'[\d]{4,4}\-[\d]{2,2}\-[\d]{2,2}T[\d]{2,2}\:[\d]{2,2}\:[\d]{2,2}' in dct['pattern']:
+                dct['format'] = 'date-time'
+            elif r'([\d]{4,4}\-[\d]{2,2}\-[\d]{2,2}(\.[\d]+)?' in dct['pattern']:
+                dct['format'] = 'date'
+
         if code is not None and 'n1:MessageTypes' in dct:
             properties = dct['n1:MessageTypes']
             properties['enum'] = [code]

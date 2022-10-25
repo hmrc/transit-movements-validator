@@ -29,19 +29,36 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
-import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidationMessage
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
+import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
 import scala.collection.JavaConverters.asScalaSetConverter
 import scala.util.Try
 import scala.util.Success
 import scala.util.Failure
+
+object JsonValidationService {
+
+  private lazy val formatOverrides = JsonMetaSchema
+    .builder(JsonMetaSchema.getV7.getUri, JsonMetaSchema.getV7)
+    .addFormat(DateFormat)
+    .addFormat(DateTimeFormat)
+    .build()
+
+  lazy val factory =
+    new JsonSchemaFactory.Builder()
+      .defaultMetaSchemaURI(JsonMetaSchema.getV7.getUri)
+      .addMetaSchema(formatOverrides)
+      .build()
+}
 
 @ImplementedBy(classOf[JsonValidationServiceImpl])
 trait JsonValidationService {
@@ -54,12 +71,11 @@ trait JsonValidationService {
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
-  private val mapper  = new ObjectMapper
-  private val factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7)
+  private val mapper = new ObjectMapper
 
   val schemaValidators = MessageType.values
     .map(
-      msgType => msgType.code -> factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
+      msgType => msgType.code -> JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )
     .toMap
 
