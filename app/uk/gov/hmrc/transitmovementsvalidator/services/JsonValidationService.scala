@@ -17,6 +17,7 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
+import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
@@ -104,7 +105,8 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
     Try {
-      val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
+      val bufferedFlow       = source.buffer(1000, overflowStrategy = OverflowStrategy.backpressure)
+      val jsonInput          = bufferedFlow.async.runWith(StreamConverters.asInputStream(20.seconds)) // run with different actors
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
       schemaValidator.validate(jsonNode).asScala.toSet
     }
