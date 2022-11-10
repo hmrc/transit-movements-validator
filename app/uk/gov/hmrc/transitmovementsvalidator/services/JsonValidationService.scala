@@ -33,6 +33,7 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
+import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -69,7 +70,7 @@ trait JsonValidationService {
   ): Future[Either[NonEmptyList[ValidationError], Unit]]
 }
 
-class JsonValidationServiceImpl @Inject() extends JsonValidationService {
+class JsonValidationServiceImpl @Inject() extends JsonValidationService with Logging {
 
   private val mapper = new ObjectMapper
 
@@ -106,6 +107,14 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
     Try {
       val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
-      schemaValidator.validate(jsonNode).asScala.toSet
+      val errors             = schemaValidator.validate(jsonNode).asScala.toSet
+      if (errors.nonEmpty) {
+        logger.error("An error while validating occurred:")
+        errors.foreach(
+          e => logger.error(s"Error: ${e.getMessage}, Path: ${e.getPath}")
+        )
+        logger.error(s"Json looked like: ${jsonNode.toPrettyString}")
+      }
+      errors
     }
 }
