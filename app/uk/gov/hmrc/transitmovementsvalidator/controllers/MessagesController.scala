@@ -65,7 +65,8 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
             .map {
               s =>
                 if (s == 0) {
-                  logger.error("Message size is zero from request.")
+                  val requestId = request.headers.get("X-Request-Id").getOrElse("not supplied")
+                  logger.error(s"Message size is zero from request - request ID: $requestId.")
                 }
                 Right(())
             }
