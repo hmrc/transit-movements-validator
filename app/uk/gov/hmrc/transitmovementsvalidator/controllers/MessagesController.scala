@@ -17,10 +17,12 @@
 package uk.gov.hmrc.transitmovementsvalidator.controllers
 
 import akka.stream.Materializer
+import akka.stream.scaladsl.FileIO
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.fasterxml.jackson.core.JsonParseException
 import play.api.Logging
+import play.api.libs.Files
 import play.api.libs.json.Json
 import play.api.mvc.Action
 import play.api.mvc.ControllerComponents
@@ -52,13 +54,14 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
       case Some(MimeTypes.JSON) => validateMessage(messageType, MimeTypes.JSON)
     }
 
-  def validateMessage(messageType: String, contentType: String): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
+  def validateMessage(messageType: String, contentType: String): Action[Files.TemporaryFile] =
+    Action.async(parse.temporaryFile(Long.MaxValue)) {
       implicit request =>
+        val stream = FileIO.fromPath(request.body)
         (for {
           validationResponse <-
-            if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, request.body)
-            else jsonValidationService.validate(messageType, request.body)
+            if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, stream)
+            else jsonValidationService.validate(messageType, stream)
         } yield validationResponse)
           .map {
             case Left(x) =>

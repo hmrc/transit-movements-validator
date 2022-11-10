@@ -106,6 +106,10 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
     Try {
       val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
-      schemaValidator.validate(jsonNode).asScala.toSet
+      val result             = schemaValidator.validate(jsonNode).asScala.toSet
+      if (result.nonEmpty) {
+        println(s"JsonResult: ${jsonNode.toPrettyString}")
+      }
+      result
     }
 }
