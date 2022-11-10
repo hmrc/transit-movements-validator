@@ -59,7 +59,7 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
         (for {
           _ <- request.body
             .fold(0)(
-              (size, bs) => size + bs.size
+              (size, bs) => size + bs.utf8String.length
             )
             .runWith(Sink.head)
             .map {
