@@ -17,10 +17,8 @@
 package uk.gov.hmrc.transitmovementsvalidator.controllers.stream
 
 import akka.stream.Materializer
-import akka.stream.scaladsl.FileIO
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import play.api.libs.Files.SingletonTemporaryFileCreator
 import play.api.libs.streams.Accumulator
 import play.api.mvc.BaseControllerHelpers
 import play.api.mvc.BodyParser
@@ -33,15 +31,6 @@ trait StreamingParsers {
   lazy val streamFromMemory: BodyParser[Source[ByteString, _]] = BodyParser {
     _ =>
       Accumulator.source[ByteString].map(Right.apply)(materializer.executionContext)
-  }
-
-  lazy val streamFromFile: BodyParser[Source[ByteString, _]] = {
-    val tempFile = SingletonTemporaryFileCreator.create("requestBody", "asTemporaryFile")
-    parse
-      .file(tempFile, Long.MaxValue)
-      .map(
-        file => FileIO.fromPath(file.toPath)
-      )(materializer.executionContext)
   }
 
 }

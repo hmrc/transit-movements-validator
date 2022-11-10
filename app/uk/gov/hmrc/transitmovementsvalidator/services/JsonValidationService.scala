@@ -33,7 +33,6 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
-import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -70,7 +69,7 @@ trait JsonValidationService {
   ): Future[Either[NonEmptyList[ValidationError], Unit]]
 }
 
-class JsonValidationServiceImpl @Inject() extends JsonValidationService with Logging {
+class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
   private val mapper = new ObjectMapper
 
@@ -107,22 +106,6 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService with Log
     Try {
       val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
-      val errors             = schemaValidator.validate(jsonNode).asScala.toSet
-      if (errors.nonEmpty) {
-        val strings = errors
-          .map(
-            e => s"Error: ${e.getMessage}, Path: ${e.getPath}"
-          )
-          .reduce(_ + sys.props("line.separator") + _)
-
-        logger.error(s"""An error while validating occurred:
-             |
-             |$strings
-             |
-             |Json looked like:
-             |${jsonNode.toPrettyString}
-             |""".stripMargin)
-      }
-      errors
+      schemaValidator.validate(jsonNode).asScala.toSet
     }
 }
