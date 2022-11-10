@@ -17,6 +17,7 @@
 package uk.gov.hmrc.transitmovementsvalidator.controllers
 
 import akka.stream.Materializer
+import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.fasterxml.jackson.core.JsonParseException
@@ -53,9 +54,21 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
     }
 
   def validateMessage(messageType: String, contentType: String): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
+    Action.async(streamFromFile) {
       implicit request =>
         (for {
+          _ <- request.body
+            .fold(0)(
+              (size, bs) => size + bs.size
+            )
+            .runWith(Sink.head)
+            .map {
+              s =>
+                if (s == 0) {
+                  logger.error("Message size is zero from request.")
+                }
+                Right(())
+            }
           validationResponse <-
             if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, request.body)
             else jsonValidationService.validate(messageType, request.body)

@@ -109,11 +109,19 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService with Log
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
       val errors             = schemaValidator.validate(jsonNode).asScala.toSet
       if (errors.nonEmpty) {
-        logger.error("An error while validating occurred:")
-        errors.foreach(
-          e => logger.error(s"Error: ${e.getMessage}, Path: ${e.getPath}")
-        )
-        logger.error(s"Json looked like: ${jsonNode.toPrettyString}")
+        val strings = errors
+          .map(
+            e => s"Error: ${e.getMessage}, Path: ${e.getPath}"
+          )
+          .reduce(_ + sys.props("line.separator") + _)
+
+        logger.error(s"""An error while validating occurred:
+             |
+             |$strings
+             |
+             |Json looked like:
+             |${jsonNode.toPrettyString}
+             |""".stripMargin)
       }
       errors
     }

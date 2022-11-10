@@ -16,12 +16,17 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.controllers.stream
 
+import akka.stream.IOResult
 import akka.stream.Materializer
+import akka.stream.scaladsl.FileIO
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import play.api.libs.streams.Accumulator
 import play.api.mvc.BaseControllerHelpers
 import play.api.mvc.BodyParser
+
+import java.util.concurrent.CompletionStage
+import scala.concurrent.ExecutionContext
 
 trait StreamingParsers {
   self: BaseControllerHelpers =>
@@ -32,5 +37,12 @@ trait StreamingParsers {
     _ =>
       Accumulator.source[ByteString].map(Right.apply)(materializer.executionContext)
   }
+
+  lazy val streamFromFile: BodyParser[Source[ByteString, _]] =
+    parse
+      .temporaryFile(Long.MaxValue)
+      .map(
+        file => FileIO.fromPath(file.path)
+      )(materializer.executionContext)
 
 }
