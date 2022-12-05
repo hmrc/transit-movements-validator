@@ -56,15 +56,19 @@ object MessageType {
   // Arrival Requests
   // ****************
 
-  /** E_REQ_REL (IE054) */
+  /** E_ARR_NOT (IE007) */
   case object ArrivalNotification extends ArrivalMessageType("IE007", "CC007C", "/xsd/cc007c.xsd", "/json/cc007c-schema.json")
 
-  /** E_PRE_NOT (IE170) */
+  /** E_ULD_REM (IE044) */
   case object UnloadingRemarks extends ArrivalMessageType("IE044", "CC044C", "/xsd/cc044c.xsd", "/json/cc044c-schema.json")
+
+  /** E_MOV_RSP (IE141) */
+  case object InformationAboutNonArrivedMovement extends ArrivalMessageType("IE141", "CC141C", "/xsd/cc141c.xsd", "/json/cc141c-schema.json")
 
   val arrivalValues = Set(
     ArrivalNotification,
-    UnloadingRemarks
+    UnloadingRemarks,
+    InformationAboutNonArrivedMovement
   )
 
   val values = arrivalValues ++ departureValues
