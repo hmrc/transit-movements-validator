@@ -106,7 +106,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     "when valid XML IE007 is provided for the given message type, return a Right" in {
       val ie007File = scala.io.Source.fromFile(testDataPath + "/cc007c-valid.xml")
       try {
-        val source = Source.single(ByteString(ie007File.mkString, StandardCharsets.UTF_8)) //exampleIE170XML.mkString, StandardCharsets.UTF_8))
+        val source = Source.single(ByteString(ie007File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE007", source)
 
@@ -120,7 +120,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     "when valid XML IE044 is provided for the given message type, return a Right" in {
       val ie044File = scala.io.Source.fromFile(testDataPath + "/cc044c-valid.xml")
       try {
-        val source = Source.single(ByteString(ie044File.mkString, StandardCharsets.UTF_8)) //exampleIE170XML.mkString, StandardCharsets.UTF_8))
+        val source = Source.single(ByteString(ie044File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE044", source)
 
@@ -134,7 +134,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     "when valid XML IE141 is provided for the given message type, return a Right" in {
       val ie141File = scala.io.Source.fromFile(testDataPath + "/cc141c-valid.xml")
       try {
-        val source = Source.single(ByteString(ie141File.mkString, StandardCharsets.UTF_8)) //exampleIE170XML.mkString, StandardCharsets.UTF_8))
+        val source = Source.single(ByteString(ie141File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE141", source)
 
