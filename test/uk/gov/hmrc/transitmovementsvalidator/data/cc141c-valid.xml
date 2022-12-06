@@ -1,0 +1,19 @@
+<ncts:CC141C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+    <messageSender>token</messageSender>
+    <messageRecipient>token</messageRecipient>
+    <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+    <messageIdentification>token</messageIdentification>
+    <messageType>CC141C</messageType>
+    <TransitOperation>
+        <MRN>27WF9X1FQ9RCKN0TM3</MRN>
+    </TransitOperation>
+    <!--Optional:-->
+    <CustomsOfficeOfDestinationActual>
+        <referenceNumber>GB123456</referenceNumber>
+    </CustomsOfficeOfDestinationActual>
+    <CustomsOfficeOfEnquiryAtDeparture>
+        <referenceNumber>GB123456</referenceNumber>
+    </CustomsOfficeOfEnquiryAtDeparture>
+    <HolderOfTheTransitProcedure>
+    </HolderOfTheTransitProcedure>
+</ncts:CC141C>
