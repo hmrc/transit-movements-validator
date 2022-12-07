@@ -1,0 +1,23 @@
+{
+    "n1:CC044C": {
+        "preparationDateAndTime": "2007-14-26T07:36:28",
+        "TransitOperation": {
+            "MRN": "27WF9X1FQ9RCKN0TM3"
+        },
+        "TraderAtDestination": {
+            "identificationNumber": "ezv3Z"
+        },
+        "UnloadingRemark": {
+            "conform": "0",
+            "unloadingCompletion": "0",
+            "unloadingDate": "2018-11-01"
+        },
+        "messageType": "CC044C",
+        "@PhaseID": "NCTS5.0",
+        "messageRecipient": "token",
+        "messageIdentification": "token",
+        "CustomsOfficeOfDestinationActual": {
+            "referenceNumber": "GB123456"
+        }
+    }
+}
