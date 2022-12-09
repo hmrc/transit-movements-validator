@@ -35,7 +35,7 @@ class MessageTypeSpec extends AnyFreeSpec with Matchers with MockitoSugar with O
       MessageType.values must contain(InformationAboutNonArrivedMovement)
       InformationAboutNonArrivedMovement.code mustEqual "IE141"
       InformationAboutNonArrivedMovement.rootNode mustEqual "CC141C"
-      MessageType.arrivalValues must contain(InformationAboutNonArrivedMovement)
+      MessageType.departureValues must contain(InformationAboutNonArrivedMovement)
     }
 
     "UnloadingRemarks" in {

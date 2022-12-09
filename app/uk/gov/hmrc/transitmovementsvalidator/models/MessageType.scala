@@ -45,11 +45,15 @@ object MessageType {
   /** E_PRE_NOT (IE170) */
   case object PresentationNotificationForPreLodgedDec extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
 
+  /** E_MOV_RSP (IE141) */
+  case object InformationAboutNonArrivedMovement extends DepartureMessageType("IE141", "CC141C", "/xsd/cc141c.xsd", "/json/cc141c-schema.json")
+
   val departureValues = Set(
     DeclarationAmendment,
     DeclarationInvalidation,
     DeclarationData,
-    PresentationNotificationForPreLodgedDec
+    PresentationNotificationForPreLodgedDec,
+    InformationAboutNonArrivedMovement
   )
 
   // ****************
@@ -62,13 +66,9 @@ object MessageType {
   /** E_ULD_REM (IE044) */
   case object UnloadingRemarks extends ArrivalMessageType("IE044", "CC044C", "/xsd/cc044c.xsd", "/json/cc044c-schema.json")
 
-  /** E_MOV_RSP (IE141) */
-  case object InformationAboutNonArrivedMovement extends ArrivalMessageType("IE141", "CC141C", "/xsd/cc141c.xsd", "/json/cc141c-schema.json")
-
   val arrivalValues = Set(
     ArrivalNotification,
-    UnloadingRemarks,
-    InformationAboutNonArrivedMovement
+    UnloadingRemarks
   )
 
   val values = arrivalValues ++ departureValues
