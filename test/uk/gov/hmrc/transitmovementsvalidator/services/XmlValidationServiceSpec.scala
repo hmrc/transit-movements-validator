@@ -103,6 +103,48 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       } finally ie170File.close()
     }
 
+    "when valid XML IE007 is provided for the given message type, return a Right" in {
+      val ie007File = scala.io.Source.fromFile(testDataPath + "/cc007c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie007File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate("IE007", source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie007File.close()
+    }
+
+    "when valid XML IE044 is provided for the given message type, return a Right" in {
+      val ie044File = scala.io.Source.fromFile(testDataPath + "/cc044c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie044File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate("IE044", source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie044File.close()
+    }
+
+    "when valid XML IE141 is provided for the given message type, return a Right" in {
+      val ie141File = scala.io.Source.fromFile(testDataPath + "/cc141c-valid.xml")
+      try {
+        val source = Source.single(ByteString(ie141File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate("IE141", source)
+
+        whenReady(result) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie141File.close()
+    }
+
     "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
       val source      = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val invalidCode = "dummy"

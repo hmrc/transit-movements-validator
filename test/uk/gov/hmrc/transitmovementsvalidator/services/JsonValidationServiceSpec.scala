@@ -92,6 +92,39 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       }
     }
 
+    "when valid CC007C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE007", source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
+    "when valid CC044C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE044", source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
+    "when valid CC141C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc141c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE141", source)
+
+      whenReady(result) {
+        r =>
+          r.isRight mustBe true
+      }
+    }
+
     "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
       val source      = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
       val invalidCode = "dummy"
@@ -129,6 +162,63 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
               JsonSchemaValidationError(
                 "#/definitions/n1:PreparationDateAndTimeContentType",
                 "$.n1:CC014C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+              ),
+              Nil
+            )
+          )
+      }
+    }
+
+    "when an invalid CC007C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-date-time.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE007", source)
+
+      whenReady(result) {
+        r =>
+          r mustBe Left(
+            NonEmptyList(
+              JsonSchemaValidationError(
+                "#/definitions/n1:PreparationDateAndTimeContentType",
+                "$.n1:CC007C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+              ),
+              Nil
+            )
+          )
+      }
+    }
+
+    "when an invalid CC044C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-date-time.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE044", source)
+
+      whenReady(result) {
+        r =>
+          r mustBe Left(
+            NonEmptyList(
+              JsonSchemaValidationError(
+                "#/definitions/n1:PreparationDateAndTimeContentType",
+                "$.n1:CC044C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+              ),
+              Nil
+            )
+          )
+      }
+    }
+
+    "when an invalid CC141C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc141c-invalid-date-time.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE141", source)
+
+      whenReady(result) {
+        r =>
+          r mustBe Left(
+            NonEmptyList(
+              JsonSchemaValidationError(
+                "#/definitions/n1:PreparationDateAndTimeContentType",
+                "$.n1:CC141C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
               ),
               Nil
             )
