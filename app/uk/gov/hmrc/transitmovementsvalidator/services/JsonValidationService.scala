@@ -27,6 +27,7 @@ import com.google.inject.ImplementedBy
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonMetaSchema
@@ -71,7 +72,7 @@ trait JsonValidationService {
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
-  private val mapper = new ObjectMapper
+  private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 
   val schemaValidators = MessageType.values
     .map(
