@@ -255,5 +255,16 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       }
     }
 
+    "when invalid json is provided with extra braces, returns an exception" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/invalid-with-extra-braces.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate(validCode, source)
+
+      whenReady(result.failed) {
+        e =>
+          e mustBe a[JsonParseException]
+      }
+    }
+
   }
 }
