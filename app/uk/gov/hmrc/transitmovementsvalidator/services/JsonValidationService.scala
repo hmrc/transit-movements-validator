@@ -72,7 +72,7 @@ trait JsonValidationService {
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
-  private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
+  private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
   val schemaValidators = MessageType.values
     .map(
