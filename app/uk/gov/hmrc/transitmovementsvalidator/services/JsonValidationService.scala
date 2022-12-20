@@ -100,7 +100,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
               )
 
               Future.successful(Left(JsonFailedValidation(NonEmptyList.fromListUnsafe(validationErrors.toList))))
-            case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(thr.getMessage)))
+            case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
             case Failure(thr)                     => Future.successful(Left(Unexpected(Some(thr))))
           }
       }
@@ -112,4 +112,16 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
       schemaValidator.validate(jsonNode).asScala.toSet
     }
+
+  // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
+  // software developers. So, we'll replace the string containing the "source" with nothing, so that the
+  // message reads "at [line: x, column: y]".
+  //
+  // I looked for a better way to do this by trying to alter how the ObjectMapper worked, but the only solution
+  // that I could see was to use reflection to get the message without the location and construct that manually,
+  // but that's more trouble than it's worth.
+  //
+  // A test will break if this stops working due to upgrades.
+  def stripSource(message: String): String =
+    message.replace("Source: (akka.stream.impl.io.InputStreamAdapter); ", "")
 }

@@ -18,8 +18,13 @@ package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
 import akka.stream.scaladsl.FileIO
+import akka.stream.scaladsl.Source
+import akka.stream.scaladsl.StreamConverters
+import akka.util.ByteString
 import akka.util.Timeout
 import cats.data.NonEmptyList
+import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -34,6 +39,8 @@ import java.nio.file.Paths
 import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.Failure
+import scala.util.Try
 
 class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with TestActorSystem with ScalaFutures with TestSourceProvider {
 
@@ -270,9 +277,23 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate(validCode, source)
 
-      whenReady(result.failed) {
+      whenReady(result.value) {
         e =>
-          e mustBe a[JsonParseException]
+          e mustBe Left(FailedToParse("""Unexpected close marker '}': expected ']' (for root starting at [line: 1, column: 0])
+              | at [line: 73, column: 2]""".stripMargin))
+      }
+    }
+
+    "when an error occurs when parsing Json, ensure the source isn't included in the string" in {
+      val sut    = new JsonValidationServiceImpl
+      val source = Source.single(ByteString("{ nope }"))
+      // This show throw a specific error
+      Try(new ObjectMapper().readTree(source.runWith(StreamConverters.asInputStream(5.seconds)))) match {
+        case Failure(x: JsonParseException) =>
+          sut.stripSource(x.getMessage) mustBe
+            """Unexpected character ('n' (code 110)): was expecting double-quote to start field name
+              | at [line: 1, column: 4]""".stripMargin
+        case _ => fail("A JsonParseException was not thrown")
       }
     }
 
