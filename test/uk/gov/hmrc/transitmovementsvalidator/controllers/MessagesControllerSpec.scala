@@ -20,40 +20,45 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
+import cats.data.EitherT
 import cats.data.NonEmptyList
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import org.mockito.Mockito.reset
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.BAD_REQUEST
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.http.Status.NOT_FOUND
 import play.api.http.Status.NO_CONTENT
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
 import play.api.libs.json.Json
+import play.api.test.FakeHeaders
+import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
 import play.api.test.Helpers.contentAsJson
 import play.api.test.Helpers.status
-import play.api.test.FakeHeaders
-import play.api.test.FakeRequest
 import play.api.test.StubControllerComponentsFactory
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider.singleUseStringSource
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationPresentationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
-import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationServiceImpl
 import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
 
 import java.nio.charset.StandardCharsets
 import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq
@@ -65,13 +70,11 @@ class MessagesControllerSpec
     with StubControllerComponentsFactory
     with TestActorSystem
     with BeforeAndAfterEach
-    with NonEmptyListFormat {
+    with NonEmptyListFormat
+    with ScalaFutures {
 
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
-
-  // the execution context for testing
-  import system.dispatcher
 
   val mockJsonValidationService: JsonValidationService = mock[JsonValidationService]
   val mockXmlValidationService: XmlValidationService   = mock[XmlValidationService]
@@ -90,7 +93,9 @@ class MessagesControllerSpec
 
     "on a valid XML file, with the application/xml content type, return No Content" in {
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.successful(Right(())))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
@@ -101,7 +106,9 @@ class MessagesControllerSpec
 
     "on a valid XML file, but no valid message type, return BadRequest with an error message" in {
       when(mockXmlValidationService.validate(eqTo(invalidCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.successful(Left(NonEmptyList(ValidationError.fromUnrecognisedMessageType("dummy"), Nil))))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.UnknownMessageType("dummy"))
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$invalidCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
@@ -109,16 +116,18 @@ class MessagesControllerSpec
 
       contentAsJson(result) mustBe Json.obj(
         "message" -> s"Unknown Message Type provided: $invalidCode is not recognised",
-        "code"    -> "BAD_REQUEST"
+        "code"    -> "NOT_FOUND"
       )
-      status(result) mustBe BAD_REQUEST
+      status(result) mustBe NOT_FOUND
     }
 
     "on an invalid XML file, return Ok with a list of errors" in {
       val errorList = NonEmptyList(XmlSchemaValidationError(1, 1, "text1"), List(XmlSchemaValidationError(2, 2, "text2")))
 
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.successful(Left(errorList)))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.XmlFailedValidation(errorList))
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
@@ -131,8 +140,11 @@ class MessagesControllerSpec
     }
 
     "on an exception being thrown during xml validation, must return Internal Server Error" in {
+      val error = new IllegalStateException("Unable to extract schema")
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.failed(new Exception("Unable to extract schema")))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
@@ -150,7 +162,9 @@ class MessagesControllerSpec
 
     "on a valid JSON file, with the application/json content type, return No Content" in {
       when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.successful(Right(())))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
@@ -171,7 +185,9 @@ class MessagesControllerSpec
 
     "on a valid JSON file, but no valid message type, return BadRequest with an error message" in {
       when(mockJsonValidationService.validate(eqTo(invalidCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.successful(Left(NonEmptyList(ValidationError.fromUnrecognisedMessageType("dummy"), Nil))))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.UnknownMessageType("dummy"))
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$invalidCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
@@ -179,9 +195,9 @@ class MessagesControllerSpec
 
       contentAsJson(result) mustBe Json.obj(
         "message" -> s"Unknown Message Type provided: $invalidCode is not recognised",
-        "code"    -> "BAD_REQUEST"
+        "code"    -> "NOT_FOUND"
       )
-      status(result) mustBe BAD_REQUEST
+      status(result) mustBe NOT_FOUND
     }
 
     "on an invalid JSON file, return Ok with a list of errors" in {
@@ -191,7 +207,9 @@ class MessagesControllerSpec
       )
 
       when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.successful(Left(errorList)))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.JsonFailedValidation(errorList))
+        )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
@@ -215,8 +233,11 @@ class MessagesControllerSpec
     }
 
     "on an exception being thrown during json validation, must return Internal Server Error" in {
+      val error = new IllegalStateException("Unable to extract schema")
       when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(Future.failed(new Exception("Unable to extract schema")))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
@@ -226,11 +247,16 @@ class MessagesControllerSpec
       status(result) mustBe INTERNAL_SERVER_ERROR
     }
 
-    val sut          = new JsonValidationServiceImpl
-    val failedFuture = sut.validate(validCode, singleUseStringSource("{'ABC':''}"))
     "on an JsonParseException being thrown during json validation, must return Bad Request" in {
       when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenReturn(failedFuture)
+        .thenAnswer(
+          _ =>
+            EitherT.leftT[Future, ValidationError](
+              ValidationError.FailedToParse(
+                "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at [Source: (akka.stream.impl.io.InputStreamAdapter); line: 1, column: 3]"
+              )
+            )
+        )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
@@ -244,6 +270,43 @@ class MessagesControllerSpec
       status(result) mustBe BAD_REQUEST
     }
 
+  }
+
+  "ResponseCreator implicit class" - {
+    import MessagesController.ResponseCreator
+
+    "A Right Unit (success case) becomes a Right None" in {
+      whenReady(EitherT.rightT[Future, PresentationError](()).toValidationResponse.value) {
+        _ mustBe Right(None)
+      }
+    }
+
+    "A Left SchemaValidationPresentationError (failed to validate - returns a success) becomes a Right Some of validation errors" - {
+
+      "for XML validation errors" in {
+        val error                                           = NonEmptyList.one(XmlSchemaValidationError(1, 1, "error"))
+        val input: EitherT[Future, PresentationError, Unit] = EitherT.leftT[Future, Unit](SchemaValidationPresentationError(error))
+        whenReady(input.toValidationResponse.value) {
+          _ mustBe Right(Some(ValidationResponse(error)))
+        }
+      }
+
+      "for Json validation errors" in {
+        val error                                           = NonEmptyList.one(JsonSchemaValidationError("path", "error"))
+        val input: EitherT[Future, PresentationError, Unit] = EitherT.leftT[Future, Unit](SchemaValidationPresentationError(error))
+        whenReady(input.toValidationResponse.value) {
+          _ mustBe Right(Some(ValidationResponse(error)))
+        }
+      }
+    }
+
+    "A Left non-schema presentation error does not get changed" in {
+      val error = PresentationError.notFoundError("error")
+      val input = EitherT.leftT[Future, Unit](error)
+      whenReady(input.toValidationResponse.value) {
+        _ mustBe Left(error)
+      }
+    }
   }
 
 }

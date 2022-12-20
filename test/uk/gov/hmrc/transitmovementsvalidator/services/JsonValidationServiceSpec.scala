@@ -20,7 +20,6 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.FileIO
 import akka.util.Timeout
 import cats.data.NonEmptyList
-import com.fasterxml.jackson.core.JsonParseException
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -29,6 +28,7 @@ import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
 
 import java.nio.file.Paths
 import scala.concurrent.duration.DurationInt
@@ -53,7 +53,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE013", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
@@ -64,7 +64,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE014", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
@@ -75,7 +75,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate(validCode, source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
@@ -86,7 +86,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE170", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
@@ -97,7 +97,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE007", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
@@ -108,7 +108,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE044", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
@@ -119,22 +119,22 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE141", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isRight mustBe true
       }
     }
 
-    "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
+    "when no valid message type is provided, return UnknownMessageType" in {
       val source      = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
       val invalidCode = "dummy"
       val sut         = new JsonValidationServiceImpl
       val result      = sut.validate(invalidCode, source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isLeft mustBe true
-          r.left.get.head mustBe ValidationError.fromUnrecognisedMessageType(invalidCode)
+          r.left.get mustBe ValidationError.UnknownMessageType(invalidCode)
       }
     }
 
@@ -143,10 +143,10 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate(validCode, source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isLeft mustBe true
-          r.left.get.head.isInstanceOf[JsonSchemaValidationError]
+          r.left.get.isInstanceOf[ValidationError.JsonFailedValidation]
       }
     }
 
@@ -155,15 +155,17 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE014", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r mustBe Left(
-            NonEmptyList(
-              JsonSchemaValidationError(
-                "#/definitions/n1:PreparationDateAndTimeContentType",
-                "$.n1:CC014C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
-              ),
-              Nil
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:PreparationDateAndTimeContentType",
+                  "$.n1:CC014C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+                ),
+                Nil
+              )
             )
           )
       }
@@ -174,15 +176,17 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE007", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r mustBe Left(
-            NonEmptyList(
-              JsonSchemaValidationError(
-                "#/definitions/n1:PreparationDateAndTimeContentType",
-                "$.n1:CC007C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
-              ),
-              Nil
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:PreparationDateAndTimeContentType",
+                  "$.n1:CC007C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+                ),
+                Nil
+              )
             )
           )
       }
@@ -193,15 +197,17 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE044", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r mustBe Left(
-            NonEmptyList(
-              JsonSchemaValidationError(
-                "#/definitions/n1:PreparationDateAndTimeContentType",
-                "$.n1:CC044C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
-              ),
-              Nil
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:PreparationDateAndTimeContentType",
+                  "$.n1:CC044C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+                ),
+                Nil
+              )
             )
           )
       }
@@ -212,15 +218,17 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE141", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r mustBe Left(
-            NonEmptyList(
-              JsonSchemaValidationError(
-                "#/definitions/n1:PreparationDateAndTimeContentType",
-                "$.n1:CC141C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
-              ),
-              Nil
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:PreparationDateAndTimeContentType",
+                  "$.n1:CC141C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+                ),
+                Nil
+              )
             )
           )
       }
@@ -231,27 +239,29 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate("IE013", source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r mustBe Left(
-            NonEmptyList(
-              JsonSchemaValidationError(
-                "#/definitions/n1:LimitDateContentType",
-                "$.n1:CC013C.TransitOperation.limitDate: does not match the date pattern - date provided is invalid."
-              ),
-              Nil
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:LimitDateContentType",
+                  "$.n1:CC013C.TransitOperation.limitDate: does not match the date pattern - date provided is invalid."
+                ),
+                Nil
+              )
             )
           )
       }
     }
 
-    "when invalid json is provided, returns an exception" in {
+    "when invalid json is provided, returns FailedToParse" in {
       val sut    = new JsonValidationServiceImpl
       val result = sut.validate(validCode, singleUseStringSource("{'ABC':}"))
 
-      whenReady(result.failed) {
+      whenReady(result.value) {
         e =>
-          e mustBe a[JsonParseException]
+          e.left.get mustBe a[FailedToParse]
       }
     }
 
