@@ -41,6 +41,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationE
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
@@ -100,7 +101,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
               Future.successful(Left(JsonFailedValidation(NonEmptyList.fromListUnsafe(validationErrors.toList))))
             case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(thr.getMessage)))
-            case Failure(thr)                     => Future.failed(thr)
+            case Failure(thr)                     => Future.successful(Left(Unexpected(Some(thr))))
           }
       }
     }
