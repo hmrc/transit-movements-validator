@@ -154,7 +154,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       whenReady(result) {
         r =>
           r.isLeft mustBe true
-          r.left.get.head mustBe ValidationError.fromUnrecognisedMessageType(invalidCode)
+          r.swap.getOrElse(None) mustBe ValidationError.fromUnrecognisedMessageType(invalidCode)
       }
     }
 
@@ -166,7 +166,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       whenReady(result) {
         r =>
           r.isLeft mustBe true
-          r.left.get.head.isInstanceOf[XmlSchemaValidationError]
+          r.swap.getOrElse(None).isInstanceOf[XmlSchemaValidationError]
       }
     }
   }
