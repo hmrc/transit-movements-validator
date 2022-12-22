@@ -133,8 +133,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result) {
         r =>
-          r.isLeft mustBe true
-          r.swap.getOrElse(None) mustBe NonEmptyList(ValidationError.fromUnrecognisedMessageType(invalidCode), List.empty)
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe NonEmptyList(ValidationError.fromUnrecognisedMessageType(invalidCode), List.empty)
       }
     }
 
@@ -145,8 +144,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result) {
         r =>
-          r.isLeft mustBe true
-          r.swap.getOrElse(None).isInstanceOf[JsonSchemaValidationError]
+          r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[JsonSchemaValidationError]
       }
     }
 
