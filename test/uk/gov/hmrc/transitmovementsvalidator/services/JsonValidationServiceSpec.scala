@@ -134,7 +134,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       whenReady(result) {
         r =>
           r.isLeft mustBe true
-          r.swap.getOrElse(None) mustBe ValidationError.fromUnrecognisedMessageType(invalidCode)
+          r.swap.getOrElse(None) mustBe NonEmptyList(ValidationError.fromUnrecognisedMessageType(invalidCode), List.empty)
       }
     }
 

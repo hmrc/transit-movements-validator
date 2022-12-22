@@ -20,6 +20,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
+import cats.data.NonEmptyList
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -154,7 +155,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       whenReady(result) {
         r =>
           r.isLeft mustBe true
-          r.swap.getOrElse(None) mustBe ValidationError.fromUnrecognisedMessageType(invalidCode)
+          r.swap.getOrElse(None) mustBe NonEmptyList(ValidationError.fromUnrecognisedMessageType(invalidCode), List.empty)
       }
     }
 
