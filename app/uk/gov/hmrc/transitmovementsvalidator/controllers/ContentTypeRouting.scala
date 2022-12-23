@@ -26,7 +26,7 @@ import play.api.mvc.Action
 import play.api.mvc.BaseController
 import play.api.mvc.Request
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
 
 import scala.concurrent.Future
 
@@ -47,7 +47,7 @@ trait ContentTypeRouting {
             Future.successful(
               UnsupportedMediaType(
                 Json.toJson(
-                  BaseError.unsupportedMediaTypeError(
+                  PresentationError.unsupportedMediaTypeError(
                     request.headers
                       .get(HeaderNames.CONTENT_TYPE)
                       .map(

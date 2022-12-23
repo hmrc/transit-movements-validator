@@ -21,7 +21,9 @@ import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
+import cats.data.EitherT
 import cats.data.NonEmptyList
+import com.fasterxml.jackson.core.JsonParseException
 import com.google.inject.ImplementedBy
 
 import scala.concurrent.ExecutionContext
@@ -37,6 +39,10 @@ import com.networknt.schema.ValidationMessage
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
@@ -62,13 +68,7 @@ object JsonValidationService {
 }
 
 @ImplementedBy(classOf[JsonValidationServiceImpl])
-trait JsonValidationService {
-
-  def validate(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]]
-}
+trait JsonValidationService extends ValidationService
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
@@ -83,24 +83,27 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]] =
-    MessageType.values.find(_.code == messageType) match {
-      case None =>
-        //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
-        source.runWith(Sink.ignore)
-        Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
-      case Some(mType) =>
-        val schemaValidator = schemaValidators(mType.code)
-        validateJson(source, schemaValidator) match {
-          case Success(errors) if errors.isEmpty => Future.successful(Right(()))
-          case Success(errors) =>
-            val validationErrors = errors.map(
-              e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
-            )
+  ): EitherT[Future, ValidationError, Unit] =
+    EitherT {
+      MessageType.values.find(_.code == messageType) match {
+        case None =>
+          //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+          source.runWith(Sink.ignore)
+          Future.successful(Left(UnknownMessageType(messageType)))
+        case Some(mType) =>
+          val schemaValidator = schemaValidators(mType.code)
+          validateJson(source, schemaValidator) match {
+            case Success(errors) if errors.isEmpty => Future.successful(Right(()))
+            case Success(errors) =>
+              val validationErrors = errors.map(
+                e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
+              )
 
-            Future.successful(Left(NonEmptyList.fromList(validationErrors.toList).get))
-          case Failure(thr) => Future.failed(thr)
-        }
+              Future.successful(Left(JsonFailedValidation(NonEmptyList.fromListUnsafe(validationErrors.toList))))
+            case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
+            case Failure(thr)                     => Future.successful(Left(Unexpected(Some(thr))))
+          }
+      }
     }
 
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
@@ -109,4 +112,16 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       val jsonNode: JsonNode = mapper.readTree(jsonInput)
       schemaValidator.validate(jsonNode).asScala.toSet
     }
+
+  // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
+  // software developers. So, we'll replace the string containing the "source" with nothing, so that the
+  // message reads "at [line: x, column: y]".
+  //
+  // I looked for a better way to do this by trying to alter how the ObjectMapper worked, but the only solution
+  // that I could see was to use reflection to get the message without the location and construct that manually,
+  // but that's more trouble than it's worth.
+  //
+  // A test will break if this stops working due to upgrades.
+  def stripSource(message: String): String =
+    message.replace("Source: (akka.stream.impl.io.InputStreamAdapter); ", "")
 }

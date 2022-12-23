@@ -16,24 +16,26 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
+import play.api.http.Status.BAD_REQUEST
+import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.http.Status.NOT_FOUND
+import play.api.http.Status.OK
+import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
 import play.api.libs.json.JsString
 import play.api.libs.json.Writes
 
 /** Common error codes documented in [[https://developer.service.hmrc.gov.uk/api-documentation/docs/reference-guide#errors Developer Hub Reference Guide]]
   */
 object ErrorCode {
-  val BadRequest: ErrorCode           = ErrorCode("BAD_REQUEST")
-  val NotFound: ErrorCode             = ErrorCode("NOT_FOUND")
-  val Forbidden: ErrorCode            = ErrorCode("FORBIDDEN")
-  val InternalServerError: ErrorCode  = ErrorCode("INTERNAL_SERVER_ERROR")
-  val GatewayTimeout: ErrorCode       = ErrorCode("GATEWAY_TIMEOUT")
-  val SchemaValidation: ErrorCode     = ErrorCode("SCHEMA_VALIDATION")
-  val EntityTooLarge: ErrorCode       = ErrorCode("REQUEST_ENTITY_TOO_LARGE")
-  val UnsupportedMediaType: ErrorCode = ErrorCode("UNSUPPORTED_MEDIA_TYPE")
+  val BadRequest: ErrorCode           = ErrorCode("BAD_REQUEST", BAD_REQUEST)
+  val NotFound: ErrorCode             = ErrorCode("NOT_FOUND", NOT_FOUND)
+  val InternalServerError: ErrorCode  = ErrorCode("INTERNAL_SERVER_ERROR", INTERNAL_SERVER_ERROR)
+  val SchemaValidation: ErrorCode     = ErrorCode("SCHEMA_VALIDATION", OK)
+  val UnsupportedMediaType: ErrorCode = ErrorCode("UNSUPPORTED_MEDIA_TYPE", UNSUPPORTED_MEDIA_TYPE)
 
   implicit val errorCodeWrites: Writes[ErrorCode] = Writes {
     errorCode => JsString(errorCode.value)
   }
 }
 
-case class ErrorCode private (value: String) extends AnyVal with Product with Serializable
+case class ErrorCode private (value: String, statusCode: Int) extends Product with Serializable
