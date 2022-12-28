@@ -16,23 +16,25 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
-import cats.data.NonEmptyList
+import org.scalacheck.Gen
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
+import play.api.libs.json.JsString
 
-sealed trait ValidationError
+class ErrorCodeSpec extends AnyFreeSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 
-sealed trait FailedValidationError extends ValidationError {
-  val errors: NonEmptyList[SchemaValidationError]
-}
+  "ErrorCodeWrites" in forAll(
+    Gen.oneOf(
+      ErrorCode.BadRequest,
+      ErrorCode.NotFound,
+      ErrorCode.InternalServerError,
+      ErrorCode.SchemaValidation,
+      ErrorCode.UnsupportedMediaType
+    )
+  ) {
+    errorCode =>
+      ErrorCode.errorCodeWrites.writes(errorCode) mustBe JsString(errorCode.value)
+  }
 
-object ValidationError {
-
-  case class Unexpected(thr: Option[Throwable]) extends ValidationError
-
-  case class UnknownMessageType(messageType: String) extends ValidationError
-
-  case class FailedToParse(message: String) extends ValidationError
-
-  case class XmlFailedValidation(errors: NonEmptyList[XmlSchemaValidationError]) extends FailedValidationError
-
-  case class JsonFailedValidation(errors: NonEmptyList[JsonSchemaValidationError]) extends FailedValidationError
 }

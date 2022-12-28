@@ -21,6 +21,7 @@ import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
+import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.google.inject.ImplementedBy
 import org.xml.sax.ErrorHandler
@@ -34,6 +35,8 @@ import cats.syntax.all._
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 
 import javax.inject.Inject
 import javax.xml.XMLConstants
@@ -42,14 +45,7 @@ import javax.xml.validation.SchemaFactory
 import scala.collection.mutable
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
-trait XmlValidationService {
-
-  def validate(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]]
-
-}
+trait XmlValidationService extends ValidationService
 
 class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
 
@@ -62,48 +58,52 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
-  ): Future[Either[NonEmptyList[ValidationError], Unit]] =
-    MessageType.values.find(_.code == messageType) match {
-      case None =>
-        //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
-        source.runWith(Sink.ignore)
-        Future.successful(Left(NonEmptyList.one(ValidationError.fromUnrecognisedMessageType(messageType))))
-      case Some(mType) =>
-        parsersByType(mType).map {
-          saxParser =>
-            val parser = saxParser.newSAXParser.getParser
+  ): EitherT[Future, ValidationError, Unit] =
+    EitherT {
+      MessageType.values.find(_.code == messageType) match {
+        case None =>
+          //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+          source.runWith(Sink.ignore)
+          Future.successful(Left(UnknownMessageType(messageType)))
+        case Some(mType) =>
+          parsersByType(mType).map {
+            saxParser =>
+              val parser = saxParser.newSAXParser.getParser
 
-            val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
-              new mutable.ListBuffer[XmlSchemaValidationError]
+              val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
+                new mutable.ListBuffer[XmlSchemaValidationError]
 
-            parser.setErrorHandler(new ErrorHandler {
-              override def warning(error: SAXParseException): Unit = {}
+              parser.setErrorHandler(new ErrorHandler {
+                override def warning(error: SAXParseException): Unit = {}
 
-              override def error(error: SAXParseException): Unit =
-                errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+                override def error(error: SAXParseException): Unit =
+                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
 
-              override def fatalError(error: SAXParseException): Unit =
-                errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
-            })
+                override def fatalError(error: SAXParseException): Unit =
+                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+              })
 
-            val xmlInput = source.runWith(StreamConverters.asInputStream(20.seconds))
+              val xmlInput = source.runWith(StreamConverters.asInputStream(20.seconds))
 
-            val inputSource = new InputSource(xmlInput)
+              val inputSource = new InputSource(xmlInput)
 
-            val parseXml = Either
-              .catchOnly[SAXParseException] {
-                parser.parse(inputSource)
-              }
-              .leftMap {
-                exc =>
-                  NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc))
-              }
+              val parseXml = Either
+                .catchOnly[SAXParseException] {
+                  parser.parse(inputSource)
+                }
+                .leftMap {
+                  exc =>
+                    XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
+                }
 
-            NonEmptyList
-              .fromList(errorBuffer.toList)
-              .map(Either.left)
-              .getOrElse(parseXml)
-        }
+              NonEmptyList
+                .fromList(errorBuffer.toList)
+                .map(
+                  x => Either.left(XmlFailedValidation(x))
+                )
+                .getOrElse(parseXml)
+          }
+      }
     }
 
   def buildParser(messageType: MessageType): SAXParserFactory = {

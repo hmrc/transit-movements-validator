@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.utils
+package uk.gov.hmrc.transitmovementsvalidator.services
 
-import cats.data.NonEmptyList
-import play.api.libs.functional.syntax.toInvariantFunctorOps
-import play.api.libs.json.Format
-import play.api.libs.json.Writes
+import akka.stream.Materializer
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
+import cats.data.EitherT
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
-trait NonEmptyListFormat {
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
-  implicit def nonEmptyListWrites[A: Writes]: Writes[NonEmptyList[A]] =
-    Writes.of[List[A]].contramap[NonEmptyList[A]](_.toList)
+trait ValidationService {
 
-  implicit def nonEmptyListFormat[A: Format]: Format[NonEmptyList[A]] =
-    Format
-      .of[List[A]]
-      .inmap(NonEmptyList.fromListUnsafe, _.toList)
+  def validate(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit]
+
 }
-
-object NonEmptyListFormat extends NonEmptyListFormat

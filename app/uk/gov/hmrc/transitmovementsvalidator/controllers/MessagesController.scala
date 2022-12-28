@@ -19,24 +19,39 @@ package uk.gov.hmrc.transitmovementsvalidator.controllers
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.fasterxml.jackson.core.JsonParseException
+import cats.data.EitherT
+import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
 import play.api.libs.json.Json
 import play.api.mvc.Action
 import play.api.mvc.ControllerComponents
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.BaseError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.UnknownMessageTypeValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationPresentationError
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
-import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
-import scala.util.control.NonFatal
+import scala.concurrent.Future
+
+object MessagesController {
+
+  implicit class ResponseCreator(val value: EitherT[Future, PresentationError, Unit]) extends AnyVal {
+
+    def toValidationResponse(implicit ec: ExecutionContext): EitherT[Future, PresentationError, Option[ValidationResponse]] =
+      value.transform {
+        case Left(SchemaValidationPresentationError(errors)) => Right(Some(ValidationResponse(errors)))
+        case Left(x)                                         => Left(x)
+        case Right(_)                                        => Right(None)
+      }
+  }
+}
 
 class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
   val materializer: Materializer,
@@ -44,36 +59,30 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
 ) extends BackendController(cc)
     with Logging
     with StreamingParsers
-    with ContentTypeRouting {
+    with ContentTypeRouting
+    with ErrorTranslator {
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
-      case Some(MimeTypes.XML)  => validateMessage(messageType, MimeTypes.XML)
-      case Some(MimeTypes.JSON) => validateMessage(messageType, MimeTypes.JSON)
+      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
+      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
     }
 
-  def validateMessage(messageType: String, contentType: String): Action[Source[ByteString, _]] =
+  def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
-        (for {
-          validationResponse <-
-            if (contentType == MimeTypes.XML) xmlValidationService.validate(messageType, request.body)
-            else jsonValidationService.validate(messageType, request.body)
-        } yield validationResponse)
-          .map {
-            case Left(x) =>
-              x.head match {
-                case UnknownMessageTypeValidationError(m) => BadRequest(Json.toJson(BaseError.badRequestError(m)))
-                case _                                    => Ok(Json.toJson(ValidationResponse(x)))
-              }
-            case Right(_) => NoContent
-          }
-          .recover {
-            case jsonException: JsonParseException =>
-              BadRequest(Json.toJson(BaseError.badRequestError(jsonException.getMessage)))
-            case NonFatal(e) =>
-              InternalServerError(Json.toJson(InternalServiceError.causedBy(e)))
-          }
+        validationService
+          .validate(messageType, request.body)
+          .asPresentation
+          .toValidationResponse
+          .fold(
+            presentationError => Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)),
+            {
+              case Some(r) => Ok(Json.toJson(r))
+              case None    => NoContent
+            }
+          )
+
     }
 
 }

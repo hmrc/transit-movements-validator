@@ -26,7 +26,6 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import java.nio.charset.StandardCharsets
@@ -55,7 +54,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE013", source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -69,7 +68,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE014", source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -83,7 +82,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate(validCode, source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -97,7 +96,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE170", source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -111,7 +110,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE007", source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -125,7 +124,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE044", source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -139,7 +138,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         val sut    = new XmlValidationServiceImpl
         val result = sut.validate("IE141", source)
 
-        whenReady(result) {
+        whenReady(result.value) {
           r =>
             r.isRight mustBe true
         }
@@ -152,10 +151,10 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       val sut         = new XmlValidationServiceImpl
       val result      = sut.validate(invalidCode, source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
           r.isLeft mustBe true
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe NonEmptyList(ValidationError.fromUnrecognisedMessageType(invalidCode), List.empty)
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe NonEmptyList(ValidationError.UnknownMessageType(invalidCode), List.empty)
       }
     }
 
@@ -164,9 +163,9 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       val sut    = new XmlValidationServiceImpl
       val result = sut.validate(validCode, source)
 
-      whenReady(result) {
+      whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[XmlSchemaValidationError]
+          r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[ValidationError.XmlFailedValidation]
       }
     }
   }

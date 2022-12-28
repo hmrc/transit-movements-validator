@@ -19,7 +19,7 @@ package uk.gov.hmrc.transitmovementsvalidator.models.response
 import cats.data.NonEmptyList
 import play.api.libs.json.Json
 import play.api.libs.json.OWrites
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
 
 object ValidationResponse extends NonEmptyListFormat {
@@ -28,4 +28,4 @@ object ValidationResponse extends NonEmptyListFormat {
     Json.writes[ValidationResponse]
 }
 
-case class ValidationResponse(validationErrors: NonEmptyList[ValidationError]) extends Product with Serializable
+case class ValidationResponse(validationErrors: NonEmptyList[SchemaValidationError]) extends Product with Serializable
