@@ -4,9 +4,10 @@ import sbt._
 object AppDependencies {
 
   val catsVersion = "2.7.0"
+  val akkaVersion = "2.6.20"
 
   val compile = Seq(
-    "uk.gov.hmrc"               %% "bootstrap-backend-play-28" % "5.24.0",
+    "uk.gov.hmrc"               %% "bootstrap-backend-play-28" % "7.12.0",
     "org.typelevel"             %% "cats-core"                 % catsVersion,
     "com.networknt"              % "json-schema-validator"     % "1.0.70" exclude ("org.slf4j", "slf4j-api"),
     "com.fasterxml.jackson.core" % "jackson-databind"          % "2.12.6"
@@ -24,6 +25,6 @@ object AppDependencies {
     "com.github.tomakehurst"  % "wiremock-standalone"  % "2.27.2",
     "org.typelevel"          %% "discipline-scalatest" % "2.1.5",
     "com.vladsch.flexmark"    % "flexmark-all"         % "0.62.2",
-    "com.typesafe.akka"      %% "akka-stream-testkit"  % "2.6.19"
+    "com.typesafe.akka"      %% "akka-stream-testkit"  % "2.6.20"
   ).map(_ % "test, it")
 }

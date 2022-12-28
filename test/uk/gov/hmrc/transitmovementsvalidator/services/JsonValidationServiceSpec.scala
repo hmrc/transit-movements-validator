@@ -140,8 +140,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.isLeft mustBe true
-          r.left.get mustBe ValidationError.UnknownMessageType(invalidCode)
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.UnknownMessageType(invalidCode)
       }
     }
 
@@ -152,8 +151,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.isLeft mustBe true
-          r.left.get.isInstanceOf[ValidationError.JsonFailedValidation]
+          r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[ValidationError.JsonFailedValidation]
       }
     }
 

@@ -47,7 +47,7 @@ import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
-import scala.collection.JavaConverters.asScalaSetConverter
+import scala.jdk.CollectionConverters._
 import scala.util.Try
 import scala.util.Success
 import scala.util.Failure

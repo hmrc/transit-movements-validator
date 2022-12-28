@@ -20,6 +20,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
+import cats.data.NonEmptyList
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -152,8 +153,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
 
       whenReady(result.value) {
         r =>
-          r.isLeft mustBe true
-          r.left.get mustBe ValidationError.UnknownMessageType(invalidCode)
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.UnknownMessageType(invalidCode)
       }
     }
 
@@ -164,8 +164,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
 
       whenReady(result.value) {
         r =>
-          r.isLeft mustBe true
-          r.left.get.isInstanceOf[ValidationError.XmlFailedValidation]
+          r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[ValidationError.XmlFailedValidation]
       }
     }
   }
