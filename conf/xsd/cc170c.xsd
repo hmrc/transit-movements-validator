@@ -22,19 +22,7 @@
   <!--================================================================================-->
   <xs:complexType name="CC170CType">
     <xs:sequence>
-      <!-- CTC: We don't accept a message sender -->
-      <!-- <xs:group ref="MESSAGE" /> -->
-      <xs:group ref="MESSAGE_FROM_TRADER" />
-      <!-- CTC Start -->
-      <xs:element name="messageType" type="MessageType170">
-        <xs:annotation>
-          <xs:documentation>
-            <description value="Message type" />
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:group ref="CORRELATION_IDENTIFIER" />
-      <!-- CTC End -->
+      <xs:group ref="MESSAGE" />
       <xs:element name="TransitOperation" type="TransitOperationType24">
         <xs:annotation>
           <xs:documentation>
