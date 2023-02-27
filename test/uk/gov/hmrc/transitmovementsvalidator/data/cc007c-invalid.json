@@ -22,7 +22,6 @@
             }
         ],
         "messageRecipient": "token",
-        "messageSender": "token",
         "Consignment": {
             "LocationOfGoods": {
                 "typeOfLocation": "A",

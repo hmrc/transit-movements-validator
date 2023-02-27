@@ -14,7 +14,7 @@
       "communicationLanguageAtDeparture": "GB",
       "bindingItinerary": "1",
       "amendmentTypeFlag": "0",
-      "limitDate": "2017-13-15"
+      "limitDate": "2017-05-15"
     },
     "CustomsOfficeOfDeparture": {
       "referenceNumber": "GB123456"
@@ -411,7 +411,7 @@
       }
     ],
     "messageRecipient": "token",
-    "messageSender": "token",
+    "messageSender": "",
     "HolderOfTheTransitProcedure": {
       "identificationNumber": "string",
       "TIRHolderIdentificationNumber": "string",

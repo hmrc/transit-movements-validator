@@ -1,6 +1,6 @@
 {
     "n1:CC044C": {
-        "preparationDateAndTime": "2007-14-26T07:36:28",
+        "preparationDateAndTime": "2007-10-26T07:36:28",
         "TransitOperation": {
             "MRN": "27WF9X1FQ9RCKN0TM3"
         },
@@ -15,7 +15,7 @@
         "messageType": "CC044C",
         "@PhaseID": "NCTS5.0",
         "messageRecipient": "token",
-        "messageSender": "token",
+        "messageSender": "",
         "messageIdentification": "token",
         "CustomsOfficeOfDestinationActual": {
             "referenceNumber": "GB123456"

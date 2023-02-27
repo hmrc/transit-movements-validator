@@ -1,5 +1,5 @@
 <ncts:CC013C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-    <messageSender>token</messageSender>
+    <messageSender></messageSender>
     <messageRecipient>token</messageRecipient>
     <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
     <messageIdentification>token</messageIdentification>

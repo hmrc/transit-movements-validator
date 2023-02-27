@@ -411,6 +411,7 @@
       }
     ],
     "messageRecipient": "token",
+    "messageSender": "token",
     "HolderOfTheTransitProcedure": {
       "identificationNumber": "string",
       "TIRHolderIdentificationNumber": "string",

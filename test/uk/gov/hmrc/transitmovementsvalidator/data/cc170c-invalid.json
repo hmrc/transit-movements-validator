@@ -12,7 +12,6 @@
     "@PhaseID": "NCTS5.0",
     "correlationIdentifier": "token",
     "messageRecipient": "token",
-    "messageSender": "token",
     "HolderOfTheTransitProcedure": {
       "identificationNumber": "string",
       "TIRHolderIdentificationNumber": "string",

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -292,6 +292,237 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             """Unexpected character ('n' (code 110)): was expecting double-quote to start field name
               | at [line: 1, column: 4]""".stripMargin
         case _ => fail("A JsonParseException was not thrown")
+      }
+    }
+
+    "when an invalid CC007C provided with invalid schema, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE007", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:CC007CType/required",
+                  "$.n1:CC007C.messageSender: is missing but it is required"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC007C provided with invalid value in messageSender field, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-message-sender.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE007", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:MessageSenderContentType/pattern",
+                  "$.n1:CC007C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC013C provided with invalid schema, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE013", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:CC013CType/required",
+                  "$.n1:CC013C.messageSender: is missing but it is required"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC013C provided with invalid value in messageSender field, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-message-sender.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE013", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:MessageSenderContentType/pattern",
+                  "$.n1:CC013C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC014C provided with invalid schema, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE014", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:CC014CType/required",
+                  "$.n1:CC014C.messageSender: is missing but it is required"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC014C provided with invalid value in messageSender field, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-message-sender.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE014", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:MessageSenderContentType/pattern",
+                  "$.n1:CC014C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC015C provided with invalid value in messageSender field, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-message-sender.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE015", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:MessageSenderContentType/pattern",
+                  "$.n1:CC015C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC044C provided with invalid schema, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE044", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:CC044CType/required",
+                  "$.n1:CC044C.messageSender: is missing but it is required"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC044C provided with invalid value in messageSender field, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-message-sender.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE044", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:MessageSenderContentType/pattern",
+                  "$.n1:CC044C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC170C provided with invalid schema, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE170", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:CC170CType/required",
+                  "$.n1:CC170C.messageSender: is missing but it is required"
+                ),
+                Nil
+              )
+            )
+          )
+      }
+    }
+
+    "when an invalid CC170C provided with invalid value in messageSender field, return error" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid-message-sender.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE170", source)
+
+      whenReady(result.value) {
+        r =>
+          r mustBe Left(
+            ValidationError.JsonFailedValidation(
+              NonEmptyList(
+                JsonSchemaValidationError(
+                  "#/definitions/n1:MessageSenderContentType/pattern",
+                  "$.n1:CC170C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                ),
+                Nil
+              )
+            )
+          )
       }
     }
 
