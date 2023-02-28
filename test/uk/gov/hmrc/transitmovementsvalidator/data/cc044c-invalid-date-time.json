@@ -15,6 +15,7 @@
         "messageType": "CC044C",
         "@PhaseID": "NCTS5.0",
         "messageRecipient": "token",
+        "messageSender": "token",
         "messageIdentification": "token",
         "CustomsOfficeOfDestinationActual": {
             "referenceNumber": "GB123456"

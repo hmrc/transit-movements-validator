@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
 import java.nio.charset.StandardCharsets
 import scala.concurrent.duration.DurationInt
@@ -167,5 +168,173 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
           r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[ValidationError.XmlFailedValidation]
       }
     }
+
+    "when invalid XML IE007 is provided, return XmlSchemaValidationError" in {
+      val ie7invalidFile = scala.io.Source.fromFile(testDataPath + "/cc007c-invalid.xml")
+      try {
+        val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE007", source)
+
+        whenReady(result.value) {
+          r =>
+            r mustBe Left(
+              ValidationError.XmlFailedValidation(
+                NonEmptyList(
+                  XmlSchemaValidationError(
+                    2,
+                    23,
+                    "cvc-complex-type.2.4.a: Invalid content was found starting with element 'messageRecipient'. One of '{messageSender}' is expected."
+                  ),
+                  Nil
+                )
+              )
+            )
+        }
+      } finally ie7invalidFile.close()
+    }
+
+    "when invalid XML IE007 is provided with invalid value for messageSender, return XmlSchemaValidationError" in {
+      val ie7invalidFile = scala.io.Source.fromFile(testDataPath + "/cc007c-invalid-message-sender.xml")
+      try {
+        val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE007", source)
+
+        whenReady(result.value) {
+          r =>
+            r mustBe Left(
+              ValidationError.XmlFailedValidation(
+                NonEmptyList(
+                  XmlSchemaValidationError(
+                    2,
+                    36,
+                    "cvc-pattern-valid: Value '' is not facet-valid with respect to pattern '.{1,35}' for type 'MessageSenderContentType'."
+                  ),
+                  List(XmlSchemaValidationError(2, 36, "cvc-type.3.1.3: The value '' of element 'messageSender' is not valid."))
+                )
+              )
+            )
+        }
+      } finally ie7invalidFile.close()
+    }
+
+    "when invalid XML IE013 is provided, return left" in {
+      val ie13invalidFile = scala.io.Source.fromFile(testDataPath + "/cc013c-invalid.xml")
+      try {
+        val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE013", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie13invalidFile.close()
+    }
+
+    "when invalid XML IE013 is provided with invalid value for messageSender, return left" in {
+      val ie13invalidFile = scala.io.Source.fromFile(testDataPath + "/cc013c-invalid-message-sender.xml")
+      try {
+        val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE013", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie13invalidFile.close()
+    }
+
+    "when invalid XML IE014 is provided, return left" in {
+      val ie14invalidFile = scala.io.Source.fromFile(testDataPath + "/cc014c-invalid.xml")
+      try {
+        val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE014", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie14invalidFile.close()
+    }
+
+    "when invalid XML IE014 is provided with invalid value for messageSender, return left" in {
+      val ie14invalidFile = scala.io.Source.fromFile(testDataPath + "/cc014c-invalid-message-sender.xml")
+      try {
+        val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE014", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie14invalidFile.close()
+    }
+
+    "when invalid XML IE015 is provided with invalid value for messageSender, return left" in {
+      val ie15invalidFile = scala.io.Source.fromFile(testDataPath + "/cc015c-invalid-message-sender.xml")
+      try {
+        val source = Source.single(ByteString(ie15invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE015", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie15invalidFile.close()
+    }
+
+    "when invalid XML IE044 is provided, return left" in {
+      val ie44invalidFile = scala.io.Source.fromFile(testDataPath + "/cc044c-invalid.xml")
+      try {
+        val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE044", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie44invalidFile.close()
+    }
+
+    "when invalid XML IE044 is provided with invalid value for messageSender, return left" in {
+      val ie44invalidFile = scala.io.Source.fromFile(testDataPath + "/cc044c-invalid-message-sender.xml")
+      try {
+        val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE044", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie44invalidFile.close()
+    }
+
+    "when invalid XML IE170 is provided, return left" in {
+      val ie170invalidFile = scala.io.Source.fromFile(testDataPath + "/cc170c-invalid.xml")
+      try {
+        val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE170", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie170invalidFile.close()
+    }
+
+    "when invalid XML IE170 is provided with invalid value for messageSender, return left" in {
+      val ie170invalidFile = scala.io.Source.fromFile(testDataPath + "/cc170c-invalid-message-sender.xml")
+      try {
+        val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(messageType = "IE170", source)
+
+        whenReady(result.value) {
+          r => r.isLeft mustBe true
+        }
+      } finally ie170invalidFile.close()
+    }
+
   }
 }

@@ -2324,6 +2324,9 @@
         "messageRecipient": {
           "$ref": "#/definitions/n1:MessageRecipientContentType"
         },
+        "messageSender": {
+          "$ref": "#/definitions/n1:MessageSenderContentType"
+        },
         "messageType": {
           "$ref": "#/definitions/n1:MessageTypes"
         },
@@ -2338,6 +2341,7 @@
         "UnloadingRemark",
         "messageIdentification",
         "messageRecipient",
+        "messageSender",
         "messageType",
         "preparationDateAndTime"
       ],

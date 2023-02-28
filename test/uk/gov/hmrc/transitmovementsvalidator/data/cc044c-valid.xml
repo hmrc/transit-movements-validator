@@ -1,20 +1,21 @@
 <ncts:CC044C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-<messageRecipient>token</messageRecipient>
-<preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
-<messageIdentification>token</messageIdentification>
-<messageType>CC044C</messageType>
-<TransitOperation>
-    <MRN>27WF9X1FQ9RCKN0TM3</MRN>
-</TransitOperation>
-<CustomsOfficeOfDestinationActual>
-    <referenceNumber>GB123456</referenceNumber>
-</CustomsOfficeOfDestinationActual>
-<TraderAtDestination>
-    <identificationNumber>ezv3Z</identificationNumber>
-</TraderAtDestination>
-<UnloadingRemark>
-    <conform>0</conform>
-    <unloadingCompletion>0</unloadingCompletion>
-    <unloadingDate>2018-11-01</unloadingDate>
-</UnloadingRemark>
+    <messageSender>token</messageSender>
+    <messageRecipient>token</messageRecipient>
+    <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+    <messageIdentification>token</messageIdentification>
+    <messageType>CC044C</messageType>
+    <TransitOperation>
+        <MRN>27WF9X1FQ9RCKN0TM3</MRN>
+    </TransitOperation>
+    <CustomsOfficeOfDestinationActual>
+        <referenceNumber>GB123456</referenceNumber>
+    </CustomsOfficeOfDestinationActual>
+    <TraderAtDestination>
+        <identificationNumber>ezv3Z</identificationNumber>
+    </TraderAtDestination>
+    <UnloadingRemark>
+        <conform>0</conform>
+        <unloadingCompletion>0</unloadingCompletion>
+        <unloadingDate>2018-11-01</unloadingDate>
+    </UnloadingRemark>
 </ncts:CC044C>
