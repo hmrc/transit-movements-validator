@@ -179,16 +179,6 @@ class MessagesControllerSpec
       status(result) mustBe NO_CONTENT
     }
 
-//    "on a valid JSON file, with no content type, must return Unsupported Media Type" in {
-//      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
-//      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
-//      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(), source)
-//      val result  = sut.validate(validCode)(request)
-//
-//      contentAsJson(result) mustBe Json.obj("code" -> "UNSUPPORTED_MEDIA_TYPE", "message" -> "Content type must be specified.")
-//      status(result) mustBe UNSUPPORTED_MEDIA_TYPE
-//    }
-
     "on a valid JSON file, but no valid message type, return BadRequest with an error message" in {
       when(mockJsonValidationService.validate(eqTo(invalidCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
@@ -337,17 +327,15 @@ class MessagesControllerSpec
       status(result) mustBe NO_CONTENT
     }
 
-    "on a file being streamed from object store, with neither X-Object-Store-Uri nor content type present, return Bad Request with an error message" in {
+    "on a file being streamed from object store with neither X-Object-Store-Uri nor content type present, return Unsupported Media Type with an error message" in {
       val sut = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
       val request =
         FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(), Source.empty)
       val result = sut.validate(validCode)(request)
 
-      contentAsJson(result) mustBe Json.obj(
-        "code"    -> "BAD_REQUEST",
-        "message" -> "Missing X-Object-Store-Uri header value"
-      )
-      status(result) mustBe BAD_REQUEST
+      contentAsJson(result) mustBe Json.obj("message" -> "Content Type or X-Object-Store-Uri must be specified.", "code" -> "UNSUPPORTED_MEDIA_TYPE")
+      status(result) mustBe UNSUPPORTED_MEDIA_TYPE
+
     }
 
     "on object store unable to find the file located at X-Object-Store-Uri, return Bad Request with an error message" in {

@@ -29,7 +29,6 @@ import play.api.mvc.ControllerComponents
 import play.api.mvc.RequestHeader
 import play.api.mvc.Result
 import play.mvc.Http.MimeTypes
-//import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
@@ -117,7 +116,7 @@ class MessagesController @Inject() (
     Future.successful(
       request.headers
         .get("X-Object-Store-Uri")
-        .toRight(PresentationError.badRequestError("Missing X-Object-Store-Uri header value"))
+        .toRight(PresentationError.unsupportedMediaTypeError("Content Type or X-Object-Store-Uri must be specified."))
     )
   }
 
