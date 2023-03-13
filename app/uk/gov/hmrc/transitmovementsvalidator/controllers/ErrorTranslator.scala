@@ -21,9 +21,11 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.FailedValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.badRequestError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.internalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.notFoundError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.schemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -45,6 +47,11 @@ trait ErrorTranslator {
     case ValidationError.Unexpected(thr)                 => InternalServiceError(cause = thr)
     case ValidationError.UnknownMessageType(messageType) => notFoundError(s"Unknown Message Type provided: $messageType is not recognised")
     case ValidationError.FailedToParse(message)          => badRequestError(message)
+  }
+
+  implicit val objectStoreErrorConverter: Converter[ObjectStoreError] = {
+    case ObjectStoreError.FileNotFound(fileLocation) => badRequestError(s"File not found at location: $fileLocation")
+    case ObjectStoreError.UnexpectedError(thr)       => internalServiceError(cause = thr)
   }
 
 }
