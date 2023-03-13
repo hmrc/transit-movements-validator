@@ -35,8 +35,8 @@ import uk.gov.hmrc.objectstore.client.Object
 import uk.gov.hmrc.objectstore.client.ObjectMetadata
 import uk.gov.hmrc.objectstore.client.Path.File
 import uk.gov.hmrc.objectstore.client.play.PlayObjectStoreClient
-import uk.gov.hmrc.transitmovementsvalidator.services.errors.ObjectStoreError.FileNotFound
-import uk.gov.hmrc.transitmovementsvalidator.services.errors.ObjectStoreError.UnexpectedError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.FileNotFound
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.UnexpectedError
 
 import java.time.Instant
 import scala.concurrent.Future

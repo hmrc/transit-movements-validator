@@ -25,9 +25,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.objectstore.client.play.Implicits._
 import uk.gov.hmrc.objectstore.client.Path
 import uk.gov.hmrc.objectstore.client.play.PlayObjectStoreClient
-import uk.gov.hmrc.transitmovementsvalidator.services.errors.ObjectStoreError
-import uk.gov.hmrc.transitmovementsvalidator.services.errors.ObjectStoreError.UnexpectedError
-import uk.gov.hmrc.transitmovementsvalidator.services.errors.ObjectStoreError.FileNotFound
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.UnexpectedError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.FileNotFound
 
 import javax.inject.Inject
 import javax.inject.Singleton
