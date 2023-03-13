@@ -24,15 +24,21 @@ import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
 import play.api.libs.json.Json
 import play.api.mvc.Action
+import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
+import play.api.mvc.RequestHeader
+import play.api.mvc.Result
 import play.mvc.Http.MimeTypes
+//import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationPresentationError
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.ObjectStoreService
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 
@@ -53,7 +59,12 @@ object MessagesController {
   }
 }
 
-class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
+class MessagesController @Inject() (
+  cc: ControllerComponents,
+  xmlValidationService: XmlValidationService,
+  jsonValidationService: JsonValidationService,
+  objectStoreService: ObjectStoreService
+)(implicit
   val materializer: Materializer,
   executionContext: ExecutionContext
 ) extends BackendController(cc)
@@ -66,7 +77,25 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
     contentTypeRoute {
       case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
       case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
+      case None                 => validateObjectStoreMessage(messageType, xmlValidationService)
     }
+
+  def validateObjectStoreMessage(messageType: String, validationService: ValidationService): Action[AnyContent] = Action.async {
+    implicit request =>
+      implicit val hc = HeaderCarrierConverter.fromRequest(request)
+      (for {
+        uri      <- getObjectStoreUri
+        contents <- objectStoreService.getContents(uri)(executionContext, hc).asPresentation
+        result   <- validationService.validate(messageType, contents).asPresentation.toValidationResponse
+      } yield result)
+        .fold[Result](
+          presentationError => Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)),
+          {
+            case Some(r) => Ok(Json.toJson(r))
+            case None    => NoContent
+          }
+        )
+  }
 
   def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
@@ -82,7 +111,14 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
               case None    => NoContent
             }
           )
-
     }
+
+  private def getObjectStoreUri(implicit request: RequestHeader) = EitherT {
+    Future.successful(
+      request.headers
+        .get("X-Object-Store-Uri")
+        .toRight(PresentationError.badRequestError("Missing X-Object-Store-Uri header value"))
+    )
+  }
 
 }
