@@ -4,7 +4,6 @@ import sbt._
 object AppDependencies {
 
   private val catsVersion         = "2.7.0"
-  private val akkaVersion         = "2.6.20"
   private val boostrapPlayVersion = "7.12.0"
 
   val compile = Seq(

@@ -22,7 +22,9 @@ import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
+import play.api.libs.functional.Functor
 import play.api.libs.json.Json
+import play.api.libs.json.OWrites
 import play.api.mvc.Action
 import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
@@ -79,6 +81,9 @@ class MessagesController @Inject() (
       case None                 => validateObjectStoreMessage(messageType, xmlValidationService)
     }
 
+  private val failCase: PresentationError => Result = presentationError =>
+    Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
+
   def validateObjectStoreMessage(messageType: String, validationService: ValidationService): Action[AnyContent] = Action.async {
     implicit request =>
       implicit val hc = HeaderCarrierConverter.fromRequest(request)
@@ -88,7 +93,7 @@ class MessagesController @Inject() (
         result   <- validationService.validate(messageType, contents).asPresentation.toValidationResponse
       } yield result)
         .fold[Result](
-          presentationError => Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)),
+          failCase,
           {
             case Some(r) => Ok(Json.toJson(r))
             case None    => NoContent
@@ -104,7 +109,7 @@ class MessagesController @Inject() (
           .asPresentation
           .toValidationResponse
           .fold(
-            presentationError => Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)),
+            failCase,
             {
               case Some(r) => Ok(Json.toJson(r))
               case None    => NoContent
