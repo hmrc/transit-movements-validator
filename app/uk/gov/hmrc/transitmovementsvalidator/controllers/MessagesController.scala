@@ -22,30 +22,19 @@ import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
-import play.api.libs.functional.Functor
 import play.api.libs.json.Json
-import play.api.libs.json.OWrites
-import play.api.mvc.Action
-import play.api.mvc.AnyContent
-import play.api.mvc.ControllerComponents
-import play.api.mvc.RequestHeader
-import play.api.mvc.Result
+import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.SchemaValidationPresentationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
-import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
-import uk.gov.hmrc.transitmovementsvalidator.services.ObjectStoreService
-import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
-import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services._
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+import scala.concurrent._
 
 object MessagesController {
 
@@ -72,7 +61,8 @@ class MessagesController @Inject() (
     with Logging
     with StreamingParsers
     with ContentTypeRouting
-    with ErrorTranslator {
+    with ErrorTranslator
+    with ObjectStoreURIHeaderExtractor {
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
@@ -88,8 +78,8 @@ class MessagesController @Inject() (
     implicit request =>
       implicit val hc = HeaderCarrierConverter.fromRequest(request)
       (for {
-        uri      <- getObjectStoreUri
-        contents <- objectStoreService.getContents(uri)(executionContext, hc).asPresentation
+        uri      <- extractObjectStoreURI(request.headers)
+        contents <- objectStoreService.getContents(uri).asPresentation
         result   <- validationService.validate(messageType, contents).asPresentation.toValidationResponse
       } yield result)
         .fold[Result](
@@ -116,13 +106,5 @@ class MessagesController @Inject() (
             }
           )
     }
-
-  private def getObjectStoreUri(implicit request: RequestHeader) = EitherT {
-    Future.successful(
-      request.headers
-        .get("X-Object-Store-Uri")
-        .toRight(PresentationError.unsupportedMediaTypeError("Content Type or X-Object-Store-Uri must be specified."))
-    )
-  }
 
 }

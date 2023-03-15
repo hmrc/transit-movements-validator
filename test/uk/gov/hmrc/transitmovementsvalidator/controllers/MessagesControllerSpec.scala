@@ -39,6 +39,7 @@ import play.api.http.Status.NO_CONTENT
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
 import play.api.libs.json.Json
+import play.api.mvc.Headers
 import play.api.test.FakeHeaders
 import play.api.test.FakeRequest
 import play.api.test.Helpers.CONTENT_TYPE
@@ -47,7 +48,9 @@ import play.api.test.Helpers.status
 import play.api.test.StubControllerComponentsFactory
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.objectstore.client.Path
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.models.ObjectStoreResourceLocation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
@@ -61,6 +64,7 @@ import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
 
 import java.nio.charset.StandardCharsets
+import java.util.UUID.randomUUID
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -80,9 +84,15 @@ class MessagesControllerSpec
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
 
-  val mockJsonValidationService: JsonValidationService = mock[JsonValidationService]
-  val mockXmlValidationService: XmlValidationService   = mock[XmlValidationService]
-  val mockObjectStoreService: ObjectStoreService       = mock[ObjectStoreService]
+  lazy val filePath = Path
+    .Directory(s"common-transit-convention-traders/movements/12345678")
+    .file(randomUUID.toString)
+    .asUri
+
+  val mockJsonValidationService: JsonValidationService                 = mock[JsonValidationService]
+  val mockXmlValidationService: XmlValidationService                   = mock[XmlValidationService]
+  val mockObjectStoreService: ObjectStoreService                       = mock[ObjectStoreService]
+  val mockObjectStoreURIHeaderExtractor: ObjectStoreURIHeaderExtractor = mock[ObjectStoreURIHeaderExtractor]
 
   override def beforeEach(): Unit = {
     reset(mockJsonValidationService)
@@ -314,13 +324,20 @@ class MessagesControllerSpec
           _ => EitherT.rightT[Future, ValidationError](())
         )
 
-      when(mockObjectStoreService.getContents(eqTo("http://hmrc.gov.uk/filename"))(any[ExecutionContext], any[HeaderCarrier]))
+      when(mockObjectStoreURIHeaderExtractor.extractObjectStoreURI(any[Headers])).thenReturn(EitherT.rightT(ObjectStoreResourceLocation(filePath)))
+
+      when(mockObjectStoreService.getContents(any[String].asInstanceOf[ObjectStoreResourceLocation])(any[ExecutionContext], any[HeaderCarrier]))
         .thenAnswer(
           _ => EitherT.rightT[Future, Source[ByteString, NotUsed]](validSource)
         )
 
       val request =
-        FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq("X-Object-Store-Uri" -> "http://hmrc.gov.uk/filename")), Source.empty)
+        FakeRequest(
+          "POST",
+          s"/messages/$validCode/validate/",
+          FakeHeaders(Seq("X-Object-Store-Uri" -> ObjectStoreResourceLocation(filePath).value)),
+          Source.empty
+        )
       val sut    = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
       val result = sut.validate(validCode)(request)
 
@@ -333,19 +350,27 @@ class MessagesControllerSpec
         FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(), Source.empty)
       val result = sut.validate(validCode)(request)
 
-      contentAsJson(result) mustBe Json.obj("message" -> "Content Type or X-Object-Store-Uri must be specified.", "code" -> "UNSUPPORTED_MEDIA_TYPE")
-      status(result) mustBe UNSUPPORTED_MEDIA_TYPE
+      contentAsJson(result) mustBe Json.obj("message" -> "Missing X-Object-Store-Uri header value", "code" -> "BAD_REQUEST")
+      status(result) mustBe BAD_REQUEST
 
     }
 
     "on object store unable to find the file located at X-Object-Store-Uri, return Bad Request with an error message" in {
-      when(mockObjectStoreService.getContents(eqTo("http://hmrc.gov.uk/filename"))(any[ExecutionContext], any[HeaderCarrier]))
+
+      when(mockObjectStoreURIHeaderExtractor.extractObjectStoreURI(any[Headers])).thenReturn(EitherT.rightT(ObjectStoreResourceLocation(filePath)))
+
+      when(mockObjectStoreService.getContents(any[String].asInstanceOf[ObjectStoreResourceLocation])(any[ExecutionContext], any[HeaderCarrier]))
         .thenAnswer(
           _ => EitherT.leftT[Future, ObjectStoreError](ObjectStoreError.FileNotFound(objectStoreUri))
         )
 
       val request =
-        FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq("X-Object-Store-Uri" -> "http://hmrc.gov.uk/filename")), Source.empty)
+        FakeRequest(
+          "POST",
+          s"/messages/$validCode/validate/",
+          FakeHeaders(Seq("X-Object-Store-Uri" -> ObjectStoreResourceLocation(filePath).value)),
+          Source.empty
+        )
 
       val sut    = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
       val result = sut.validate(validCode)(request)
@@ -361,13 +386,20 @@ class MessagesControllerSpec
 
       val error = new IllegalStateException("Object Store problem")
 
-      when(mockObjectStoreService.getContents(eqTo("http://hmrc.gov.uk/filename"))(any[ExecutionContext], any[HeaderCarrier]))
+      when(mockObjectStoreURIHeaderExtractor.extractObjectStoreURI(any[Headers])).thenReturn(EitherT.rightT(ObjectStoreResourceLocation(filePath)))
+
+      when(mockObjectStoreService.getContents(any[String].asInstanceOf[ObjectStoreResourceLocation])(any[ExecutionContext], any[HeaderCarrier]))
         .thenAnswer(
           _ => EitherT.leftT[Future, ObjectStoreError](ObjectStoreError.UnexpectedError(Some(error)))
         )
 
       val request =
-        FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq("X-Object-Store-Uri" -> "http://hmrc.gov.uk/filename")), Source.empty)
+        FakeRequest(
+          "POST",
+          s"/messages/$validCode/validate/",
+          FakeHeaders(Seq("X-Object-Store-Uri" -> ObjectStoreResourceLocation(filePath).value)),
+          Source.empty
+        )
 
       val sut    = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
       val result = sut.validate(validCode)(request)
@@ -382,7 +414,9 @@ class MessagesControllerSpec
     "on streaming an invalid XML file, return Ok with a list of errors" in {
       val errorList = NonEmptyList(XmlSchemaValidationError(1, 1, "text1"), List(XmlSchemaValidationError(2, 2, "text2")))
 
-      when(mockObjectStoreService.getContents(eqTo("http://hmrc.gov.uk/filename"))(any[ExecutionContext], any[HeaderCarrier]))
+      when(mockObjectStoreURIHeaderExtractor.extractObjectStoreURI(any[Headers])).thenReturn(EitherT.rightT(ObjectStoreResourceLocation(filePath)))
+
+      when(mockObjectStoreService.getContents(any[String].asInstanceOf[ObjectStoreResourceLocation])(any[ExecutionContext], any[HeaderCarrier]))
         .thenAnswer(
           _ => EitherT.rightT[Future, Source[ByteString, NotUsed]](validSource)
         )
@@ -394,7 +428,12 @@ class MessagesControllerSpec
 
       val sut = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
       val request =
-        FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq("X-Object-Store-Uri" -> "http://hmrc.gov.uk/filename")), Source.empty)
+        FakeRequest(
+          "POST",
+          s"/messages/$validCode/validate/",
+          FakeHeaders(Seq("X-Object-Store-Uri" -> ObjectStoreResourceLocation(filePath).value)),
+          Source.empty
+        )
       val result = sut.validate(validCode)(request)
 
       contentAsJson(result) mustBe Json.obj(

@@ -33,12 +33,15 @@ import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.objectstore.client.Md5Hash
 import uk.gov.hmrc.objectstore.client.Object
 import uk.gov.hmrc.objectstore.client.ObjectMetadata
+import uk.gov.hmrc.objectstore.client.Path
 import uk.gov.hmrc.objectstore.client.Path.File
 import uk.gov.hmrc.objectstore.client.play.PlayObjectStoreClient
+import uk.gov.hmrc.transitmovementsvalidator.models.ObjectStoreResourceLocation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.FileNotFound
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.UnexpectedError
 
 import java.time.Instant
+import java.util.UUID.randomUUID
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -47,17 +50,23 @@ class ObjectStoreServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   private val mockClient: PlayObjectStoreClient = mock[PlayObjectStoreClient]
-  private val fileName                          = "fileName"
-  private val fileContents                      = "<xml>content</xml>"
+
+  lazy val filePath = ObjectStoreResourceLocation(
+    Path
+      .Directory(s"common-transit-convention-traders/movements/12345678")
+      .file(randomUUID.toString)
+      .asUri
+  )
+  private val fileContents = "<xml>content</xml>"
 
   "ObjectStoreService" - {
     "should return the file contents" in {
       val metadata = ObjectMetadata("", 0, Md5Hash(""), Instant.now(), Map.empty[String, String])
-      val obj      = Option[Object[Source[ByteString, NotUsed]]](Object.apply(File(fileName), Source.single(ByteString(fileContents)), metadata))
+      val obj      = Option[Object[Source[ByteString, NotUsed]]](Object.apply(File(filePath.value), Source.single(ByteString(fileContents)), metadata))
       when(mockClient.getObject[Source[ByteString, NotUsed]](any[File](), any())(any(), any())).thenReturn(Future.successful(obj))
 
       val sut    = new ObjectStoreServiceImpl(mockClient)
-      val result = sut.getContents(fileName).value
+      val result = sut.getContents(filePath).value
 
       whenReady(result) {
         _ mustBe Right(obj.get.content)
@@ -67,7 +76,7 @@ class ObjectStoreServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar
     "should return an error when the file is not found in object store" in {
       when(mockClient.getObject[Source[ByteString, NotUsed]](any[File](), any())(any(), any())).thenReturn(Future.successful(None))
       val sut    = new ObjectStoreServiceImpl(mockClient)
-      val result = sut.getContents(fileName).value
+      val result = sut.getContents(filePath).value
 
       whenReady(result) {
         case Left(FileNotFound(fileName)) => succeed
@@ -79,7 +88,7 @@ class ObjectStoreServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar
       when(mockClient.getObject[Source[ByteString, NotUsed]](any[File](), any())(any(), any()))
         .thenReturn(Future.failed(UpstreamErrorResponse("failed", INTERNAL_SERVER_ERROR)))
       val sut    = new ObjectStoreServiceImpl(mockClient)
-      val result = sut.getContents(fileName).value
+      val result = sut.getContents(filePath).value
 
       whenReady(result) {
         case Left(UnexpectedError(fileName)) => succeed

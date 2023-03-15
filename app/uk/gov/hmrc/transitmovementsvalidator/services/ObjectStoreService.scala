@@ -25,6 +25,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.objectstore.client.play.Implicits._
 import uk.gov.hmrc.objectstore.client.Path
 import uk.gov.hmrc.objectstore.client.play.PlayObjectStoreClient
+import uk.gov.hmrc.transitmovementsvalidator.models.ObjectStoreResourceLocation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.UnexpectedError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ObjectStoreError.FileNotFound
@@ -38,23 +39,27 @@ import scala.util.control.NonFatal
 @ImplementedBy(classOf[ObjectStoreServiceImpl])
 trait ObjectStoreService {
 
-  def getContents(fileName: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): EitherT[Future, ObjectStoreError, Source[ByteString, NotUsed]]
+  def getContents(
+    uri: ObjectStoreResourceLocation
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): EitherT[Future, ObjectStoreError, Source[ByteString, NotUsed]]
 
 }
 
 @Singleton
 class ObjectStoreServiceImpl @Inject() (client: PlayObjectStoreClient) extends ObjectStoreService {
 
-  def getContents(fileName: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): EitherT[Future, ObjectStoreError, Source[ByteString, NotUsed]] =
+  def getContents(
+    uri: ObjectStoreResourceLocation
+  )(implicit ec: ExecutionContext, hc: HeaderCarrier): EitherT[Future, ObjectStoreError, Source[ByteString, NotUsed]] =
     EitherT(
       client
         .getObject[Source[ByteString, NotUsed]](
-          Path.File(fileName),
+          Path.File(uri.value),
           "common-transit-convention-traders"
         )
         .flatMap {
           case Some(objectSource) => Future.successful(Right(objectSource.content))
-          case _                  => Future.successful(Left(FileNotFound(fileName)))
+          case _                  => Future.successful(Left(FileNotFound(uri.value)))
         }
         .recover {
           case NonFatal(exc) => Left(UnexpectedError(Some(exc)))
