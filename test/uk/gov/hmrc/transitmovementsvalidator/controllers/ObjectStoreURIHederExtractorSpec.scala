@@ -16,12 +16,9 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.controllers
 
-import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import play.api.http.HeaderNames
-import play.api.http.MimeTypes
 import play.api.mvc.BaseController
 import play.api.mvc.ControllerComponents
 import play.api.mvc.Headers
@@ -50,7 +47,7 @@ class ObjectStoreURIHederExtractorSpec extends AnyFreeSpec with Matchers with Sc
     }
 
     "if object store uri header supplied is invalid, return BadRequestError" in {
-      val invalidObjectStoreURIHeader = Headers(HeaderNames.CONTENT_TYPE -> MimeTypes.XML, "X-Object-Store-Uri" -> "invalid")
+      val invalidObjectStoreURIHeader = Headers("X-Object-Store-Uri" -> "invalid")
 
       val result = objectStoreURIExtractor.extractObjectStoreURI(invalidObjectStoreURIHeader)
 
