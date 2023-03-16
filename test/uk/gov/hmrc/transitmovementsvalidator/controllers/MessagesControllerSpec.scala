@@ -318,6 +318,7 @@ class MessagesControllerSpec
   "On validate Object Store resource" - {
 
     lazy val validSource = Source.single(ByteString(<test>test xml</test>.mkString, StandardCharsets.UTF_8))
+
     "on a valid file being streamed from object store with X-Object-Store-Uri present and no content type, return No Content" in {
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(

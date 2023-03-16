@@ -37,9 +37,8 @@ class ObjectStoreURIHeaderExtractorSpec extends AnyFreeSpec with Matchers with S
   "extractObjectStoreURI" - {
 
     "if object store uri header is not supplied, return BadRequestError" in {
-      val noObjectStoreURIHeader = Headers("X-Message-Type" -> "IE015")
 
-      val result = objectStoreURIExtractor.extractObjectStoreURI(noObjectStoreURIHeader)
+      val result = objectStoreURIExtractor.extractObjectStoreURI(Headers())
 
       whenReady(result.value) {
         _ mustBe Left(PresentationError.badRequestError("Missing X-Object-Store-Uri header value"))
