@@ -26,7 +26,7 @@ import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.transitmovementsvalidator.models.ObjectStoreResourceLocation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
 
-class ObjectStoreURIHederExtractorSpec extends AnyFreeSpec with Matchers with ScalaFutures {
+class ObjectStoreURIHeaderExtractorSpec extends AnyFreeSpec with Matchers with ScalaFutures {
 
   class ObjectStoreURIHeaderExtractorImpl extends ObjectStoreURIHeaderExtractor with BaseController {
     override protected def controllerComponents: ControllerComponents = stubControllerComponents()

@@ -344,7 +344,7 @@ class MessagesControllerSpec
       status(result) mustBe NO_CONTENT
     }
 
-    "on a file being streamed from object store with neither X-Object-Store-Uri nor content type present, return Unsupported Media Type with an error message" in {
+    "on a file being streamed from object store with neither X-Object-Store-Uri nor content type present, return Bad Request with an error message" in {
       val sut = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
       val request =
         FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(), Source.empty)
