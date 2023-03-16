@@ -52,6 +52,13 @@ object PresentationError {
   def schemaValidationError(errors: NonEmptyList[SchemaValidationError]): PresentationError =
     SchemaValidationPresentationError(errors)
 
+  def internalServiceError(
+    message: String = "Internal server error",
+    code: ErrorCode = ErrorCode.InternalServerError,
+    cause: Option[Throwable] = None
+  ): PresentationError =
+    InternalServiceError(message, code, cause)
+
 }
 
 sealed abstract class PresentationError extends Product with Serializable {
