@@ -43,13 +43,14 @@ import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.validation.SchemaFactory
 import scala.collection.mutable
+import scala.util.Using
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
 trait XmlValidationService extends ValidationService
 
 class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
 
-  val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
+  private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {
       typ =>
         typ -> Future(buildParser(typ))
@@ -60,48 +61,58 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
-      MessageType.values.find(_.code == messageType) match {
+      val parser = MessageType
+        .find(messageType)
+        .map(
+          t => parsersByType(t)
+        )
+      parser match {
         case None =>
           //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
           source.runWith(Sink.ignore)
           Future.successful(Left(UnknownMessageType(messageType)))
-        case Some(mType) =>
-          parsersByType(mType).map {
+        case Some(futureType) =>
+          futureType.map {
             saxParser =>
-              val parser = saxParser.newSAXParser.getParser
+              Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+                xmlInput =>
+                  val parser = saxParser.newSAXParser.getParser
 
-              val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
-                new mutable.ListBuffer[XmlSchemaValidationError]
+                  val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
+                    new mutable.ListBuffer[XmlSchemaValidationError]
 
-              parser.setErrorHandler(new ErrorHandler {
-                override def warning(error: SAXParseException): Unit = {}
+                  parser.setErrorHandler(new ErrorHandler {
+                    override def warning(error: SAXParseException): Unit = {}
 
-                override def error(error: SAXParseException): Unit =
-                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+                    override def error(error: SAXParseException): Unit =
+                      errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
 
-                override def fatalError(error: SAXParseException): Unit =
-                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
-              })
+                    override def fatalError(error: SAXParseException): Unit =
+                      errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+                  })
 
-              val xmlInput = source.runWith(StreamConverters.asInputStream(20.seconds))
+                  val inputSource = new InputSource(xmlInput)
 
-              val inputSource = new InputSource(xmlInput)
+                  val parseXml = Either
+                    .catchOnly[SAXParseException] {
+                      parser.parse(inputSource)
+                    }
+                    .leftMap {
+                      exc =>
+                        XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
+                    }
 
-              val parseXml = Either
-                .catchOnly[SAXParseException] {
-                  parser.parse(inputSource)
-                }
-                .leftMap {
-                  exc =>
-                    XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
-                }
-
-              NonEmptyList
-                .fromList(errorBuffer.toList)
-                .map(
-                  x => Either.left(XmlFailedValidation(x))
+                  NonEmptyList
+                    .fromList(errorBuffer.toList)
+                    .map(
+                      x => Either.left(XmlFailedValidation(x))
+                    )
+                    .getOrElse(parseXml)
+              }.toEither
+                .leftMap(
+                  thr => ValidationError.Unexpected(Some(thr))
                 )
-                .getOrElse(parseXml)
+                .flatten
           }
       }
     }

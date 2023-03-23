@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.models
 
+import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -78,6 +79,18 @@ class MessageTypeSpec extends AnyFreeSpec with Matchers with MockitoSugar with O
       PresentationNotificationForPreLodgedDec.code mustEqual "IE170"
       PresentationNotificationForPreLodgedDec.rootNode mustEqual "CC170C"
       MessageType.departureValues must contain(PresentationNotificationForPreLodgedDec)
+    }
+  }
+
+  "find" - {
+    "must return None when junk is provided" in forAll(Gen.stringOfN(6, Gen.alphaNumChar)) {
+      code =>
+        MessageType.find(code) must not be defined
+    }
+
+    "must return the correct message type when a correct code is provided" in forAll(Gen.oneOf(MessageType.values)) {
+      messageType =>
+        MessageType.find(messageType.code) mustBe Some(messageType)
     }
   }
 }

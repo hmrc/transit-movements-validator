@@ -51,6 +51,7 @@ import scala.jdk.CollectionConverters._
 import scala.util.Try
 import scala.util.Success
 import scala.util.Failure
+import scala.util.Using
 
 object JsonValidationService {
 
@@ -107,10 +108,10 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
     }
 
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
-    Try {
-      val jsonInput          = source.runWith(StreamConverters.asInputStream(20.seconds))
-      val jsonNode: JsonNode = mapper.readTree(jsonInput)
-      schemaValidator.validate(jsonNode).asScala.toSet
+    Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+      jsonInput =>
+        val jsonNode: JsonNode = mapper.readTree(jsonInput)
+        schemaValidator.validate(jsonNode).asScala.toSet
     }
 
   // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
