@@ -73,4 +73,6 @@ object MessageType {
 
   val values = arrivalValues ++ departureValues
 
+  def find(code: String): Option[MessageType] = values.find(_.code == code)
+
 }
