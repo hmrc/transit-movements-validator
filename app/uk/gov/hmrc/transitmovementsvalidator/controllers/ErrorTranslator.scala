@@ -21,6 +21,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.FailedValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.InternalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.badRequestError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.businessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.internalServiceError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.notFoundError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.schemaValidationError
@@ -43,10 +44,11 @@ trait ErrorTranslator {
   }
 
   implicit val validationErrorConverter: Converter[ValidationError] = {
-    case error: FailedValidationError                    => schemaValidationError(error.errors)
-    case ValidationError.Unexpected(thr)                 => InternalServiceError(cause = thr)
-    case ValidationError.UnknownMessageType(messageType) => notFoundError(s"Unknown Message Type provided: $messageType is not recognised")
-    case ValidationError.FailedToParse(message)          => badRequestError(message)
+    case error: FailedValidationError                     => schemaValidationError(error.errors)
+    case ValidationError.Unexpected(thr)                  => InternalServiceError(cause = thr)
+    case ValidationError.UnknownMessageType(messageType)  => notFoundError(s"Unknown Message Type provided: $messageType is not recognised")
+    case ValidationError.FailedToParse(message)           => badRequestError(message)
+    case ValidationError.BusinessValidationError(message) => businessValidationError(message)
   }
 
   implicit val objectStoreErrorConverter: Converter[ObjectStoreError] = {
