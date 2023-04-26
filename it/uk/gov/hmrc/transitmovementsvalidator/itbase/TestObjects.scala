@@ -125,6 +125,7 @@ object TestObjects {
 
     lazy val xmlInvalid = <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <messageRecipient>FdOcminxBxSLGm1rRUn0q96S1</messageRecipient>
+      <messageType>CC007C</messageType>
     </ncts:CC007C>
 
     lazy val jsonValid = Json.obj(
@@ -245,7 +246,8 @@ object TestObjects {
         "n1:CC007C" ->
           Json.obj(
             "@PhaseID"         -> "NCTS5.0",
-            "messageRecipient" -> "FdOcminxBxSLGm1rRUn0q96S1"
+            "messageRecipient" -> "FdOcminxBxSLGm1rRUn0q96S1",
+            "messageType"      -> "CC007C"
           )
       )
   }
@@ -465,6 +467,7 @@ object TestObjects {
 
     lazy val xmlInvalid = <ncts:CC013C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <messageSender>FdOcminxBxSLGm1rRUn0q96S1</messageSender>
+      <messageType>CC013C</messageType>
     </ncts:CC013C>
 
     lazy val jsonValid = Json.obj(
@@ -931,7 +934,8 @@ object TestObjects {
         "n1:CC013C" ->
           Json.obj(
             "@PhaseID"         -> "NCTS5.0",
-            "messageRecipient" -> "FdOcminxBxSLGm1rRUn0q96S1"
+            "messageRecipient" -> "FdOcminxBxSLGm1rRUn0q96S1",
+            "messageType"      -> "CC013C"
           )
       )
 
@@ -959,6 +963,7 @@ object TestObjects {
 
     lazy val xmlInvalid = <ncts:CC014C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <messageSender>FdOcminxBxSLGm1rRUn0q96S1</messageSender>
+      <messageType>CC014C</messageType>
     </ncts:CC014C>
 
     lazy val jsonValid = Json.obj(
@@ -1008,7 +1013,8 @@ object TestObjects {
         "n1:CC014C" ->
           Json.obj(
             "@PhaseID"         -> "NCTS5.0",
-            "messageRecipient" -> "FdOcminxBxSLGm1rRUn0q96S1"
+            "messageRecipient" -> "FdOcminxBxSLGm1rRUn0q96S1",
+            "messageType"      -> "CC014C"
           )
       )
   }
@@ -1017,6 +1023,7 @@ object TestObjects {
 
     lazy val xmlInvalid = <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <messageSender>FdOcminxBxSLGm1rRUn0q96S1</messageSender>
+      <messageType>CC015C</messageType>
     </ncts:CC015C>
 
     lazy val xmlValid = <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
@@ -1072,7 +1079,8 @@ object TestObjects {
         "n1:CC015C" ->
           Json.obj(
             "@PhaseID"      -> "NCTS5.0",
-            "messageSender" -> "FdOcminxBxSLGm1rRUn0q96S1"
+            "messageSender" -> "FdOcminxBxSLGm1rRUn0q96S1",
+            "messageType"   -> "CC015C"
           )
       )
 
@@ -1180,6 +1188,7 @@ object TestObjects {
 
     lazy val xmlInvalid = <ncts:CC044C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <messageRecipient>FdOcminxBxSLGm1rRUn0q96S1</messageRecipient>
+      <messageType>CC044C</messageType>
     </ncts:CC044C>
 
     lazy val jsonValid = Json.obj(
@@ -1212,7 +1221,8 @@ object TestObjects {
         "n1:CC044C" ->
           Json.obj(
             "@PhaseID"      -> "NCTS5.0",
-            "messageSender" -> "FdOcminxBxSLGm1rRUn0q96S1"
+            "messageSender" -> "FdOcminxBxSLGm1rRUn0q96S1",
+            "messageType"   -> "CC044C"
           )
       )
   }
@@ -1284,6 +1294,7 @@ object TestObjects {
 
     lazy val xmlInvalid = <ncts:CC170C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <messageRecipient>FdOcminxBxSLGm1rRUn0q96S1</messageRecipient>
+      <messageType>CC170C</messageType>
     </ncts:CC170C>
 
     lazy val jsonValid = Json.obj(
@@ -1423,7 +1434,8 @@ object TestObjects {
         "n1:CC170C" ->
           Json.obj(
             "@PhaseID"      -> "NCTS5.0",
-            "messageSender" -> "FdOcminxBxSLGm1rRUn0q96S1"
+            "messageSender" -> "FdOcminxBxSLGm1rRUn0q96S1",
+            "messageType"   -> "CC170C"
           )
       )
   }

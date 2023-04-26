@@ -526,5 +526,18 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       }
     }
 
+    "when message type and root node doesn't match, return BusinessValidationError" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-rootNodeMismatch.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE015", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
+            "Root node doesn't match with the messageType"
+          )
+      }
+    }
+
   }
 }
