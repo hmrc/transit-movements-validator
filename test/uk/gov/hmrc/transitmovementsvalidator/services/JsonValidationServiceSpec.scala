@@ -31,6 +31,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ErrorCode.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
@@ -536,6 +537,20 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
           r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
             "Root node doesn't match with the messageType"
           )
+      }
+    }
+
+    "when referenceNumber node doesn't start with GB or XI, return BusinessValidationError" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate("IE007", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Invalid reference number must start with 'GB' or 'XI'.")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number must start with 'GB' or 'XI'."
+          )
+
       }
     }
 

@@ -49,6 +49,110 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     <messageIdentification>XusMGrh</messageIdentification>
     <messageType>CC007C</messageType>
     </ncts:CC015C>
+
+  lazy val invalidReferenceXml: NodeSeq =
+    <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+      <messageSender>token</messageSender>
+      <messageRecipient>token</messageRecipient>
+      <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+      <messageIdentification>token</messageIdentification>
+      <messageType>CC007C</messageType>
+      <correlationIdentifier>token</correlationIdentifier>
+      <TransitOperation>
+        <MRN>27WF9X1FQ9RCKN0TM3</MRN>
+        <arrivalNotificationDateAndTime>2022-07-02T03:11:04</arrivalNotificationDateAndTime>
+        <simplifiedProcedure>1</simplifiedProcedure>
+        <incidentFlag>1</incidentFlag>
+      </TransitOperation>
+      <Authorisation>
+        <sequenceNumber>123</sequenceNumber>
+        <type>3344</type>
+        <referenceNumber>token</referenceNumber>
+      </Authorisation>
+      <CustomsOfficeOfDestinationActual>
+        <referenceNumber>GZ123456</referenceNumber>
+      </CustomsOfficeOfDestinationActual>
+      <TraderAtDestination>
+        <identificationNumber>ezv3Z</identificationNumber>
+        <communicationLanguageAtDestination>sa</communicationLanguageAtDestination>
+      </TraderAtDestination>
+      <Consignment>
+        <LocationOfGoods>
+          <typeOfLocation>A</typeOfLocation>
+          <qualifierOfIdentification>A</qualifierOfIdentification>
+          <authorisationNumber>token</authorisationNumber>
+          <additionalIdentifier>1234</additionalIdentifier>
+          <UNLocode>token</UNLocode>
+          <CustomsOffice>
+            <referenceNumber>AB234567</referenceNumber>
+          </CustomsOffice>
+
+          <EconomicOperator>
+            <identificationNumber>ezv3Z</identificationNumber>
+          </EconomicOperator>
+          <Address>
+            <streetAndNumber>token</streetAndNumber>
+            <postcode>token</postcode>
+            <city>token</city>
+            <country>GB</country>
+          </Address>
+          <PostcodeAddress>
+            <houseNumber>token</houseNumber>
+            <postcode>token</postcode>
+            <country>SA</country>
+          </PostcodeAddress>
+          <ContactPerson>
+            <name>token</name>
+            <phoneNumber>token</phoneNumber>
+            <eMailAddress>sandeep@gmail.com</eMailAddress>
+          </ContactPerson>
+        </LocationOfGoods>
+        <Incident>
+          <sequenceNumber>12345</sequenceNumber>
+          <code>1</code>
+          <text>token</text>
+          <Endorsement>
+            <date>2022-07-02</date>
+            <authority>token</authority>
+            <place>token</place>
+            <country>GB</country>
+          </Endorsement>
+          <Location>
+            <qualifierOfIdentification>A</qualifierOfIdentification>
+            <UNLocode>token</UNLocode>
+            <country>SA</country>
+
+            <Address>
+              <streetAndNumber>token</streetAndNumber>
+              <postcode>token</postcode>
+              <city>token</city>
+            </Address>
+          </Location>
+          <TransportEquipment>
+            <sequenceNumber>12345</sequenceNumber>
+            <containerIdentificationNumber>ezv3Z</containerIdentificationNumber>
+            <numberOfSeals>2345</numberOfSeals>
+            <Seal>
+              <sequenceNumber>12345</sequenceNumber>
+              <identifier>token</identifier>
+            </Seal>
+            <GoodsReference>
+              <sequenceNumber>12345</sequenceNumber>
+              <declarationGoodsItemNumber>12</declarationGoodsItemNumber>
+            </GoodsReference>
+          </TransportEquipment>
+          <Transhipment>
+            <containerIndicator>0</containerIndicator>
+            <TransportMeans>
+              <typeOfIdentification>12</typeOfIdentification>
+              <identificationNumber>ezv3Z</identificationNumber>
+              <nationality>GB</nationality>
+            </TransportMeans>
+          </Transhipment>
+        </Incident>
+      </Consignment>
+    </ncts:CC007C>
+
   lazy val validCode: String = "IE015"
 
   lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
@@ -368,6 +472,19 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         r =>
           r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
             "Root node doesn't match with the messageType"
+          )
+      }
+    }
+
+    "when referenceNumber doesn't start with GB or XI , return BusinessValidationError" in {
+      val source = Source.single(ByteString(invalidReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut    = new XmlValidationServiceImpl
+      val result = sut.validate("IE007", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
+            "Reference numbers must start with either GB or XI"
           )
       }
     }
