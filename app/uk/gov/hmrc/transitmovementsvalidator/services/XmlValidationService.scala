@@ -81,18 +81,27 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   val inputSource = new InputSource(xmlInput)
                   val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
                     new mutable.ListBuffer[XmlSchemaValidationError]
-                  var elementValue = ""
-                  var rootTag      = ""
+                  var elementValue     = ""
+                  var rootTag          = ""
+                  val referenceNumbers = new mutable.ListBuffer[String]
 
                   val parser = saxParser.newSAXParser.parse(
                     inputSource,
                     new DefaultHandler {
-                      var inMessageTypeElement = false
+                      var inMessageTypeElement               = false
+                      var inReferenceNumber                  = false
+                      var inCustomsOfficeOfDeparture         = false
+                      var inCustomsOfficeOfDestinationActual = false
 
-                      override def characters(ch: Array[Char], start: Int, length: Int): Unit =
+                      override def characters(ch: Array[Char], start: Int, length: Int): Unit = {
                         if (inMessageTypeElement) {
                           elementValue = new String(ch, start, length)
                         }
+
+                        if (inReferenceNumber && (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual)) {
+                          referenceNumbers += new String(ch, start, length)
+                        }
+                      }
 
                       override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
                         if (qName.startsWith("ncts:")) {
@@ -101,12 +110,32 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                         if (qName.equals("messageType")) {
                           inMessageTypeElement = true
                         }
+                        if (qName.equals("referenceNumber")) {
+                          inReferenceNumber = true
+                        }
+                        if (qName.equals("CustomsOfficeOfDeparture")) {
+                          inCustomsOfficeOfDeparture = true
+                        }
+                        if (qName.equals("CustomsOfficeOfDestinationActual")) {
+                          inCustomsOfficeOfDestinationActual = true
+                        }
                       }
 
-                      override def endElement(uri: String, localName: String, qName: String): Unit =
+                      override def endElement(uri: String, localName: String, qName: String): Unit = {
                         if (qName.equals("messageType")) {
                           inMessageTypeElement = false
                         }
+
+                        if (qName.equals("referenceNumber")) {
+                          inReferenceNumber = false
+                        }
+                        if (qName.equals("CustomsOfficeOfDeparture")) {
+                          inCustomsOfficeOfDeparture = false
+                        }
+                        if (qName.equals("CustomsOfficeOfDestinationActual")) {
+                          inCustomsOfficeOfDestinationActual = false
+                        }
+                      }
 
                       override def warning(error: SAXParseException): Unit = {}
 
@@ -127,15 +156,31 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                         XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
                     }
 
-                  if (!elementValue.equalsIgnoreCase(rootTag)) {
-                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-                  } else {
-                    NonEmptyList
-                      .fromList(errorBuffer.toList)
-                      .map(
-                        x => Either.left(XmlFailedValidation(x))
+//                  if (!elementValue.equalsIgnoreCase(rootTag)) {
+//                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
+//                  } else {
+//                    NonEmptyList
+//                      .fromList(errorBuffer.toList)
+//                      .map(
+//                        x => Either.left(XmlFailedValidation(x))
+//                      )
+//                      .getOrElse(parseXml)
+//                  }
+
+                  (elementValue.equalsIgnoreCase(rootTag), NonEmptyList.fromList(errorBuffer.toList)) match {
+                    case (false, _) =>
+                      Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
+                    case (true, None) =>
+                      val invalidReferenceNumbers = referenceNumbers.exists(
+                        ref => !ref.startsWith("GB") && !ref.startsWith("XI")
                       )
-                      .getOrElse(parseXml)
+                      if (invalidReferenceNumbers) {
+                        Either.left(BusinessValidationError("Reference numbers must start with either GB or XI"))
+                      } else {
+                        parseXml
+                      }
+                    case (true, Some(x)) =>
+                      Either.left(XmlFailedValidation(x))
                   }
 
               }.toEither

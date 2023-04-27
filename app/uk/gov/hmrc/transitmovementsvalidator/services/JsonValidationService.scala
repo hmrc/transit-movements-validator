@@ -24,14 +24,10 @@ import akka.util.ByteString
 import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.fasterxml.jackson.core.JsonParseException
-import com.google.inject.ImplementedBy
-
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
-import scala.concurrent.duration.DurationInt
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.inject.ImplementedBy
 import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
@@ -39,19 +35,19 @@ import uk.gov.hmrc.transitmovementsvalidator.models.CustomValidationMessage
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError._
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
+import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
 import scala.jdk.CollectionConverters._
-import scala.util.Try
-import scala.util.Success
 import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
 import scala.util.Using
 
 object JsonValidationService {
@@ -82,6 +78,30 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
     )
     .toMap
 
+  def findNodes(jsonNode: JsonNode, targetNodes: List[String]): List[JsonNode] = {
+    val foundNodes = new ListBuffer[JsonNode]()
+
+    def traverse(node: JsonNode): Unit =
+      if (node.isObject) {
+        node.fields().forEachRemaining {
+          field =>
+            if (targetNodes.contains(field.getKey)) {
+              foundNodes += field.getValue
+            } else {
+              traverse(field.getValue)
+            }
+        }
+      } else if (node.isArray) {
+        node.elements().forEachRemaining {
+          arrayElement =>
+            traverse(arrayElement)
+        }
+      }
+
+    traverse(jsonNode)
+    foundNodes.toList
+  }
+
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
@@ -107,29 +127,54 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
             case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
             case Failure(thr)                     => Future.successful(Left(Unexpected(Some(thr))))
+            case _                                => Future.successful(Left(Unexpected(None))) // add this line to handle the case when validateJson returns a Failure
           }
       }
     }
 
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
-    Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
-      jsonInput =>
-        val jsonNode: JsonNode      = mapper.readTree(jsonInput)
-        val rootNode                = jsonNode.fields().next().getKey
-        val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
-        val messageTypeFromRootNode = rootNode.split(":")(1)
-        if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
-          Set(CustomValidationMessage(None, "Root node doesn't match with the messageType", isBusinessValidation = true))
-        } else {
-          schemaValidator
-            .validate(jsonNode)
-            .asScala
-            .map(
-              vm => CustomValidationMessage(Some(vm.getSchemaPath), vm.getMessage, isBusinessValidation = false)
-            )
-            .toSet
-        }
+    Try {
+      Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+        jsonInput =>
+          val jsonNode: JsonNode      = mapper.readTree(jsonInput)
+          val rootNode                = jsonNode.fields().next().getKey
+          val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
+          val messageTypeFromRootNode = rootNode.split(":")(1)
 
+          if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
+            Set(CustomValidationMessage(None, "Root node doesn't match with the messageType", isBusinessValidation = true))
+          } else {
+            val schemaValidationErrors: Set[CustomValidationMessage] =
+              schemaValidator
+                .validate(jsonNode)
+                .asScala
+                .map(
+                  vm => CustomValidationMessage(Some(vm.getSchemaPath), vm.getMessage, isBusinessValidation = false)
+                )
+                .toSet
+
+            val customsOfficeNodes = List("CustomsOfficeOfDeparture", "CustomsOfficeOfDestinationActual")
+
+            val targetNodes = findNodes(jsonNode, customsOfficeNodes)
+
+            val referenceNumberErrors = targetNodes.flatMap {
+              customsOfficeNode =>
+                val referenceNumberNode = customsOfficeNode.path("referenceNumber")
+                if (referenceNumberNode.isMissingNode) {
+                  None
+                } else {
+                  val referenceNumber = referenceNumberNode.asText()
+                  if (!referenceNumber.startsWith("GB") && !referenceNumber.startsWith("XI")) {
+                    Some(CustomValidationMessage(None, s"Invalid reference number must start with 'GB' or 'XI'.", isBusinessValidation = true))
+                  } else {
+                    None
+                  }
+                }
+            }.toSet
+
+            schemaValidationErrors ++ referenceNumberErrors
+          }
+      }.get
     }
 
   // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
