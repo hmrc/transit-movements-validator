@@ -275,10 +275,10 @@ object TestObjects {
         <referenceNumber>GB444</referenceNumber>
       </Authorisation>
       <CustomsOfficeOfDeparture>
-        <referenceNumber>AB123456</referenceNumber>
+        <referenceNumber>GB123456</referenceNumber>
       </CustomsOfficeOfDeparture>
       <CustomsOfficeOfDestinationDeclared>
-        <referenceNumber>AB123456</referenceNumber>
+        <referenceNumber>GB123456</referenceNumber>
       </CustomsOfficeOfDestinationDeclared>
       <!--0 to 9 repetitions:-->
       <CustomsOfficeOfTransitDeclared>
@@ -1041,7 +1041,7 @@ object TestObjects {
         <bindingItinerary>0</bindingItinerary>
       </TransitOperation>
       <CustomsOfficeOfDeparture>
-        <referenceNumber>ZQZ20442</referenceNumber>
+        <referenceNumber>GBZ20442</referenceNumber>
       </CustomsOfficeOfDeparture>
       <CustomsOfficeOfDestinationDeclared>
         <referenceNumber>ZQZ20442</referenceNumber>
@@ -1103,7 +1103,7 @@ object TestObjects {
               "bindingItinerary"          -> "0"
             ),
             "CustomsOfficeOfDeparture" -> Json.obj(
-              "referenceNumber" -> "ZQZ20442"
+              "referenceNumber" -> "GBZ20442"
             ),
             "CustomsOfficeOfDestinationDeclared" -> Json.obj(
               "referenceNumber" -> "ZQZ20442"
@@ -1305,7 +1305,7 @@ object TestObjects {
           "limitDate" -> "2014-06-09"
         ),
         "CustomsOfficeOfDeparture" -> Json.obj(
-          "referenceNumber" -> "AB123456"
+          "referenceNumber" -> "GB123456"
         ),
         "messageType"           -> "CC170C",
         "@PhaseID"              -> "NCTS5.0",
