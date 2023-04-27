@@ -10,10 +10,10 @@
       "bindingItinerary": "0"
     },
     "CustomsOfficeOfDeparture": {
-      "referenceNumber": "ZQZ20442"
+      "referenceNumber": "GBZ20442"
     },
     "CustomsOfficeOfDestinationDeclared": {
-      "referenceNumber": "ZQZ20442"
+      "referenceNumber": "GBZ20442"
     },
     "messageType": "CC015C",
     "@PhaseID": "NCTS5.0",
