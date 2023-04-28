@@ -156,17 +156,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                         XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
                     }
 
-//                  if (!elementValue.equalsIgnoreCase(rootTag)) {
-//                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-//                  } else {
-//                    NonEmptyList
-//                      .fromList(errorBuffer.toList)
-//                      .map(
-//                        x => Either.left(XmlFailedValidation(x))
-//                      )
-//                      .getOrElse(parseXml)
-//                  }
-
                   (elementValue.equalsIgnoreCase(rootTag), NonEmptyList.fromList(errorBuffer.toList)) match {
                     case (false, _) =>
                       Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
