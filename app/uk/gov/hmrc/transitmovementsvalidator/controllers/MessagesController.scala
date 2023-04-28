@@ -64,12 +64,17 @@ class MessagesController @Inject() (
     with ErrorTranslator
     with ObjectStoreURIHeaderExtractor {
 
-  def validate(messageType: String): Action[Source[ByteString, _]] =
+  def validate(messageType: String): Action[Source[ByteString, _]] = {
+    println("Validating ....")
     contentTypeRoute {
-      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
-      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
-      case None                 => validateObjectStoreMessage(messageType, xmlValidationService)
+      case Some(MimeTypes.XML) =>
+        validateMessage1(messageType, xmlValidationService)
+      case Some(MimeTypes.JSON) =>
+        println("Validating .JSON...")
+        validateMessage1(messageType, jsonValidationService)
+      case None => validateObjectStoreMessage(messageType, xmlValidationService)
     }
+  }
 
   private val failCase: PresentationError => Result = presentationError =>
     Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
@@ -91,11 +96,45 @@ class MessagesController @Inject() (
         )
   }
 
+  def validateMessage1(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+    Action.async(streamFromMemory) {
+      implicit request =>
+        (for {
+          schemaResult   <- validationService.validate(messageType, request.body).asPresentation.toValidationResponse
+          result   = if(schemaResult.get.validationErrors.toList.isEmpty) validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
+        } yield result)
+          .fold[Result](
+            failCase,
+            {
+             // case Some(r) => Ok(Json.toJson(r))
+              case None => NoContent
+            }
+          )
+
+    }
+
   def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
         validationService
           .validate(messageType, request.body)
+          .asPresentation
+          .toValidationResponse
+          .fold(
+            failCase,
+            {
+              case Some(r) => Ok(Json.toJson(r))
+//              case None    => businessValidation(messageType, validationService)
+              case None    => NoContent
+            }
+          )
+    }
+
+  private def businessValidation(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+    Action.async(streamFromMemory) {
+      implicit request =>
+        validationService
+          .businessRuleValidation(messageType, request.body)
           .asPresentation
           .toValidationResponse
           .fold(

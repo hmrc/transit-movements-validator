@@ -24,6 +24,7 @@ import akka.util.ByteString
 import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.google.inject.ImplementedBy
+import org.xml.sax.ErrorHandler
 import org.xml.sax.Attributes
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
@@ -78,9 +79,70 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
             saxParser =>
               Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
                 xmlInput =>
-                  val inputSource = new InputSource(xmlInput)
+                  val parser = saxParser.newSAXParser.getParser
+
                   val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
                     new mutable.ListBuffer[XmlSchemaValidationError]
+
+                  parser.setErrorHandler(new ErrorHandler {
+                    override def warning(error: SAXParseException): Unit = {}
+
+                    override def error(error: SAXParseException): Unit =
+                      errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+
+                    override def fatalError(error: SAXParseException): Unit =
+                      errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+                  })
+
+                  val inputSource = new InputSource(xmlInput)
+
+                  val parseXml = Either
+                    .catchOnly[SAXParseException] {
+                      parser.parse(inputSource)
+                    }
+                    .leftMap {
+                      exc =>
+                        XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
+                    }
+
+                  NonEmptyList
+                    .fromList(errorBuffer.toList)
+                    .map(
+                      x => Either.left(XmlFailedValidation(x))
+                    )
+                    .getOrElse(parseXml)
+              }.toEither
+                .leftMap(
+                  thr => ValidationError.Unexpected(Some(thr))
+                )
+                .flatten
+          }
+      }
+    }
+
+  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit] =
+    EitherT {
+
+      val parser = MessageType
+        .find(messageType)
+        .map(
+          t => parsersByType(t)
+        )
+
+      parser match {
+        case None =>
+          //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+          source.runWith(Sink.ignore)
+          Future.successful(Left(UnknownMessageType(messageType)))
+        case Some(futureType) =>
+          futureType.map {
+            saxParser =>
+              Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+                xmlInput =>
+                  val inputSource  = new InputSource(xmlInput)
                   var elementValue = ""
                   var rootTag      = ""
 
@@ -108,34 +170,13 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                           inMessageTypeElement = false
                         }
 
-                      override def warning(error: SAXParseException): Unit = {}
-
-                      override def error(error: SAXParseException): Unit =
-                        errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
-
-                      override def fatalError(error: SAXParseException): Unit =
-                        errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
                     }
                   )
-
-                  val parseXml = Either
-                    .catchOnly[SAXParseException] {
-                      parser
-                    }
-                    .leftMap {
-                      exc =>
-                        XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
-                    }
 
                   if (!elementValue.equalsIgnoreCase(rootTag)) {
                     Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
                   } else {
-                    NonEmptyList
-                      .fromList(errorBuffer.toList)
-                      .map(
-                        x => Either.left(XmlFailedValidation(x))
-                      )
-                      .getOrElse(parseXml)
+                    Either.right()
                   }
 
               }.toEither
@@ -145,7 +186,58 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                 .flatten
           }
       }
+
     }
+
+  /*  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+                                                                                          materializer: Materializer,
+                                                                                          ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit] =
+    EitherT {
+      Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+        xmlInput =>
+          val inputSource = new InputSource(xmlInput)
+          var elementValue = ""
+          var rootTag = ""
+
+          val saxParser = SAXParserFactory.newInstance()
+
+          val parser = saxParser.newSAXParser.parse(
+            inputSource,
+            new DefaultHandler {
+              var inMessageTypeElement = false
+
+              override def characters(ch: Array[Char], start: Int, length: Int): Unit =
+                if (inMessageTypeElement) {
+                  elementValue = new String(ch, start, length)
+                }
+
+              override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
+                if (qName.startsWith("ncts:")) {
+                  rootTag = localName
+                }
+                if (qName.equals("messageType")) {
+                  inMessageTypeElement = true
+                }
+              }
+
+              override def endElement(uri: String, localName: String, qName: String): Unit =
+                if (qName.equals("messageType")) {
+                  inMessageTypeElement = false
+                }
+
+            }
+          )
+
+          if (!elementValue.equalsIgnoreCase(rootTag)) {
+            Either.left(ValidationError.UnknownMessageType("Root node doesn't match with the messageType"))
+          } else {
+            Either.right()
+          }
+
+      }
+
+    }*/
 
   def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)

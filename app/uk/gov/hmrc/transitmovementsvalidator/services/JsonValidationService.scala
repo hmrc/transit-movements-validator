@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
+import com.networknt.schema.ValidationMessage
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomValidationMessage
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
@@ -96,40 +97,61 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
           val schemaValidator = schemaValidators(mType.code)
           validateJson(source, schemaValidator) match {
             case Success(errors) if errors.isEmpty => Future.successful(Right(()))
-            case Success(errors) if !errors.head.isBusinessValidation =>
+            case Success(errors) =>
               val validationErrors = errors.map(
-                e => JsonSchemaValidationError(e.schemaPath.get, e.message)
+                e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
               )
+
               Future.successful(Left(JsonFailedValidation(NonEmptyList.fromListUnsafe(validationErrors.toList))))
-
-            case Success(errors) if errors.head.isBusinessValidation =>
-              Future.successful(Left(BusinessValidationError(errors.head.message)))
-
             case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
             case Failure(thr)                     => Future.successful(Left(Unexpected(Some(thr))))
           }
       }
     }
 
-  def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
+  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit] = {
+    println("businessRuleValidation....")
+    EitherT {
+      MessageType.values.find(_.code == messageType) match {
+        case Some(_) =>
+          println("match messageType....")
+          validateJson(source) match {
+            case Success(errors) if errors.isEmpty => Future.successful(Right(()))
+            case Success(errors) if errors.head.isBusinessValidation =>
+              Future.successful(Left(BusinessValidationError(errors.head.message)))
+            case Failure(thr) => Future.successful(Left(Unexpected(Some(thr))))
+          }
+        case None =>
+          println("None....")
+          Future.successful(Left(UnknownMessageType(messageType)))
+      }
+    }
+  }
+
+  def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
-        val jsonNode: JsonNode      = mapper.readTree(jsonInput)
+        val jsonNode: JsonNode = mapper.readTree(jsonInput)
+        schemaValidator.validate(jsonNode).asScala.toSet
+    }
+
+  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
+    Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+      jsonInput =>
+        println("reading jsoninput = " + jsonInput)
+        val jsonNode: JsonNode = mapper.readTree(jsonInput)
+        println("jsonNode")
         val rootNode                = jsonNode.fields().next().getKey
         val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
         val messageTypeFromRootNode = rootNode.split(":")(1)
         if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
           Set(CustomValidationMessage(None, "Root node doesn't match with the messageType", isBusinessValidation = true))
         } else {
-          schemaValidator
-            .validate(jsonNode)
-            .asScala
-            .map(
-              vm => CustomValidationMessage(Some(vm.getSchemaPath), vm.getMessage, isBusinessValidation = false)
-            )
-            .toSet
+          Set()
         }
-
     }
 
   // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
