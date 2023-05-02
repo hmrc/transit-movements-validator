@@ -48,6 +48,7 @@ import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 import scala.util.Try
 import scala.util.Success
@@ -81,6 +82,30 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       msgType => msgType.code -> JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )
     .toMap
+
+  def findNodes(jsonNode: JsonNode, targetNodes: List[String]): List[JsonNode] = {
+    val foundNodes = new ListBuffer[JsonNode]()
+
+    def traverse(node: JsonNode): Unit =
+      if (node.isObject) {
+        node.fields().forEachRemaining {
+          field =>
+            if (targetNodes.contains(field.getKey)) {
+              foundNodes += field.getValue
+            } else {
+              traverse(field.getValue)
+            }
+        }
+      } else if (node.isArray) {
+        node.elements().forEachRemaining {
+          arrayElement =>
+            traverse(arrayElement)
+        }
+      }
+
+    traverse(jsonNode)
+    foundNodes.toList
+  }
 
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
@@ -133,17 +158,39 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
     }
 
   def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[BusinessValidationError]] =
+    Try {
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
         val jsonNode: JsonNode      = mapper.readTree(jsonInput)
         val rootNode                = jsonNode.fields().next().getKey
         val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
         val messageTypeFromRootNode = rootNode.split(":")(1)
-        if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
+        val rootNodeErrors = if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
           Set(BusinessValidationError("Root node doesn't match with the messageType"))
         } else {
           Set()
         }
+
+        val customsOfficeNodes = List("CustomsOfficeOfDeparture", "CustomsOfficeOfDestinationActual")
+        val targetNodes = findNodes(jsonNode, customsOfficeNodes)
+
+        val referenceNumberErrors = targetNodes.flatMap {
+          customsOfficeNode =>
+            val referenceNumberNode = customsOfficeNode.path("referenceNumber")
+            if (referenceNumberNode.isMissingNode) {
+              None
+            } else {
+              val referenceNumber = referenceNumberNode.asText()
+              if (!referenceNumber.startsWith("GB") && !referenceNumber.startsWith("XI")) {
+                Some(BusinessValidationError(None, s"Invalid reference number must start with 'GB' or 'XI'.", isBusinessValidation = true))
+              } else {
+                None
+              }
+            }
+        }.toSet
+
+        rootNodeErrors ++ referenceNumberErrors
+    }.get
     }
 
   // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
