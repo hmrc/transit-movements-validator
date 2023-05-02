@@ -123,7 +123,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit] =
+  ): EitherT[Future, ValidationError, Unit] = {
+    println("Business Rule validation...")
     EitherT {
 
       val parser = MessageType
@@ -174,20 +175,23 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   )
 
                   if (!elementValue.equalsIgnoreCase(rootTag)) {
+                    println("Root node doesn't match with the messageType...")
                     Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
                   } else {
+                    println("success...")
                     Either.right()
                   }
 
-              }.toEither
-                .leftMap(
-                  thr => ValidationError.Unexpected(Some(thr))
-                )
-                .flatten
+              }.toEither.leftMap {
+                thr =>
+                  println("ValidationError.Unexpected..." + thr.getMessage)
+                  ValidationError.Unexpected(Some(thr))
+              }.flatten
           }
       }
 
     }
+  }
 
   /*  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
                                                                                           materializer: Materializer,

@@ -22,6 +22,7 @@ import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
+import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
@@ -32,6 +33,7 @@ import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services._
+import uk.gov.hmrc.transitmovementsvalidator.utils.StreamWithFile
 
 import javax.inject.Inject
 import scala.concurrent._
@@ -42,9 +44,12 @@ object MessagesController {
 
     def toValidationResponse(implicit ec: ExecutionContext): EitherT[Future, PresentationError, Option[ValidationResponse]] =
       value.transform {
-        case Left(SchemaValidationPresentationError(errors)) => Right(Some(ValidationResponse(errors)))
-        case Left(x)                                         => Left(x)
-        case Right(_)                                        => Right(None)
+        case Left(SchemaValidationPresentationError(errors)) =>
+          Right(Some(ValidationResponse(errors)))
+        case Left(x) =>
+          Left(x)
+        case Right(_) =>
+          Right(None)
       }
   }
 }
@@ -53,25 +58,25 @@ class MessagesController @Inject() (
   cc: ControllerComponents,
   xmlValidationService: XmlValidationService,
   jsonValidationService: JsonValidationService,
-  objectStoreService: ObjectStoreService
+  objectStoreService: ObjectStoreService,
 )(implicit
   val materializer: Materializer,
+  val temporaryFileCreator: TemporaryFileCreator,
   executionContext: ExecutionContext
 ) extends BackendController(cc)
     with Logging
     with StreamingParsers
+    with StreamWithFile
     with ContentTypeRouting
     with ErrorTranslator
     with ObjectStoreURIHeaderExtractor {
 
   def validate(messageType: String): Action[Source[ByteString, _]] = {
-    println("Validating ....")
     contentTypeRoute {
       case Some(MimeTypes.XML) =>
-        validateMessage1(messageType, xmlValidationService)
+        validateMessage(messageType, xmlValidationService)
       case Some(MimeTypes.JSON) =>
-        println("Validating .JSON...")
-        validateMessage1(messageType, jsonValidationService)
+        validateMessage(messageType, jsonValidationService)
       case None => validateObjectStoreMessage(messageType, xmlValidationService)
     }
   }
@@ -96,24 +101,32 @@ class MessagesController @Inject() (
         )
   }
 
-  def validateMessage1(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+  def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
+        val file = temporaryFileCreator.create()
         (for {
-          schemaResult   <- validationService.validate(messageType, request.body).asPresentation.toValidationResponse
-          result   = if(schemaResult.get.validationErrors.toList.isEmpty) validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
-        } yield result)
+          schemaResult <- validationService.validate(messageType, request.body).asPresentation.toValidationResponse
+          result = if (schemaResult.isEmpty) validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
+        } yield (schemaResult, result))
           .fold[Result](
             failCase,
-            {
-             // case Some(r) => Ok(Json.toJson(r))
-              case None => NoContent
-            }
+            response =>
+              if (response._1.isDefined) {
+                response._1 match {
+                  case Some(r) => Ok(Json.toJson(r))
+                  case None    => NoContent
+                }
+              } else {
+                response._2 match {
+                  case _ => NoContent
+                }
+              }
           )
 
     }
 
-  def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+  def validateMessage1(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.async(streamFromMemory) {
       implicit request =>
         validationService
@@ -125,7 +138,7 @@ class MessagesController @Inject() (
             {
               case Some(r) => Ok(Json.toJson(r))
 //              case None    => businessValidation(messageType, validationService)
-              case None    => NoContent
+              case None => NoContent
             }
           )
     }
