@@ -22,4 +22,3 @@ import play.api.mvc.WrappedRequest
 abstract class BodyReplaceableRequest[+R[_], B](request: Request[B]) extends WrappedRequest[B](request) {
   def replaceBody(body: B): R[B]
 }
-

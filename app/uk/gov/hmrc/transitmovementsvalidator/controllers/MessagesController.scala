@@ -21,6 +21,7 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsStdInstancesForFuture
+import cats.implicits.catsSyntaxEitherId
 import play.api.Logging
 import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.json.Json
@@ -47,8 +48,10 @@ object MessagesController {
         case Left(SchemaValidationPresentationError(errors)) =>
           Right(Some(ValidationResponse(errors)))
         case Left(x) =>
+          println("Left(x) = " + x.message)
           Left(x)
         case Right(_) =>
+          println("Right = ")
           Right(None)
       }
   }
@@ -58,7 +61,7 @@ class MessagesController @Inject() (
   cc: ControllerComponents,
   xmlValidationService: XmlValidationService,
   jsonValidationService: JsonValidationService,
-  objectStoreService: ObjectStoreService,
+  objectStoreService: ObjectStoreService
 )(implicit
   val materializer: Materializer,
   val temporaryFileCreator: TemporaryFileCreator,
@@ -71,7 +74,7 @@ class MessagesController @Inject() (
     with ErrorTranslator
     with ObjectStoreURIHeaderExtractor {
 
-  def validate(messageType: String): Action[Source[ByteString, _]] = {
+  def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
       case Some(MimeTypes.XML) =>
         validateMessage(messageType, xmlValidationService)
@@ -79,7 +82,6 @@ class MessagesController @Inject() (
         validateMessage(messageType, jsonValidationService)
       case None => validateObjectStoreMessage(messageType, xmlValidationService)
     }
-  }
 
   private val failCase: PresentationError => Result = presentationError =>
     Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
@@ -102,9 +104,8 @@ class MessagesController @Inject() (
   }
 
   def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
+    Action.stream {
       implicit request =>
-        val file = temporaryFileCreator.create()
         (for {
           schemaResult <- validationService.validate(messageType, request.body).asPresentation.toValidationResponse
           result = if (schemaResult.isEmpty) validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
@@ -127,18 +128,23 @@ class MessagesController @Inject() (
     }
 
   def validateMessage1(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
+    Action.stream {
       implicit request =>
         validationService
           .validate(messageType, request.body)
           .asPresentation
           .toValidationResponse
-          .fold(
+          .flatMap {
+            case Some(value) if value.validationErrors.toList.isEmpty =>
+              validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
+            case validationResult =>
+              EitherT(Future.successful(validationResult.asRight[PresentationError]))
+          }
+          .fold[Result](
             failCase,
             {
-              case Some(r) => Ok(Json.toJson(r))
-//              case None    => businessValidation(messageType, validationService)
-              case None => NoContent
+              case Some(r) => Ok(Json.toJson(r)) // r is now of type ValidationResult, which has an implicit Writes instance
+              case None    => NoContent
             }
           )
     }

@@ -17,16 +17,23 @@
 package uk.gov.hmrc.transitmovementsvalidator.controllers.stream
 
 import akka.stream.Materializer
-import akka.stream.scaladsl.{FileIO, Source}
+import akka.stream.scaladsl.FileIO
+import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import cats.implicits.catsSyntaxMonadError
 import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.streams.Accumulator
-import play.api.mvc.{Action, ActionBuilder, BaseControllerHelpers, BodyParser, Result}
+import play.api.mvc.Action
+import play.api.mvc.ActionBuilder
+import play.api.mvc.BaseControllerHelpers
+import play.api.mvc.BodyParser
+import play.api.mvc.Request
+import play.api.mvc.Result
 import uk.gov.hmrc.transitmovementsvalidator.controllers.BodyReplaceableRequest
 
 import java.util.concurrent.Executors
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 trait StreamingParsers {
   self: BaseControllerHelpers =>
@@ -45,23 +52,23 @@ trait StreamingParsers {
       Accumulator.source[ByteString].map(Right.apply)(materializer.executionContext)
   }
 
-  implicit class ActionBuilderStreamHelpers[R[A] <: BodyReplaceableRequest[R, A]](actionBuilder: ActionBuilder[R, _]) {
+  implicit class ActionBuilderStreamHelpers(actionBuilder: ActionBuilder[Request, _]) {
 
     /** Updates the [[Source]] in the [[BodyReplaceableRequest]] with a version that can be used
-     * multiple times via the use of a temporary file.
-     *
-     * @param block The code to use the with the reusable source
-     * @return An [[Action]]
-     */
+      * multiple times via the use of a temporary file.
+      *
+      * @param block The code to use the with the reusable source
+      * @return An [[Action]]
+      */
     def stream(
-                block: R[Source[ByteString, _]] => Future[Result]
-              )(implicit temporaryFileCreator: TemporaryFileCreator): Action[Source[ByteString, _]] =
+      block: Request[Source[ByteString, _]] => Future[Result]
+    )(implicit temporaryFileCreator: TemporaryFileCreator): Action[Source[ByteString, _]] =
       actionBuilder.async(streamFromMemory) {
         request =>
           val file = temporaryFileCreator.create()
           (for {
-            _ <- request.body.runWith(FileIO.toPath(file))
-            result <- block(request.replaceBody(FileIO.fromPath(file)))
+            _      <- request.body.runWith(FileIO.toPath(file))
+            result <- block(request.withBody(FileIO.fromPath(file)))
           } yield result)
             .attemptTap {
               _ =>

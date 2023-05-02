@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.utils
 
-import akka.stream.{IOResult, Materializer}
-import akka.stream.scaladsl.{FileIO, Source}
+import akka.stream.IOResult
+import akka.stream.Materializer
+import akka.stream.scaladsl.FileIO
+import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import cats.data.EitherT
 import cats.syntax.flatMap._
@@ -26,7 +28,8 @@ import play.api.libs.Files.TemporaryFileCreator
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
 
 import java.nio.file.Path
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 trait StreamWithFile {

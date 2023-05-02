@@ -93,3 +93,5 @@ case class SchemaValidationPresentationError(errors: NonEmptyList[SchemaValidati
   val message: String = "Schema Validation Error"
   val code: ErrorCode = ErrorCode.SchemaValidation
 }
+
+case class BusinessValidationPresentationError(message: String, code: ErrorCode) extends PresentationError
