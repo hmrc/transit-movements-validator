@@ -112,12 +112,10 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit] = {
-    println("businessRuleValidation....")
+  ): EitherT[Future, ValidationError, Unit] =
     EitherT {
       MessageType.values.find(_.code == messageType) match {
         case Some(_) =>
-          println("match messageType....")
           validateJson(source) match {
             case Success(errors) if errors.isEmpty => Future.successful(Right(()))
             case Success(errors) if errors.head.isBusinessValidation =>
@@ -125,11 +123,9 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
             case Failure(thr) => Future.successful(Left(Unexpected(Some(thr))))
           }
         case None =>
-          println("None....")
           Future.successful(Left(UnknownMessageType(messageType)))
       }
     }
-  }
 
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
@@ -141,9 +137,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
   def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
-        println("reading jsoninput = " + jsonInput)
-        val jsonNode: JsonNode = mapper.readTree(jsonInput)
-        println("jsonNode")
+        val jsonNode: JsonNode      = mapper.readTree(jsonInput)
         val rootNode                = jsonNode.fields().next().getKey
         val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
         val messageTypeFromRootNode = rootNode.split(":")(1)

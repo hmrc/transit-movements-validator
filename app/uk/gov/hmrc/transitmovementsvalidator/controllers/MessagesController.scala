@@ -102,11 +102,13 @@ class MessagesController @Inject() (
               case Some(schemaResult) => Future.successful(Ok(Json.toJson(schemaResult)))
               case None =>
                 validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
-                  case Right(_)                      => Future.successful(NoContent)
-                  case Left(businessValidationError) => Future.successful(BadRequest(Json.toJson(businessValidationError)))
+                  case Right(_) => Future.successful(NoContent)
+                  case Left(presentationError) =>
+                    Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
                 }
             }
-          case Left(presentationError) => Future.successful(NotFound(Json.toJson(presentationError)))
+          case Left(presentationError) =>
+            Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
         }
     }
 

@@ -348,7 +348,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     "when message type and root node doesn't match, return BusinessValidationError" in {
       val source = Source.single(ByteString(rootNodeMismatchXml.mkString, StandardCharsets.UTF_8))
       val sut    = new XmlValidationServiceImpl
-      val result = sut.validate("IE015", source)
+      val result = sut.businessRuleValidation("IE015", source)
 
       whenReady(result.value) {
         r =>
