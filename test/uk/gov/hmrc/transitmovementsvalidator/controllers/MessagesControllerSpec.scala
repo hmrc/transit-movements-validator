@@ -333,6 +333,51 @@ class MessagesControllerSpec
       status(result) mustBe BAD_REQUEST
     }
 
+    "root node doesn't match messageType in json, return BadRequest with an error message" in {
+
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockJsonValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType"))
+        )
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
+      val result  = sut.validate(validCode)(request)
+
+      status(result) mustBe BAD_REQUEST
+
+      contentAsJson(result) mustBe
+        Json.obj(
+          "message" -> Json.toJson("Root node doesn't match with the messageType"),
+          "code"    -> Json.toJson("BUSINESS_VALIDATION_ERROR")
+        )
+    }
+
+    "on an exception being thrown during json business validation, must return Internal Server Error" in {
+      val error = new IllegalStateException("Unable to extract schema")
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockJsonValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
+        )
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
+      val result  = sut.validate(validCode)(request)
+
+      contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
+      status(result) mustBe INTERNAL_SERVER_ERROR
+    }
+
   }
 
   "ResponseCreator implicit class" - {

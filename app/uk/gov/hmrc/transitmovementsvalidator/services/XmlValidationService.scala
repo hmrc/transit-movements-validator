@@ -150,6 +150,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                     inputSource,
                     new DefaultHandler {
                       var inMessageTypeElement = false
+                      var startPrefix          = ""
 
                       override def characters(ch: Array[Char], start: Int, length: Int): Unit =
                         if (inMessageTypeElement) {
@@ -157,7 +158,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                         }
 
                       override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
-                        if (uri.nonEmpty && qName.contains(":")) {
+                        if (uri.nonEmpty && qName.startsWith(startPrefix + ":")) {
                           rootTag = localName
                         }
                         if (qName.equals("messageType")) {
@@ -169,6 +170,9 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                         if (qName.equals("messageType")) {
                           inMessageTypeElement = false
                         }
+
+                      override def startPrefixMapping(prefix: String, uri: String): Unit =
+                        startPrefix = prefix
 
                     }
                   )
