@@ -21,7 +21,6 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsStdInstancesForFuture
-import cats.implicits.catsSyntaxEitherId
 import play.api.Logging
 import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.json.Json
@@ -34,7 +33,6 @@ import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services._
-import uk.gov.hmrc.transitmovementsvalidator.utils.StreamWithFile
 
 import javax.inject.Inject
 import scala.concurrent._
@@ -45,14 +43,9 @@ object MessagesController {
 
     def toValidationResponse(implicit ec: ExecutionContext): EitherT[Future, PresentationError, Option[ValidationResponse]] =
       value.transform {
-        case Left(SchemaValidationPresentationError(errors)) =>
-          Right(Some(ValidationResponse(errors)))
-        case Left(x) =>
-          println("Left(x) = " + x.message)
-          Left(x)
-        case Right(_) =>
-          println("Right = ")
-          Right(None)
+        case Left(SchemaValidationPresentationError(errors)) => Right(Some(ValidationResponse(errors)))
+        case Left(x)                                         => Left(x)
+        case Right(_)                                        => Right(None)
       }
   }
 }
@@ -69,18 +62,15 @@ class MessagesController @Inject() (
 ) extends BackendController(cc)
     with Logging
     with StreamingParsers
-    with StreamWithFile
     with ContentTypeRouting
     with ErrorTranslator
     with ObjectStoreURIHeaderExtractor {
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
-      case Some(MimeTypes.XML) =>
-        validateMessage(messageType, xmlValidationService)
-      case Some(MimeTypes.JSON) =>
-        validateMessage(messageType, jsonValidationService)
-      case None => validateObjectStoreMessage(messageType, xmlValidationService)
+      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
+      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
+      case None                 => validateObjectStoreMessage(messageType, xmlValidationService)
     }
 
   private val failCase: PresentationError => Result = presentationError =>
@@ -106,63 +96,18 @@ class MessagesController @Inject() (
   def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.stream {
       implicit request =>
-        (for {
-          schemaResult <- validationService.validate(messageType, request.body).asPresentation.toValidationResponse
-          result = if (schemaResult.isEmpty) validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
-        } yield (schemaResult, result))
-          .fold[Result](
-            failCase,
-            response =>
-              if (response._1.isDefined) {
-                response._1 match {
-                  case Some(r) => Ok(Json.toJson(r))
-                  case None    => NoContent
+        validationService.validate(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
+          case Right(schemaResult) =>
+            schemaResult match {
+              case Some(schemaResult) => Future.successful(Ok(Json.toJson(schemaResult)))
+              case None =>
+                validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
+                  case Right(_)                      => Future.successful(NoContent)
+                  case Left(businessValidationError) => Future.successful(BadRequest(Json.toJson(businessValidationError)))
                 }
-              } else {
-                response._2 match {
-                  case _ => NoContent
-                }
-              }
-          )
-
-    }
-
-  def validateMessage1(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
-    Action.stream {
-      implicit request =>
-        validationService
-          .validate(messageType, request.body)
-          .asPresentation
-          .toValidationResponse
-          .flatMap {
-            case Some(value) if value.validationErrors.toList.isEmpty =>
-              validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse
-            case validationResult =>
-              EitherT(Future.successful(validationResult.asRight[PresentationError]))
-          }
-          .fold[Result](
-            failCase,
-            {
-              case Some(r) => Ok(Json.toJson(r)) // r is now of type ValidationResult, which has an implicit Writes instance
-              case None    => NoContent
             }
-          )
-    }
-
-  private def businessValidation(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
-      implicit request =>
-        validationService
-          .businessRuleValidation(messageType, request.body)
-          .asPresentation
-          .toValidationResponse
-          .fold(
-            failCase,
-            {
-              case Some(r) => Ok(Json.toJson(r))
-              case None    => NoContent
-            }
-          )
+          case Left(presentationError) => Future.successful(NotFound(Json.toJson(presentationError)))
+        }
     }
 
 }

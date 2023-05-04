@@ -123,8 +123,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit] = {
-    println("Business Rule validation...")
+  ): EitherT[Future, ValidationError, Unit] =
     EitherT {
 
       val parser = MessageType
@@ -147,7 +146,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   var elementValue = ""
                   var rootTag      = ""
 
-                  val parser = saxParser.newSAXParser.parse(
+                  saxParser.newSAXParser.parse(
                     inputSource,
                     new DefaultHandler {
                       var inMessageTypeElement = false
@@ -158,7 +157,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                         }
 
                       override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
-                        if (qName.startsWith("ncts:")) {
+                        if (uri.nonEmpty && qName.contains(":")) {
                           rootTag = localName
                         }
                         if (qName.equals("messageType")) {
@@ -175,73 +174,19 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   )
 
                   if (!elementValue.equalsIgnoreCase(rootTag)) {
-                    println("Root node doesn't match with the messageType...")
                     Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
                   } else {
-                    println("success...")
                     Either.right()
                   }
 
               }.toEither.leftMap {
                 thr =>
-                  println("ValidationError.Unexpected..." + thr.getMessage)
                   ValidationError.Unexpected(Some(thr))
               }.flatten
           }
       }
 
     }
-  }
-
-  /*  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
-                                                                                          materializer: Materializer,
-                                                                                          ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit] =
-    EitherT {
-      Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
-        xmlInput =>
-          val inputSource = new InputSource(xmlInput)
-          var elementValue = ""
-          var rootTag = ""
-
-          val saxParser = SAXParserFactory.newInstance()
-
-          val parser = saxParser.newSAXParser.parse(
-            inputSource,
-            new DefaultHandler {
-              var inMessageTypeElement = false
-
-              override def characters(ch: Array[Char], start: Int, length: Int): Unit =
-                if (inMessageTypeElement) {
-                  elementValue = new String(ch, start, length)
-                }
-
-              override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
-                if (qName.startsWith("ncts:")) {
-                  rootTag = localName
-                }
-                if (qName.equals("messageType")) {
-                  inMessageTypeElement = true
-                }
-              }
-
-              override def endElement(uri: String, localName: String, qName: String): Unit =
-                if (qName.equals("messageType")) {
-                  inMessageTypeElement = false
-                }
-
-            }
-          )
-
-          if (!elementValue.equalsIgnoreCase(rootTag)) {
-            Either.left(ValidationError.UnknownMessageType("Root node doesn't match with the messageType"))
-          } else {
-            Either.right()
-          }
-
-      }
-
-    }*/
 
   def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)

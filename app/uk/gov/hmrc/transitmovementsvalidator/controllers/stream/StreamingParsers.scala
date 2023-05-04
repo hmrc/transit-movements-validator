@@ -29,7 +29,6 @@ import play.api.mvc.BaseControllerHelpers
 import play.api.mvc.BodyParser
 import play.api.mvc.Request
 import play.api.mvc.Result
-import uk.gov.hmrc.transitmovementsvalidator.controllers.BodyReplaceableRequest
 
 import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
