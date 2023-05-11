@@ -150,11 +150,11 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   saxParser.newSAXParser.parse(
                     inputSource,
                     new DefaultHandler {
-                      var inMessageTypeElement = false
-                      var startPrefix          = ""
+                      var inMessageTypeElement               = false
                       var inReferenceNumber                  = false
                       var inCustomsOfficeOfDeparture         = false
                       var inCustomsOfficeOfDestinationActual = false
+                      var startPrefix                        = ""
 
                       override def characters(ch: Array[Char], start: Int, length: Int): Unit = {
                         if (inMessageTypeElement) {
@@ -208,12 +208,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                     }
                   )
 
-                  if (!elementValue.equalsIgnoreCase(rootTag)) {
-                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-                  } else {
-                    Either.right()
-                  }
-
                   (
                     referenceNumbers.filter(
                       ref => !ref.toUpperCase.startsWith("GB") && !ref.toUpperCase.startsWith("XI")
@@ -223,7 +217,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                     case (invalidRefs, true) if invalidRefs.nonEmpty =>
                       Either.left(BusinessValidationError(s"Invalid reference numbers: ${invalidRefs.mkString(", ")}"))
                     case (_, false) => Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-                    case _ => Either.right(())
+                    case _          => Either.right(())
                   }
 
               }.toEither.leftMap {

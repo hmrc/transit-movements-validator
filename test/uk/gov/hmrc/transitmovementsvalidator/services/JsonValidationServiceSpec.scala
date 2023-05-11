@@ -540,15 +540,29 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       }
     }
 
-    "when referenceNumber node doesn't start with GB or XI, return BusinessValidationError" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference.json"))
+    "when referenceNumber node doesn't start with GB or XI for Arrival, return BusinessValidationError" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference-arrival.json"))
       val sut    = new JsonValidationServiceImpl
-      val result = sut.validate("IE007", source)
+      val result = sut.businessRuleValidation("IE007", source)
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Invalid reference number must start with 'GB' or 'XI'.")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference number must start with 'GB' or 'XI'."
+          r.left.getOrElse(fail("Invalid reference number: GZ123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GZ123456"
+          )
+
+      }
+    }
+
+    "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.businessRuleValidation("IE015", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Invalid reference number: GZ123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GZ123456"
           )
 
       }
