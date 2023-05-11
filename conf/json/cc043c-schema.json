@@ -14594,9 +14594,6 @@
     },
     "n1:MessageTypes": {
       "description": "The list of codes used to identify the type of messages exchanged on the Common Domain and on the External Domain (e.g. CD001B, CD302A, CC515C, CD801A).The values of this codelist are also available and updated in CS/RD2.",
-      "enum": [
-        "CC043C"
-      ],
       "type": "string"
     },
     "n1:MethodOfPaymentContentType": {
