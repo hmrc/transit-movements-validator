@@ -156,10 +156,10 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
             saxParser =>
               Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
                 xmlInput =>
-                  val inputSource      = new InputSource(xmlInput)
-                  var elementValue     = ""
-                  var rootTag          = ""
-                  val referenceNumbers = new mutable.ListBuffer[String]
+                  val inputSource     = new InputSource(xmlInput)
+                  var elementValue    = ""
+                  var rootTag         = ""
+                  var referenceNumber = ""
 
                   saxParser.newSAXParser.parse(
                     inputSource,
@@ -176,7 +176,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                           elementValue = new String(ch, start, length)
                         }
                         if (inReferenceNumber && (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual)) {
-                          referenceNumbers += new String(ch, start, length)
+                          referenceNumber = new String(ch, start, length)
                         }
                       }
 
@@ -231,15 +231,12 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   )
 
                   (
-                    referenceNumbers.filter(
-                      ref => !ref.toUpperCase.startsWith("GB") && !ref.toUpperCase.startsWith("XI")
-                    ),
+                    referenceNumber.toUpperCase.startsWith("GB") || referenceNumber.toUpperCase.startsWith("XI"),
                     elementValue.equalsIgnoreCase(rootTag)
                   ) match {
-                    case (invalidRefs, true) if invalidRefs.nonEmpty =>
-                      Either.left(BusinessValidationError(s"Invalid reference numbers: ${invalidRefs.mkString(", ")}"))
-                    case (_, false) => Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-                    case _          => Either.right(())
+                    case (_, false)   => Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
+                    case (false, _)   => Either.left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+                    case (true, true) => Either.right(())
                   }
 
               }.toEither.leftMap {
