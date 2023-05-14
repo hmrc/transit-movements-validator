@@ -34,6 +34,8 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
 import org.xml.sax.helpers.DefaultHandler
+import uk.gov.hmrc.transitmovementsvalidator.models.ArrivalMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.DepartureMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
@@ -60,8 +62,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     }.toMap
 
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
+                                                                            materializer: Materializer,
+                                                                            ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
       val parser = MessageType
@@ -121,8 +123,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     }
 
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
+                                                                                          materializer: Materializer,
+                                                                                          ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
 
@@ -132,6 +134,18 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
           t => parsersByType(t)
         )
 
+      def checkMessageType(rootTag: String): String = {
+        val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag))
+
+        messageType match {
+          case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
+            "OfficeOfDeparture"
+          case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
+            "OfficeOfDestinationActual"
+          case _ =>
+            ""
+        }
+      }
       parser match {
         case None =>
           //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
@@ -155,6 +169,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                       var inCustomsOfficeOfDeparture         = false
                       var inCustomsOfficeOfDestinationActual = false
                       var startPrefix                        = ""
+                      var checkedMessageType                 = ""
 
                       override def characters(ch: Array[Char], start: Int, length: Int): Unit = {
                         if (inMessageTypeElement) {
@@ -168,21 +183,25 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                       override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
                         if (uri.nonEmpty && qName.startsWith(startPrefix + ":")) {
                           rootTag = localName
+                          checkedMessageType = checkMessageType(rootTag)
                         }
                         if (qName.equals("messageType")) {
                           inMessageTypeElement = true
                         }
 
-                        if (qName.equals("referenceNumber")) {
-                          inReferenceNumber = true
-                        }
-                        if (qName.equals("CustomsOfficeOfDeparture")) {
+                        if (checkedMessageType.equals("OfficeOfDeparture") && qName.equals("CustomsOfficeOfDeparture")) {
                           inCustomsOfficeOfDeparture = true
                         }
-                        if (qName.equals("CustomsOfficeOfDestinationActual")) {
+
+                        if (checkedMessageType.equals("OfficeOfDestinationActual") && qName.equals("CustomsOfficeOfDestinationActual")) {
                           inCustomsOfficeOfDestinationActual = true
                         }
 
+                        if (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual) {
+                          if (qName.equals("referenceNumber")) {
+                            inReferenceNumber = true
+                          }
+                        }
                       }
 
                       override def endElement(uri: String, localName: String, qName: String): Unit = {
@@ -190,16 +209,19 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                           inMessageTypeElement = false
                         }
 
-                        if (qName.equals("referenceNumber")) {
-                          inReferenceNumber = false
-                        }
-                        if (qName.equals("CustomsOfficeOfDeparture")) {
+                        if (checkedMessageType.equals("OfficeOfDeparture") && qName.equals("CustomsOfficeOfDeparture")) {
                           inCustomsOfficeOfDeparture = false
                         }
-                        if (qName.equals("CustomsOfficeOfDestinationActual")) {
+
+                        if (checkedMessageType.equals("OfficeOfDestinationActual") && qName.equals("CustomsOfficeOfDestinationActual")) {
                           inCustomsOfficeOfDestinationActual = false
                         }
 
+                        if (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual) {
+                          if (qName.equals("referenceNumber")) {
+                            inReferenceNumber = false
+                          }
+                        }
                       }
 
                       override def startPrefixMapping(prefix: String, uri: String): Unit =
