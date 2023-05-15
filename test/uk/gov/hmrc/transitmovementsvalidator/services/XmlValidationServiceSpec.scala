@@ -50,7 +50,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     <messageType>CC007C</messageType>
     </ncts:CC015C>
 
-  lazy val invalidArrivalSingleReferenceXml: NodeSeq =
+  lazy val invalidArrivalReferenceXml: NodeSeq =
     <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
       <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
       <messageType>CC007C</messageType>
@@ -59,33 +59,53 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       </CustomsOfficeOfDestinationActual>
     </ncts:CC007C>
 
-  lazy val invalidArrivalMultipleReferenceXml: NodeSeq =
-    <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-      <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
-      <messageType>CC007C</messageType>
-      <CustomsOfficeOfDestinationActual>
-        <referenceNumber>JK123456</referenceNumber>
-        <referenceNumber>GF123456</referenceNumber>
-      </CustomsOfficeOfDestinationActual>
-    </ncts:CC007C>
-
-  lazy val invalidDepartureSingleReferenceXml: NodeSeq =
+  lazy val invalidDepartureReferenceXml: NodeSeq =
     <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-      <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+      <messageSender>token</messageSender>
+      <messageRecipient>cUusObWiVZhuaZFNr6KrXy8y</messageRecipient>
+      <preparationDateAndTime>2022-10-23T15:19:29</preparationDateAndTime>
+      <messageIdentification>P</messageIdentification>
       <messageType>CC015C</messageType>
+      <TransitOperation>
+        <LRN>3CnsTh79I7vtOW1</LRN>
+        <declarationType>G8</declarationType>
+        <additionalDeclarationType>p</additionalDeclarationType>
+        <security>9</security>
+        <reducedDatasetIndicator>1</reducedDatasetIndicator>
+        <bindingItinerary>1</bindingItinerary>
+      </TransitOperation>
       <CustomsOfficeOfDeparture>
-        <referenceNumber>GZ123456</referenceNumber>
+        <referenceNumber>GV1T34FR</referenceNumber>
       </CustomsOfficeOfDeparture>
-    </ncts:CC015C>
-
-  lazy val invalidDepartureMultipleReferenceXml: NodeSeq =
-    <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-      <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
-      <messageType>CC015C</messageType>
-      <CustomsOfficeOfDeparture>
-        <referenceNumber>JK123456</referenceNumber>
-        <referenceNumber>GF123456</referenceNumber>
-      </CustomsOfficeOfDeparture>
+      <CustomsOfficeOfDestinationDeclared>
+        <referenceNumber>GB123456</referenceNumber>
+      </CustomsOfficeOfDestinationDeclared>
+      <HolderOfTheTransitProcedure>
+        <identificationNumber>k</identificationNumber>
+      </HolderOfTheTransitProcedure>
+      <Guarantee>
+        <sequenceNumber>64582</sequenceNumber>
+        <guaranteeType>J</guaranteeType>
+        <otherGuaranteeReference>4yFxS49</otherGuaranteeReference>
+      </Guarantee>
+      <Consignment>
+        <grossMass>1854093104.078068</grossMass>
+        <HouseConsignment>
+          <sequenceNumber>64582</sequenceNumber>
+          <grossMass>1854093104.078068</grossMass>
+          <ConsignmentItem>
+            <goodsItemNumber>39767</goodsItemNumber>
+            <declarationGoodsItemNumber>1861</declarationGoodsItemNumber>
+            <Commodity>
+              <descriptionOfGoods>OPDK4mBmHFyczZqwPjzU5wqgynvlbKtDxc64BAXycRKIOlWGT7YDJcpGNUtmgbs79eqBw2gHpBJ2CRFkOp6RbHh7ZZp0HBtwk8q0mdKZbSdebOLEWzMrVYziNHyHa95fw7iiQonwKfCw6KA0NQQEFaFwmg6D</descriptionOfGoods>
+            </Commodity>
+            <Packaging>
+              <sequenceNumber>64582</sequenceNumber>
+              <typeOfPackages>V8</typeOfPackages>
+            </Packaging>
+          </ConsignmentItem>
+        </HouseConsignment>
+      </Consignment>
     </ncts:CC015C>
 
   lazy val validCode: String = "IE015"
@@ -411,54 +431,28 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       }
     }
 
-    "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given single referenceNumber" in {
-      val source = Source.single(ByteString(invalidArrivalSingleReferenceXml.mkString, StandardCharsets.UTF_8))
+    "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given a valid referenceNumber" in {
+      val source = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
       val sut    = new XmlValidationServiceImpl
       val result = sut.businessRuleValidation("IE007", source)
 
       whenReady(result.value) {
         r =>
           r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference numbers: GZ123456"
+            "Invalid reference number: GZ123456"
           )
       }
     }
 
-    "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given multiple referenceNumbers" in {
-      val source = Source.single(ByteString(invalidArrivalMultipleReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationServiceImpl
-      val result = sut.businessRuleValidation("IE007", source)
-
-      whenReady(result.value) {
-        r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference numbers: JK123456, GF123456"
-          )
-      }
-    }
-
-    "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given single referenceNumber" in {
-      val source = Source.single(ByteString(invalidDepartureSingleReferenceXml.mkString, StandardCharsets.UTF_8))
+    "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given a valid referenceNumber" in {
+      val source = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
       val sut    = new XmlValidationServiceImpl
       val result = sut.businessRuleValidation("IE015", source)
 
       whenReady(result.value) {
         r =>
           r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference numbers: GZ123456"
-          )
-      }
-    }
-
-    "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given multiple referenceNumbers" in {
-      val source = Source.single(ByteString(invalidDepartureMultipleReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationServiceImpl
-      val result = sut.businessRuleValidation("IE015", source)
-
-      whenReady(result.value) {
-        r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference numbers: JK123456, GF123456"
+            "Invalid reference number: GV1T34FR"
           )
       }
     }

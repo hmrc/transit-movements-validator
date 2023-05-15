@@ -11,10 +11,10 @@
             "bindingItinerary": "0"
         },
         "CustomsOfficeOfDeparture": {
-            "referenceNumber": "GZ123456"
+            "referenceNumber": "GV123456"
         },
         "CustomsOfficeOfDestinationDeclared": {
-            "referenceNumber": "GZ123456"
+            "referenceNumber": "GB123456"
         },
         "messageType": "CC015C",
         "@PhaseID": "NCTS5.0",
