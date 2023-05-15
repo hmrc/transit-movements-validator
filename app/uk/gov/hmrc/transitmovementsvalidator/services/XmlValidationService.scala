@@ -62,8 +62,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     }.toMap
 
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
-                                                                            materializer: Materializer,
-                                                                            ec: ExecutionContext
+    materializer: Materializer,
+    ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
       val parser = MessageType
@@ -122,6 +122,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       }
     }
 
+
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
                                                                                           materializer: Materializer,
                                                                                           ec: ExecutionContext
@@ -135,7 +136,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
         )
 
       def checkMessageType(rootTag: String): String = {
-        val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag))
+        val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
 
         messageType match {
           case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
@@ -146,6 +147,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
             ""
         }
       }
+
       parser match {
         case None =>
           //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
@@ -156,51 +158,65 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
             saxParser =>
               Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
                 xmlInput =>
-                  val inputSource     = new InputSource(xmlInput)
-                  var elementValue    = ""
-                  var rootTag         = ""
+                  val inputSource = new InputSource(xmlInput)
+                  var elementValue = ""
+                  var rootTag = ""
                   var referenceNumber = ""
+                  var checkedMessageType = ""
+                  var inReferenceNumber = false
+                  var inCustomsOfficeOfDeparture = false
+                  var inCustomsOfficeOfDestinationActual = false
+                  var withinCustomsOfficeElements = false
 
                   saxParser.newSAXParser.parse(
                     inputSource,
                     new DefaultHandler {
-                      var inMessageTypeElement               = false
-                      var inReferenceNumber                  = false
-                      var inCustomsOfficeOfDeparture         = false
-                      var inCustomsOfficeOfDestinationActual = false
-                      var startPrefix                        = ""
-                      var checkedMessageType                 = ""
+                      var inMessageTypeElement = false
+                      var startPrefix = ""
+                      var customsOfficeOfDestinationActualReferenceNumber: Option[String] = None
+                      var customsOfficeOfEnquiryAtDepartureReferenceNumber: Option[String] = None
+
+                      var withinCustomsOfficeDestinationActual = false
+                      var withinCustomsOfficeEnquiryAtDeparture = false
 
                       override def characters(ch: Array[Char], start: Int, length: Int): Unit = {
                         if (inMessageTypeElement) {
                           elementValue = new String(ch, start, length)
                         }
-                        if (inReferenceNumber && (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual)) {
+                        if (inReferenceNumber && withinCustomsOfficeElements) {
                           referenceNumber = new String(ch, start, length)
                         }
                       }
 
-                      override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
-                        if (uri.nonEmpty && qName.startsWith(startPrefix + ":")) {
-                          rootTag = localName
+                      override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit = {
+                        if (uri.nonEmpty) {
+                          rootTag = qName
                           checkedMessageType = checkMessageType(rootTag)
                         }
                         if (qName.equals("messageType")) {
                           inMessageTypeElement = true
                         }
 
-                        if (checkedMessageType.equals("OfficeOfDeparture") && qName.equals("CustomsOfficeOfDeparture")) {
-                          inCustomsOfficeOfDeparture = true
-                        }
+                        if (checkedMessageType.equals("OfficeOfDeparture")) {
 
-                        if (checkedMessageType.equals("OfficeOfDestinationActual") && qName.equals("CustomsOfficeOfDestinationActual")) {
-                          inCustomsOfficeOfDestinationActual = true
-                        }
-
-                        if (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual) {
-                          if (qName.equals("referenceNumber")) {
-                            inReferenceNumber = true
+                          if (qName.equals("CustomsOfficeOfEnquiryAtDeparture") || qName.equals("CustomsOfficeOfDeparture")) {
+                            inCustomsOfficeOfDeparture = true
+                            withinCustomsOfficeElements = true
+                            withinCustomsOfficeEnquiryAtDeparture = true
                           }
+
+                        }
+
+                        if (checkedMessageType.equals("OfficeOfDestinationActual")) {
+                          if (qName.equals("CustomsOfficeOfDestinationActual")) {
+                            inCustomsOfficeOfDestinationActual = true
+                            withinCustomsOfficeDestinationActual = true
+                            withinCustomsOfficeElements = true
+                          }
+                        }
+
+                        if (withinCustomsOfficeElements && qName.equals("referenceNumber")) {
+                          inReferenceNumber = true
                         }
                       }
 
@@ -209,19 +225,36 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                           inMessageTypeElement = false
                         }
 
-                        if (checkedMessageType.equals("OfficeOfDeparture") && qName.equals("CustomsOfficeOfDeparture")) {
-                          inCustomsOfficeOfDeparture = false
-                        }
-
-                        if (checkedMessageType.equals("OfficeOfDestinationActual") && qName.equals("CustomsOfficeOfDestinationActual")) {
-                          inCustomsOfficeOfDestinationActual = false
-                        }
-
-                        if (inCustomsOfficeOfDeparture || inCustomsOfficeOfDestinationActual) {
-                          if (qName.equals("referenceNumber")) {
-                            inReferenceNumber = false
+                        if (checkedMessageType.equals("OfficeOfDestinationActual")) {
+                          if (qName.equals("CustomsOfficeOfDestinationActual")) {
+                            inCustomsOfficeOfDestinationActual = false
+                            withinCustomsOfficeDestinationActual = false
+                            withinCustomsOfficeElements = false
                           }
                         }
+
+                        if (checkedMessageType.equals("OfficeOfDeparture")) {
+
+                          if (qName.equals("CustomsOfficeOfEnquiryAtDeparture") || qName.equals("CustomsOfficeOfDeparture")) {
+                            inCustomsOfficeOfDeparture = false
+                            withinCustomsOfficeElements = false
+                            withinCustomsOfficeEnquiryAtDeparture = false
+                          }
+
+                        }
+
+                        if (withinCustomsOfficeElements && qName.equals("referenceNumber")) {
+                          inReferenceNumber = false
+
+                          if (withinCustomsOfficeDestinationActual) {
+                            customsOfficeOfDestinationActualReferenceNumber = Some(referenceNumber)
+                          }
+
+                          if (withinCustomsOfficeEnquiryAtDeparture) {
+                            customsOfficeOfEnquiryAtDepartureReferenceNumber = Some(referenceNumber)
+                          }
+                        }
+
                       }
 
                       override def startPrefixMapping(prefix: String, uri: String): Unit =
@@ -230,13 +263,22 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                     }
                   )
 
-                  (
-                    referenceNumber.toUpperCase.startsWith("GB") || referenceNumber.toUpperCase.startsWith("XI"),
-                    elementValue.equalsIgnoreCase(rootTag)
-                  ) match {
-                    case (_, false)   => Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-                    case (false, _)   => Either.left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
-                    case (true, true) => Either.right(())
+                  val rootNodeCheck = if (!elementValue.equalsIgnoreCase(rootTag.split(":")(1))) {
+                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
+                  } else {
+                    Either.right()
+                  }
+
+                  val referenceNumberCheck = if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
+                    Either.left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+                  } else {
+                    Either.right(())
+                  }
+
+                  (rootNodeCheck, referenceNumberCheck) match {
+                    case (Right(_), Right(_)) => Right(())
+                    case (Left(error), _) => Left(error)
+                    case (_, Left(error)) => Left(error)
                   }
 
               }.toEither.leftMap {
