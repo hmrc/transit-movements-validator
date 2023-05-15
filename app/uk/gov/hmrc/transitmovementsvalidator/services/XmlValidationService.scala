@@ -122,7 +122,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       }
     }
 
-
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
                                                                                           materializer: Materializer,
                                                                                           ec: ExecutionContext
@@ -289,6 +288,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       }
 
     }
+
 
   def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
