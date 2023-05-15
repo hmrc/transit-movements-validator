@@ -36,6 +36,8 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
+import uk.gov.hmrc.transitmovementsvalidator.models.ArrivalMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.DepartureMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -150,6 +152,19 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       }
     }
 
+  def checkMessageType(rootTag: String): String = {
+    val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
+
+    messageType match {
+      case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
+        "OfficeOfDeparture"
+      case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
+        "OfficeOfDestinationActual"
+      case _ =>
+        ""
+    }
+  }
+
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
@@ -157,8 +172,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         schemaValidator.validate(jsonNode).asScala.toSet
     }
 
-  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[BusinessValidationError]] =
-    Try {
+  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
         val jsonNode: JsonNode      = mapper.readTree(jsonInput)
