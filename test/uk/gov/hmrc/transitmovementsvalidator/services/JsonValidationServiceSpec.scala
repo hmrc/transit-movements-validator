@@ -561,8 +561,8 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Invalid reference number: GZ123456")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference number: GZ123456"
+          r.left.getOrElse(fail("Invalid reference number: GV123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GV123456"
           )
 
       }
