@@ -201,6 +201,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
 
     }
 
+
   def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
     val parser        = SAXParserFactory.newInstance()
