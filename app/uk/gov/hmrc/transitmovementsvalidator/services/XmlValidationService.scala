@@ -123,8 +123,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     }
 
   override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
-                                                                                          materializer: Materializer,
-                                                                                          ec: ExecutionContext
+    materializer: Materializer,
+    ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
 
@@ -157,25 +157,25 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
             saxParser =>
               Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
                 xmlInput =>
-                  val inputSource = new InputSource(xmlInput)
-                  var elementValue = ""
-                  var rootTag = ""
-                  var referenceNumber = ""
-                  var checkedMessageType = ""
-                  var inReferenceNumber = false
-                  var inCustomsOfficeOfDeparture = false
+                  val inputSource                        = new InputSource(xmlInput)
+                  var elementValue                       = ""
+                  var rootTag                            = ""
+                  var referenceNumber                    = ""
+                  var checkedMessageType                 = ""
+                  var inReferenceNumber                  = false
+                  var inCustomsOfficeOfDeparture         = false
                   var inCustomsOfficeOfDestinationActual = false
-                  var withinCustomsOfficeElements = false
+                  var withinCustomsOfficeElements        = false
 
                   saxParser.newSAXParser.parse(
                     inputSource,
                     new DefaultHandler {
-                      var inMessageTypeElement = false
-                      var startPrefix = ""
-                      var customsOfficeOfDestinationActualReferenceNumber: Option[String] = None
+                      var inMessageTypeElement                                             = false
+                      var startPrefix                                                      = ""
+                      var customsOfficeOfDestinationActualReferenceNumber: Option[String]  = None
                       var customsOfficeOfEnquiryAtDepartureReferenceNumber: Option[String] = None
 
-                      var withinCustomsOfficeDestinationActual = false
+                      var withinCustomsOfficeDestinationActual  = false
                       var withinCustomsOfficeEnquiryAtDeparture = false
 
                       override def characters(ch: Array[Char], start: Int, length: Int): Unit = {
@@ -276,8 +276,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
 
                   (rootNodeCheck, referenceNumberCheck) match {
                     case (Right(_), Right(_)) => Right(())
-                    case (Left(error), _) => Left(error)
-                    case (_, Left(error)) => Left(error)
+                    case (Left(error), _)     => Left(error)
+                    case (_, Left(error))     => Left(error)
                   }
 
               }.toEither.leftMap {
@@ -288,7 +288,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       }
 
     }
-
 
   def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
