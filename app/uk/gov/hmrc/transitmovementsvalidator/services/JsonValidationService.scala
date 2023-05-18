@@ -36,7 +36,6 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
-import uk.gov.hmrc.transitmovementsvalidator.models.CustomValidationMessage
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -118,9 +117,8 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         case Some(_) =>
           validateJson(source) match {
             case Success(errors) if errors.isEmpty => Future.successful(Right(()))
-            case Success(errors) if errors.head.isBusinessValidation =>
-              Future.successful(Left(BusinessValidationError(errors.head.message)))
-            case Failure(thr) => Future.successful(Left(Unexpected(Some(thr))))
+            case Success(errors)                   => Future.successful(Left(errors.head))
+            case Failure(thr)                      => Future.successful(Left(Unexpected(Some(thr))))
           }
         case None =>
           Future.successful(Left(UnknownMessageType(messageType)))
@@ -134,7 +132,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         schemaValidator.validate(jsonNode).asScala.toSet
     }
 
-  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
+  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[BusinessValidationError]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
         val jsonNode: JsonNode      = mapper.readTree(jsonInput)
@@ -142,7 +140,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
         val messageTypeFromRootNode = rootNode.split(":")(1)
         if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
-          Set(CustomValidationMessage(None, "Root node doesn't match with the messageType", isBusinessValidation = true))
+          Set(BusinessValidationError("Root node doesn't match with the messageType"))
         } else {
           Set()
         }
