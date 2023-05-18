@@ -25,6 +25,7 @@ import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.google.inject.ImplementedBy
 import org.xml.sax.ErrorHandler
+import org.xml.sax.Attributes
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
 
@@ -32,9 +33,11 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
+import org.xml.sax.helpers.DefaultHandler
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 
@@ -115,6 +118,78 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                 .flatten
           }
       }
+    }
+
+  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit] =
+    EitherT {
+
+      val parser = MessageType
+        .find(messageType)
+        .map(
+          t => parsersByType(t)
+        )
+
+      parser match {
+        case None =>
+          //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+          source.runWith(Sink.ignore)
+          Future.successful(Left(UnknownMessageType(messageType)))
+        case Some(futureType) =>
+          futureType.map {
+            saxParser =>
+              Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+                xmlInput =>
+                  val inputSource  = new InputSource(xmlInput)
+                  var elementValue = ""
+                  var rootTag      = ""
+
+                  saxParser.newSAXParser.parse(
+                    inputSource,
+                    new DefaultHandler {
+                      var inMessageTypeElement = false
+                      var startPrefix          = ""
+
+                      override def characters(ch: Array[Char], start: Int, length: Int): Unit =
+                        if (inMessageTypeElement) {
+                          elementValue = new String(ch, start, length)
+                        }
+
+                      override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
+                        if (uri.nonEmpty && qName.startsWith(startPrefix + ":")) {
+                          rootTag = localName
+                        }
+                        if (qName.equals("messageType")) {
+                          inMessageTypeElement = true
+                        }
+                      }
+
+                      override def endElement(uri: String, localName: String, qName: String): Unit =
+                        if (qName.equals("messageType")) {
+                          inMessageTypeElement = false
+                        }
+
+                      override def startPrefixMapping(prefix: String, uri: String): Unit =
+                        startPrefix = prefix
+
+                    }
+                  )
+
+                  if (!elementValue.equalsIgnoreCase(rootTag)) {
+                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
+                  } else {
+                    Either.right()
+                  }
+
+              }.toEither.leftMap {
+                thr =>
+                  ValidationError.Unexpected(Some(thr))
+              }.flatten
+          }
+      }
+
     }
 
   def buildParser(messageType: MessageType): SAXParserFactory = {

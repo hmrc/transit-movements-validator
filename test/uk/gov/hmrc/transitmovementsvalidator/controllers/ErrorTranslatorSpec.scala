@@ -106,6 +106,13 @@ class ErrorTranslatorSpec extends AnyFreeSpec with Matchers with OptionValues wi
         validationErrorConverter.convert(input) mustBe output
       }
     }
+
+    "BusinessValidationError becomes a BadRequest" in {
+      val input  = BusinessValidationError("Root node doesn't match with the messageType")
+      val output = PresentationError.businessValidationError("Root node doesn't match with the messageType")
+
+      validationErrorConverter.convert(input) mustBe output
+    }
   }
 
 }

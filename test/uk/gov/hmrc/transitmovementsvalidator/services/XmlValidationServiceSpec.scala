@@ -40,6 +40,15 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
 
   lazy val validXml: NodeSeq = <test></test>
+
+  lazy val rootNodeMismatchXml: NodeSeq =
+    <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+    <messageSender>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageSender>
+    <messageRecipient>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageRecipient>
+    <preparationDateAndTime>2022-12-20T10:34:40</preparationDateAndTime>
+    <messageIdentification>XusMGrh</messageIdentification>
+    <messageType>CC007C</messageType>
+    </ncts:CC015C>
   lazy val validCode: String = "IE015"
 
   lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
@@ -334,6 +343,19 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
           r => r.isLeft mustBe true
         }
       } finally ie170invalidFile.close()
+    }
+
+    "when message type and root node doesn't match, return BusinessValidationError" in {
+      val source = Source.single(ByteString(rootNodeMismatchXml.mkString, StandardCharsets.UTF_8))
+      val sut    = new XmlValidationServiceImpl
+      val result = sut.businessRuleValidation("IE015", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
+            "Root node doesn't match with the messageType"
+          )
+      }
     }
 
   }
