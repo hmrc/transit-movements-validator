@@ -85,30 +85,6 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
     )
     .toMap
 
-  def findNodes(jsonNode: JsonNode, targetNodes: List[String]): List[JsonNode] = {
-    val foundNodes = new ListBuffer[JsonNode]()
-
-    def traverse(node: JsonNode): Unit =
-      if (node.isObject) {
-        node.fields().forEachRemaining {
-          field =>
-            if (targetNodes.contains(field.getKey)) {
-              foundNodes += field.getValue
-            } else {
-              traverse(field.getValue)
-            }
-        }
-      } else if (node.isArray) {
-        node.elements().forEachRemaining {
-          arrayElement =>
-            traverse(arrayElement)
-        }
-      }
-
-    traverse(jsonNode)
-    foundNodes.toList
-  }
-
   override def validate(messageType: String, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
@@ -172,7 +148,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         schemaValidator.validate(jsonNode).asScala.toSet
     }
 
-  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[CustomValidationMessage]] =
+  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[BusinessValidationError]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
         val jsonNode: JsonNode      = mapper.readTree(jsonInput)
@@ -185,27 +161,34 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
           Set()
         }
 
-        val customsOfficeNodes = List("CustomsOfficeOfDeparture", "CustomsOfficeOfDestinationActual")
-        val targetNodes = findNodes(jsonNode, customsOfficeNodes)
+        val officeNodeName = checkMessageType(rootNode)
 
-        val referenceNumberErrors = targetNodes.flatMap {
-          customsOfficeNode =>
-            val referenceNumberNode = customsOfficeNode.path("referenceNumber")
-            if (referenceNumberNode.isMissingNode) {
-              None
-            } else {
-              val referenceNumber = referenceNumberNode.asText()
-              if (!referenceNumber.startsWith("GB") && !referenceNumber.startsWith("XI")) {
-                Some(BusinessValidationError(None, s"Invalid reference number must start with 'GB' or 'XI'.", isBusinessValidation = true))
-              } else {
-                None
-              }
-            }
-        }.toSet
+        val officeErrors = officeNodeName match {
+          case "OfficeOfDeparture" =>
+            customsOfficeNodeErrors(List("CustomsOfficeOfDeparture", "CustomsOfficeOfEnquiryAtDeparture"), jsonNode, rootNode)
+          case "OfficeOfDestinationActual" =>
+            customsOfficeNodeErrors(List("CustomsOfficeOfDestinationActual"), jsonNode, rootNode)
+          case _ => Set()
+        }
 
-        rootNodeErrors ++ referenceNumberErrors
-    }.get
+        rootNodeErrors ++ officeErrors
     }
+
+  def customsOfficeNodeErrors(officeNodeNames: List[String], jsonNode: JsonNode, rootNode: String): Set[BusinessValidationError] =
+    officeNodeNames.flatMap {
+      officeNodeName =>
+        val referenceNumberNode = jsonNode
+          .path(rootNode)
+          .path(officeNodeName)
+          .path("referenceNumber")
+
+        Option(referenceNumberNode.textValue()) match {
+          case Some(referenceNumber) if !referenceNumber.startsWith("GB") && !referenceNumber.startsWith("XI") =>
+            Set(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+          case _ =>
+            Set()
+        }
+    }.toSet
 
   // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
   // software developers. So, we'll replace the string containing the "source" with nothing, so that the
