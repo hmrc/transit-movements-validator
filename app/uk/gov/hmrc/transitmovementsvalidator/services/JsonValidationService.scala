@@ -77,6 +77,9 @@ trait JsonValidationService extends ValidationService
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
+  private val OfficeOfDeparture         = "OfficeOfDeparture"
+  private val OfficeOfDestinationActual = "OfficeOfDestinationActual"
+
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
   val schemaValidators = MessageType.values
@@ -128,16 +131,22 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       }
     }
 
-  def checkMessageType(rootTag: String): String = {
+  //This method checks the type of message by inspecting the rootTag which appears to be a key in the JSON being validated
+  //It first splits the rootTag by ":" and uses the second part (at index 1) to find a matching MessageType from the set of all MessageType values.
+  //The equalsIgnoreCase method is used, meaning the match is case-insensitive.
+  //The function then checks what type of MessageType was found. If the message type is a subtype of DepartureMessageType
+  //and is one of the defined departure values, it returns the string "OfficeOfDeparture".
+  //If the message type is a subtype of ArrivalMessageType and is one of the defined arrival values, it returns the string "OfficeOfDestinationActual". For all other cases, it returns a None.
+  def checkMessageType(rootTag: String): Option[String] = {
     val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
 
     messageType match {
       case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
-        "OfficeOfDeparture"
+        Some(OfficeOfDeparture)
       case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
-        "OfficeOfDestinationActual"
+        Some(OfficeOfDestinationActual)
       case _ =>
-        ""
+        None
     }
   }
 
@@ -160,20 +169,31 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         } else {
           Set()
         }
+        val OfficeOfDeparture                 = "OfficeOfDeparture"
+        val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
+        val CustomsOfficeOfEnquiryAtDeparture = "CustomsOfficeOfEnquiryAtDeparture"
+        val OfficeOfDestinationActual         = "OfficeOfDestinationActual"
+        val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
 
         val officeNodeName = checkMessageType(rootNode)
 
         val officeErrors = officeNodeName match {
-          case "OfficeOfDeparture" =>
-            customsOfficeNodeErrors(List("CustomsOfficeOfDeparture", "CustomsOfficeOfEnquiryAtDeparture"), jsonNode, rootNode)
-          case "OfficeOfDestinationActual" =>
-            customsOfficeNodeErrors(List("CustomsOfficeOfDestinationActual"), jsonNode, rootNode)
-          case _ => Set()
+          case Some(OfficeOfDeparture) =>
+            customsOfficeNodeErrors(List(CustomsOfficeOfDeparture, CustomsOfficeOfEnquiryAtDeparture), jsonNode, rootNode)
+          case Some(OfficeOfDestinationActual) =>
+            customsOfficeNodeErrors(List(CustomsOfficeOfDestinationActual), jsonNode, rootNode)
+          case None => Set()
         }
 
         rootNodeErrors ++ officeErrors
     }
 
+  //This method checks each specified office node's "referenceNumber" in the JSON document for validity according to
+  //certain business rules, and returns a set of business validation errors for any invalid reference numbers it finds.
+  //It takes three arguments :
+  //officeNodeNames: a list of the names of the office nodes that need to be checked in the JSON document.
+  //jsonNode: the root JSON Node of the document that is being checked. This node represents the entire JSON document.
+  //rootNode: a string that specifies the root node name in the JSON document.
   def customsOfficeNodeErrors(officeNodeNames: List[String], jsonNode: JsonNode, rootNode: String): Set[BusinessValidationError] =
     officeNodeNames.flatMap {
       officeNodeName =>
@@ -184,7 +204,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
         Option(referenceNumberNode.textValue()) match {
           case Some(referenceNumber) if !referenceNumber.startsWith("GB") && !referenceNumber.startsWith("XI") =>
-            Set(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+            Set(BusinessValidationError(s"Did not recognise office:$officeNodeName"))
           case _ =>
             Set()
         }
