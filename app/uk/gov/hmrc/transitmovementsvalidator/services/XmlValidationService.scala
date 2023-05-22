@@ -134,16 +134,30 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
           t => parsersByType(t)
         )
 
-      def checkMessageType(rootTag: String): String = {
+      lazy val OfficeOfDeparture                 = "OfficeOfDeparture"
+      lazy val OfficeOfDestinationActual         = "OfficeOfDestinationActual"
+      lazy val CustomsOfficeOfEnquiryAtDeparture = "CustomsOfficeOfEnquiryAtDeparture"
+      lazy val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
+      lazy val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
+
+      //This method is used within businessRuleValidation to determine the type of the message, and the business rules validation process
+      //proceeds accordingly based on the type of message determined.
+      //It splits the rootTag by ":", and uses the second part (at index 1) to find a matching MessageType from the set of all MessageType values.
+      //The comparison is case-insensitive, as indicated by equalsIgnoreCase.
+      //Depending on the type of MessageType it found:
+      //If the MessageType is a subtype of DepartureMessageType and is included in the defined departure values, the function returns the string "OfficeOfDeparture".
+      //If the MessageType is a subtype of ArrivalMessageType and is included in the defined arrival values, the function returns the string "OfficeOfDestinationActual".
+      //For all other cases, the function returns None.
+      def checkMessageType(rootTag: String): Option[String] = {
         val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
 
         messageType match {
           case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
-            "OfficeOfDeparture"
+            Some(OfficeOfDeparture)
           case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
-            "OfficeOfDestinationActual"
+            Some(OfficeOfDestinationActual)
           case _ =>
-            ""
+            None
         }
       }
 
@@ -166,6 +180,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   var inCustomsOfficeOfDeparture         = false
                   var inCustomsOfficeOfDestinationActual = false
                   var withinCustomsOfficeElements        = false
+                  var currentParentElement: String       = ""
 
                   saxParser.newSAXParser.parse(
                     inputSource,
@@ -190,15 +205,18 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                       override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit = {
                         if (uri.nonEmpty) {
                           rootTag = qName
-                          checkedMessageType = checkMessageType(rootTag)
+                          checkMessageType(rootTag) match {
+                            case Some(msgType) => checkedMessageType = msgType
+                            case None          => // Nothing happens
+                          }
                         }
                         if (qName.equals("messageType")) {
                           inMessageTypeElement = true
                         }
 
-                        if (checkedMessageType.equals("OfficeOfDeparture")) {
+                        if (checkedMessageType.equals(OfficeOfDeparture)) {
 
-                          if (qName.equals("CustomsOfficeOfEnquiryAtDeparture") || qName.equals("CustomsOfficeOfDeparture")) {
+                          if (qName.equals(CustomsOfficeOfEnquiryAtDeparture) || qName.equals(CustomsOfficeOfDeparture)) {
                             inCustomsOfficeOfDeparture = true
                             withinCustomsOfficeElements = true
                             withinCustomsOfficeEnquiryAtDeparture = true
@@ -206,15 +224,18 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
 
                         }
 
-                        if (checkedMessageType.equals("OfficeOfDestinationActual")) {
-                          if (qName.equals("CustomsOfficeOfDestinationActual")) {
+                        if (checkedMessageType.equals(OfficeOfDestinationActual)) {
+                          if (qName.equals(CustomsOfficeOfDestinationActual)) {
                             inCustomsOfficeOfDestinationActual = true
                             withinCustomsOfficeDestinationActual = true
                             withinCustomsOfficeElements = true
                           }
                         }
 
-                        if (withinCustomsOfficeElements && qName.equals("referenceNumber")) {
+                        if (withinCustomsOfficeElements && qName != "referenceNumber") {
+                          currentParentElement = qName
+                        }
+                        if (qName.equals("referenceNumber")) {
                           inReferenceNumber = true
                         }
                       }
@@ -224,17 +245,17 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                           inMessageTypeElement = false
                         }
 
-                        if (checkedMessageType.equals("OfficeOfDestinationActual")) {
-                          if (qName.equals("CustomsOfficeOfDestinationActual")) {
+                        if (checkedMessageType.equals(OfficeOfDestinationActual)) {
+                          if (qName.equals(CustomsOfficeOfDestinationActual)) {
                             inCustomsOfficeOfDestinationActual = false
                             withinCustomsOfficeDestinationActual = false
                             withinCustomsOfficeElements = false
                           }
                         }
 
-                        if (checkedMessageType.equals("OfficeOfDeparture")) {
+                        if (checkedMessageType.equals(OfficeOfDeparture)) {
 
-                          if (qName.equals("CustomsOfficeOfEnquiryAtDeparture") || qName.equals("CustomsOfficeOfDeparture")) {
+                          if (qName.equals(CustomsOfficeOfEnquiryAtDeparture) || qName.equals(CustomsOfficeOfDeparture)) {
                             inCustomsOfficeOfDeparture = false
                             withinCustomsOfficeElements = false
                             withinCustomsOfficeEnquiryAtDeparture = false
@@ -254,6 +275,10 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                           }
                         }
 
+                        if (qName == CustomsOfficeOfDeparture || qName == CustomsOfficeOfDestinationActual) {
+                          withinCustomsOfficeElements = false
+                        }
+
                       }
 
                       override def startPrefixMapping(prefix: String, uri: String): Unit =
@@ -269,7 +294,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   }
 
                   val referenceNumberCheck = if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
-                    Either.left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+                    Either.left(BusinessValidationError(s"Did not recognise office:$currentParentElement"))
                   } else {
                     Either.right(())
                   }

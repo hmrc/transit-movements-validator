@@ -418,30 +418,33 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     }
 
     "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given a valid referenceNumber" in {
-      val source = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationServiceImpl
-      val result = sut.businessRuleValidation("IE007", source)
+      val source                = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut                   = new XmlValidationServiceImpl
+      val result                = sut.businessRuleValidation("IE007", source)
+      val expectedParentElement = "CustomsOfficeOfDestinationActual"
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference number: GZ123456"
+          val expectedError = ValidationError.BusinessValidationError(
+            s"Did not recognise office:$expectedParentElement"
           )
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe expectedError
       }
     }
 
     "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given a valid referenceNumber" in {
-      val source = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationServiceImpl
-      val result = sut.businessRuleValidation("IE015", source)
+      val source                = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut                   = new XmlValidationServiceImpl
+      val result                = sut.businessRuleValidation("IE015", source)
+      val expectedParentElement = "CustomsOfficeOfDeparture"
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference number: GV1T34FR"
+          val expectedError = ValidationError.BusinessValidationError(
+            s"Did not recognise office:$expectedParentElement"
           )
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe expectedError
       }
     }
-
   }
 }
