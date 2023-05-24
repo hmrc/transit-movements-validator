@@ -41,6 +41,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Busin
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 
+import java.io.InputStream
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
@@ -52,6 +53,8 @@ import scala.util.Using
 trait XmlValidationService extends ValidationService
 
 class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
+
+  private val pattern = raw"^IE(\d{3})".r
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {
@@ -132,63 +135,69 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
           t => parsersByType(t)
         )
 
-      parser match {
-        case None =>
-          //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
-          source.runWith(Sink.ignore)
-          Future.successful(Left(UnknownMessageType(messageType)))
-        case Some(futureType) =>
-          futureType.map {
-            saxParser =>
-              Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
-                xmlInput =>
-                  val inputSource  = new InputSource(xmlInput)
-                  var elementValue = ""
-                  var rootTag      = ""
+      pattern
+        .findFirstMatchIn(messageType)
+        .map(
+          r => s"CC${r.group(1)}C"
+        )
+        .map {
+          expectedMessageType =>
+            parser match {
+              case None =>
+                //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+                source.runWith(Sink.ignore)
+                Future.successful(Left(UnknownMessageType(messageType)))
+              case Some(futureType) =>
+                futureType.map {
+                  saxParser =>
+                    // Unfortunately, we need to extract this out to help the compiler,
+                    // without it, it can't infer the types for flatten.
+                    // Probably due to the fact that there is nesting and the compiler gets confused.
+                    val result: Either[ValidationError, Either[ValidationError, Unit]] =
+                      Using[InputStream, Either[ValidationError, Unit]](source.runWith(StreamConverters.asInputStream(20.seconds))) {
+                        xmlInput =>
+                          val inputSource  = new InputSource(xmlInput)
+                          var elementValue = ""
 
-                  saxParser.newSAXParser.parse(
-                    inputSource,
-                    new DefaultHandler {
-                      var inMessageTypeElement = false
-                      var startPrefix          = ""
+                          saxParser.newSAXParser.parse(
+                            inputSource,
+                            new DefaultHandler {
+                              var inMessageTypeElement = false
 
-                      override def characters(ch: Array[Char], start: Int, length: Int): Unit =
-                        if (inMessageTypeElement) {
-                          elementValue = new String(ch, start, length)
-                        }
+                              override def characters(ch: Array[Char], start: Int, length: Int): Unit =
+                                if (inMessageTypeElement) {
+                                  elementValue = new String(ch, start, length)
+                                }
 
-                      override def startElement(uri: String, localName: String, qName: String, attributes: Attributes) = {
-                        if (uri.nonEmpty && qName.startsWith(startPrefix + ":")) {
-                          rootTag = localName
-                        }
-                        if (qName.equals("messageType")) {
-                          inMessageTypeElement = true
-                        }
+                              override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit =
+                                if (qName.equals("messageType")) {
+                                  inMessageTypeElement = true
+                                }
+
+                              override def endElement(uri: String, localName: String, qName: String): Unit =
+                                if (qName.equals("messageType")) {
+                                  inMessageTypeElement = false
+                                }
+
+                            }
+                          )
+
+                          if (!elementValue.equalsIgnoreCase(expectedMessageType)) {
+                            Either.left[ValidationError, Unit](BusinessValidationError("Root node doesn't match with the messageType"))
+                          } else {
+                            Either.right[ValidationError, Unit]((): Unit)
+                          }
+
+                      }.toEither.leftMap {
+                        thr =>
+                          ValidationError.Unexpected(Some(thr))
                       }
 
-                      override def endElement(uri: String, localName: String, qName: String): Unit =
-                        if (qName.equals("messageType")) {
-                          inMessageTypeElement = false
-                        }
-
-                      override def startPrefixMapping(prefix: String, uri: String): Unit =
-                        startPrefix = prefix
-
-                    }
-                  )
-
-                  if (!elementValue.equalsIgnoreCase(rootTag)) {
-                    Either.left(BusinessValidationError("Root node doesn't match with the messageType"))
-                  } else {
-                    Either.right()
-                  }
-
-              }.toEither.leftMap {
-                thr =>
-                  ValidationError.Unexpected(Some(thr))
-              }.flatten
-          }
-      }
+                    result.flatten
+                }
+            }
+        }
+        .getOrElse(Future.successful(Left[ValidationError, Unit](ValidationError.UnknownMessageType(messageType))))
 
     }
 
