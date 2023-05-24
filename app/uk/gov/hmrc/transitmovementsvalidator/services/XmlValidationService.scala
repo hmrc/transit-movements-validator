@@ -25,6 +25,7 @@ import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.google.inject.ImplementedBy
 import org.xml.sax.ErrorHandler
+import org.xml.sax.Attributes
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
 
@@ -32,12 +33,15 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import cats.syntax.all._
+import org.xml.sax.helpers.DefaultHandler
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 
+import java.io.InputStream
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
@@ -49,6 +53,8 @@ import scala.util.Using
 trait XmlValidationService extends ValidationService
 
 class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
+
+  private val pattern = raw"^IE(\d{3})".r
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {
@@ -115,6 +121,84 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                 .flatten
           }
       }
+    }
+
+  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit] =
+    EitherT {
+
+      val parser = MessageType
+        .find(messageType)
+        .map(
+          t => parsersByType(t)
+        )
+
+      pattern
+        .findFirstMatchIn(messageType)
+        .map(
+          r => s"CC${r.group(1)}C"
+        )
+        .map {
+          expectedMessageType =>
+            parser match {
+              case None =>
+                //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
+                source.runWith(Sink.ignore)
+                Future.successful(Left(UnknownMessageType(messageType)))
+              case Some(futureType) =>
+                futureType.map {
+                  saxParser =>
+                    // Unfortunately, we need to extract this out to help the compiler,
+                    // without it, it can't infer the types for flatten.
+                    // Probably due to the fact that there is nesting and the compiler gets confused.
+                    val result: Either[ValidationError, Either[ValidationError, Unit]] =
+                      Using[InputStream, Either[ValidationError, Unit]](source.runWith(StreamConverters.asInputStream(20.seconds))) {
+                        xmlInput =>
+                          val inputSource  = new InputSource(xmlInput)
+                          var elementValue = ""
+
+                          saxParser.newSAXParser.parse(
+                            inputSource,
+                            new DefaultHandler {
+                              var inMessageTypeElement = false
+
+                              override def characters(ch: Array[Char], start: Int, length: Int): Unit =
+                                if (inMessageTypeElement) {
+                                  elementValue = new String(ch, start, length)
+                                }
+
+                              override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit =
+                                if (qName.equals("messageType")) {
+                                  inMessageTypeElement = true
+                                }
+
+                              override def endElement(uri: String, localName: String, qName: String): Unit =
+                                if (qName.equals("messageType")) {
+                                  inMessageTypeElement = false
+                                }
+
+                            }
+                          )
+
+                          if (!elementValue.equalsIgnoreCase(expectedMessageType)) {
+                            Either.left[ValidationError, Unit](BusinessValidationError("Root node doesn't match with the messageType"))
+                          } else {
+                            Either.right[ValidationError, Unit]((): Unit)
+                          }
+
+                      }.toEither.leftMap {
+                        thr =>
+                          ValidationError.Unexpected(Some(thr))
+                      }
+
+                    result.flatten
+                }
+            }
+        }
+        .getOrElse(Future.successful(Left[ValidationError, Unit](ValidationError.UnknownMessageType(messageType))))
+
     }
 
   def buildParser(messageType: MessageType): SAXParserFactory = {

@@ -38,6 +38,8 @@ import play.api.http.Status.NOT_FOUND
 import play.api.http.Status.NO_CONTENT
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
+import play.api.libs.Files.SingletonTemporaryFileCreator
+import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.json.Json
 import play.api.mvc.Headers
 import play.api.test.FakeHeaders
@@ -81,8 +83,9 @@ class MessagesControllerSpec
     with NonEmptyListFormat
     with ScalaFutures {
 
-  implicit val timeout: Timeout           = Timeout(5.seconds)
-  implicit val materializer: Materializer = Materializer(TestActorSystem.system)
+  implicit val timeout: Timeout                           = Timeout(5.seconds)
+  implicit val materializer: Materializer                 = Materializer(TestActorSystem.system)
+  implicit val temporaryFileCreator: TemporaryFileCreator = SingletonTemporaryFileCreator
 
   lazy val filePath = Path
     .Directory(s"common-transit-convention-traders/movements/12345678")
@@ -109,6 +112,10 @@ class MessagesControllerSpec
 
     "on a valid XML file, with the application/xml content type, return No Content" in {
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockXmlValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )
@@ -155,7 +162,7 @@ class MessagesControllerSpec
       status(result) mustBe OK
     }
 
-    "on an exception being thrown during xml validation, must return Internal Server Error" in {
+    "on an exception being thrown during xml schema validation, must return Internal Server Error" in {
       val error = new IllegalStateException("Unable to extract schema")
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
@@ -169,6 +176,52 @@ class MessagesControllerSpec
       contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
       status(result) mustBe INTERNAL_SERVER_ERROR
     }
+
+    "root node doesn't match messageType in XML file, return BadRequest with an error message" in {
+      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockXmlValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType"))
+        )
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
+      val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+      val result  = sut.validate(validCode)(request)
+
+      status(result) mustBe BAD_REQUEST
+
+      contentAsJson(result) mustBe
+        Json.obj(
+          "message" -> Json.toJson("Root node doesn't match with the messageType"),
+          "code"    -> Json.toJson("BUSINESS_VALIDATION_ERROR")
+        )
+    }
+
+    "on an exception being thrown during xml business validation, must return Internal Server Error" in {
+      val error = new IllegalStateException("Unable to extract schema")
+
+      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockXmlValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
+        )
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
+      val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+      val result  = sut.validate(validCode)(request)
+
+      contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
+      status(result) mustBe INTERNAL_SERVER_ERROR
+    }
+
   }
 
   "On validate JSON" - {
@@ -178,6 +231,10 @@ class MessagesControllerSpec
 
     "on a valid JSON file, with the application/json content type, return No Content" in {
       when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockJsonValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )
@@ -274,6 +331,51 @@ class MessagesControllerSpec
         "message" -> "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at [Source: (akka.stream.impl.io.InputStreamAdapter); line: 1, column: 3]"
       )
       status(result) mustBe BAD_REQUEST
+    }
+
+    "root node doesn't match messageType in json, return BadRequest with an error message" in {
+
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockJsonValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType"))
+        )
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
+      val result  = sut.validate(validCode)(request)
+
+      status(result) mustBe BAD_REQUEST
+
+      contentAsJson(result) mustBe
+        Json.obj(
+          "message" -> Json.toJson("Root node doesn't match with the messageType"),
+          "code"    -> Json.toJson("BUSINESS_VALIDATION_ERROR")
+        )
+    }
+
+    "on an exception being thrown during json business validation, must return Internal Server Error" in {
+      val error = new IllegalStateException("Unable to extract schema")
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.rightT[Future, ValidationError](())
+        )
+      when(mockJsonValidationService.businessRuleValidation(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
+        )
+
+      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockObjectStoreService)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
+      val result  = sut.validate(validCode)(request)
+
+      contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
+      status(result) mustBe INTERNAL_SERVER_ERROR
     }
 
   }

@@ -35,4 +35,6 @@ object ValidationError {
   case class XmlFailedValidation(errors: NonEmptyList[XmlSchemaValidationError]) extends FailedValidationError
 
   case class JsonFailedValidation(errors: NonEmptyList[JsonSchemaValidationError]) extends FailedValidationError
+
+  case class BusinessValidationError(message: String) extends ValidationError
 }

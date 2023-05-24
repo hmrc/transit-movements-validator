@@ -32,4 +32,9 @@ trait ValidationService {
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit]
 
+  def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit]
+
 }

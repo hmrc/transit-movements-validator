@@ -59,6 +59,9 @@ object PresentationError {
   ): PresentationError =
     InternalServiceError(message, code, cause)
 
+  def businessValidationError(message: String): PresentationError =
+    StandardError(message, ErrorCode.BusinessValidationError)
+
 }
 
 sealed abstract class PresentationError extends Product with Serializable {

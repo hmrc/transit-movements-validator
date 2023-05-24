@@ -22,6 +22,7 @@ import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
+import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
@@ -56,6 +57,7 @@ class MessagesController @Inject() (
   objectStoreService: ObjectStoreService
 )(implicit
   val materializer: Materializer,
+  val temporaryFileCreator: TemporaryFileCreator,
   executionContext: ExecutionContext
 ) extends BackendController(cc)
     with Logging
@@ -92,19 +94,22 @@ class MessagesController @Inject() (
   }
 
   def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
+    Action.stream {
       implicit request =>
-        validationService
-          .validate(messageType, request.body)
-          .asPresentation
-          .toValidationResponse
-          .fold(
-            failCase,
-            {
-              case Some(r) => Ok(Json.toJson(r))
-              case None    => NoContent
+        validationService.validate(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
+          case Right(schemaResult) =>
+            schemaResult match {
+              case Some(schemaResult) => Future.successful(Ok(Json.toJson(schemaResult)))
+              case None =>
+                validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
+                  case Right(_) => Future.successful(NoContent)
+                  case Left(presentationError) =>
+                    Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
+                }
             }
-          )
+          case Left(presentationError) =>
+            Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
+        }
     }
 
 }
