@@ -158,6 +158,20 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       } finally ie15File.close
     }
 
+    "when valid XML IE015 with additional namespaces is provided for the given message type, return a Right" in {
+      val ie15File = scala.io.Source.fromFile(testDataPath + "/cc015c-valid-2.xml")
+      try {
+        val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
+        val sut    = new XmlValidationServiceImpl
+        val result = sut.validate(validCode, source)
+
+        whenReady(result.value) {
+          r =>
+            r.isRight mustBe true
+        }
+      } finally ie15File.close
+    }
+
     "when valid XML IE170 is provided for the given message type, return a Right" in {
       val ie170File = scala.io.Source.fromFile(testDataPath + "/cc170c-valid.xml")
       try {
