@@ -17,16 +17,25 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
-import akka.stream.scaladsl.{Sink, Source, StreamConverters}
+import akka.stream.scaladsl.Sink
+import akka.stream.scaladsl.Source
+import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
-import cats.data.{EitherT, NonEmptyList}
+import cats.data.EitherT
+import cats.data.NonEmptyList
 import cats.syntax.all._
 import com.google.inject.ImplementedBy
-import org.xml.sax.{Attributes, ErrorHandler, InputSource, SAXParseException}
+import org.xml.sax.Attributes
+import org.xml.sax.ErrorHandler
+import org.xml.sax.InputSource
+import org.xml.sax.SAXParseException
 import org.xml.sax.helpers.DefaultHandler
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.{BusinessValidationError, UnknownMessageType, XmlFailedValidation}
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.{ValidationError, XmlSchemaValidationError}
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
 import java.io.InputStream
 import javax.inject.Inject
@@ -34,10 +43,11 @@ import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.validation.SchemaFactory
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.util.Using
+import scala.xml.SAXException
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
 trait XmlValidationService extends ValidationService
@@ -118,125 +128,123 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
+
       val parser = MessageType
         .find(messageType)
         .map(
           t => parsersByType(t)
         )
 
-      lazy val OfficeOfDeparture                 = "OfficeOfDeparture"
-      lazy val OfficeOfDestinationActual         = "OfficeOfDestinationActual"
-      lazy val CustomsOfficeOfEnquiryAtDeparture = "CustomsOfficeOfEnquiryAtDeparture"
-      lazy val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
-      lazy val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
-
-      def checkMessageType(expectedMessageType: String): Option[String] =
-        MessageType.find(expectedMessageType) match {
-          case Some(msgType) if MessageType.departureValues.exists(_.rootNode.equalsIgnoreCase(expectedMessageType)) =>
-            Some(OfficeOfDeparture)
-          case Some(msgType) if MessageType.arrivalValues.exists(_.rootNode.equalsIgnoreCase(expectedMessageType)) =>
-            Some(OfficeOfDestinationActual)
-          case _ =>
-            None
-        }
+      val CustomsOfficeOfEnquiryAtDeparture = "CustomsOfficeOfEnquiryAtDeparture"
+      val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
+      val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
 
       def validateReferenceNumber(referenceNumber: String, currentParentElement: Option[String]): Either[ValidationError, Unit] =
         currentParentElement match {
-          case Some(parentElement) if !referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI") =>
-            Left(BusinessValidationError(s"Did not recognise office:$parentElement"))
+          case Some(parentElement)
+              if parentElement == CustomsOfficeOfDestinationActual || parentElement == CustomsOfficeOfDeparture || parentElement == CustomsOfficeOfEnquiryAtDeparture =>
+            if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
+              Left(BusinessValidationError(s"Did not recognise office: $parentElement"))
+            } else {
+              Right(())
+            }
           case _ =>
-            Right(())
+            Right(()) // Skip validation for other parent elements
         }
 
       pattern
         .findFirstMatchIn(messageType)
+        .map(
+          r => s"CC${r.group(1)}C"
+        )
         .map {
-          r =>
-            val expectedMessageType = s"CC${r.group(1)}C"
+          expectedMessageType =>
             parser match {
               case None =>
+                //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
                 source.runWith(Sink.ignore)
                 Future.successful(Left(UnknownMessageType(messageType)))
               case Some(futureType) =>
                 futureType.map {
                   saxParser =>
+                    // Unfortunately, we need to extract this out to help the compiler,
+                    // without it, it can't infer the types for flatten.
+                    // Probably due to the fact that there is nesting and the compiler gets confused.
                     val result: Either[ValidationError, Either[ValidationError, Unit]] =
                       Using[InputStream, Either[ValidationError, Unit]](source.runWith(StreamConverters.asInputStream(20.seconds))) {
                         xmlInput =>
-                          val inputSource                          = new InputSource(xmlInput)
-                          var elementValue                         = ""
-                          var validationErrors                     = new ListBuffer[ValidationError]()
-                          var currentParentElement: Option[String] = None
-                          var referenceNumber: String              = ""
+                          try {
+                            val inputSource                          = new InputSource(xmlInput)
+                            var elementValue                         = ""
+                            var currentParentElement: Option[String] = None
+                            var referenceNumber: String              = ""
 
-                          saxParser.newSAXParser.parse(
-                            inputSource,
-                            new DefaultHandler {
-                              var inMessageTypeElement        = false
-                              var withinCustomsOfficeElements = false
+                            saxParser.newSAXParser.parse(
+                              inputSource,
+                              new DefaultHandler {
+                                var inMessageTypeElement     = false
+                                var inReferenceNumberElement = false
 
-                              override def characters(ch: Array[Char], start: Int, length: Int): Unit = {
-                                if (inMessageTypeElement) {
-                                  elementValue = new String(ch, start, length)
-                                }
-                                if (withinCustomsOfficeElements && currentParentElement.contains("referenceNumber")) {
-                                  referenceNumber = new String(ch, start, length)
-                                }
-                              }
+                                override def characters(ch: Array[Char], start: Int, length: Int): Unit =
+                                  if (inMessageTypeElement) {
+                                    elementValue = new String(ch, start, length)
+                                  } else if (inReferenceNumberElement) {
+                                    referenceNumber = new String(ch, start, length)
+                                  }
 
-                              override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit = {
-                                if (qName == "messageType") {
-                                  inMessageTypeElement = true
-                                }
-
-                                if (
-                                  qName == CustomsOfficeOfDeparture || qName == CustomsOfficeOfDestinationActual || qName == CustomsOfficeOfEnquiryAtDeparture
-                                ) {
-                                  withinCustomsOfficeElements = true
-                                }
-
-                                if (withinCustomsOfficeElements && qName != "referenceNumber") {
-                                  currentParentElement = Some(qName)
-                                }
-                              }
-
-                              override def endElement(uri: String, localName: String, qName: String): Unit = {
-                                if (qName == "messageType") {
-                                  inMessageTypeElement = false
-                                }
-
-                                if (withinCustomsOfficeElements && qName == "referenceNumber") {
-                                  val validationResult = validateReferenceNumber(referenceNumber, currentParentElement)
-                                  validationResult match {
-                                    case Left(error) =>
-                                      validationErrors += error
-                                    case _ => // No validation error
+                                override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit = {
+                                  inMessageTypeElement = qName.equals("messageType")
+                                  inReferenceNumberElement = qName.equals("referenceNumber")
+                                  if (
+                                    qName.equals(CustomsOfficeOfEnquiryAtDeparture) ||
+                                    qName.equals(CustomsOfficeOfDeparture) ||
+                                    qName.equals(CustomsOfficeOfDestinationActual)
+                                  ) {
+                                    currentParentElement = Some(qName)
                                   }
                                 }
 
-                                if (
-                                  qName == CustomsOfficeOfDeparture || qName == CustomsOfficeOfDestinationActual || qName == CustomsOfficeOfEnquiryAtDeparture
-                                ) {
-                                  withinCustomsOfficeElements = false
+                                override def endElement(uri: String, localName: String, qName: String): Unit = {
+                                  inMessageTypeElement = false
+                                  if (qName.equals("referenceNumber")) {
+                                    inReferenceNumberElement = false
+                                    val validationResult = validateReferenceNumber(referenceNumber, currentParentElement)
+                                    validationResult match {
+                                      case Left(error) =>
+                                        error match {
+                                          case BusinessValidationError(message) => throw new SAXException(message)
+                                          case UnknownMessageType(messageType)  => throw new SAXException(s"Unknown message type: $messageType")
+                                          case XmlFailedValidation(errors)      => throw new SAXException(errors.toList.map(_.message).mkString(", "))
+                                        }
+                                      case _ => // No validation error
+                                    }
+                                  } else if (
+                                    qName.equals(CustomsOfficeOfEnquiryAtDeparture) ||
+                                    qName.equals(CustomsOfficeOfDeparture) ||
+                                    qName.equals(CustomsOfficeOfDestinationActual)
+                                  ) {
+                                    currentParentElement = None
+                                  }
                                 }
-                              }
-                            }
-                          )
 
-                          if (!elementValue.equalsIgnoreCase(expectedMessageType)) {
-                            Left(BusinessValidationError("Root node doesn't match with the messageType"))
-                          } else if (validationErrors.nonEmpty) {
-                            Left(validationErrors.head)
-                          } else {
-                            Right(())
+                              }
+                            )
+
+                            if (!elementValue.equalsIgnoreCase(expectedMessageType)) {
+                              Left(BusinessValidationError("Root node doesn't match with the messageType"))
+                            } else {
+                              Right(())
+                            }
+                          } catch {
+                            case e: SAXException => Left(BusinessValidationError(e.getMessage))
                           }
                       }.toEither.leftMap {
-                        thr =>
-                          ValidationError.Unexpected(Some(thr))
+                        thr => ValidationError.Unexpected(Some(thr))
                       }
 
                     result.flatten
                 }
+
             }
         }
         .getOrElse(Future.successful(Left[ValidationError, Unit](ValidationError.UnknownMessageType(messageType))))

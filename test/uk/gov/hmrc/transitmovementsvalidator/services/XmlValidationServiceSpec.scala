@@ -19,13 +19,16 @@ package uk.gov.hmrc.transitmovementsvalidator.services
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
+import akka.util.Helpers.Requiring
 import akka.util.Timeout
 import cats.data.NonEmptyList
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ErrorCode.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
@@ -430,19 +433,39 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
           )
       }
     }
+//
+//    "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given a valid referenceNumber" in {
+//      val source                = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
+//      val sut                   = new XmlValidationServiceImpl
+//      val result                = sut.businessRuleValidation("IE007", source)
+//      val expectedParentElement = "CustomsOfficeOfDestinationActual"
+//
+//      whenReady(result.value) {
+//        r =>
+//          val expectedError = ValidationError.BusinessValidationError(
+//            s"Did not recognise office:$expectedParentElement"
+//          )
+//          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe expectedError
+//
+//      }
+//    }
 
     "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given a valid referenceNumber" in {
-      val source                = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut                   = new XmlValidationServiceImpl
-      val result                = sut.businessRuleValidation("IE007", source)
+      val source = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut    = new XmlValidationServiceImpl
+      val result = sut.businessRuleValidation("IE007", source)
+
       val expectedParentElement = "CustomsOfficeOfDestinationActual"
+      val expectedErrorMessage  = s"Did not recognise office: $expectedParentElement"
 
       whenReady(result.value) {
         r =>
-          val expectedError = ValidationError.BusinessValidationError(
-            s"Did not recognise office:$expectedParentElement"
-          )
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe expectedError
+          r.left.getOrElse(fail("Expected a Left but got a Right")) match {
+            case ValidationError.BusinessValidationError(message) =>
+              assert(message == expectedErrorMessage)
+            case _ =>
+              fail("Expected BusinessValidationError")
+          }
       }
     }
 
@@ -451,14 +474,18 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       val sut                   = new XmlValidationServiceImpl
       val result                = sut.businessRuleValidation("IE015", source)
       val expectedParentElement = "CustomsOfficeOfDeparture"
+      val expectedErrorMessage  = s"Did not recognise office: $expectedParentElement"
 
       whenReady(result.value) {
-        r =>
-          val expectedError = ValidationError.BusinessValidationError(
-            s"Did not recognise office:$expectedParentElement"
-          )
-          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe expectedError
+        eitherResult =>
+          eitherResult.left.getOrElse(fail("Expected a Left but got a Right")) match {
+            case ValidationError.BusinessValidationError(message) =>
+              assert(message == expectedErrorMessage)
+            case _ =>
+              fail("Expected BusinessValidationError")
+          }
       }
     }
+
   }
 }
