@@ -547,8 +547,8 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Did not recognise office:CustomsOfficeOfDestinationActual")) mustBe ValidationError.BusinessValidationError(
-            "Did not recognise office:CustomsOfficeOfDestinationActual"
+          r.left.getOrElse(fail("Invalid reference number: GZ123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GZ123456"
           )
       }
     }
@@ -560,11 +560,11 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Did not recognise office:CustomsOfficeOfDeparture")) mustBe ValidationError
-            .BusinessValidationError(
-              "Did not recognise office:CustomsOfficeOfDeparture"
-            )
+          r.left.getOrElse(fail("Invalid reference number: GV123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GV123456"
+          )
       }
     }
+
   }
 }
