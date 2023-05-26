@@ -144,7 +144,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
           case Some(parentElement)
               if parentElement == CustomsOfficeOfDestinationActual || parentElement == CustomsOfficeOfDeparture || parentElement == CustomsOfficeOfEnquiryAtDeparture =>
             if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
-              Left(BusinessValidationError(s"Did not recognise office: $parentElement"))
+              Left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
             } else {
               Right(())
             }
