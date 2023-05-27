@@ -213,8 +213,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                                       case Left(error) =>
                                         error match {
                                           case BusinessValidationError(message) => throw new SAXException(message)
-                                          case UnknownMessageType(messageType)  => throw new SAXException(s"Unknown message type: $messageType")
-                                          case XmlFailedValidation(errors)      => throw new SAXException(errors.toList.map(_.message).mkString(", "))
                                         }
                                       case _ => // No validation error
                                     }
@@ -249,7 +247,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
         }
         .getOrElse(Future.successful(Left[ValidationError, Unit](ValidationError.UnknownMessageType(messageType))))
     }
-
 
   def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)

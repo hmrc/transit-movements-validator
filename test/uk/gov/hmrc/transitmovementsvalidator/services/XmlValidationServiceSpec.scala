@@ -46,11 +46,11 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
 
   lazy val rootNodeMismatchXml: NodeSeq =
     <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-    <messageSender>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageSender>
-    <messageRecipient>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageRecipient>
-    <preparationDateAndTime>2022-12-20T10:34:40</preparationDateAndTime>
-    <messageIdentification>XusMGrh</messageIdentification>
-    <messageType>CC007C</messageType>
+      <messageSender>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageSender>
+      <messageRecipient>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageRecipient>
+      <preparationDateAndTime>2022-12-20T10:34:40</preparationDateAndTime>
+      <messageIdentification>XusMGrh</messageIdentification>
+      <messageType>CC007C</messageType>
     </ncts:CC015C>
 
   lazy val invalidArrivalReferenceXml: NodeSeq =

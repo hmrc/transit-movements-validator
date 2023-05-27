@@ -137,18 +137,6 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
   //The function then checks what type of MessageType was found. If the message type is a subtype of DepartureMessageType
   //and is one of the defined departure values, it returns the string "OfficeOfDeparture".
   //If the message type is a subtype of ArrivalMessageType and is one of the defined arrival values, it returns the string "OfficeOfDestinationActual". For all other cases, it returns a None.
-//  def checkMessageType(rootTag: String): Option[String] = {
-//    val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
-//
-//    messageType match {
-//      case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
-//        Some(OfficeOfDeparture)
-//      case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
-//        Some(OfficeOfDestinationActual)
-//      case _ =>
-//        None
-//    }
-//  }
   def checkMessageType(rootTag: String): Option[MessageType] = {
     val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
     messageType
@@ -160,37 +148,6 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         val jsonNode: JsonNode = mapper.readTree(jsonInput)
         schemaValidator.validate(jsonNode).asScala.toSet
     }
-
-//  def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[BusinessValidationError]] =
-//    Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
-//      jsonInput =>
-//        val jsonNode: JsonNode      = mapper.readTree(jsonInput)
-//        val rootNode                = jsonNode.fields().next().getKey
-//        val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
-//        val messageTypeFromRootNode = rootNode.split(":")(1)
-//        val rootNodeErrors = if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
-//          Set(BusinessValidationError("Root node doesn't match with the messageType"))
-//        } else {
-//          Set()
-//        }
-//        val OfficeOfDeparture                 = "OfficeOfDeparture"
-//        val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
-//        val CustomsOfficeOfEnquiryAtDeparture = "CustomsOfficeOfEnquiryAtDeparture"
-//        val OfficeOfDestinationActual         = "OfficeOfDestinationActual"
-//        val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
-//
-//        val officeNodeName = checkMessageType(rootNode)
-//
-//        val officeErrors = officeNodeName match {
-//          case Some(OfficeOfDeparture) =>
-//            customsOfficeNodeErrors(List(CustomsOfficeOfDeparture, CustomsOfficeOfEnquiryAtDeparture), jsonNode, rootNode)
-//          case Some(OfficeOfDestinationActual) =>
-//            customsOfficeNodeErrors(List(CustomsOfficeOfDestinationActual), jsonNode, rootNode)
-//          case None => Set()
-//        }
-//
-//        rootNodeErrors ++ officeErrors
-//    }
 
   def validateJson(source: Source[ByteString, _])(implicit materializer: Materializer): Try[Set[BusinessValidationError]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
@@ -218,27 +175,12 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         rootNodeErrors ++ officeErrors
     }
 
-//  //This method checks each specified office node's "referenceNumber" in the JSON document for validity according to
-//  //certain business rules, and returns a set of business validation errors for any invalid reference numbers it finds.
-//  //It takes three arguments :
-//  //officeNodeNames: a list of the names of the office nodes that need to be checked in the JSON document.
-//  //jsonNode: the root JSON Node of the document that is being checked. This node represents the entire JSON document.
-//  //rootNode: a string that specifies the root node name in the JSON document.
-//  def customsOfficeNodeErrors(officeNodeNames: List[String], jsonNode: JsonNode, rootNode: String): Set[BusinessValidationError] =
-//    officeNodeNames.flatMap {
-//      officeNodeName =>
-//        val referenceNumberNode = jsonNode
-//          .path(rootNode)
-//          .path(officeNodeName)
-//          .path("referenceNumber")
-//
-//        Option(referenceNumberNode.textValue()) match {
-//          case Some(referenceNumber) if !referenceNumber.startsWith("GB") && !referenceNumber.startsWith("XI") =>
-//            Set(BusinessValidationError(s"Did not recognise office:$officeNodeName"))
-//          case _ =>
-//            Set()
-//        }
-//    }.toSet
+  //This method checks each specified office node's "referenceNumber" in the JSON document for validity according to
+  //certain business rules, and returns a set of business validation errors for any invalid reference numbers it finds.
+  //It takes three arguments :
+  //officeNodeNames: a list of the names of the office nodes that need to be checked in the JSON document.
+  //jsonNode: the root JSON Node of the document that is being checked. This node represents the entire JSON document.
+  //rootNode: a string that specifies the root node name in the JSON document.
   def customsOfficeNodeErrors(officeNodeNames: List[String], jsonNode: JsonNode, rootNode: String): Set[BusinessValidationError] =
     officeNodeNames.flatMap {
       officeNodeName =>

@@ -279,7 +279,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       whenReady(result.value) {
         e =>
           e mustBe Left(FailedToParse("""Unexpected close marker '}': expected ']' (for root starting at [line: 1, column: 0])
-              | at [line: 73, column: 2]""".stripMargin))
+                                        | at [line: 73, column: 2]""".stripMargin))
       }
     }
 
