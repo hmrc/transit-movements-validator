@@ -30,6 +30,8 @@ import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
 import org.xml.sax.helpers.DefaultHandler
+import uk.gov.hmrc.transitmovementsvalidator.models.ArrivalMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.DepartureMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
@@ -139,10 +141,13 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
       val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
 
-      def validateReferenceNumber(referenceNumber: String, currentParentElement: Option[String]): Either[ValidationError, Unit] =
+      def validateReferenceNumber(
+        referenceNumber: String,
+        currentParentElement: Option[String],
+        expectedParentElements: List[String]
+      ): Either[ValidationError, Unit] =
         currentParentElement match {
-          case Some(parentElement)
-              if parentElement == CustomsOfficeOfDestinationActual || parentElement == CustomsOfficeOfDeparture || parentElement == CustomsOfficeOfEnquiryAtDeparture =>
+          case Some(parentElement) if expectedParentElements.contains(parentElement) =>
             if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
               Left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
             } else {
@@ -151,6 +156,19 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
           case _ =>
             Right(()) // Skip validation for other parent elements
         }
+
+      def checkMessageType(messageType: String): List[String] = {
+        val foundMessageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(messageType))
+
+        foundMessageType match {
+          case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
+            List(CustomsOfficeOfEnquiryAtDeparture, CustomsOfficeOfDeparture)
+          case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
+            List(CustomsOfficeOfDestinationActual)
+          case _ =>
+            List.empty
+        }
+      }
 
       pattern
         .findFirstMatchIn(messageType)
@@ -208,7 +226,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                                   inMessageTypeElement = false
                                   if (qName.equals("referenceNumber")) {
                                     inReferenceNumberElement = false
-                                    val validationResult = validateReferenceNumber(referenceNumber, currentParentElement)
+                                    val validationResult = validateReferenceNumber(referenceNumber, currentParentElement, checkMessageType(expectedMessageType))
                                     validationResult match {
                                       case Left(error) =>
                                         error match {
