@@ -36,6 +36,8 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
+import uk.gov.hmrc.transitmovementsvalidator.models.ArrivalMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.DepartureMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -48,6 +50,7 @@ import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 import scala.util.Try
 import scala.util.Success
@@ -73,6 +76,9 @@ object JsonValidationService {
 trait JsonValidationService extends ValidationService
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
+
+  private val OfficeOfDeparture         = "OfficeOfDeparture"
+  private val OfficeOfDestinationActual = "OfficeOfDestinationActual"
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
@@ -125,6 +131,17 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       }
     }
 
+  //This method checks the type of message by inspecting the rootTag which appears to be a key in the JSON being validated
+  //It first splits the rootTag by ":" and uses the second part (at index 1) to find a matching MessageType from the set of all MessageType values.
+  //The equalsIgnoreCase method is used, meaning the match is case-insensitive.
+  //The function then checks what type of MessageType was found. If the message type is a subtype of DepartureMessageType
+  //and is one of the defined departure values, it returns the string "OfficeOfDeparture".
+  //If the message type is a subtype of ArrivalMessageType and is one of the defined arrival values, it returns the string "OfficeOfDestinationActual". For all other cases, it returns a None.
+  def checkMessageType(rootTag: String): Option[MessageType] = {
+    val messageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(rootTag.split(":")(1)))
+    messageType
+  }
+
   def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
@@ -139,12 +156,46 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
         val rootNode                = jsonNode.fields().next().getKey
         val messageType             = jsonNode.path(rootNode).path("messageType").textValue()
         val messageTypeFromRootNode = rootNode.split(":")(1)
-        if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
+        val rootNodeErrors = if (!messageTypeFromRootNode.equalsIgnoreCase(messageType)) {
           Set(BusinessValidationError("Root node doesn't match with the messageType"))
         } else {
           Set()
         }
+
+        val messageTypeOption = checkMessageType(rootNode)
+
+        val officeErrors = messageTypeOption match {
+          case Some(msgType: DepartureMessageType) =>
+            customsOfficeNodeErrors(List("CustomsOfficeOfDeparture", "CustomsOfficeOfEnquiryAtDeparture"), jsonNode, rootNode)
+          case Some(msgType: ArrivalMessageType) =>
+            customsOfficeNodeErrors(List("CustomsOfficeOfDestinationActual"), jsonNode, rootNode)
+          case None => Set()
+        }
+
+        rootNodeErrors ++ officeErrors
     }
+
+  //This method checks each specified office node's "referenceNumber" in the JSON document for validity according to
+  //certain business rules, and returns a set of business validation errors for any invalid reference numbers it finds.
+  //It takes three arguments :
+  //officeNodeNames: a list of the names of the office nodes that need to be checked in the JSON document.
+  //jsonNode: the root JSON Node of the document that is being checked. This node represents the entire JSON document.
+  //rootNode: a string that specifies the root node name in the JSON document.
+  def customsOfficeNodeErrors(officeNodeNames: List[String], jsonNode: JsonNode, rootNode: String): Set[BusinessValidationError] =
+    officeNodeNames.flatMap {
+      officeNodeName =>
+        val referenceNumberNode = jsonNode
+          .path(rootNode)
+          .path(officeNodeName)
+          .path("referenceNumber")
+
+        Option(referenceNumberNode.textValue()) match {
+          case Some(referenceNumber) if !(referenceNumber.startsWith("GB") || referenceNumber.startsWith("XI")) =>
+            Set(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+          case _ =>
+            Set()
+        }
+    }.toSet
 
   // Unfortunately, the JsonParseException contains an implementation detail that's just going to confuse
   // software developers. So, we'll replace the string containing the "source" with nothing, so that the

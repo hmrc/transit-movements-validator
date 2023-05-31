@@ -19,13 +19,16 @@ package uk.gov.hmrc.transitmovementsvalidator.services
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
+import akka.util.Helpers.Requiring
 import akka.util.Timeout
 import cats.data.NonEmptyList
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ErrorCode.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
@@ -43,12 +46,71 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
 
   lazy val rootNodeMismatchXml: NodeSeq =
     <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
-    <messageSender>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageSender>
-    <messageRecipient>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageRecipient>
-    <preparationDateAndTime>2022-12-20T10:34:40</preparationDateAndTime>
-    <messageIdentification>XusMGrh</messageIdentification>
-    <messageType>CC007C</messageType>
+      <messageSender>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageSender>
+      <messageRecipient>OJ8tELE5IIgfuH2C3RepK5tFCVJo5fJ9</messageRecipient>
+      <preparationDateAndTime>2022-12-20T10:34:40</preparationDateAndTime>
+      <messageIdentification>XusMGrh</messageIdentification>
+      <messageType>CC007C</messageType>
     </ncts:CC015C>
+
+  lazy val invalidArrivalReferenceXml: NodeSeq =
+    <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+      <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+      <messageType>CC007C</messageType>
+      <CustomsOfficeOfDestinationActual>
+        <referenceNumber>GZ123456</referenceNumber>
+      </CustomsOfficeOfDestinationActual>
+    </ncts:CC007C>
+
+  lazy val invalidDepartureReferenceXml: NodeSeq =
+    <ncts:CC015C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+      <messageSender>token</messageSender>
+      <messageRecipient>cUusObWiVZhuaZFNr6KrXy8y</messageRecipient>
+      <preparationDateAndTime>2022-10-23T15:19:29</preparationDateAndTime>
+      <messageIdentification>P</messageIdentification>
+      <messageType>CC015C</messageType>
+      <TransitOperation>
+        <LRN>3CnsTh79I7vtOW1</LRN>
+        <declarationType>G8</declarationType>
+        <additionalDeclarationType>p</additionalDeclarationType>
+        <security>9</security>
+        <reducedDatasetIndicator>1</reducedDatasetIndicator>
+        <bindingItinerary>1</bindingItinerary>
+      </TransitOperation>
+      <CustomsOfficeOfDeparture>
+        <referenceNumber>GV1T34FR</referenceNumber>
+      </CustomsOfficeOfDeparture>
+      <CustomsOfficeOfDestinationDeclared>
+        <referenceNumber>GB123456</referenceNumber>
+      </CustomsOfficeOfDestinationDeclared>
+      <HolderOfTheTransitProcedure>
+        <identificationNumber>k</identificationNumber>
+      </HolderOfTheTransitProcedure>
+      <Guarantee>
+        <sequenceNumber>64582</sequenceNumber>
+        <guaranteeType>J</guaranteeType>
+        <otherGuaranteeReference>4yFxS49</otherGuaranteeReference>
+      </Guarantee>
+      <Consignment>
+        <grossMass>1854093104.078068</grossMass>
+        <HouseConsignment>
+          <sequenceNumber>64582</sequenceNumber>
+          <grossMass>1854093104.078068</grossMass>
+          <ConsignmentItem>
+            <goodsItemNumber>39767</goodsItemNumber>
+            <declarationGoodsItemNumber>1861</declarationGoodsItemNumber>
+            <Commodity>
+              <descriptionOfGoods>OPDK4mBmHFyczZqwPjzU5wqgynvlbKtDxc64BAXycRKIOlWGT7YDJcpGNUtmgbs79eqBw2gHpBJ2CRFkOp6RbHh7ZZp0HBtwk8q0mdKZbSdebOLEWzMrVYziNHyHa95fw7iiQonwKfCw6KA0NQQEFaFwmg6D</descriptionOfGoods>
+            </Commodity>
+            <Packaging>
+              <sequenceNumber>64582</sequenceNumber>
+              <typeOfPackages>V8</typeOfPackages>
+            </Packaging>
+          </ConsignmentItem>
+        </HouseConsignment>
+      </Consignment>
+    </ncts:CC015C>
+
   lazy val validCode: String = "IE015"
 
   lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
@@ -369,6 +431,42 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
           r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
             "Root node doesn't match with the messageType"
           )
+      }
+    }
+
+    "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given a valid referenceNumber" in {
+      val source = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut    = new XmlValidationServiceImpl
+      val result = sut.businessRuleValidation("IE007", source)
+
+      val expectedErrorMessage = s"Invalid reference number: GZ123456"
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Expected a Left but got a Right")) match {
+            case ValidationError.BusinessValidationError(message) =>
+              assert(message == expectedErrorMessage)
+            case _ =>
+              fail("Expected BusinessValidationError")
+          }
+      }
+    }
+
+    "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given a valid referenceNumber" in {
+      val source = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut    = new XmlValidationServiceImpl
+      val result = sut.businessRuleValidation("IE015", source)
+
+      val expectedErrorMessage = "Invalid reference number: GV1T34FR"
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Expected a Left but got a Right")) match {
+            case ValidationError.BusinessValidationError(message) =>
+              assert(message == expectedErrorMessage)
+            case _ =>
+              fail("Expected BusinessValidationError")
+          }
       }
     }
 

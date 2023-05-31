@@ -31,6 +31,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ErrorCode.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
@@ -278,7 +279,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       whenReady(result.value) {
         e =>
           e mustBe Left(FailedToParse("""Unexpected close marker '}': expected ']' (for root starting at [line: 1, column: 0])
-              | at [line: 73, column: 2]""".stripMargin))
+                                        | at [line: 73, column: 2]""".stripMargin))
       }
     }
 
@@ -535,6 +536,32 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
         r =>
           r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.BusinessValidationError(
             "Root node doesn't match with the messageType"
+          )
+      }
+    }
+
+    "when referenceNumber node doesn't start with GB or XI for Arrival, return BusinessValidationError" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference-arrival.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.businessRuleValidation("IE007", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Invalid reference number: GZ123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GZ123456"
+          )
+      }
+    }
+
+    "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.businessRuleValidation("IE015", source)
+
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Invalid reference number: GV123456")) mustBe ValidationError.BusinessValidationError(
+            "Invalid reference number: GV123456"
           )
       }
     }
