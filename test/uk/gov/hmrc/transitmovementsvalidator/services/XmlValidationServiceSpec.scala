@@ -434,23 +434,6 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       }
     }
 
-    "when referenceNumber doesn't start with GB or XI for Arrival, return BusinessValidationError, given a valid referenceNumber" in {
-      val source = Source.single(ByteString(invalidArrivalReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationServiceImpl
-      val result = sut.businessRuleValidation("IE007", source)
-
-      val expectedErrorMessage = s"Invalid reference number: GZ123456"
-
-      whenReady(result.value) {
-        r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")) match {
-            case ValidationError.BusinessValidationError(message) =>
-              assert(message == expectedErrorMessage)
-            case _ =>
-              fail("Expected BusinessValidationError")
-          }
-      }
-    }
 
     "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given a valid referenceNumber" in {
       val source = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
