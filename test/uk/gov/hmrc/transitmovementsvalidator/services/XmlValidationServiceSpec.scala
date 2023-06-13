@@ -434,13 +434,13 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       }
     }
 
-
     "when referenceNumber doesn't start with GB or XI for Departure, return BusinessValidationError, given a valid referenceNumber" in {
       val source = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
       val sut    = new XmlValidationServiceImpl
       val result = sut.businessRuleValidation("IE015", source)
 
-      val expectedErrorMessage = "Invalid reference number: GV1T34FR"
+      val expectedErrorMessage =
+        "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV1T34FR was specified)"
 
       whenReady(result.value) {
         r =>
