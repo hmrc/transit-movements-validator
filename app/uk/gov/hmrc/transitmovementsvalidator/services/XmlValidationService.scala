@@ -144,18 +144,16 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       def validateReferenceNumber(
         referenceNumber: String,
         currentParentElement: Option[String],
-        messageType: String,
         expectedParentElements: List[String]
       ): Either[ValidationError, Unit] =
         currentParentElement match {
           case Some(parentElement) if expectedParentElements.contains(parentElement) =>
             if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
-              parentElement match {
-                case CustomsOfficeOfDestinationActual =>
-                  Left(BusinessValidationError(s"Did not recognise office: $referenceNumber"))
-                case _ =>
-                  Left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
-              }
+              Left(
+                BusinessValidationError(
+                  s"The customs office specified for $parentElement must be a customs office located in the United Kingdom ($referenceNumber was specified)"
+                )
+              )
             } else {
               Right(())
             }
@@ -233,7 +231,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                                   if (qName.equals("referenceNumber")) {
                                     inReferenceNumberElement = false
                                     val validationResult =
-                                      validateReferenceNumber(referenceNumber, currentParentElement, messageType, checkMessageType(expectedMessageType))
+                                      validateReferenceNumber(referenceNumber, currentParentElement, checkMessageType(expectedMessageType))
                                     validationResult match {
                                       case Left(error) =>
                                         error match {

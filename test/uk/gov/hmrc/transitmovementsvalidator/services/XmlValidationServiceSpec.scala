@@ -439,7 +439,8 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       val sut    = new XmlValidationServiceImpl
       val result = sut.businessRuleValidation("IE015", source)
 
-      val expectedErrorMessage = "Invalid reference number: GV1T34FR"
+      val expectedErrorMessage =
+        "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV1T34FR was specified)"
 
       whenReady(result.value) {
         r =>

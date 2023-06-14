@@ -279,7 +279,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       whenReady(result.value) {
         e =>
           e mustBe Left(FailedToParse("""Unexpected close marker '}': expected ']' (for root starting at [line: 1, column: 0])
-                                        | at [line: 73, column: 2]""".stripMargin))
+              | at [line: 73, column: 2]""".stripMargin))
       }
     }
 
@@ -547,8 +547,12 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Invalid reference number: GZ123456")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference number: GZ123456"
+          r.left.getOrElse(
+            fail(
+              "The customs office specified for CustomsOfficeOfDestinationActual must be a customs office located in the United Kingdom (GZ123456 was specified)"
+            )
+          ) mustBe ValidationError.BusinessValidationError(
+            "The customs office specified for CustomsOfficeOfDestinationActual must be a customs office located in the United Kingdom (GZ123456 was specified)"
           )
       }
     }
@@ -560,8 +564,10 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          r.left.getOrElse(fail("Invalid reference number: GV123456")) mustBe ValidationError.BusinessValidationError(
-            "Invalid reference number: GV123456"
+          r.left.getOrElse(
+            fail("The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)")
+          ) mustBe ValidationError.BusinessValidationError(
+            "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)"
           )
       }
     }
