@@ -192,7 +192,7 @@ class MessagesControllerSpec
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate(validCode)(request)
 
-      status(result) mustBe BAD_REQUEST
+      status(result) mustBe OK
 
       contentAsJson(result) mustBe
         Json.obj(
@@ -349,7 +349,7 @@ class MessagesControllerSpec
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode)(request)
 
-      status(result) mustBe BAD_REQUEST
+      status(result) mustBe OK
 
       contentAsJson(result) mustBe
         Json.obj(
