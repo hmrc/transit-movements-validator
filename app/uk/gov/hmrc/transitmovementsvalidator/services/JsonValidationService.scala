@@ -191,7 +191,11 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
         Option(referenceNumberNode.textValue()) match {
           case Some(referenceNumber) if !(referenceNumber.startsWith("GB") || referenceNumber.startsWith("XI")) =>
-            Set(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+            Set(
+              BusinessValidationError(
+                s"The customs office specified for $officeNodeName must be a customs office located in the United Kingdom ($referenceNumber was specified)"
+              )
+            )
           case _ =>
             Set()
         }

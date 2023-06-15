@@ -149,7 +149,11 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
         currentParentElement match {
           case Some(parentElement) if expectedParentElements.contains(parentElement) =>
             if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
-              Left(BusinessValidationError(s"Invalid reference number: $referenceNumber"))
+              Left(
+                BusinessValidationError(
+                  s"The customs office specified for $parentElement must be a customs office located in the United Kingdom ($referenceNumber was specified)"
+                )
+              )
             } else {
               Right(())
             }
@@ -226,7 +230,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                                   inMessageTypeElement = false
                                   if (qName.equals("referenceNumber")) {
                                     inReferenceNumberElement = false
-                                    val validationResult = validateReferenceNumber(referenceNumber, currentParentElement, checkMessageType(expectedMessageType))
+                                    val validationResult =
+                                      validateReferenceNumber(referenceNumber, currentParentElement, checkMessageType(expectedMessageType))
                                     validationResult match {
                                       case Left(error) =>
                                         error match {
