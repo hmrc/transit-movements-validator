@@ -3,15 +3,14 @@ import sbt._
 
 object AppDependencies {
 
-  private val catsVersion         = "2.7.0"
+  private val catsVersion         = "2.9.0"
   private val boostrapPlayVersion = "7.12.0"
 
   val compile = Seq(
     "uk.gov.hmrc"               %% "bootstrap-backend-play-28"   % boostrapPlayVersion,
     "org.typelevel"             %% "cats-core"                   % catsVersion,
     "com.networknt"              % "json-schema-validator"       % "1.0.70" exclude ("org.slf4j", "slf4j-api"),
-    "com.fasterxml.jackson.core" % "jackson-databind"            % "2.12.6",
-    "uk.gov.hmrc.objectstore"   %% "object-store-client-play-28" % "1.0.0"
+    "com.fasterxml.jackson.core" % "jackson-databind"            % "2.12.6"
   )
 
   val test = Seq(

@@ -27,7 +27,6 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
@@ -50,12 +49,7 @@ object MessagesController {
   }
 }
 
-class MessagesController @Inject() (
-  cc: ControllerComponents,
-  xmlValidationService: XmlValidationService,
-  jsonValidationService: JsonValidationService,
-  objectStoreService: ObjectStoreService
-)(implicit
+class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
   val materializer: Materializer,
   val temporaryFileCreator: TemporaryFileCreator,
   executionContext: ExecutionContext
@@ -63,37 +57,15 @@ class MessagesController @Inject() (
     with Logging
     with StreamingParsers
     with ContentTypeRouting
-    with ErrorTranslator
-    with ObjectStoreURIHeaderExtractor {
+    with ErrorTranslator {
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
       case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
       case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
-      case None                 => validateObjectStoreMessage(messageType, xmlValidationService)
     }
 
-  private val failCase: PresentationError => Result = presentationError =>
-    Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
-
-  def validateObjectStoreMessage(messageType: String, validationService: ValidationService): Action[AnyContent] = Action.async {
-    implicit request =>
-      implicit val hc = HeaderCarrierConverter.fromRequest(request)
-      (for {
-        uri      <- extractObjectStoreURI(request.headers)
-        contents <- objectStoreService.getContents(uri).asPresentation
-        result   <- validationService.validate(messageType, contents).asPresentation.toValidationResponse
-      } yield result)
-        .fold[Result](
-          failCase,
-          {
-            case Some(r) => Ok(Json.toJson(r))
-            case None    => NoContent
-          }
-        )
-  }
-
-  def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+  private def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.stream {
       implicit request =>
         validationService.validate(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
