@@ -32,7 +32,7 @@ object ErrorCode {
   val InternalServerError: ErrorCode     = ErrorCode("INTERNAL_SERVER_ERROR", INTERNAL_SERVER_ERROR)
   val SchemaValidation: ErrorCode        = ErrorCode("SCHEMA_VALIDATION", OK)
   val UnsupportedMediaType: ErrorCode    = ErrorCode("UNSUPPORTED_MEDIA_TYPE", UNSUPPORTED_MEDIA_TYPE)
-  val BusinessValidationError: ErrorCode = ErrorCode("BUSINESS_VALIDATION_ERROR", OK)
+  val BusinessValidationError: ErrorCode = ErrorCode("BUSINESS_VALIDATION_ERROR", BAD_REQUEST)
 
   implicit val errorCodeWrites: Writes[ErrorCode] = Writes {
     errorCode => JsString(errorCode.value)
