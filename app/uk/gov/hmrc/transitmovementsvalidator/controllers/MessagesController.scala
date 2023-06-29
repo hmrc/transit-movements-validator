@@ -29,6 +29,7 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services._
@@ -68,20 +69,20 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
   private def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
     Action.stream {
       implicit request =>
-        validationService.validate(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
-          case Right(schemaResult) =>
-            schemaResult match {
-              case Some(schemaResult) => Future.successful(Ok(Json.toJson(schemaResult)))
-              case None =>
-                validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
-                  case Right(_) => Future.successful(NoContent)
-                  case Left(presentationError) =>
-                    Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
-                }
-            }
-          case Left(presentationError) =>
-            Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
-        }
+        (for {
+          messageTypeObj <- findMessageType(messageType)
+          (deferredBusinessRulesValidation, businessRulesFlow) = validationService.businessValidationFlow(messageTypeObj)
+          _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
+          _ <- deferredBusinessRulesValidation.asPresentation
+        } yield NoContent)
+          .valueOr {
+            presentationError =>
+              Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
+          }
+
     }
+
+  private def findMessageType(messageType: String): EitherT[Future, PresentationError, MessageType] =
+    EitherT.fromEither(MessageType.find(messageType).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))).asPresentation
 
 }

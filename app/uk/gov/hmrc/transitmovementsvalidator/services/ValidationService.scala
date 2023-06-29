@@ -16,23 +16,104 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
+import akka.stream.FlowShape
 import akka.stream.Materializer
+import akka.stream.scaladsl.Broadcast
+import akka.stream.scaladsl.Concat
+import akka.stream.scaladsl.Flow
+import akka.stream.scaladsl.GraphDSL
+import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import cats.data.EitherT
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
 trait ValidationService {
 
-  def validate(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit]
+  protected def rootNode(messageType: MessageType): String = messageType.rootNode
 
-  def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
+  def messageTypeLocation(messageType: MessageType): Seq[String] = messageType.rootNode :: "messageType" :: Nil
+
+  def officeLocation(messageType: MessageType): Seq[String] = messageType.rootNode :: messageType.routingOfficeNode :: "referenceNumber" :: Nil
+
+  protected def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _]
+
+  // Rules
+  def checkMessageType(messageType: MessageType): Flow[ByteString, ValidationError, _] =
+    stringValueFlow(messageTypeLocation(messageType))
+      .via(
+        Flow.fromFunction[String, Option[BusinessValidationError]](
+          string =>
+            if (string.trim == messageType.rootNode) None
+            else
+              Some(
+                BusinessValidationError(
+                  s"Root node doesn't match with the messageType"
+                )
+              )
+        )
+      )
+      .filter(_.isDefined)
+      .map(_.get)
+
+  def checkOffice(messageType: MessageType): Flow[ByteString, ValidationError, _] =
+    stringValueFlow(officeLocation(messageType))
+      .via(
+        Flow.fromFunction[String, Option[BusinessValidationError]](
+          string =>
+            if (string.startsWith("GB") || string.startsWith("XI")) None
+            else
+              Some(
+                BusinessValidationError(
+                  s"The customs office specified for ${messageType.routingOfficeNode} must be a customs office located in the United Kingdom ($string was specified)"
+                )
+              )
+        )
+      )
+      .filter(_.isDefined)
+      .map(_.get)
+
+  def businessValidationFlow(
+    messageType: MessageType
+  )(implicit materializer: Materializer, ec: ExecutionContext): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, _]) = {
+    val (preMat, flow): (Future[Option[ValidationError]], Flow[ByteString, ByteString, _]) = Flow
+      .fromGraph(
+        GraphDSL.createGraph(Sink.headOption[ValidationError]) {
+          implicit builder => sink =>
+            import GraphDSL.Implicits._
+
+            val broadcast = builder.add(Broadcast[ByteString](3))
+            val merge     = builder.add(Concat[ValidationError](2)) // for order guarantees
+
+            // Business rules to check
+            val messageTypeRule = builder.add(checkMessageType(messageType))
+            val checkOfficeRule = builder.add(checkOffice(messageType))
+
+            broadcast.out(1) ~> messageTypeRule ~> merge.in(0)
+            broadcast.out(2) ~> checkOfficeRule ~> merge.in(1)
+
+            merge.out ~> sink
+
+            FlowShape(broadcast.in, broadcast.out(0))
+        }
+      )
+      .preMaterialize()
+    (
+      EitherT(
+        preMat.map(
+          x => x.map(Left.apply).getOrElse(Right((): Unit))
+        )
+      ),
+      flow
+    )
+  }
+
+  def validate(messageType: MessageType, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit]

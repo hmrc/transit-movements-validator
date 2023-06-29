@@ -21,11 +21,17 @@ sealed trait MessageType {
   def rootNode: String
   def xsdPath: String
   def jsonSchemaPath: String
+
+  def routingOfficeNode: String
 }
 
-sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType
+sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType {
+  override lazy val routingOfficeNode: String = "CustomsOfficeOfDeparture"
+}
 
-sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType
+sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType {
+  override lazy val routingOfficeNode: String = "CustomsOfficeOfDestinationActual"
+}
 
 object MessageType {
 
@@ -46,7 +52,9 @@ object MessageType {
   case object PresentationNotificationForPreLodgedDec extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
 
   /** E_MOV_RSP (IE141) */
-  case object InformationAboutNonArrivedMovement extends DepartureMessageType("IE141", "CC141C", "/xsd/cc141c.xsd", "/json/cc141c-schema.json")
+  case object InformationAboutNonArrivedMovement extends DepartureMessageType("IE141", "CC141C", "/xsd/cc141c.xsd", "/json/cc141c-schema.json") {
+    override lazy val routingOfficeNode: String = "CustomsOfficeOfEnquiryAtDeparture"
+  }
 
   val departureValues = Set(
     DeclarationAmendment,

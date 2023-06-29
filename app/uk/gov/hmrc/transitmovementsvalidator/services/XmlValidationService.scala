@@ -17,7 +17,9 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
-import akka.stream.scaladsl.Sink
+import akka.stream.alpakka.xml.TextEvent
+import akka.stream.alpakka.xml.scaladsl.XmlParsing
+import akka.stream.scaladsl.Flow
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
@@ -25,21 +27,14 @@ import cats.data.EitherT
 import cats.data.NonEmptyList
 import cats.syntax.all._
 import com.google.inject.ImplementedBy
-import org.xml.sax.Attributes
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
-import org.xml.sax.helpers.DefaultHandler
-import uk.gov.hmrc.transitmovementsvalidator.models.ArrivalMessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.DepartureMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.UnknownMessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
-import java.io.InputStream
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
@@ -49,14 +44,11 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.util.Using
-import scala.xml.SAXException
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
 trait XmlValidationService extends ValidationService
 
 class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
-
-  private val pattern = raw"^IE(\d{3})".r
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {
@@ -64,211 +56,53 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
         typ -> Future(buildParser(typ))
     }.toMap
 
-  override def validate(messageType: String, source: Source[ByteString, _])(implicit
+  override def validate(messageType: MessageType, source: Source[ByteString, _])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
-      val parser = MessageType
-        .find(messageType)
-        .map(
-          t => parsersByType(t)
-        )
-      parser match {
-        case None =>
-          //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
-          source.runWith(Sink.ignore)
-          Future.successful(Left(UnknownMessageType(messageType)))
-        case Some(futureType) =>
-          futureType.map {
-            saxParser =>
-              Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
-                xmlInput =>
-                  val parser = saxParser.newSAXParser.getParser
+      parsersByType(messageType).map {
+        saxParser =>
+          Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
+            xmlInput =>
+              val parser = saxParser.newSAXParser.getParser
 
-                  val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
-                    new mutable.ListBuffer[XmlSchemaValidationError]
+              val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
+                new mutable.ListBuffer[XmlSchemaValidationError]
 
-                  parser.setErrorHandler(new ErrorHandler {
-                    override def warning(error: SAXParseException): Unit = {}
+              parser.setErrorHandler(new ErrorHandler {
+                override def warning(error: SAXParseException): Unit = {}
 
-                    override def error(error: SAXParseException): Unit =
-                      errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+                override def error(error: SAXParseException): Unit =
+                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
 
-                    override def fatalError(error: SAXParseException): Unit =
-                      errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
-                  })
+                override def fatalError(error: SAXParseException): Unit =
+                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+              })
 
-                  val inputSource = new InputSource(xmlInput)
+              val inputSource = new InputSource(xmlInput)
 
-                  val parseXml = Either
-                    .catchOnly[SAXParseException] {
-                      parser.parse(inputSource)
-                    }
-                    .leftMap {
-                      exc =>
-                        XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
-                    }
-
-                  NonEmptyList
-                    .fromList(errorBuffer.toList)
-                    .map(
-                      x => Either.left(XmlFailedValidation(x))
-                    )
-                    .getOrElse(parseXml)
-              }.toEither
-                .leftMap(
-                  thr => ValidationError.Unexpected(Some(thr))
-                )
-                .flatten
-          }
-      }
-    }
-
-  override def businessRuleValidation(messageType: String, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit] =
-    EitherT {
-
-      val parser = MessageType
-        .find(messageType)
-        .map(
-          t => parsersByType(t)
-        )
-
-      val CustomsOfficeOfEnquiryAtDeparture = "CustomsOfficeOfEnquiryAtDeparture"
-      val CustomsOfficeOfDeparture          = "CustomsOfficeOfDeparture"
-      val CustomsOfficeOfDestinationActual  = "CustomsOfficeOfDestinationActual"
-
-      def validateReferenceNumber(
-        referenceNumber: String,
-        currentParentElement: Option[String],
-        expectedParentElements: List[String]
-      ): Either[ValidationError, Unit] =
-        currentParentElement match {
-          case Some(parentElement) if expectedParentElements.contains(parentElement) =>
-            if (!referenceNumber.toUpperCase.startsWith("GB") && !referenceNumber.toUpperCase.startsWith("XI")) {
-              Left(
-                BusinessValidationError(
-                  s"The customs office specified for $parentElement must be a customs office located in the United Kingdom ($referenceNumber was specified)"
-                )
-              )
-            } else {
-              Right(())
-            }
-          case _ =>
-            Right(()) // Skip validation for other parent elements
-        }
-
-      def checkMessageType(messageType: String): List[String] = {
-        val foundMessageType = MessageType.values.find(_.rootNode.equalsIgnoreCase(messageType))
-
-        foundMessageType match {
-          case Some(msgType: DepartureMessageType) if MessageType.departureValues.contains(msgType) =>
-            List(CustomsOfficeOfEnquiryAtDeparture, CustomsOfficeOfDeparture)
-          case Some(msgType: ArrivalMessageType) if MessageType.arrivalValues.contains(msgType) =>
-            List(CustomsOfficeOfDestinationActual)
-          case _ =>
-            List.empty
-        }
-      }
-
-      pattern
-        .findFirstMatchIn(messageType)
-        .map(
-          r => s"CC${r.group(1)}C"
-        )
-        .map {
-          expectedMessageType =>
-            parser match {
-              case None =>
-                //Must be run to prevent memory overflow (the request *MUST* be consumed somehow)
-                source.runWith(Sink.ignore)
-                Future.successful(Left(UnknownMessageType(messageType)))
-              case Some(futureType) =>
-                futureType.map {
-                  saxParser =>
-                    // Unfortunately, we need to extract this out to help the compiler,
-                    // without it, it can't infer the types for flatten.
-                    // Probably due to the fact that there is nesting and the compiler gets confused.
-                    val result: Either[ValidationError, Either[ValidationError, Unit]] =
-                      Using[InputStream, Either[ValidationError, Unit]](source.runWith(StreamConverters.asInputStream(20.seconds))) {
-                        xmlInput =>
-                          try {
-                            val inputSource                          = new InputSource(xmlInput)
-                            var elementValue                         = ""
-                            var currentParentElement: Option[String] = None
-                            var referenceNumber: String              = ""
-
-                            saxParser.newSAXParser.parse(
-                              inputSource,
-                              new DefaultHandler {
-                                var inMessageTypeElement     = false
-                                var inReferenceNumberElement = false
-
-                                override def characters(ch: Array[Char], start: Int, length: Int): Unit =
-                                  if (inMessageTypeElement) {
-                                    elementValue = new String(ch, start, length)
-                                  } else if (inReferenceNumberElement) {
-                                    referenceNumber = new String(ch, start, length)
-                                  }
-
-                                override def startElement(uri: String, localName: String, qName: String, attributes: Attributes): Unit = {
-                                  inMessageTypeElement = qName.equals("messageType")
-                                  inReferenceNumberElement = qName.equals("referenceNumber")
-                                  if (
-                                    qName.equals(CustomsOfficeOfEnquiryAtDeparture) ||
-                                    qName.equals(CustomsOfficeOfDeparture) ||
-                                    qName.equals(CustomsOfficeOfDestinationActual)
-                                  ) {
-                                    currentParentElement = Some(qName)
-                                  }
-                                }
-
-                                override def endElement(uri: String, localName: String, qName: String): Unit = {
-                                  inMessageTypeElement = false
-                                  if (qName.equals("referenceNumber")) {
-                                    inReferenceNumberElement = false
-                                    val validationResult =
-                                      validateReferenceNumber(referenceNumber, currentParentElement, checkMessageType(expectedMessageType))
-                                    validationResult match {
-                                      case Left(error) =>
-                                        error match {
-                                          case BusinessValidationError(message) => throw new SAXException(message)
-                                        }
-                                      case _ => // No validation error
-                                    }
-                                  } else if (
-                                    qName.equals(CustomsOfficeOfEnquiryAtDeparture) ||
-                                    qName.equals(CustomsOfficeOfDeparture) ||
-                                    qName.equals(CustomsOfficeOfDestinationActual)
-                                  ) {
-                                    currentParentElement = None
-                                  }
-                                }
-
-                              }
-                            )
-
-                            if (!elementValue.equalsIgnoreCase(expectedMessageType)) {
-                              Left(BusinessValidationError("Root node doesn't match with the messageType"))
-                            } else {
-                              Right(())
-                            }
-                          } catch {
-                            case e: SAXException => Left(BusinessValidationError(e.getMessage))
-                          }
-                      }.toEither.leftMap {
-                        thr => ValidationError.Unexpected(Some(thr))
-                      }
-
-                    result.flatten
+              val parseXml = Either
+                .catchOnly[SAXParseException] {
+                  parser.parse(inputSource)
+                }
+                .leftMap {
+                  exc =>
+                    XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
                 }
 
-            }
-        }
-        .getOrElse(Future.successful(Left[ValidationError, Unit](ValidationError.UnknownMessageType(messageType))))
+              NonEmptyList
+                .fromList(errorBuffer.toList)
+                .map(
+                  x => Either.left(XmlFailedValidation(x))
+                )
+                .getOrElse(parseXml)
+          }.toEither
+            .leftMap(
+              thr => ValidationError.Unexpected(Some(thr))
+            )
+            .flatten
+      }
     }
 
   def buildParser(messageType: MessageType): SAXParserFactory = {
@@ -289,4 +123,12 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     parser
   }
 
+  override protected def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _] =
+    XmlParsing.parser
+      .via(XmlParsing.subslice(path))
+      .mapConcat {
+        case event: TextEvent => Seq(event.text)
+        case _                => Seq.empty
+      }
+      .take(1)
 }
