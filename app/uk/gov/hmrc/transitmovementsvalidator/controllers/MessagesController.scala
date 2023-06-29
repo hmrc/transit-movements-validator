@@ -27,7 +27,6 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
@@ -36,19 +35,6 @@ import uk.gov.hmrc.transitmovementsvalidator.services._
 
 import javax.inject.Inject
 import scala.concurrent._
-
-object MessagesController {
-
-  implicit class ResponseCreator(val value: EitherT[Future, PresentationError, Unit]) extends AnyVal {
-
-    def toValidationResponse(implicit ec: ExecutionContext): EitherT[Future, PresentationError, Option[ValidationResponse]] =
-      value.transform {
-        case Left(SchemaValidationPresentationError(errors)) => Right(Some(ValidationResponse(errors)))
-        case Left(x)                                         => Left(x)
-        case Right(_)                                        => Right(None)
-      }
-  }
-}
 
 class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
   val materializer: Materializer,
@@ -76,7 +62,10 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
           _ <- deferredBusinessRulesValidation.asPresentation
         } yield NoContent)
           .valueOr {
-            presentationError =>
+            case SchemaValidationPresentationError(errors) =>
+              // We have special cased this as this isn't considered an "error" so much.
+              Ok(Json.toJson(ValidationResponse(errors)))
+            case presentationError =>
               Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
           }
 

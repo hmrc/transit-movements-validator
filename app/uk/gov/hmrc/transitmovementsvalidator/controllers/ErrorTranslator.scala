@@ -25,6 +25,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.bus
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.notFoundError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.schemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
