@@ -165,7 +165,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationServiceImpl
-        val result = sut.validate(MessageType.DeclarationInvalidation, source)
+        val result = sut.validate(MessageType.DeclarationData, source)
 
         whenReady(result.value) {
           r =>
@@ -408,23 +408,27 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       } finally ie170invalidFile.close()
     }
 
-
     "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-      val source = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut = new XmlValidationServiceImpl
+      val source         = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
+      val sut            = new XmlValidationServiceImpl
       val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData)
 
       source.via(flow).runWith(Sink.ignore)
 
       whenReady(preMat.value) {
-        case Left(ValidationError.BusinessValidationError("The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)")) => succeed
-        case _ => fail("Did not get expected message/result")
+        case Left(
+              ValidationError.BusinessValidationError(
+                "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV1T34FR was specified)"
+              )
+            ) =>
+          succeed
+        case x => fail(s"Did not get expected message/result (got $x)")
       }
     }
 
     "when message is business rule valid, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(testDataPath + "/cc015c-valid.xml"))
-      val sut = new XmlValidationServiceImpl
+      val source         = FileIO.fromPath(Paths.get(testDataPath + "/cc015c-valid.xml"))
+      val sut            = new XmlValidationServiceImpl
       val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData)
 
       source.via(flow).runWith(Sink.ignore)
@@ -434,17 +438,29 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       }
     }
 
-
     "when message type and root node doesn't match, return BusinessValidationError" in {
-      val source = Source.single(ByteString(rootNodeMismatchXml.mkString, StandardCharsets.UTF_8))
-      val sut = new XmlValidationServiceImpl
+      val source         = Source.single(ByteString(rootNodeMismatchXml.mkString, StandardCharsets.UTF_8))
+      val sut            = new XmlValidationServiceImpl
       val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData)
 
       source.via(flow).runWith(Sink.ignore)
 
       whenReady(preMat.value) {
         case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
-        case _ => fail("Expected a Left but got a Right")
+        case _                                                                                             => fail("Expected a Left but got a Right")
+      }
+    }
+
+    "when message type is there too much, return BusinessValidationError" in {
+      val source         = FileIO.fromPath(Paths.get(testDataPath + "/cc007c-tooManyNodes.xml"))
+      val sut            = new XmlValidationServiceImpl
+      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification)
+
+      source.via(flow).runWith(Sink.ignore)
+
+      whenReady(preMat.value) {
+        case Left(ValidationError.TooManyElementsError(Seq("CC007C", "messageType"))) => succeed
+        case x                                                                        => fail(s"Expected a Left of TooManyElements, got $x")
       }
     }
   }

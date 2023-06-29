@@ -101,7 +101,7 @@ class MessagesControllerSpec
         )
       when(mockXmlValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => EitherT.rightT[Future, ValidationError](())
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
@@ -129,7 +129,11 @@ class MessagesControllerSpec
 
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => EitherT.leftT[Future, ValidationError](ValidationError.XmlFailedValidation(errorList))
+          _ => EitherT.leftT[Future, Unit](ValidationError.XmlFailedValidation(errorList))
+        )
+      when(mockXmlValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
@@ -146,7 +150,11 @@ class MessagesControllerSpec
       val error = new IllegalStateException("Unable to extract schema")
       when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
+          _ => EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error)))
+        )
+      when(mockXmlValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
@@ -164,7 +172,8 @@ class MessagesControllerSpec
         )
       when(mockXmlValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => (EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType")), Flow[ByteString])
+          _ =>
+            (EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType")), Flow[ByteString])
         )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
@@ -216,7 +225,7 @@ class MessagesControllerSpec
         )
       when(mockJsonValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => EitherT.rightT[Future, ValidationError](())
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
@@ -249,6 +258,10 @@ class MessagesControllerSpec
         .thenAnswer(
           _ => EitherT.leftT[Future, ValidationError](ValidationError.JsonFailedValidation(errorList))
         )
+      when(mockJsonValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
+        )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
@@ -277,6 +290,10 @@ class MessagesControllerSpec
         .thenAnswer(
           _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
         )
+      when(mockJsonValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
+        )
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
@@ -295,6 +312,10 @@ class MessagesControllerSpec
                 "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at [Source: (akka.stream.impl.io.InputStreamAdapter); line: 1, column: 3]"
               )
             )
+        )
+      when(mockJsonValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
+        .thenAnswer(
+          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
@@ -317,7 +338,8 @@ class MessagesControllerSpec
         )
       when(mockJsonValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => (EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType")), Flow[ByteString])
+          _ =>
+            (EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType")), Flow[ByteString])
         )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)
@@ -342,7 +364,7 @@ class MessagesControllerSpec
         )
       when(mockJsonValidationService.businessValidationFlow(eqTo(validCode))(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
-          _ => (EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error))), Flow[ByteString])
+          _ => (EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error))), Flow[ByteString])
         )
 
       val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService)

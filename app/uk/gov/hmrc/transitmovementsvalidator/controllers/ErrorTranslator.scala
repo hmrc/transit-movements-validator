@@ -25,7 +25,6 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.bus
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.notFoundError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError.schemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -48,6 +47,9 @@ trait ErrorTranslator {
     case ValidationError.UnknownMessageType(messageType)  => notFoundError(s"Unknown Message Type provided: $messageType is not recognised")
     case ValidationError.FailedToParse(message)           => badRequestError(message)
     case ValidationError.BusinessValidationError(message) => businessValidationError(message)
+    // These two should be superseded by schema errors
+    case ValidationError.MissingElementError(path)  => businessValidationError(s"Missing element: ${path.mkString(".")}")
+    case ValidationError.TooManyElementsError(path) => businessValidationError(s"Too many elements: ${path.mkString(".")}")
   }
 
 }

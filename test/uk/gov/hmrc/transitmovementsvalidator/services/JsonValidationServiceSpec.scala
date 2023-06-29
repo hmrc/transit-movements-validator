@@ -133,7 +133,6 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       }
     }
 
-
     "when valid message type provided but with schema invalid json, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid.json"))
       val sut    = new JsonValidationServiceImpl
@@ -211,7 +210,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     "when an invalid CC141C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc141c-invalid-date-time.json"))
       val sut    = new JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationInvalidation, source)
+      val result = sut.validate(MessageType.InformationAboutNonArrivedMovement, source)
 
       whenReady(result.value) {
         r =>
@@ -255,8 +254,8 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val result = sut.validate(MessageType.DeclarationData, singleUseStringSource("{'ABC':}"))
 
       whenReady(result.value) {
-        e =>
-          e.left.get mustBe a[FailedToParse]
+        case Left(x: FailedToParse) => succeed
+        case _                      => fail("Expected Left(FailedToPasrse)")
       }
     }
 
@@ -393,7 +392,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     "when an invalid CC014C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-message-sender.json"))
       val sut    = new JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationAmendment, source)
+      val result = sut.validate(MessageType.DeclarationInvalidation, source)
 
       whenReady(result.value) {
         r =>
@@ -516,41 +515,64 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       }
     }
 
-    "when message type and root node doesn't match, return BusinessValidationError" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-rootNodeMismatch.json"))
-      val sut    = new JsonValidationServiceImpl
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData)
-
-      source.via(flow).runWith(Sink.ignore)
-
-      whenReady(preMat.value) {
-        case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
-        case _ => fail("Expected a Left but got a Right")
-      }
-    }
-
-    "when referenceNumber node doesn't start with GB or XI for Arrival, return BusinessValidationError" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference-arrival.json"))
-      val sut    = new JsonValidationServiceImpl
+    "when message type doesn't exist, return BusinessValidationError" in {
+      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-missingNode.json"))
+      val sut            = new JsonValidationServiceImpl
       val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification)
 
       source.via(flow).runWith(Sink.ignore)
 
       whenReady(preMat.value) {
-        case Left(ValidationError.BusinessValidationError("The customs office specified for CustomsOfficeOfDestinationActual must be a customs office located in the United Kingdom (GZ123456 was specified)")) => succeed
+        case Left(ValidationError.MissingElementError(Seq("n1:CC007C", "messageType"))) => succeed
+        case _                                                                          => fail("Expected a Left of MissingElementError")
+      }
+    }
+
+    "when message type and root node doesn't match, return BusinessValidationError" in {
+      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-rootNodeMismatch.json"))
+      val sut            = new JsonValidationServiceImpl
+      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification)
+
+      source.via(flow).runWith(Sink.ignore)
+
+      whenReady(preMat.value) {
+        case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
+        case _                                                                                             => fail("Expected a Left but got a Right")
+      }
+    }
+
+    "when referenceNumber node doesn't start with GB or XI for Arrival, return BusinessValidationError" in {
+      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference-arrival.json"))
+      val sut            = new JsonValidationServiceImpl
+      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification)
+
+      source.via(flow).runWith(Sink.ignore)
+
+      whenReady(preMat.value) {
+        case Left(
+              ValidationError.BusinessValidationError(
+                "The customs office specified for CustomsOfficeOfDestinationActual must be a customs office located in the United Kingdom (GZ123456 was specified)"
+              )
+            ) =>
+          succeed
         case _ => fail("Did not get expected message/result")
       }
     }
 
     "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
-      val sut    = new JsonValidationServiceImpl
+      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+      val sut            = new JsonValidationServiceImpl
       val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData)
 
       source.via(flow).runWith(Sink.ignore)
 
       whenReady(preMat.value) {
-        case Left(ValidationError.BusinessValidationError("The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)")) => succeed
+        case Left(
+              ValidationError.BusinessValidationError(
+                "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)"
+              )
+            ) =>
+          succeed
         case _ => fail("Did not get expected message/result")
       }
     }
@@ -558,7 +580,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     "when message is business rule valid, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
 
-      val sut = new JsonValidationServiceImpl
+      val sut            = new JsonValidationServiceImpl
       val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData)
 
       source.via(flow).runWith(Sink.ignore)

@@ -33,6 +33,7 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
+import org.jsfr.json.path.JsonPath
 import play.api.libs.json.JsString
 import play.api.libs.json.Json
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
@@ -45,6 +46,7 @@ import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
+import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
@@ -74,7 +76,7 @@ trait JsonValidationService extends ValidationService
 
 class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
-  protected override def rootNode(messageType: MessageType): String = s"n1.${messageType.rootNode}"
+  override protected def rootNode(messageType: MessageType): String = s"n1:${messageType.rootNode}"
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
@@ -122,9 +124,16 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
   def stripSource(message: String): String =
     message.replace("Source: (akka.stream.impl.io.InputStreamAdapter); ", "")
 
-  override protected def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _] =
+  override protected def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _] = {
+    @tailrec
+    def createPath(path: Seq[String], acc: JsonPath.Builder = JsonPath.Builder.start()): JsonPath =
+      path match {
+        case Nil          => acc.build()
+        case head :: tail => createPath(tail, acc.child(head))
+      }
+
     JsonReader
-      .select(("$" :+ path).mkString("."))
+      .select(createPath(path))
       .via(Flow.fromFunction {
         fragment =>
           Json.parse(fragment.utf8String)
@@ -132,4 +141,5 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
       .via(Flow.fromFunction {
         case JsString(value) => value
       })
+  }
 }

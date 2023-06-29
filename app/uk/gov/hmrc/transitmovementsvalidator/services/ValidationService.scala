@@ -29,6 +29,8 @@ import cats.data.EitherT
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.MissingElementError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.TooManyElementsError
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -37,15 +39,23 @@ trait ValidationService {
 
   protected def rootNode(messageType: MessageType): String = messageType.rootNode
 
-  def messageTypeLocation(messageType: MessageType): Seq[String] = messageType.rootNode :: "messageType" :: Nil
+  def messageTypeLocation(messageType: MessageType): Seq[String] = rootNode(messageType) :: "messageType" :: Nil
 
-  def officeLocation(messageType: MessageType): Seq[String] = messageType.rootNode :: messageType.routingOfficeNode :: "referenceNumber" :: Nil
+  def officeLocation(messageType: MessageType): Seq[String] = rootNode(messageType) :: messageType.routingOfficeNode :: "referenceNumber" :: Nil
 
   protected def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _]
 
+  def single(path: Seq[String])(current: Option[ValidationError], next: Option[ValidationError]): Option[ValidationError] =
+    current match {
+      case Some(_: MissingElementError)      => next
+      case x @ Some(_: TooManyElementsError) => x
+      case _                                 => Some(TooManyElementsError(path))
+    }
+
   // Rules
-  def checkMessageType(messageType: MessageType): Flow[ByteString, ValidationError, _] =
-    stringValueFlow(messageTypeLocation(messageType))
+  def checkMessageType(messageType: MessageType): Flow[ByteString, ValidationError, _] = {
+    val path = messageTypeLocation(messageType)
+    stringValueFlow(path)
       .via(
         Flow.fromFunction[String, Option[BusinessValidationError]](
           string =>
@@ -58,11 +68,15 @@ trait ValidationService {
               )
         )
       )
+      .fold[Option[ValidationError]](Some(MissingElementError(path)))(single(path))
       .filter(_.isDefined)
       .map(_.get)
 
-  def checkOffice(messageType: MessageType): Flow[ByteString, ValidationError, _] =
-    stringValueFlow(officeLocation(messageType))
+  }
+
+  def checkOffice(messageType: MessageType): Flow[ByteString, ValidationError, _] = {
+    val path = officeLocation(messageType)
+    stringValueFlow(path)
       .via(
         Flow.fromFunction[String, Option[BusinessValidationError]](
           string =>
@@ -75,8 +89,10 @@ trait ValidationService {
               )
         )
       )
+      .fold[Option[ValidationError]](Some(MissingElementError(path)))((single(path)))
       .filter(_.isDefined)
       .map(_.get)
+  }
 
   def businessValidationFlow(
     messageType: MessageType

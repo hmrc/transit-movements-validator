@@ -130,5 +130,4 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
         case event: TextEvent => Seq(event.text)
         case _                => Seq.empty
       }
-      .take(1)
 }
