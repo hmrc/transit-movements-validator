@@ -84,7 +84,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     messageFormat
       .stringValueFlow(path)
       .via(
-        Flow.fromFunction[String, Option[BusinessValidationError]](
+        Flow.fromFunction[String, Option[BusinessValidationError]] {
           string =>
             if (string.trim == messageType.rootNode) None
             else
@@ -93,7 +93,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
                   s"Root node doesn't match with the messageType"
                 )
               )
-        )
+        }
       )
       .fold[Option[ValidationError]](Some(MissingElementError(path)))(single(path))
       .filter(_.isDefined)
@@ -117,6 +117,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
             )
         }
       )
+      .fold[Either[ValidationError, CustomsOffice]](Left(MissingElementError(path)))(singleEither(path))
   }
 
   private def recipientFlow[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, Either[ValidationError, CustomsOffice], _] = {
@@ -157,7 +158,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
               builder.add(Flow.fromFunction[(Either[ValidationError, CustomsOffice], Either[ValidationError, CustomsOffice]), Option[ValidationError]] {
                 case (Right(left), Right(right)) =>
                   if (left == right) None
-                  else Some(BusinessValidationError(s"The message recipient must match the country of the ${messageType.routingOfficeNode}"))
+                  else Some(BusinessValidationError(s"The message recipient country must match the country of the ${messageType.routingOfficeNode}"))
                 case (Left(error), _) => Some(error)
                 case (_, Left(error)) => Some(error)
               })

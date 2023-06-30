@@ -106,7 +106,7 @@
         },
         "messageIdentification": "token",
         "CustomsOfficeOfDestinationActual": {
-            "referenceNumber": "GB123456"
+            "referenceNumber": "XI123456"
         }
     }
 }

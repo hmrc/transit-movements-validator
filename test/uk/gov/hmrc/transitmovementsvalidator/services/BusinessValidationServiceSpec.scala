@@ -24,6 +24,7 @@ import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
@@ -38,6 +39,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.xml.NodeSeq
 
 class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with ScalaFutures with ScalaCheckDrivenPropertyChecks with TestActorSystem {
+
+  implicit val timeout: PatienceConfig = PatienceConfig(2.seconds, 2.seconds)
 
   lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
 
@@ -112,147 +115,327 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
   "Json" - {
 
-    lazy val appConfig = mock[AppConfig]
-    when(appConfig.enableBusinessValidationMessageRecipient).thenReturn(false)
+    "when we don't validate the message recipient" - {
 
-    "when message type doesn't exist, return BusinessValidationError" in {
-      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-missingNode.json"))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+      lazy val appConfig = mock[AppConfig]
+      when(appConfig.enableBusinessValidationMessageRecipient).thenReturn(false)
 
-      source.via(flow).runWith(Sink.ignore)
+      "when message type doesn't exist, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-missingNode.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
 
-      whenReady(preMat.value) {
-        case Left(ValidationError.MissingElementError(Seq("n1:CC007C", "messageType"))) => succeed
-        case x =>
-          fail(s"Expected a Left of MissingElementError, got $x")
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(ValidationError.MissingElementError(Seq("n1:CC007C", "messageType"))) => succeed
+          case x =>
+            fail(s"Expected a Left of MissingElementError, got $x")
+        }
       }
+
+      "when message type and root node doesn't match, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-rootNodeMismatch.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
+          case x =>
+            fail(s"Expected a Left of root node error but got $x")
+        }
+      }
+
+      "when referenceNumber node doesn't start with GB or XI for Arrival, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference-arrival.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The customs office specified for CustomsOfficeOfDestinationActual must be a customs office located in the United Kingdom (GZ123456 was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
+      }
+
+      "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
+      }
+
+      "when message is business rule valid, return a Right" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
+
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
     }
 
-    "when message type and root node doesn't match, return BusinessValidationError" in {
-      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-rootNodeMismatch.json"))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+    "when we do validate the message recipient" - {
 
-      source.via(flow).runWith(Sink.ignore)
+      lazy val appConfig = mock[AppConfig]
+      when(appConfig.enableBusinessValidationMessageRecipient).thenReturn(true)
 
-      whenReady(preMat.value) {
-        case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
-        case x =>
-          fail(s"Expected a Left of root node error but got $x")
+      "when messageRecipient is invalid" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-recipient.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The message recipient must be either NTA.GB or NTA.XI (nope was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
       }
-    }
 
-    "when referenceNumber node doesn't start with GB or XI for Arrival, return BusinessValidationError" in {
-      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-reference-arrival.json"))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+      "when the office country does not match the messageRecipient country (XI office for GB recipient)" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-ref-office.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
 
-      source.via(flow).runWith(Sink.ignore)
+        source.via(flow).runWith(Sink.ignore)
 
-      whenReady(preMat.value) {
-        case Left(
-              ValidationError.BusinessValidationError(
-                "The customs office specified for CustomsOfficeOfDestinationActual must be a customs office located in the United Kingdom (GZ123456 was specified)"
-              )
-            ) =>
-          succeed
-        case x => fail(s"Did not get Left of office error, got $x")
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The message recipient country must match the country of the CustomsOfficeOfDestinationActual"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
       }
-    }
 
-    "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-      val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Json)
+      "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Json)
 
-      source.via(flow).runWith(Sink.ignore)
+        source.via(flow).runWith(Sink.ignore)
 
-      whenReady(preMat.value) {
-        case Left(
-              ValidationError.BusinessValidationError(
-                "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)"
-              )
-            ) =>
-          succeed
-        case x => fail(s"Did not get Left of office error, got $x")
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV123456 was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
       }
-    }
 
-    "when message is business rule valid, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
+      "when message is business rule valid for GB, return a Right" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
 
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Json)
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
 
-      source.via(flow).runWith(Sink.ignore)
+        source.via(flow).runWith(Sink.ignore)
 
-      whenReady(preMat.value) {
-        _ mustBe Right((): Unit)
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
       }
-    }
 
+      "when message is business rule valid for XI, return a Right" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid-xi.json"))
+
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+    }
   }
 
   "XML" - {
 
-    lazy val appConfig = mock[AppConfig]
-    when(appConfig.enableBusinessValidationMessageRecipient).thenReturn(false)
+    "when we don't validate the message recipient" - {
 
-    "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-      val source         = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
+      lazy val appConfig = mock[AppConfig]
+      when(appConfig.enableBusinessValidationMessageRecipient).thenReturn(false)
 
-      source.via(flow).runWith(Sink.ignore)
+      "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
+        val source         = Source.single(ByteString(invalidDepartureReferenceXml.mkString, StandardCharsets.UTF_8))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
 
-      whenReady(preMat.value) {
-        case Left(
-              ValidationError.BusinessValidationError(
-                "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV1T34FR was specified)"
-              )
-            ) =>
-          succeed
-        case x => fail(s"Did not get expected message/result (got $x)")
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (GV1T34FR was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get expected message/result (got $x)")
+        }
+      }
+
+      "when message is business rule valid, return a Right" in {
+        val source         = FileIO.fromPath(Paths.get(testDataPath + "/cc015c-valid.xml"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+      "when message type and root node doesn't match, return BusinessValidationError" in {
+        val source         = Source.single(ByteString(rootNodeMismatchXml.mkString, StandardCharsets.UTF_8))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
+          case _                                                                                             => fail("Expected a Left but got a Right")
+        }
+      }
+
+      "when message type is there too much, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(testDataPath + "/cc007c-tooManyNodes.xml"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(ValidationError.TooManyElementsError(Seq("CC007C", "messageType"))) => succeed
+          case x                                                                        => fail(s"Expected a Left of TooManyElements, got $x")
+        }
       }
     }
 
-    "when message is business rule valid, return a Right" in {
-      val source         = FileIO.fromPath(Paths.get(testDataPath + "/cc015c-valid.xml"))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
+    "when we do validate the message recipient" - {
 
-      source.via(flow).runWith(Sink.ignore)
+      lazy val appConfig = mock[AppConfig]
+      when(appConfig.enableBusinessValidationMessageRecipient).thenReturn(true)
 
-      whenReady(preMat.value) {
-        _ mustBe Right((): Unit)
+      "when messageRecipient is invalid" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-recipient.xml"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The message recipient must be either NTA.GB or NTA.XI (token was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
       }
-    }
 
-    "when message type and root node doesn't match, return BusinessValidationError" in {
-      val source         = Source.single(ByteString(rootNodeMismatchXml.mkString, StandardCharsets.UTF_8))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
+      "when the office country does not match the messageRecipient country (XI office for GB recipient)" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-ref-office.xml"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Xml)
 
-      source.via(flow).runWith(Sink.ignore)
+        source.via(flow).runWith(Sink.ignore)
 
-      whenReady(preMat.value) {
-        case Left(ValidationError.BusinessValidationError("Root node doesn't match with the messageType")) => succeed
-        case _                                                                                             => fail("Expected a Left but got a Right")
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The message recipient country must match the country of the CustomsOfficeOfDestinationActual"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
       }
-    }
 
-    "when message type is there too much, return BusinessValidationError" in {
-      val source         = FileIO.fromPath(Paths.get(testDataPath + "/cc007c-tooManyNodes.xml"))
-      val sut            = new BusinessValidationServiceImpl(appConfig)
-      val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Xml)
+      "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
+        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.xml"))
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData, MessageFormat.Xml)
 
-      source.via(flow).runWith(Sink.ignore)
+        source.via(flow).runWith(Sink.ignore)
 
-      whenReady(preMat.value) {
-        case Left(ValidationError.TooManyElementsError(Seq("CC007C", "messageType"))) => succeed
-        case x                                                                        => fail(s"Expected a Left of TooManyElements, got $x")
+        whenReady(preMat.value) {
+          case Left(
+                ValidationError.BusinessValidationError(
+                  "The customs office specified for CustomsOfficeOfDeparture must be a customs office located in the United Kingdom (XB3KMA8M was specified)"
+                )
+              ) =>
+            succeed
+          case x => fail(s"Did not get Left of office error, got $x")
+        }
       }
+
+      "when message is business rule valid for GB, return a Right" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.xml"))
+
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+      "when message is business rule valid for XI, return a Right" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid-xi.xml"))
+
+        val sut            = new BusinessValidationServiceImpl(appConfig)
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
     }
   }
 

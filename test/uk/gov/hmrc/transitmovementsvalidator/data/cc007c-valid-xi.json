@@ -21,7 +21,7 @@
                 "type": "3344"
             }
         ],
-        "messageRecipient": "NTA.GB",
+        "messageRecipient": "NTA.XI",
         "messageSender": "token",
         "Consignment": {
             "LocationOfGoods": {
@@ -106,7 +106,7 @@
         },
         "messageIdentification": "token",
         "CustomsOfficeOfDestinationActual": {
-            "referenceNumber": "GB123456"
+            "referenceNumber": "XI123456"
         }
     }
 }
