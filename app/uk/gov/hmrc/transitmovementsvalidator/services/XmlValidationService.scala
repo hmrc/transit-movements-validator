@@ -17,9 +17,6 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
-import akka.stream.alpakka.xml.TextEvent
-import akka.stream.alpakka.xml.scaladsl.XmlParsing
-import akka.stream.scaladsl.Flow
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.StreamConverters
 import akka.util.ByteString
@@ -123,11 +120,4 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     parser
   }
 
-  override protected def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _] =
-    XmlParsing.parser
-      .via(XmlParsing.subslice(path))
-      .mapConcat {
-        case event: TextEvent => Seq(event.text)
-        case _                => Seq.empty
-      }
 }

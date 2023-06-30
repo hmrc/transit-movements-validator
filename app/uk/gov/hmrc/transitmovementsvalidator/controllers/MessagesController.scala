@@ -28,6 +28,7 @@ import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
@@ -36,7 +37,12 @@ import uk.gov.hmrc.transitmovementsvalidator.services._
 import javax.inject.Inject
 import scala.concurrent._
 
-class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
+class MessagesController @Inject() (
+  cc: ControllerComponents,
+  xmlValidationService: XmlValidationService,
+  jsonValidationService: JsonValidationService,
+  businessValidationService: BusinessValidationService
+)(implicit
   val materializer: Materializer,
   val temporaryFileCreator: TemporaryFileCreator,
   executionContext: ExecutionContext
@@ -48,16 +54,16 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
-      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
-      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
+      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService, MessageFormat.Xml)
+      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService, MessageFormat.Json)
     }
 
-  private def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+  private def validateMessage(messageType: String, validationService: ValidationService, messageFormat: MessageFormat[_]): Action[Source[ByteString, _]] =
     Action.stream {
       implicit request =>
         (for {
           messageTypeObj <- findMessageType(messageType)
-          (deferredBusinessRulesValidation, businessRulesFlow) = validationService.businessValidationFlow(messageTypeObj)
+          (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
           _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
           _ <- deferredBusinessRulesValidation.asPresentation
         } yield NoContent)
