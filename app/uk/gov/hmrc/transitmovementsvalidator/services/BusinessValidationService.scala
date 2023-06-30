@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
+import akka.stream.Attributes
+import akka.stream.Attributes.LogLevels
 import akka.stream.FlowShape
 import akka.stream.Materializer
 import akka.stream.scaladsl.Broadcast
 import akka.stream.scaladsl.Concat
 import akka.stream.scaladsl.Flow
 import akka.stream.scaladsl.GraphDSL
+import akka.stream.scaladsl.Keep
 import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Zip
 import akka.util.ByteString
@@ -39,6 +42,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.TooMa
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 @ImplementedBy(classOf[BusinessValidationServiceImpl])
 trait BusinessValidationService {
@@ -188,9 +192,15 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     messageType: MessageType,
     messageFormat: MessageFormat[A]
   )(implicit materializer: Materializer, ec: ExecutionContext): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, _]) = {
+    val recoverableSink: Sink[ValidationError, Future[Option[ValidationError]]] = Flow
+      .apply[ValidationError]
+      .recover {
+        case NonFatal(ex) => ValidationError.Unexpected(Some(ex))
+      }
+      .toMat(Sink.headOption)(Keep.right)
     val (preMat, flow): (Future[Option[ValidationError]], Flow[ByteString, ByteString, _]) = Flow
       .fromGraph(
-        GraphDSL.createGraph(Sink.headOption[ValidationError]) {
+        GraphDSL.createGraph(recoverableSink) {
           implicit builder => sink =>
             import GraphDSL.Implicits._
 
@@ -214,6 +224,12 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
 
             FlowShape(initialBroadcast.in, initialBroadcast.out(0))
         }
+      )
+      .withAttributes(
+        Attributes.logLevels(
+          onFailure = LogLevels.Off,
+          onFinish = LogLevels.Off
+        )
       )
       .preMaterialize()
     (
