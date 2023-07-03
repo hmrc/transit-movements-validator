@@ -30,8 +30,25 @@ import play.api.libs.json.JsString
 import scala.annotation.tailrec
 
 sealed trait MessageFormat[A] {
+
+  /** Formats the [[MessageType]] as the expected root node in the specified format
+    *
+    * @param messageType The message type to get the root node from
+    * @return The root node
+    */
   def rootNode(messageType: MessageType): String
+
+  /** Parses the stream into tokens of type A, which is format dependent
+    *
+    * @return The flow that parses [[ByteString]]s into As
+    */
   def tokenParser: Flow[ByteString, A, _]
+
+  /** Extracts the string value of the node at path.
+    *
+    * @param path The path to the value
+    * @return A flow that extracts the value as a string
+    */
   def stringValueFlow(path: Seq[String]): Flow[A, String, _]
 }
 

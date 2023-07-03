@@ -63,6 +63,11 @@ class MessagesController @Inject() (
       implicit request =>
         (for {
           messageTypeObj <- findMessageType(messageType)
+
+          // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
+          // business validation at the same time. We get the result from the business rule validation from the
+          // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
+          // the source with the flow attached to the schema validation service and it runs.
           (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
           _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
           _ <- deferredBusinessRulesValidation.asPresentation

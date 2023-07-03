@@ -54,6 +54,54 @@ trait BusinessValidationService {
 
 }
 
+/** Akka Streams implementation of business validation rules.
+  *
+  * The intention behind this service is to provide a [[Flow]] that takes in a
+  * [[ByteString]] and returns a [[ByteString]] that can be used for schema validation, while
+  * simultaneously performing business validation.
+  *
+  * ==How this service works==
+  *
+  * This service provides a [[Flow]] to perform **deferred validation**, that is, calling this
+  * service doesn't perform the validation itself, the flow you obtain has to be attached to another
+  * Akka [[akka.stream.scaladsl.Source]], i.e. almost always going to ne the [[play.api.mvc.Request]]
+  * body.
+  *
+  * When this flow is attached to a stream and the stream is subsequently executed, this flow will parse
+  * the stream as it is consumed by its ultimate consumer (the XML/Json parsers) in parallel. It does
+  * not create an additional copy of the raw data, though it may create tokens to represent the data.
+  * The way the tokens are parsed and strings are extracted are determined by the [[MessageFormat]]
+  * that we have ingested.
+  *
+  * When everything is hooked up, the flow will look something like this:
+  *
+  * {{{
+  * incoming stream -----> schema validation sink -> schema validation result
+  *                   |
+  *                  \/
+  *        business validation flow
+  *                  \/
+  *             token parser* --> messageTypeRule -> merge results -> business validation result (as pre-mat Future)
+  *                            |                       /\
+  *                            --> officeCheckRule ----|
+  * }}}
+  *
+  * (* -- parsing done via the supplied MessageFormat)
+  *
+  * Because this service doesn't actually do the validation eagerly, we have to provide a
+  * [[Future]] that we can inspect when the flow is actually executed, i.e., when the
+  * schema validation is performed, thus this service returns a tuple of this future,
+  * and the flow to attach to an existing source.
+  *
+  * ==Adding new rules==
+  *
+  * Adding a new rule requires a couple of steps:
+  *
+  * * Create a Flow[A, ValidationError, _], where A is the token type, as determined by the [[MessageFormat]].
+  * * Add it to [[businessValidationFlow()]] as per the comments in that method.
+  *
+  * @param appConfig The configuration to use when determining which rules to apply.
+  */
 class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends BusinessValidationService {
 
   private val gbOffice = "^GB.*$".r
@@ -68,6 +116,16 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
   private def recipientLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
     messageFormat.rootNode(messageType) :: "messageRecipient" :: Nil
 
+  /** Ensure that one, and only one, element is returned, returning an error if zero or more than one
+    * has been emitted.
+    *
+    * This is for use in fold.
+    *
+    * @param path The path to add to the error message
+    * @param current The current element
+    * @param next The next element
+    * @return The [[ValidationError]], if there is one
+    */
   def single(path: Seq[String])(current: Option[ValidationError], next: Option[ValidationError]): Option[ValidationError] =
     current match {
       case Some(_: MissingElementError)      => next
@@ -75,6 +133,16 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       case _                                 => Some(TooManyElementsError(path))
     }
 
+  /** Ensure that one, and only one, element is returned, returning an error if zero or more than one
+    * has been emitted.
+    *
+    * This is for use in fold.
+    *
+    * @param path    The path to add to the error message
+    * @param current The current element
+    * @param next    The next element
+    * @return The [[ValidationError]], if there is one, else the value of the element
+    */
   def singleEither[T](path: Seq[String])(current: Either[ValidationError, T], next: Either[ValidationError, T]): Either[ValidationError, T] =
     current match {
       case Left(_: MissingElementError)      => next
@@ -83,6 +151,17 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     }
 
   // Rules
+
+  /** This rule checks the "messageType" field in the XML/Json and returns if it's not the value that
+    * is expected (it should match the message type we're trying to validate).
+    *
+    * This flow will only emit an element if there is a validation error.
+    *
+    * @param messageType The [[MessageType]]
+    * @param messageFormat The format of the message (XML or Json)
+    * @tparam A The type of token
+    * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
+    */
   private def checkMessageType[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] = {
     val path = messageTypeLocation(messageType, messageFormat)
     messageFormat
@@ -105,6 +184,13 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
 
   }
 
+  /** Extracts the office as specified in [[MessageType.routingOfficeNode]]
+    *
+    * @param messageType The [[MessageType]] to get the path from
+    * @param messageFormat The format of the incoming message
+    * @tparam A The type of the tokens
+    * @return A flow that can extract the office, or returns an error
+    */
   private def officeFlow[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, Either[ValidationError, CustomsOffice], _] = {
     val path = officeLocation(messageType, messageFormat)
     messageFormat
@@ -124,6 +210,13 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       .fold[Either[ValidationError, CustomsOffice]](Left(MissingElementError(path)))(singleEither(path))
   }
 
+  /** Extracts the message recipient
+    *
+    * @param messageType   The [[MessageType]]
+    * @param messageFormat The format of the incoming message
+    * @tparam A The type of the tokens
+    * @return A flow that can extract the recipient, or returns an error
+    */
   private def recipientFlow[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, Either[ValidationError, CustomsOffice], _] = {
     val path = recipientLocation(messageType, messageFormat)
     messageFormat
@@ -143,10 +236,19 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       .fold[Either[ValidationError, CustomsOffice]](Left(MissingElementError(path)))(singleEither(path))
   }
 
-  // determine office, determine recipient
-  // if not GB/XI office, error as in checkOffice
-  // if recipient not NTA.(XI|GB), error as appropriate
-  // if both valid GB/XI but not matching, appropriate error
+  /** Composes the checkOffice and checkRecipient flows, and ensures that the countries extracted from each matches.
+    *
+    * If they do, this flow will return no elements, else this will return a [[ValidationError]]
+    *
+    * * if not GB/XI office, error as in checkOffice
+    * * if recipient not NTA.(XI|GB), error as in checkRecipient
+    * * if both valid GB/XI but not matching, error that states they don't match
+    *
+    * @param messageType   The [[MessageType]]
+    * @param messageFormat The format of the incoming message
+    * @tparam A The type of the tokens
+    * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
+    */
   def checkOfficeAndRecipient[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] =
     Flow
       .fromGraph(
@@ -179,6 +281,14 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       .filter(_.isDefined)
       .map(_.get)
 
+  /** Transforms the checkOffice flow from returning an [[Either]], to only returning a [[ValidationError]]
+    * if the returned Either is a [[Left]]
+    *
+    * @param messageType   The [[MessageType]]
+    * @param messageFormat The format of the incoming message
+    * @tparam A The type of the tokens
+    * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
+    */
   private def checkOffice[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] = {
     val path = officeLocation(messageType, messageFormat)
     officeFlow(messageType, messageFormat)
@@ -188,6 +298,20 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       .map(_.get)
   }
 
+  /** Creates and returns a pre-materialised flow for checking business rules.
+    *
+    * When adding a business rule, ensure that:
+    *
+    * * numberOfRules represents the number of rules that need to be run
+    * * that you add the rule to the graph where indicated
+    *
+    * @param messageType The [[MessageType]]
+    * @param messageFormat The [[MessageFormat]] to parse
+    * @param materializer The [[Materializer]] that will pre-materialise the stream
+    * @param ec The [[ExecutionContext]]
+    * @tparam A The type of token that [[MessageFormat]] will parse the stream into
+    * @return The pre-materialised [[Future]] and the [[Flow]].
+    */
   override def businessValidationFlow[A](
     messageType: MessageType,
     messageFormat: MessageFormat[A]
@@ -206,8 +330,11 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
 
             val initialBroadcast = builder.add(Broadcast[ByteString](2))
             val xmlParser        = builder.add(messageFormat.tokenParser)
-            val ruleBroadcast    = builder.add(Broadcast[A](2))
-            val merge            = builder.add(Concat[ValidationError](2)) // for order guarantees
+
+            // The number of rules that need ot be checked.
+            val numberOfRules = 2
+            val ruleBroadcast = builder.add(Broadcast[A](numberOfRules))
+            val merge         = builder.add(Concat[ValidationError](numberOfRules)) // for order guarantees
 
             // Business rules to check
             val messageTypeRule = builder.add(checkMessageType(messageType, messageFormat))
@@ -217,8 +344,9 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
 
             initialBroadcast.out(1) ~> xmlParser ~> ruleBroadcast.in
 
-            ruleBroadcast.out(0) ~> messageTypeRule ~> merge.in(0)
-            ruleBroadcast.out(1) ~> checkOfficeRule ~> merge.in(1)
+            // For each rule, add a line in here, flowing from ruleBroadcast, via the rule, to merge
+            ruleBroadcast ~> messageTypeRule ~> merge
+            ruleBroadcast ~> checkOfficeRule ~> merge
 
             merge.out ~> sink
 
