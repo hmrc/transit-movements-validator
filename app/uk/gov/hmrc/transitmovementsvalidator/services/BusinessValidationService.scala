@@ -244,6 +244,22 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     * * if recipient not NTA.(XI|GB), error as in checkRecipient
     * * if both valid GB/XI but not matching, error that states they don't match
     *
+    * It does this by creating two flows that run in parallel, one to get the message recipient country,
+    * one to get the office of destination/departure as appropriate, passes the country on if successful,
+    * then the two streams zip the results together and if the two countries match, emits nothing, else
+    * an appropriate error is generated.
+    *
+    * Zip turns two elements from two streams into a tuple of the two, i.e. the transformation [A, B => (A, B)],
+    * which allows us to use both elements in the next step, and ensure we only get one element.
+    *
+    * The graph looks like this
+    *
+    * {{{
+    *   in -> tokens --> broadcast ---> extractOffice -------> zip -> calculate result ---> error, if any -> out
+    *                       |                            |
+    *                       |-> extractMessageRecipient -|
+    * }}}
+    *
     * @param messageType   The [[MessageType]]
     * @param messageFormat The format of the incoming message
     * @tparam A The type of the tokens
@@ -293,7 +309,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     val path = officeLocation(messageType, messageFormat)
     officeFlow(messageType, messageFormat)
       .map(_.swap.toOption)
-      .fold[Option[ValidationError]](Some(MissingElementError(path)))((single(path)))
+      .fold[Option[ValidationError]](Some(MissingElementError(path)))(single(path))
       .filter(_.isDefined)
       .map(_.get)
   }
@@ -316,12 +332,38 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     messageType: MessageType,
     messageFormat: MessageFormat[A]
   )(implicit materializer: Materializer, ec: ExecutionContext): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, _]) = {
+
+    // The rule selected here is controlled by configuration.
+    val checkOfficeRule =
+      if (appConfig.enableBusinessValidationMessageRecipient) checkOfficeAndRecipient(messageType, messageFormat)
+      else checkOffice(messageType, messageFormat)
+
+    // Add each rule here, this will take care of all configuration needed in the graph below.
+    // Each rule MUST be a Flow[A, ValidationError, _], which will emit ZERO elements on success
+    val rules: Seq[Flow[A, ValidationError, _]] = Seq(
+      checkMessageType(messageType, messageFormat),
+      checkOfficeRule
+    )
+
+    // This sink ensure we don't error the stream if something goes wrong and take down the whole thing
+    // Otherwise, this populates the future returned from the graph
     val recoverableSink: Sink[ValidationError, Future[Option[ValidationError]]] = Flow
       .apply[ValidationError]
       .recover {
         case NonFatal(ex) => ValidationError.Unexpected(Some(ex))
       }
       .toMat(Sink.headOption)(Keep.right)
+
+    /*
+     * This graph looks like this:
+     *
+     * in -> initialBroadcast -> output (this is "flow", for attaching to source)
+     *       |
+     *       |->  tokenParser -> rulesBroadcast (-> ruleFlow ->) merge -> sink (gets first error, if any)
+     *
+     * (-> ruleFlow ->) will be as many rules as there are, specified above. The sink will put its result
+     * into the Future returned by preMat.
+     */
     val (preMat, flow): (Future[Option[ValidationError]], Flow[ByteString, ByteString, _]) = Flow
       .fromGraph(
         GraphDSL.createGraph(recoverableSink) {
@@ -329,24 +371,19 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
             import GraphDSL.Implicits._
 
             val initialBroadcast = builder.add(Broadcast[ByteString](2))
-            val xmlParser        = builder.add(messageFormat.tokenParser)
+            val parser           = builder.add(messageFormat.tokenParser)
 
-            // The number of rules that need ot be checked.
-            val numberOfRules = 2
+            val numberOfRules = rules.length
             val ruleBroadcast = builder.add(Broadcast[A](numberOfRules))
-            val merge         = builder.add(Concat[ValidationError](numberOfRules)) // for order guarantees
+            val merge         = builder.add(Concat[ValidationError](numberOfRules)) // Concat for order guarantees
 
-            // Business rules to check
-            val messageTypeRule = builder.add(checkMessageType(messageType, messageFormat))
-            val checkOfficeRule =
-              if (appConfig.enableBusinessValidationMessageRecipient) builder.add(checkOfficeAndRecipient(messageType, messageFormat))
-              else builder.add(checkOffice(messageType, messageFormat))
+            initialBroadcast.out(1) ~> parser ~> ruleBroadcast.in
 
-            initialBroadcast.out(1) ~> xmlParser ~> ruleBroadcast.in
-
-            // For each rule, add a line in here, flowing from ruleBroadcast, via the rule, to merge
-            ruleBroadcast ~> messageTypeRule ~> merge
-            ruleBroadcast ~> checkOfficeRule ~> merge
+            // Adds all rules to the broadcast
+            rules.foreach {
+              rule =>
+                ruleBroadcast ~> builder.add(rule) ~> merge
+            }
 
             merge.out ~> sink
 
@@ -360,6 +397,13 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
         )
       )
       .preMaterialize()
+
+    // We return a tuple of:
+    //
+    // * An EitherT[Future, ValidationError, Unit] that holds the result of the graph
+    //   above once it is run
+    // * The one-time use flow to use on the request source that will then be sent to
+    //   the schema validator
     (
       EitherT(
         preMat.map(
