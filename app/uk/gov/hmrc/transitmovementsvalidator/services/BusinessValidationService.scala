@@ -95,10 +95,8 @@ trait BusinessValidationService {
   *
   * ==Adding new rules==
   *
-  * Adding a new rule requires a couple of steps:
-  *
-  * * Create a Flow[A, ValidationError, _], where A is the token type, as determined by the [[MessageFormat]].
-  * * Add it to [[businessValidationFlow()]] as per the comments in that method.
+  * All rules need to be a Flow of A to ValidationError, which only emits if there is an error.
+  * Once created, each rule needs to go into the rules seq in businessValidationFlow.
   *
   * @param appConfig The configuration to use when determining which rules to apply.
   */
