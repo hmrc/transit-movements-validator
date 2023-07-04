@@ -314,10 +314,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
 
   /** Creates and returns a pre-materialised flow for checking business rules.
     *
-    * When adding a business rule, ensure that:
-    *
-    * * numberOfRules represents the number of rules that need to be run
-    * * that you add the rule to the graph where indicated
+    * Add rules to the "rules" Seq. This will configure the graph accordingly.
     *
     * @param messageType The [[MessageType]]
     * @param messageFormat The [[MessageFormat]] to parse
