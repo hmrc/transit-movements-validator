@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.services
+package uk.gov.hmrc.transitmovementsvalidator.models
 
-import akka.stream.Materializer
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
-import cats.data.EitherT
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+sealed trait CustomsOffice
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+object CustomsOffice {
 
-trait ValidationService {
-
-  def validate(messageType: MessageType, source: Source[ByteString, _])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit]
+  case object Gb extends CustomsOffice
+  case object Xi extends CustomsOffice
 
 }

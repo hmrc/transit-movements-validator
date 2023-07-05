@@ -21,11 +21,17 @@ sealed trait MessageType {
   def rootNode: String
   def xsdPath: String
   def jsonSchemaPath: String
+
+  def routingOfficeNode: String
 }
 
-sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType
+sealed abstract class DepartureMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType {
+  override lazy val routingOfficeNode: String = "CustomsOfficeOfDeparture"
+}
 
-sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType
+sealed abstract class ArrivalMessageType(val code: String, val rootNode: String, val xsdPath: String, val jsonSchemaPath: String) extends MessageType {
+  override lazy val routingOfficeNode: String = "CustomsOfficeOfDestinationActual"
+}
 
 object MessageType {
 

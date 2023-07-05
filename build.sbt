@@ -1,5 +1,4 @@
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "transit-movements-validator"
 
@@ -17,7 +16,6 @@ lazy val microservice = Project(appName, file("."))
       "-Djdk.xml.maxOccurLimit=100000"
     )
   )
-  .settings(publishingSettings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
   .settings(CodeCoverageSettings.settings: _*)

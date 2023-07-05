@@ -1,9 +1,10 @@
 <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
     <messageSender>token</messageSender>
-    <messageRecipient>NTA.GB</messageRecipient>
+    <messageRecipient>token</messageRecipient>
     <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
     <messageIdentification>token</messageIdentification>
     <messageType>CC007C</messageType>
+    <messageType>CC015C</messageType>
     <correlationIdentifier>token</correlationIdentifier>
     <TransitOperation>
         <MRN>27WF9X1FQ9RCKN0TM3</MRN>
