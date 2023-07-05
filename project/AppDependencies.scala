@@ -7,10 +7,12 @@ object AppDependencies {
   private val boostrapPlayVersion = "7.12.0"
 
   val compile = Seq(
-    "uk.gov.hmrc"               %% "bootstrap-backend-play-28"   % boostrapPlayVersion,
-    "org.typelevel"             %% "cats-core"                   % catsVersion,
-    "com.networknt"              % "json-schema-validator"       % "1.0.70" exclude ("org.slf4j", "slf4j-api"),
-    "com.fasterxml.jackson.core" % "jackson-databind"            % "2.12.6"
+    "uk.gov.hmrc"               %% "bootstrap-backend-play-28"          % boostrapPlayVersion,
+    "org.typelevel"             %% "cats-core"                          % catsVersion,
+    "com.networknt"              % "json-schema-validator"              % "1.0.70" exclude ("org.slf4j", "slf4j-api"),
+    "com.fasterxml.jackson.core" % "jackson-databind"                   % "2.12.6",
+    "com.lightbend.akka"        %% "akka-stream-alpakka-xml"            % "3.0.4",
+    "com.lightbend.akka"        %% "akka-stream-alpakka-json-streaming" % "3.0.4"
   )
 
   val test = Seq(

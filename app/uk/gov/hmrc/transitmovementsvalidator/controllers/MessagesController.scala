@@ -27,8 +27,9 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.transitmovementsvalidator.controllers.MessagesController.ResponseCreator
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services._
@@ -36,20 +37,12 @@ import uk.gov.hmrc.transitmovementsvalidator.services._
 import javax.inject.Inject
 import scala.concurrent._
 
-object MessagesController {
-
-  implicit class ResponseCreator(val value: EitherT[Future, PresentationError, Unit]) extends AnyVal {
-
-    def toValidationResponse(implicit ec: ExecutionContext): EitherT[Future, PresentationError, Option[ValidationResponse]] =
-      value.transform {
-        case Left(SchemaValidationPresentationError(errors)) => Right(Some(ValidationResponse(errors)))
-        case Left(x)                                         => Left(x)
-        case Right(_)                                        => Right(None)
-      }
-  }
-}
-
-class MessagesController @Inject() (cc: ControllerComponents, xmlValidationService: XmlValidationService, jsonValidationService: JsonValidationService)(implicit
+class MessagesController @Inject() (
+  cc: ControllerComponents,
+  xmlValidationService: XmlValidationService,
+  jsonValidationService: JsonValidationService,
+  businessValidationService: BusinessValidationService
+)(implicit
   val materializer: Materializer,
   val temporaryFileCreator: TemporaryFileCreator,
   executionContext: ExecutionContext
@@ -61,27 +54,35 @@ class MessagesController @Inject() (cc: ControllerComponents, xmlValidationServi
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
     contentTypeRoute {
-      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService)
-      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService)
+      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService, MessageFormat.Xml)
+      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService, MessageFormat.Json)
     }
 
-  private def validateMessage(messageType: String, validationService: ValidationService): Action[Source[ByteString, _]] =
+  private def validateMessage(messageType: String, validationService: ValidationService, messageFormat: MessageFormat[_]): Action[Source[ByteString, _]] =
     Action.stream {
       implicit request =>
-        validationService.validate(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
-          case Right(schemaResult) =>
-            schemaResult match {
-              case Some(schemaResult) => Future.successful(Ok(Json.toJson(schemaResult)))
-              case None =>
-                validationService.businessRuleValidation(messageType, request.body).asPresentation.toValidationResponse.value.flatMap {
-                  case Right(_) => Future.successful(NoContent)
-                  case Left(presentationError) =>
-                    Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
-                }
-            }
-          case Left(presentationError) =>
-            Future.successful(Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites)))
-        }
+        (for {
+          messageTypeObj <- findMessageType(messageType)
+
+          // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
+          // business validation at the same time. We get the result from the business rule validation from the
+          // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
+          // the source with the flow attached to the schema validation service and it runs.
+          (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
+          _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
+          _ <- deferredBusinessRulesValidation.asPresentation
+        } yield NoContent)
+          .valueOr {
+            case SchemaValidationPresentationError(errors) =>
+              // We have special cased this as this isn't considered an "error" so much.
+              Ok(Json.toJson(ValidationResponse(errors)))
+            case presentationError =>
+              Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
+          }
+
     }
+
+  private def findMessageType(messageType: String): EitherT[Future, PresentationError, MessageType] =
+    EitherT.fromEither(MessageType.find(messageType).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))).asPresentation
 
 }

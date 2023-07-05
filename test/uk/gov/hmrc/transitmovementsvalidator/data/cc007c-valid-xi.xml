@@ -1,6 +1,6 @@
 <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
     <messageSender>token</messageSender>
-    <messageRecipient>NTA.GB</messageRecipient>
+    <messageRecipient>NTA.XI</messageRecipient>
     <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
     <messageIdentification>token</messageIdentification>
     <messageType>CC007C</messageType>
@@ -17,7 +17,7 @@
         <referenceNumber>token</referenceNumber>
     </Authorisation>
     <CustomsOfficeOfDestinationActual>
-        <referenceNumber>GB123456</referenceNumber>
+        <referenceNumber>XI123456</referenceNumber>
     </CustomsOfficeOfDestinationActual>
     <TraderAtDestination>
         <identificationNumber>ezv3Z</identificationNumber>

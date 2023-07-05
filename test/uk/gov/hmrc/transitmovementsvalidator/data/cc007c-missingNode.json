@@ -11,7 +11,6 @@
             "identificationNumber": "ezv3Z",
             "communicationLanguageAtDestination": "sa"
         },
-        "messageType": "CC007C",
         "@PhaseID": "NCTS5.0",
         "correlationIdentifier": "token",
         "Authorisation": [
@@ -21,7 +20,7 @@
                 "type": "3344"
             }
         ],
-        "messageRecipient": "NTA.GB",
+        "messageRecipient": "token",
         "messageSender": "token",
         "Consignment": {
             "LocationOfGoods": {

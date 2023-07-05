@@ -37,4 +37,8 @@ object ValidationError {
   case class JsonFailedValidation(errors: NonEmptyList[JsonSchemaValidationError]) extends FailedValidationError
 
   case class BusinessValidationError(message: String) extends ValidationError
+
+  case class MissingElementError(path: Seq[String]) extends ValidationError
+
+  case class TooManyElementsError(path: Seq[String]) extends ValidationError
 }
