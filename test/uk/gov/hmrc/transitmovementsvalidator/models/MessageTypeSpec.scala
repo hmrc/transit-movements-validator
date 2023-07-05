@@ -26,19 +26,11 @@ import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.ArrivalNotificat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.DeclarationAmendment
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.DeclarationData
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.DeclarationInvalidation
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.InformationAboutNonArrivedMovement
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.PresentationNotificationForPreLodgedDec
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.UnloadingRemarks
 
 class MessageTypeSpec extends AnyFreeSpec with Matchers with MockitoSugar with OptionValues with ScalaCheckDrivenPropertyChecks {
   "MessageType must contain" - {
-    "InformationAboutNonArrivedMovement" in {
-      MessageType.values must contain(InformationAboutNonArrivedMovement)
-      InformationAboutNonArrivedMovement.code mustEqual "IE141"
-      InformationAboutNonArrivedMovement.rootNode mustEqual "CC141C"
-      MessageType.departureValues must contain(InformationAboutNonArrivedMovement)
-    }
-
     "UnloadingRemarks" in {
       MessageType.values must contain(UnloadingRemarks)
       UnloadingRemarks.code mustEqual "IE044"

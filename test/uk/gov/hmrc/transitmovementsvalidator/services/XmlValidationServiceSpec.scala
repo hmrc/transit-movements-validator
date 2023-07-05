@@ -217,18 +217,15 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       } finally ie044File.close()
     }
 
-    "when valid XML IE141 is provided for the given message type, return a Right" in {
-      val ie141File = scala.io.Source.fromFile(testDataPath + "/cc141c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie141File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationServiceImpl
-        val result = sut.validate("IE141", source)
+    "when invalid message type IE141 is provided, return a left" in {
+      val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+      val sut    = new XmlValidationServiceImpl
+      val result = sut.validate("IE141", source)
 
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie141File.close()
+      whenReady(result.value) {
+        r =>
+          r.left.getOrElse(fail("Expected a Left but got a Right")) mustBe ValidationError.UnknownMessageType("IE141")
+      }
     }
 
     "when no valid message type is provided, return UnknownMessageTypeValidationError" in {
