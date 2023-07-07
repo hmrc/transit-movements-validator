@@ -51,17 +51,11 @@ object MessageType {
   /** E_PRE_NOT (IE170) */
   case object PresentationNotificationForPreLodgedDec extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
 
-  /** E_MOV_RSP (IE141) */
-  case object InformationAboutNonArrivedMovement extends DepartureMessageType("IE141", "CC141C", "/xsd/cc141c.xsd", "/json/cc141c-schema.json") {
-    override lazy val routingOfficeNode: String = "CustomsOfficeOfEnquiryAtDeparture"
-  }
-
   val departureValues = Set(
     DeclarationAmendment,
     DeclarationInvalidation,
     DeclarationData,
-    PresentationNotificationForPreLodgedDec,
-    InformationAboutNonArrivedMovement
+    PresentationNotificationForPreLodgedDec
   )
 
   // ****************
