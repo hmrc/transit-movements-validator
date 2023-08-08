@@ -2807,7 +2807,7 @@
     },
     "n1:CommodityType02": {
       "additionalProperties": false,
-      "description": "Used by 1/91 messages: CC044C",
+      "description": "Used by 1/91 messages: CC025C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -2824,7 +2824,7 @@
           "type": "string"
         },
         "CommodityCode": {
-          "$ref": "#/definitions/n1:CommodityCodeType03"
+          "$ref": "#/definitions/n1:CommodityCodeType06"
         },
         "GoodsMeasure": {
           "$ref": "#/definitions/n1:GoodsMeasureType04"
@@ -3709,7 +3709,7 @@
           "type": "string"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType08"
+          "$ref": "#/definitions/n1:CommodityType02"
         },
         "Packaging": {
           "items": {

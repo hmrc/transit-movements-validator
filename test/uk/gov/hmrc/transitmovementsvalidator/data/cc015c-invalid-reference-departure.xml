@@ -6,7 +6,7 @@
     <messageType>CC015C</messageType>
     <TransitOperation>
         <LRN>DHbrfgDQJRm</LRN>
-        <declarationType>gJ</declarationType>
+        <DeclarationType>gJ</DeclarationType>
         <additionalDeclarationType>h</additionalDeclarationType>
         <security>7</security>
         <reducedDatasetIndicator>1</reducedDatasetIndicator>

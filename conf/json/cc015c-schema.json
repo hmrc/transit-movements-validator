@@ -2323,7 +2323,7 @@
         },
         "CustomsOfficeOfTransitDeclared": {
           "items": {
-            "$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType03"
+            "$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType04"
           },
           "type": "array"
         },
@@ -8641,9 +8641,9 @@
       ],
       "type": "object"
     },
-    "n1:CustomsOfficeOfTransitDeclaredType03": {
+    "n1:CustomsOfficeOfTransitDeclaredType04": {
       "additionalProperties": false,
-      "description": "Used by 9/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD115C, CD165C",
+      "description": "Used by 5/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -11266,7 +11266,7 @@
           },
           "type": "array"
         },
-        "guaranteeType": {
+        "GuaranteeType": {
           "$ref": "#/definitions/n1:GuaranteeTypeContentType"
         },
         "otherGuaranteeReference": {
@@ -11277,7 +11277,7 @@
         }
       },
       "required": [
-        "guaranteeType",
+        "GuaranteeType",
         "sequenceNumber"
       ],
       "type": "object"
@@ -11567,7 +11567,7 @@
     },
     "n1:GuarantorType02": {
       "additionalProperties": false,
-      "description": "Used by 1/91 messages: CC224C",
+      "description": "Used by 1/91 messages: CC015C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -17962,7 +17962,7 @@
         "communicationLanguageAtDeparture": {
           "$ref": "#/definitions/n1:CommunicationLanguageAtDepartureContentType"
         },
-        "declarationType": {
+        "DeclarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "limitDate": {
@@ -17985,7 +17985,7 @@
         "LRN",
         "additionalDeclarationType",
         "bindingItinerary",
-        "declarationType",
+        "DeclarationType",
         "reducedDatasetIndicator",
         "security"
       ],
