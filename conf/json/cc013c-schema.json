@@ -4274,7 +4274,7 @@
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
-        "declarationType": {
+        "DeclarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
@@ -11227,7 +11227,7 @@
           },
           "type": "array"
         },
-        "guaranteeType": {
+        "GuaranteeType": {
           "$ref": "#/definitions/n1:GuaranteeTypeContentType"
         },
         "otherGuaranteeReference": {
