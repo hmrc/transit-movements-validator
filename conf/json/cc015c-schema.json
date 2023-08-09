@@ -4274,7 +4274,7 @@
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
-        "declarationType": {
+        "DeclarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
