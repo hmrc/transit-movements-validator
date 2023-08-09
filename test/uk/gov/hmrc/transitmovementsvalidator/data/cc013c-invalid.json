@@ -285,7 +285,7 @@
             {
               "goodsItemNumber": "123",
               "declarationGoodsItemNumber": 100,
-              "declarationType": "token",
+              "DeclarationType": "token",
               "countryOfDispatch": "GB",
               "countryOfDestination": "XI",
               "referenceNumberUCR": "string",
@@ -440,7 +440,7 @@
     "Guarantee": [
       {
         "sequenceNumber": "123",
-        "guaranteeType": "B",
+        "GuaranteeType": "B",
         "otherGuaranteeReference": "GBP",
         "GuaranteeReference": [
           {
