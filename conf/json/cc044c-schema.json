@@ -19774,8 +19774,7 @@
       },
       "required": [
         "referenceNumber",
-        "sequenceNumber",
-        "type"
+        "sequenceNumber"
       ],
       "type": "object"
     },
