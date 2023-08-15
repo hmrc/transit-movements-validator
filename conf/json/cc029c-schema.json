@@ -2326,7 +2326,7 @@
         },
         "CustomsOfficeOfTransitDeclared": {
           "items": {
-            "$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType03"
+            "$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType04"
           },
           "type": "array"
         },
@@ -3853,7 +3853,7 @@
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
-        "declarationType": {
+        "DeclarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
@@ -8644,9 +8644,9 @@
       ],
       "type": "object"
     },
-    "n1:CustomsOfficeOfTransitDeclaredType03": {
+    "n1:CustomsOfficeOfTransitDeclaredType04": {
       "additionalProperties": false,
-      "description": "Used by 9/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD115C, CD165C",
+      "description": "Used by 5/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -11309,7 +11309,7 @@
           },
           "type": "array"
         },
-        "guaranteeType": {
+        "GuaranteeType": {
           "$ref": "#/definitions/n1:GuaranteeTypeContentType"
         },
         "otherGuaranteeReference": {
@@ -11320,7 +11320,7 @@
         }
       },
       "required": [
-        "guaranteeType",
+        "GuaranteeType",
         "sequenceNumber"
       ],
       "type": "object"
@@ -18223,7 +18223,7 @@
         "declarationAcceptanceDate": {
           "$ref": "#/definitions/n1:DeclarationAcceptanceDateContentType"
         },
-        "declarationType": {
+        "DeclarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "reducedDatasetIndicator": {
@@ -18245,7 +18245,7 @@
         "additionalDeclarationType",
         "bindingItinerary",
         "declarationAcceptanceDate",
-        "declarationType",
+        "DeclarationType",
         "reducedDatasetIndicator",
         "releaseDate",
         "security"

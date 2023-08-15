@@ -10,7 +10,7 @@
     <correlationIdentifier>test</correlationIdentifier>
     <TransitOperation>
         <LRN>MDTP-18</LRN>
-        <declarationType>T1</declarationType>
+        <DeclarationType>T1</DeclarationType>
         <additionalDeclarationType>A</additionalDeclarationType>
         <security>0</security>
         <reducedDatasetIndicator>0</reducedDatasetIndicator>
@@ -54,7 +54,7 @@
 </Representative> -->
     <Guarantee>
         <sequenceNumber>1</sequenceNumber>
-        <guaranteeType>1</guaranteeType>
+        <GuaranteeType>1</GuaranteeType>
         <GuaranteeReference>
             <sequenceNumber>1</sequenceNumber>
             <GRN>20XI0000010000070</GRN>
