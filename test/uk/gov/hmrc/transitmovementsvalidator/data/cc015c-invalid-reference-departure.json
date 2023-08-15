@@ -4,7 +4,7 @@
         "messageSender": "token",
         "TransitOperation": {
             "LRN": "qvRcL",
-            "DeclarationType": "Pbg",
+            "declarationType": "Pbg",
             "additionalDeclarationType": "O",
             "security": "8",
             "reducedDatasetIndicator": "1",
@@ -64,7 +64,7 @@
         "Guarantee": [
             {
                 "sequenceNumber": "48711",
-                "GuaranteeType": "1",
+                "guaranteeType": "1",
                 "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
                 "GuaranteeReference": []
             }

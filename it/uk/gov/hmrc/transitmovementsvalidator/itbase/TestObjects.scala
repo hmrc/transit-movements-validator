@@ -261,7 +261,7 @@ object TestObjects {
       <messageIdentification>token</messageIdentification>
       <messageType>CC013C</messageType>
       <TransitOperation>
-        <DeclarationType>token</DeclarationType>
+        <declarationType>token</declarationType>
         <additionalDeclarationType>A</additionalDeclarationType>
         <security>0</security>
         <reducedDatasetIndicator>1</reducedDatasetIndicator>
@@ -476,7 +476,7 @@ object TestObjects {
         "TransitOperation" -> Json.obj(
           "LRN"                               -> "string",
           "MRN"                               -> "29GMFMHYWWCFCWRVJ3",
-          "DeclarationType"                   -> "token",
+          "declarationType"                   -> "token",
           "additionalDeclarationType"         -> "a",
           "TIRCarnetNumber"                   -> "123456",
           "presentationOfTheGoodsDateAndTime" -> "2014-06-09T16:15:04",
@@ -757,7 +757,7 @@ object TestObjects {
                 Json.obj(
                   "goodsItemNumber"            -> "123",
                   "declarationGoodsItemNumber" -> 100,
-                  "DeclarationType"            -> "token",
+                  "declarationType"            -> "token",
                   "countryOfDispatch"          -> "GB",
                   "countryOfDestination"       -> "XI",
                   "referenceNumberUCR"         -> "string",
@@ -913,7 +913,7 @@ object TestObjects {
         "Guarantee" -> Json.arr(
           Json.obj(
             "sequenceNumber"          -> "123",
-            "GuaranteeType"           -> "B",
+            "guaranteeType"           -> "B",
             "otherGuaranteeReference" -> "GBP",
             "GuaranteeReference" -> Json.arr(
               Json.obj(
@@ -1034,7 +1034,7 @@ object TestObjects {
       <messageType>CC015C</messageType>
       <TransitOperation>
         <LRN>qvRcL</LRN>
-        <DeclarationType>Pbg</DeclarationType>
+        <declarationType>Pbg</declarationType>
         <additionalDeclarationType>O</additionalDeclarationType>
         <security>8</security>
         <reducedDatasetIndicator>1</reducedDatasetIndicator>
@@ -1051,7 +1051,7 @@ object TestObjects {
       </HolderOfTheTransitProcedure>
       <Guarantee>
         <sequenceNumber>48711</sequenceNumber>
-        <GuaranteeType>1</GuaranteeType>
+        <guaranteeType>1</guaranteeType>
         <otherGuaranteeReference>1qJMA6MbhnnrOJJjHBHX</otherGuaranteeReference>
       </Guarantee>
       <Consignment>
@@ -1096,7 +1096,7 @@ object TestObjects {
             "messageType"            -> "CC015C",
             "TransitOperation" -> Json.obj(
               "LRN"                       -> "qvRcL",
-              "DeclarationType"           -> "Pbg",
+              "declarationType"           -> "Pbg",
               "additionalDeclarationType" -> "O",
               "security"                  -> "8",
               "reducedDatasetIndicator"   -> "1",
@@ -1114,7 +1114,7 @@ object TestObjects {
             "Guarantee" -> Json.arr(
               Json.obj(
                 "sequenceNumber"          -> "48711",
-                "GuaranteeType"           -> "1",
+                "guaranteeType"           -> "1",
                 "otherGuaranteeReference" -> "1qJMA6MbhnnrOJJjHBHX",
                 "GuaranteeReference"      -> Json.arr()
               )

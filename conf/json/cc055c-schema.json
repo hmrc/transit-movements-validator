@@ -10854,7 +10854,7 @@
         "GRN": {
           "$ref": "#/definitions/n1:GrnContentType"
         },
-        "GuaranteeTypeWithGrn": {
+        "InvalidGuaranteeReason": {
           "$ref": "#/definitions/n1:InvalidGuaranteeReasonType01"
         },
         "sequenceNumber": {
@@ -10863,7 +10863,7 @@
       },
       "required": [
         "GRN",
-        "GuaranteeTypeWithGrn",
+        "InvalidGuaranteeReason",
         "sequenceNumber"
       ],
       "type": "object"
@@ -13885,9 +13885,6 @@
       "properties": {
         "#": {
           "type": "string"
-        },
-        "sequenceNumber": {
-          "$ref": "#/definitions/n1:SequenceNumberContentType"
         },
         "code": {
           "$ref": "#/definitions/n1:CodeContentType04"
