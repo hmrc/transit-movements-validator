@@ -63,7 +63,7 @@
     "Guarantee": [
       {
         "sequenceNumber": "48711",
-        "GuaranteeType": "1",
+        "guaranteeType": "1",
         "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
         "GuaranteeReference": []
       }

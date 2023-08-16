@@ -4,7 +4,7 @@
     "TransitOperation": {
       "LRN": "string",
       "MRN": "29GMFMHYWWCFCWRVJ3",
-      "DeclarationType": "token",
+      "declarationType": "token",
       "additionalDeclarationType": "a",
       "TIRCarnetNumber": "123456",
       "presentationOfTheGoodsDateAndTime": "2014-06-09T16:15:04",
@@ -285,7 +285,7 @@
             {
               "goodsItemNumber": "123",
               "declarationGoodsItemNumber": 100,
-              "DeclarationType": "token",
+              "declarationType": "token",
               "countryOfDispatch": "GB",
               "countryOfDestination": "XI",
               "referenceNumberUCR": "string",
@@ -440,7 +440,7 @@
     "Guarantee": [
       {
         "sequenceNumber": "123",
-        "GuaranteeType": "B",
+        "guaranteeType": "B",
         "otherGuaranteeReference": "GBP",
         "GuaranteeReference": [
           {

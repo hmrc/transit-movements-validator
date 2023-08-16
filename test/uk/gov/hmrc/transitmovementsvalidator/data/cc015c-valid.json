@@ -3,7 +3,7 @@
     "preparationDateAndTime": "2022-01-22T07:43:36",
     "TransitOperation": {
       "LRN": "qvRcL",
-      "DeclarationType": "Pbg",
+      "declarationType": "Pbg",
       "additionalDeclarationType": "O",
       "security": "8",
       "reducedDatasetIndicator": "1",
@@ -64,7 +64,7 @@
     "Guarantee": [
       {
         "sequenceNumber": "48711",
-        "GuaranteeType": "1",
+        "guaranteeType": "1",
         "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
         "GuaranteeReference": []
       }

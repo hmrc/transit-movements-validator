@@ -3853,7 +3853,7 @@
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
-        "DeclarationType": {
+        "declarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
@@ -11309,7 +11309,7 @@
           },
           "type": "array"
         },
-        "GuaranteeType": {
+        "guaranteeType": {
           "$ref": "#/definitions/n1:GuaranteeTypeContentType"
         },
         "otherGuaranteeReference": {
@@ -11320,7 +11320,7 @@
         }
       },
       "required": [
-        "GuaranteeType",
+        "guaranteeType",
         "sequenceNumber"
       ],
       "type": "object"
@@ -18223,7 +18223,7 @@
         "declarationAcceptanceDate": {
           "$ref": "#/definitions/n1:DeclarationAcceptanceDateContentType"
         },
-        "DeclarationType": {
+        "declarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "reducedDatasetIndicator": {
@@ -18245,7 +18245,7 @@
         "additionalDeclarationType",
         "bindingItinerary",
         "declarationAcceptanceDate",
-        "DeclarationType",
+        "declarationType",
         "reducedDatasetIndicator",
         "releaseDate",
         "security"

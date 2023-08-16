@@ -4274,7 +4274,7 @@
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
-        "DeclarationType": {
+        "declarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
@@ -11227,7 +11227,7 @@
           },
           "type": "array"
         },
-        "GuaranteeType": {
+        "guaranteeType": {
           "$ref": "#/definitions/n1:GuaranteeTypeContentType"
         },
         "otherGuaranteeReference": {
@@ -17873,7 +17873,7 @@
         "communicationLanguageAtDeparture": {
           "$ref": "#/definitions/n1:CommunicationLanguageAtDepartureContentType"
         },
-        "DeclarationType": {
+        "declarationType": {
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "limitDate": {
@@ -17896,7 +17896,7 @@
         "additionalDeclarationType",
         "amendmentTypeFlag",
         "bindingItinerary",
-        "DeclarationType",
+        "declarationType",
         "reducedDatasetIndicator",
         "security"
       ],

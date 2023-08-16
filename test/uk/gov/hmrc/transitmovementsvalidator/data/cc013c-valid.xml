@@ -5,7 +5,7 @@
     <messageIdentification>token</messageIdentification>
     <messageType>CC013C</messageType>
     <TransitOperation>
-        <DeclarationType>token</DeclarationType>
+        <declarationType>token</declarationType>
         <additionalDeclarationType>A</additionalDeclarationType>
         <security>0</security>
         <reducedDatasetIndicator>1</reducedDatasetIndicator>
