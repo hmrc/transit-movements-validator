@@ -2363,11 +2363,11 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="GoodsMeasure" type="GoodsMeasureType03">
+      <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03">
         <xs:annotation>
           <xs:documentation>
             <description value="GOODS MEASURE" />
-            <optionality value="R" />
+            <optionality value="O" />    <!--##Changed to Optional (IE025 - Not in active use in HMRC)##-->
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2645,11 +2645,11 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="GoodsMeasure" type="GoodsMeasureType03">
+      <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03">
         <xs:annotation>
           <xs:documentation>
             <description value="GOODS MEASURE" />
-            <optionality value="R" />
+            <optionality value="O" />    <!--##Changed to Optional (IE029 & IE043)##-->
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -4973,11 +4973,11 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="PlaceOfLoading" type="PlaceOfLoadingType02">
+      <xs:element name="PlaceOfLoading" minOccurs="0" type="PlaceOfLoadingType02">
         <xs:annotation>
           <xs:documentation>
             <description value="PLACE OF LOADING" />
-            <optionality value="R" />
+            <optionality value="O" />  <!--##Changed to Optional (IE029 Only)##-->
           </xs:documentation>
         </xs:annotation>
       </xs:element>

@@ -482,5 +482,17 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
           )
       }
     }
+
+    "when valid CC029C JSON is provided for the given message type, return a Right" in {
+      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc029c-valid.json"))
+      val sut    = new JsonValidationServiceImpl
+      val result = sut.validate(MessageType.ReleaseForTransit, source)
+
+      whenReady(result.value) {
+        r =>
+          println(r)
+          r.isRight mustBe true
+      }
+    }
   }
 }

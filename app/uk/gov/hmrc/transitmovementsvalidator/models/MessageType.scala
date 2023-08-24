@@ -51,11 +51,14 @@ object MessageType {
   /** E_PRE_NOT (IE170) */
   case object PresentationNotificationForPreLodgedDec extends DepartureMessageType("IE170", "CC170C", "/xsd/cc170c.xsd", "/json/cc170c-schema.json")
 
+  case object ReleaseForTransit extends DepartureMessageType("IE029", "CC029C", "/xsd/cc029c.xsd", "/json/cc029c-schema.json")
+
   val departureValues = Set(
     DeclarationAmendment,
     DeclarationInvalidation,
     DeclarationData,
-    PresentationNotificationForPreLodgedDec
+    PresentationNotificationForPreLodgedDec,
+    ReleaseForTransit
   )
 
   // ****************
