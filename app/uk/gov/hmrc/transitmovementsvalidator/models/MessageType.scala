@@ -53,6 +53,10 @@ object MessageType {
 
   case object ReleaseForTransit extends DepartureMessageType("IE029", "CC029C", "/xsd/cc029c.xsd", "/json/cc029c-schema.json")
 
+  case object GoodsReleaseNotification extends ArrivalMessageType("IE025", "CC025C", "/xsd/cc025c.xsd", "/json/cc025c-schema.json")
+
+  case object UnloadingPermission extends ArrivalMessageType("IE043", "CC043C", "/xsd/cc043c.xsd", "/json/cc043c-schema.json")
+
   val departureValues = Set(
     DeclarationAmendment,
     DeclarationInvalidation,
@@ -73,7 +77,9 @@ object MessageType {
 
   val arrivalValues = Set(
     ArrivalNotification,
-    UnloadingRemarks
+    UnloadingRemarks,
+    GoodsReleaseNotification,
+    UnloadingPermission
   )
 
   val values = arrivalValues ++ departureValues
