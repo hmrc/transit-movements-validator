@@ -3097,7 +3097,6 @@
         }
       },
       "required": [
-        "GoodsMeasure",
         "descriptionOfGoods"
       ],
       "type": "object"
@@ -4841,7 +4840,6 @@
       },
       "required": [
         "HouseConsignment",
-        "PlaceOfLoading",
         "containerIndicator",
         "grossMass"
       ],

@@ -143,11 +143,6 @@
                     "conveyanceReferenceNumber": "string"
                 }
             ],
-            "PlaceOfLoading": {
-                "UNLocode": "token",
-                "country": "IT",
-                "location": "string"
-            },
             "PlaceOfUnloading": {
                 "UNLocode": "token",
                 "country": "IT",
@@ -319,11 +314,7 @@
                                         "sequenceNumber": "1",
                                         "UNNumber": "4321"
                                     }
-                                ],
-                                "GoodsMeasure": {
-                                    "grossMass": 1000,
-                                    "netMass": 1000
-                                }
+                                ]
                             },
                             "Packaging": [
                                 {
