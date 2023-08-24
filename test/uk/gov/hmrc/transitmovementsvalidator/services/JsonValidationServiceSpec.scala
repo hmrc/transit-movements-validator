@@ -514,7 +514,6 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         r =>
-          println(r)
           r.isRight mustBe true
       }
     }
