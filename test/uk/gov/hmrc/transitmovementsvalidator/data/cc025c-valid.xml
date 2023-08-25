@@ -3,16 +3,16 @@
   <messageRecipient>token</messageRecipient>
   <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
   <messageIdentification>token</messageIdentification>
-  <messageType>CD975C</messageType>
+  <messageType>CC025C</messageType>
   <!--Optional:-->
   <correlationIdentifier>token</correlationIdentifier>
   <TransitOperation>
-    <MRN>string</MRN>
-    <releaseDate>2014-06-09+01:00</releaseDate>
-    <releaseIndicator>token</releaseIndicator>
+    <MRN>27WF9X1FQ9RCKN0TM3</MRN>
+    <releaseDate>2014-06-09</releaseDate>
+    <releaseIndicator>2</releaseIndicator>
   </TransitOperation>
   <CustomsOfficeOfDestinationActual>
-    <referenceNumber>stringst</referenceNumber>
+    <referenceNumber>AB654321</referenceNumber>
   </CustomsOfficeOfDestinationActual>
   <TraderAtDestination>
     <identificationNumber>string</identificationNumber>
@@ -21,39 +21,33 @@
   <Consignment>
     <!--1 to 99 repetitions:-->
     <HouseConsignment>
-      <sequenceNumber>token</sequenceNumber>
-      <releaseType>token</releaseType>
+      <sequenceNumber>1</sequenceNumber>
+      <releaseType>2</releaseType>
       <!--0 to 999 repetitions:-->
       <ConsignmentItem>
-        <goodsItemNumber>token</goodsItemNumber>
+        <goodsItemNumber>54321</goodsItemNumber>
         <declarationGoodsItemNumber>100</declarationGoodsItemNumber>
-        <releaseType>token</releaseType>
+        <releaseType>4</releaseType>
         <Commodity>
           <descriptionOfGoods>string</descriptionOfGoods>
           <!--Optional:-->
-          <cusCode>token</cusCode>
+          <cusCode>987654321</cusCode>
           <!--Optional:-->
           <CommodityCode>
-            <harmonizedSystemSubHeadingCode>token</harmonizedSystemSubHeadingCode>
+            <harmonizedSystemSubHeadingCode>123456</harmonizedSystemSubHeadingCode>
             <!--Optional:-->
             <combinedNomenclatureCode>st</combinedNomenclatureCode>
           </CommodityCode>
           <!--0 to 99 repetitions:-->
           <DangerousGoods>
-            <sequenceNumber>token</sequenceNumber>
-            <UNNumber>token</UNNumber>
+            <sequenceNumber>1</sequenceNumber>
+            <UNNumber>4321</UNNumber>
           </DangerousGoods>
-          <!--Optional:-->
-          <GoodsMeasure>
-            <grossMass>1000.000000000000</grossMass>
-            <!--Optional:-->
-            <netMass>1000.000000000000</netMass>
-          </GoodsMeasure>
         </Commodity>
         <!--1 to 99 repetitions:-->
         <Packaging>
-          <sequenceNumber>token</sequenceNumber>
-          <typeOfPackages>token</typeOfPackages>
+          <sequenceNumber>1</sequenceNumber>
+          <typeOfPackages>21</typeOfPackages>
           <!--Optional:-->
           <numberOfPackages>100</numberOfPackages>
           <!--Optional:-->

@@ -2834,6 +2834,12 @@
         },
         "descriptionOfGoods": {
           "$ref": "#/definitions/n1:DescriptionOfGoodsContentType02"
+        },
+        "DangerousGoods": {
+          "items": {
+            "$ref": "#/definitions/n1:DangerousGoodsType02"
+          },
+          "type": "array"
         }
       },
       "type": "object"
