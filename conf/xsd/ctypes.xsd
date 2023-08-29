@@ -2363,7 +2363,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03">
+      <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03"> <!--##Added minOccurs="0" as this is optional (IE029 Only)##-->
         <xs:annotation>
           <xs:documentation>
             <description value="GOODS MEASURE" />
@@ -2645,10 +2645,10 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03">
+      <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03"> <!--##Added minOccurs="0" as this is optional (IE029 Only)##-->
         <xs:annotation>
           <xs:documentation>
-            <description value="GOODS MEASURE" />
+            <description value="GOODS MEASURE" /> 
             <optionality value="O" />    <!--##Changed to Optional (IE029 & IE043)##-->
           </xs:documentation>
         </xs:annotation>
@@ -4973,7 +4973,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="PlaceOfLoading" minOccurs="0" type="PlaceOfLoadingType02">
+      <xs:element name="PlaceOfLoading" minOccurs="0" type="PlaceOfLoadingType02"> <!--##Added minOccurs="0" as this is optional (IE029 Only)##-->
         <xs:annotation>
           <xs:documentation>
             <description value="PLACE OF LOADING" />
