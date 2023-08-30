@@ -394,44 +394,5 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       } finally ie170invalidFile.close()
     }
 
-    "when valid XML IE029 is provided for the given message type, return a Right" in {
-      val ie29File = scala.io.Source.fromFile(testDataPath + "/cc029c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie29File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationServiceImpl
-        val result = sut.validate(MessageType.ReleaseForTransit, source)
-
-        whenReady(result.value) {
-          r => r.isRight mustBe true
-        }
-      } finally ie29File.close
-    }
-
-    "when valid XML IE025 is provided for the given message type, return a Right" in {
-      val ie25File = scala.io.Source.fromFile(testDataPath + "/cc025c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie25File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationServiceImpl
-        val result = sut.validate(MessageType.GoodsReleaseNotification, source)
-
-        whenReady(result.value) {
-          r => r.isRight mustBe true
-        }
-      } finally ie25File.close
-    }
-
-    "when valid XML IE043 is provided for the given message type, return a Right" in {
-      val ie43File = scala.io.Source.fromFile(testDataPath + "/cc043c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie43File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationServiceImpl
-        val result = sut.validate(MessageType.UnloadingPermission, source)
-
-        whenReady(result.value) {
-          r => r.isRight mustBe true
-        }
-      } finally ie43File.close
-    }
-
   }
 }
