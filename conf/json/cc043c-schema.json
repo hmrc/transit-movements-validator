@@ -3066,7 +3066,6 @@
         }
       },
       "required": [
-        "GoodsMeasure",
         "descriptionOfGoods"
       ],
       "type": "object"

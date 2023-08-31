@@ -393,5 +393,6 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
         }
       } finally ie170invalidFile.close()
     }
+
   }
 }

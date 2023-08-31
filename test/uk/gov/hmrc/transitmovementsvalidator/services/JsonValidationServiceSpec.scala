@@ -482,5 +482,6 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
           )
       }
     }
+
   }
 }
