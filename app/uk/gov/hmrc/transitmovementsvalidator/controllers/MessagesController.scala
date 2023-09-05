@@ -27,6 +27,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
@@ -41,7 +42,8 @@ class MessagesController @Inject() (
   cc: ControllerComponents,
   xmlValidationService: XmlValidationService,
   jsonValidationService: JsonValidationService,
-  businessValidationService: BusinessValidationService
+  businessValidationService: BusinessValidationService,
+  config: AppConfig
 )(implicit
   val materializer: Materializer,
   val temporaryFileCreator: TemporaryFileCreator,
@@ -83,6 +85,8 @@ class MessagesController @Inject() (
     }
 
   private def findMessageType(messageType: String): EitherT[Future, PresentationError, MessageType] =
-    EitherT.fromEither(MessageType.find(messageType).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))).asPresentation
+    EitherT
+      .fromEither(MessageType.find(messageType, config.validateRequestTypesOnly).toRight[ValidationError](ValidationError.UnknownMessageType(messageType)))
+      .asPresentation
 
 }

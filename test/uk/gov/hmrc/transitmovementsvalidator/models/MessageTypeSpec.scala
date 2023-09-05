@@ -35,54 +35,64 @@ class MessageTypeSpec extends AnyFreeSpec with Matchers with MockitoSugar with O
       MessageType.values must contain(UnloadingRemarks)
       UnloadingRemarks.code mustEqual "IE044"
       UnloadingRemarks.rootNode mustEqual "CC044C"
-      MessageType.arrivalValues must contain(UnloadingRemarks)
+      MessageType.arrivalRequestValues must contain(UnloadingRemarks)
     }
 
     "ArrivalNotification" in {
       MessageType.values must contain(ArrivalNotification)
       ArrivalNotification.code mustEqual "IE007"
       ArrivalNotification.rootNode mustEqual "CC007C"
-      MessageType.arrivalValues must contain(ArrivalNotification)
+      MessageType.arrivalRequestValues must contain(ArrivalNotification)
     }
 
     "DeclarationAmendment" in {
       MessageType.values must contain(DeclarationAmendment)
       DeclarationAmendment.code mustEqual "IE013"
       DeclarationAmendment.rootNode mustEqual "CC013C"
-      MessageType.departureValues must contain(DeclarationAmendment)
+      MessageType.departureRequestValues must contain(DeclarationAmendment)
     }
 
     "DeclarationInvalidation" in {
       MessageType.values must contain(DeclarationInvalidation)
       DeclarationInvalidation.code mustEqual "IE014"
       DeclarationInvalidation.rootNode mustEqual "CC014C"
-      MessageType.departureValues must contain(DeclarationInvalidation)
+      MessageType.departureRequestValues must contain(DeclarationInvalidation)
     }
 
     "DeclarationData" in {
       MessageType.values must contain(DeclarationData)
       DeclarationData.code mustEqual "IE015"
       DeclarationData.rootNode mustEqual "CC015C"
-      MessageType.departureValues must contain(DeclarationData)
+      MessageType.departureRequestValues must contain(DeclarationData)
     }
 
     "PresentationNotificationForPreLodgedDec" in {
       MessageType.values must contain(PresentationNotificationForPreLodgedDec)
       PresentationNotificationForPreLodgedDec.code mustEqual "IE170"
       PresentationNotificationForPreLodgedDec.rootNode mustEqual "CC170C"
-      MessageType.departureValues must contain(PresentationNotificationForPreLodgedDec)
+      MessageType.departureRequestValues must contain(PresentationNotificationForPreLodgedDec)
     }
   }
 
   "find" - {
     "must return None when junk is provided" in forAll(Gen.stringOfN(6, Gen.alphaNumChar)) {
       code =>
-        MessageType.find(code) must not be defined
+        MessageType.find(code, true) must not be defined
     }
 
-    "must return the correct message type when a correct code is provided" in forAll(Gen.oneOf(MessageType.values)) {
+    "must return the correct message type when a correct code is provided for request types" in forAll(Gen.oneOf(MessageType.requestValues)) {
       messageType =>
-        MessageType.find(messageType.code) mustBe Some(messageType)
+        MessageType.find(messageType.code, true) mustBe Some(messageType)
+    }
+
+    "must return None when a correct code is provided for response types, when requestOnly is true" in forAll(Gen.oneOf(MessageType.responseValues)) {
+      messageType =>
+        MessageType.find(messageType.code, true) mustBe None
+    }
+
+    "must return the correct message type when a correct code is provided for all types" in forAll(Gen.oneOf(MessageType.values)) {
+      messageType =>
+        MessageType.find(messageType.code, false) mustBe Some(messageType)
     }
   }
 }

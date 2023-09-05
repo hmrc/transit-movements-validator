@@ -27,11 +27,13 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import org.mockito.Mockito.reset
 import org.mockito.Mockito.when
+import org.scalacheck.Gen
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.http.Status.BAD_REQUEST
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.http.Status.NOT_FOUND
@@ -49,6 +51,7 @@ import play.api.test.Helpers.status
 import play.api.test.StubControllerComponentsFactory
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
@@ -74,7 +77,8 @@ class MessagesControllerSpec
     with TestActorSystem
     with BeforeAndAfterEach
     with NonEmptyListFormat
-    with ScalaFutures {
+    with ScalaFutures
+    with ScalaCheckDrivenPropertyChecks {
 
   implicit val timeout: Timeout                           = Timeout(5.seconds)
   implicit val materializer: Materializer                 = Materializer(TestActorSystem.system)
@@ -83,6 +87,8 @@ class MessagesControllerSpec
   val mockJsonValidationService: JsonValidationService         = mock[JsonValidationService]
   val mockXmlValidationService: XmlValidationService           = mock[XmlValidationService]
   val mockBusinessValidationService: BusinessValidationService = mock[BusinessValidationService]
+  val mockConfig: AppConfig                                    = mock[AppConfig]
+  when(mockConfig.validateRequestTypesOnly).thenReturn(true)
 
   override def beforeEach(): Unit = {
     reset(mockJsonValidationService)
@@ -92,31 +98,33 @@ class MessagesControllerSpec
   }
   val validCode: MessageType = MessageType.DeclarationData
   val invalidCode            = "dummy"
-  val objectStoreUri         = "https://objectstore/file"
 
   "On validate XML" - {
 
     lazy val validXml: NodeSeq = <test></test>
 
-    "on a valid XML file, with the application/xml content type, return No Content" in {
-      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
-        .thenAnswer(
-          _ => EitherT.rightT[Future, ValidationError](())
-        )
-      when(mockBusinessValidationService.businessValidationFlow(eqTo(validCode), eqTo(MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
-        .thenAnswer(
-          _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
-        )
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
-      val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
-      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
-      val result  = sut.validate(validCode.code)(request)
+    "on a valid XML file, with the application/xml content type, return No Content" in forAll(Gen.oneOf(MessageType.requestValues)) {
+      messageType =>
+        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+          .thenAnswer(
+            _ => EitherT.rightT[Future, ValidationError](())
+          )
+        when(mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
+          .thenAnswer(
+            _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
+          )
+        val sut =
+          new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val request = FakeRequest("POST", s"/messages/${messageType.code}/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+        val result  = sut.validate(messageType.code)(request)
 
-      status(result) mustBe NO_CONTENT
+        status(result) mustBe NO_CONTENT
     }
 
     "on a valid XML file, but no valid message type, return BadRequest with an error message" in {
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$invalidCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate(invalidCode)(request)
@@ -126,6 +134,44 @@ class MessagesControllerSpec
         "code"    -> "NOT_FOUND"
       )
       status(result) mustBe NOT_FOUND
+    }
+
+    "on a valid XML file for a response type where response types are not enabled, return BadRequest with an error message" in forAll(
+      Gen.oneOf(MessageType.responseValues)
+    ) {
+      responseType =>
+        val sut =
+          new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val request = FakeRequest("POST", s"/messages/${responseType.code}/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+        val result  = sut.validate(responseType.code)(request)
+
+        contentAsJson(result) mustBe Json.obj(
+          "message" -> s"Unknown Message Type provided: ${responseType.code} is not recognised",
+          "code"    -> "NOT_FOUND"
+        )
+        status(result) mustBe NOT_FOUND
+    }
+
+    "on a valid XML file for a request or response type where response types are enabled, return No Content" in forAll(Gen.oneOf(MessageType.values)) {
+      messageType =>
+        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+          .thenAnswer(
+            _ => EitherT.rightT[Future, ValidationError](())
+          )
+        when(mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
+          .thenAnswer(
+            _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
+          )
+        val config = mock[AppConfig]
+        when(config.validateRequestTypesOnly).thenReturn(false)
+
+        val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, config)
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val request = FakeRequest("POST", s"/messages/${messageType.code}/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
+        val result  = sut.validate(messageType.code)(request)
+
+        status(result) mustBe NO_CONTENT
     }
 
     "on an invalid XML file, return Ok with a list of errors" in {
@@ -139,7 +185,8 @@ class MessagesControllerSpec
         .thenAnswer(
           _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -160,7 +207,8 @@ class MessagesControllerSpec
         .thenAnswer(
           _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -180,7 +228,8 @@ class MessagesControllerSpec
             (EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType")), Flow[ByteString])
         )
 
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -206,7 +255,8 @@ class MessagesControllerSpec
           _ => (EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error))), Flow[ByteString])
         )
 
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -231,7 +281,8 @@ class MessagesControllerSpec
         .thenAnswer(
           _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -240,7 +291,8 @@ class MessagesControllerSpec
     }
 
     "on a valid JSON file, but no valid message type, return BadRequest with an error message" in {
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$invalidCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(invalidCode)(request)
@@ -267,7 +319,8 @@ class MessagesControllerSpec
           _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
 
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -279,7 +332,8 @@ class MessagesControllerSpec
     }
 
     "on receiving an invalid content type, must return Unsupported Media Type" in {
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.TEXT)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -298,7 +352,8 @@ class MessagesControllerSpec
         .thenAnswer(
           _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -322,7 +377,8 @@ class MessagesControllerSpec
           _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
         )
 
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -346,7 +402,8 @@ class MessagesControllerSpec
             (EitherT.leftT[Future, ValidationError](ValidationError.BusinessValidationError("Root node doesn't match with the messageType")), Flow[ByteString])
         )
 
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode.code)(request)
@@ -371,7 +428,8 @@ class MessagesControllerSpec
           _ => (EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error))), Flow[ByteString])
         )
 
-      val sut     = new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService)
+      val sut =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON)), source)
       val result  = sut.validate(validCode.code)(request)

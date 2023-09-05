@@ -17,8 +17,6 @@
 package uk.gov.hmrc.transitmovementsvalidator.services
 
 import akka.stream.Materializer
-import akka.stream.scaladsl.FileIO
-import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
@@ -33,7 +31,6 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
 import java.nio.charset.StandardCharsets
-import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 import scala.xml.NodeSeq

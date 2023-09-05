@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
+import akka.NotUsed
 import akka.stream.Attributes
 import akka.stream.Attributes.LogLevels
 import akka.stream.FlowShape
@@ -26,6 +27,7 @@ import akka.stream.scaladsl.Flow
 import akka.stream.scaladsl.GraphDSL
 import akka.stream.scaladsl.Keep
 import akka.stream.scaladsl.Sink
+import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.Zip
 import akka.util.ByteString
 import cats.data.EitherT
@@ -35,6 +37,7 @@ import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.RequestMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.MissingElementError
@@ -105,10 +108,12 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
   private val gbOffice = "^GB.*$".r
   private val xiOffice = "^XI.*$".r
 
+  private val bypassValidationFlow: Flow[Any, ValidationError, NotUsed] = Flow.fromSinkAndSource(Sink.ignore, Source.empty[ValidationError])
+
   private def messageTypeLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
     messageFormat.rootNode(messageType) :: "messageType" :: Nil
 
-  private def officeLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
+  private def officeLocation(messageType: RequestMessageType, messageFormat: MessageFormat[_]): Seq[String] =
     messageFormat.rootNode(messageType) :: messageType.routingOfficeNode :: "referenceNumber" :: Nil
 
   private def recipientLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
@@ -182,14 +187,14 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
 
   }
 
-  /** Extracts the office as specified in [[MessageType.routingOfficeNode]]
+  /** Extracts the office as specified in [[RequestMessageType.routingOfficeNode]]
     *
     * @param messageType The [[MessageType]] to get the path from
     * @param messageFormat The format of the incoming message
     * @tparam A The type of the tokens
     * @return A flow that can extract the office, or returns an error
     */
-  private def officeFlow[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, Either[ValidationError, CustomsOffice], _] = {
+  private def officeFlow[A](messageType: RequestMessageType, messageFormat: MessageFormat[A]): Flow[A, Either[ValidationError, CustomsOffice], _] = {
     val path = officeLocation(messageType, messageFormat)
     messageFormat
       .stringValueFlow(path)
@@ -263,7 +268,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     * @tparam A The type of the tokens
     * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
     */
-  def checkOfficeAndRecipient[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] =
+  def checkOfficeAndRecipient[A](messageType: RequestMessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] =
     Flow
       .fromGraph(
         GraphDSL.create() {
@@ -303,7 +308,7 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     * @tparam A The type of the tokens
     * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
     */
-  private def checkOffice[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] = {
+  private def checkOffice[A](messageType: RequestMessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] = {
     val path = officeLocation(messageType, messageFormat)
     officeFlow(messageType, messageFormat)
       .map(_.swap.toOption)
@@ -327,11 +332,13 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     messageType: MessageType,
     messageFormat: MessageFormat[A]
   )(implicit materializer: Materializer, ec: ExecutionContext): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, _]) = {
-
-    // The rule selected here is controlled by configuration.
-    val checkOfficeRule =
-      if (appConfig.enableBusinessValidationMessageRecipient) checkOfficeAndRecipient(messageType, messageFormat)
-      else checkOffice(messageType, messageFormat)
+    // The rule selected here is controlled by configuration and is only applicable for messages from the Trader
+    val checkOfficeRule = messageType match {
+      case requestMessageType: RequestMessageType =>
+        if (appConfig.enableBusinessValidationMessageRecipient) checkOfficeAndRecipient(requestMessageType, messageFormat)
+        else checkOffice(requestMessageType, messageFormat)
+      case _ => bypassValidationFlow
+    }
 
     // Add each rule here, this will take care of all configuration needed in the graph below.
     // Each rule MUST be a Flow[A, ValidationError, _], which will emit ZERO elements on success
@@ -408,5 +415,4 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       flow
     )
   }
-
 }
