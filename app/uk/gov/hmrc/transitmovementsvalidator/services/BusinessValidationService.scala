@@ -33,7 +33,6 @@ import akka.util.ByteString
 import cats.data.EitherT
 import com.google.inject.ImplementedBy
 import com.google.inject.Inject
-import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
@@ -100,7 +99,6 @@ trait BusinessValidationService {
   *
   * All rules need to be a Flow of A to ValidationError, which only emits if there is an error.
   * Once created, each rule needs to go into the rules seq in businessValidationFlow.
-  *
   */
 class BusinessValidationServiceImpl @Inject() () extends BusinessValidationService {
 
