@@ -25,7 +25,5 @@ class AppConfig @Inject() (config: Configuration) {
 
   lazy val appName: String = config.get[String]("appName")
 
-  lazy val enableBusinessValidationMessageRecipient: Boolean = config.get[Boolean]("business-validation.enforce-messageRecipient")
-
   lazy val validateRequestTypesOnly: Boolean = config.getOptional[Boolean]("validate-request-types-only").getOrElse(true)
 }

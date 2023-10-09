@@ -101,9 +101,8 @@ trait BusinessValidationService {
   * All rules need to be a Flow of A to ValidationError, which only emits if there is an error.
   * Once created, each rule needs to go into the rules seq in businessValidationFlow.
   *
-  * @param appConfig The configuration to use when determining which rules to apply.
   */
-class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends BusinessValidationService {
+class BusinessValidationServiceImpl @Inject() () extends BusinessValidationService {
 
   private val gbOffice = "^GB.*$".r
   private val xiOffice = "^XI.*$".r
@@ -300,23 +299,6 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       .filter(_.isDefined)
       .map(_.get)
 
-  /** Transforms the checkOffice flow from returning an [[Either]], to only returning a [[ValidationError]]
-    * if the returned Either is a [[Left]]
-    *
-    * @param messageType   The [[MessageType]]
-    * @param messageFormat The format of the incoming message
-    * @tparam A The type of the tokens
-    * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
-    */
-  private def checkOffice[A](messageType: RequestMessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] = {
-    val path = officeLocation(messageType, messageFormat)
-    officeFlow(messageType, messageFormat)
-      .map(_.swap.toOption)
-      .fold[Option[ValidationError]](Some(MissingElementError(path)))(single(path))
-      .filter(_.isDefined)
-      .map(_.get)
-  }
-
   /** Creates and returns a pre-materialised flow for checking business rules.
     *
     * Add rules to the "rules" Seq. This will configure the graph accordingly.
@@ -334,10 +316,8 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
   )(implicit materializer: Materializer, ec: ExecutionContext): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, _]) = {
     // The rule selected here is controlled by configuration and is only applicable for messages from the Trader
     val checkOfficeRule = messageType match {
-      case requestMessageType: RequestMessageType =>
-        if (appConfig.enableBusinessValidationMessageRecipient) checkOfficeAndRecipient(requestMessageType, messageFormat)
-        else checkOffice(requestMessageType, messageFormat)
-      case _ => bypassValidationFlow
+      case requestMessageType: RequestMessageType => checkOfficeAndRecipient(requestMessageType, messageFormat)
+      case _                                      => bypassValidationFlow
     }
 
     // Add each rule here, this will take care of all configuration needed in the graph below.
