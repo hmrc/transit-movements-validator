@@ -11,6 +11,4 @@ The XSDs are also contained in the ALL_CTC_XSDs_v51.8.2_B.zip file.
 
 ## XSD versions
 
-The XSDs in this directory are version 51.8.2. The version currently deployed on Trader Test is version 51.8_A, which are available from the ALL_CTC_XSDs_v51.8_A.zip file.
-
-**Note that this version retains the leading space for phase ID " NCTS5.1" in stypes.** Please feel free to change this locally -- this leading space has no effect on the validation. 
+The XSDs in this directory are version 51.8.2.
