@@ -33,6 +33,7 @@ import akka.util.ByteString
 import cats.data.EitherT
 import com.google.inject.ImplementedBy
 import com.google.inject.Inject
+import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
@@ -100,7 +101,7 @@ trait BusinessValidationService {
   * All rules need to be a Flow of A to ValidationError, which only emits if there is an error.
   * Once created, each rule needs to go into the rules seq in businessValidationFlow.
   */
-class BusinessValidationServiceImpl @Inject() () extends BusinessValidationService {
+class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends BusinessValidationService {
 
   private val gbOffice = "^GB.*$".r
   private val xiOffice = "^XI.*$".r
@@ -115,6 +116,9 @@ class BusinessValidationServiceImpl @Inject() () extends BusinessValidationServi
 
   private def recipientLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
     messageFormat.rootNode(messageType) :: "messageRecipient" :: Nil
+
+  private def lrnLocation(messageFormat: MessageFormat[_]): Seq[String] =
+    messageFormat.rootNode(MessageType.DeclarationData) :: "TransitOperation" :: "LRN" :: Nil
 
   /** Ensure that one, and only one, element is returned, returning an error if zero or more than one
     * has been emitted.
@@ -183,6 +187,37 @@ class BusinessValidationServiceImpl @Inject() () extends BusinessValidationServi
       .map(_.get)
 
   }
+
+  /** This rule checks the "LRN" field in the IE015 XML/Json and returns if it doesn't match the supplied regex, if
+    * LRN validation was enabled.
+    *
+    * This flow will only emit an element if there is a validation error.
+    *
+    * @param messageType   The [[MessageType]]
+    * @param messageFormat The format of the message (XML or Json)
+    * @tparam A The type of token
+    * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
+    */
+  private def checkLRNForDepartures[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] =
+    if (appConfig.validateLrnEnabled && MessageType.departureRequestValues.contains(messageType)) {
+      val path = lrnLocation(messageFormat)
+      messageFormat
+        .stringValueFlow(path)
+        .via(
+          Flow.fromFunction[String, Option[BusinessValidationError]] {
+            string =>
+              if (appConfig.validateLrnRegex.matches(string.trim)) None
+              else
+                Some(
+                  BusinessValidationError(
+                    s"LRN must match the regex ${appConfig.validateLrnRegex.regex}, but '${string.trim}' was provided"
+                  )
+                )
+          }
+        )
+        .filter(_.isDefined)
+        .map(_.get)
+    } else bypassValidationFlow
 
   /** Extracts the office as specified in [[RequestMessageType.routingOfficeNode]]
     *
@@ -322,7 +357,8 @@ class BusinessValidationServiceImpl @Inject() () extends BusinessValidationServi
     // Each rule MUST be a Flow[A, ValidationError, _], which will emit ZERO elements on success
     val rules: Seq[Flow[A, ValidationError, _]] = Seq(
       checkMessageType(messageType, messageFormat),
-      checkOfficeRule
+      checkOfficeRule,
+      checkLRNForDepartures(messageType, messageFormat)
     )
 
     // This sink ensure we don't error the stream if something goes wrong and take down the whole thing

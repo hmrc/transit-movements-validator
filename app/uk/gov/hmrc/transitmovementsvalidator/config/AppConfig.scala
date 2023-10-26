@@ -20,10 +20,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import play.api.Configuration
 
+import scala.util.matching.Regex
+
 @Singleton
 class AppConfig @Inject() (config: Configuration) {
 
   lazy val appName: String = config.get[String]("appName")
 
   lazy val validateRequestTypesOnly: Boolean = config.getOptional[Boolean]("validate-request-types-only").getOrElse(true)
+
+  lazy val validateLrnEnabled: Boolean = config.get[Boolean]("validate-lrn.enabled")
+  lazy val validateLrnRegex: Regex     = config.get[String]("validate-lrn.regex").r
 }
