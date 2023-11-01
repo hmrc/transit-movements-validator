@@ -2,7 +2,7 @@
   "n1:CC015C": {
     "preparationDateAndTime": "2022-01-22T07:43:36",
     "TransitOperation": {
-      "LRN": "qvRcL",
+      "LRN": "{{LRN}}",
       "declarationType": "Pbg",
       "additionalDeclarationType": "O",
       "security": "8",
