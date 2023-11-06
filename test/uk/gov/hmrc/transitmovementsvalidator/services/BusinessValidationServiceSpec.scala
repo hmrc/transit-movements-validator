@@ -33,7 +33,6 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.xml.NodeSeq
 
 class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with ScalaFutures with ScalaCheckDrivenPropertyChecks with TestActorSystem {
 
@@ -178,6 +177,60 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
         }
       }
     }
+
+    "IE013" - {
+      "when we have a valid IE013 using an LRN, Unit must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+      "when we have a valid IE013 using an MRN, Unit must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid-mrn.json"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+      "when we have an invalid IE013 without a LRN or MRN, a validation error must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-no-mrn-lrn.json"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Left(ValidationError.BusinessValidationError("A LRN or MRN must be specified, neither were found (rule C0467)"))
+        }
+      }
+
+      "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-mrn-and-lrn.json"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Json)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Left(ValidationError.BusinessValidationError("Only an LRN or MRN must be specified, both were found (rule C0467)"))
+        }
+      }
+    }
   }
 
   "XML" - {
@@ -307,6 +360,60 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
         whenReady(preMat.value) {
           _ mustBe Right((): Unit)
+        }
+      }
+    }
+
+    "IE013" - {
+      "when we have a valid IE013 using an LRN, Unit must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.xml"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+      "when we have a valid IE013 using an MRN, Unit must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid-mrn.xml"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Right((): Unit)
+        }
+      }
+
+      "when we have an invalid IE013 without an LRN or MRN, a validation error must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-no-mrn-lrn.xml"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Left(ValidationError.BusinessValidationError("A LRN or MRN must be specified, neither we found (rule C0467)"))
+        }
+      }
+
+      "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-mrn-and-lrn.xml"))
+
+        val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
+        val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Xml)
+
+        source.via(flow).runWith(Sink.ignore)
+
+        whenReady(preMat.value) {
+          _ mustBe Left(ValidationError.BusinessValidationError("Only an LRN or MRN must be specified, both were found (rule C0467)"))
         }
       }
     }
