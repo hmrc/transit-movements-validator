@@ -5,7 +5,7 @@
     <messageIdentification>token</messageIdentification>
     <messageType>CC013C</messageType>
     <TransitOperation>
-        <LRN>ABC</LRN>
+        <MRN>24GB012345678901A0</MRN>
         <declarationType>token</declarationType>
         <additionalDeclarationType>A</additionalDeclarationType>
         <security>0</security>

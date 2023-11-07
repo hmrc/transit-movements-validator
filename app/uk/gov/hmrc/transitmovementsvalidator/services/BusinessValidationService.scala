@@ -26,6 +26,7 @@ import akka.stream.scaladsl.Concat
 import akka.stream.scaladsl.Flow
 import akka.stream.scaladsl.GraphDSL
 import akka.stream.scaladsl.Keep
+import akka.stream.scaladsl.Merge
 import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.Zip
@@ -117,8 +118,11 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
   private def recipientLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
     messageFormat.rootNode(messageType) :: "messageRecipient" :: Nil
 
-  private def lrnLocation(messageFormat: MessageFormat[_]): Seq[String] =
-    messageFormat.rootNode(MessageType.DeclarationData) :: "TransitOperation" :: "LRN" :: Nil
+  private def lrnLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
+    messageFormat.rootNode(messageType) :: "TransitOperation" :: "LRN" :: Nil
+
+  private def mrnLocation(messageType: MessageType, messageFormat: MessageFormat[_]): Seq[String] =
+    messageFormat.rootNode(messageType) :: "TransitOperation" :: "MRN" :: Nil
 
   /** Ensure that one, and only one, element is returned, returning an error if zero or more than one
     * has been emitted.
@@ -199,8 +203,8 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     * @return A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
     */
   private def checkLRNForDepartures[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] =
-    if (appConfig.validateLrnEnabled && MessageType.departureRequestValues.contains(messageType)) {
-      val path = lrnLocation(messageFormat)
+    if (appConfig.validateLrnEnabled && messageType == MessageType.DeclarationData) {
+      val path = lrnLocation(messageType, messageFormat)
       messageFormat
         .stringValueFlow(path)
         .via(
@@ -218,6 +222,58 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
         .filter(_.isDefined)
         .map(_.get)
     } else bypassValidationFlow
+
+  /** Ensure that either an LRN or MRN is present in an IE013 message, else returns nothing.
+    *
+    * If it is, and neither the LRN or MRN is detected, then a [[ValidationError]] will be returned,
+    * otherwise, nothing will be returned.
+    *
+    * @param messageType The message type to check
+    * @param messageFormat The message format
+    * @tparam A The type of message format
+    * @return A [[Flow]]
+    */
+  private def enforceRuleC0467[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, _] =
+    if (messageType == MessageType.DeclarationAmendment) {
+      val lrnNode = lrnLocation(messageType, messageFormat)
+      val mrnNode = mrnLocation(messageType, messageFormat)
+      Flow
+        .fromGraph[A, String, NotUsed](GraphDSL.create() {
+          implicit builder =>
+            import GraphDSL.Implicits._
+
+            // This graph looks like the following
+            //
+            //
+            //              ----> get LRN -----|
+            //              |                 \/
+            // input -> broadcast            merge --> output LRN and/or MRN as separate elements
+            //              |                 /\
+            //              ----> get MRN ----|
+            //
+            // As we're only checking that one exists, we can then count the elements later
+
+            val broadcast         = builder.add(Broadcast[A](2))
+            val checkLrnExistence = builder.add(messageFormat.stringValueFlow(lrnNode))
+            val checkMrnExistence = builder.add(messageFormat.stringValueFlow(mrnNode))
+            val merge             = builder.add(Merge[String](2))
+
+            broadcast ~> checkLrnExistence ~> merge
+            broadcast ~> checkMrnExistence ~> merge
+
+            FlowShape(broadcast.in, merge.out)
+        })
+        .fold(0)(
+          (current, _) => current + 1
+        )
+        .map {
+          case 0 => Some(ValidationError.BusinessValidationError("A LRN or MRN must be specified, neither were found (rule C0467)"))
+          case 1 => None
+          case _ => Some(ValidationError.BusinessValidationError("Only an LRN or MRN must be specified, both were found (rule C0467)"))
+        }
+        .filter(_.isDefined) // these two lines will ensure only a ValidationError will be returned, else nothing
+        .map(_.get)
+    } else bypassValidationFlow // this condition doesn't apply so we'll return nothing
 
   /** Extracts the office as specified in [[RequestMessageType.routingOfficeNode]]
     *
@@ -353,13 +409,20 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       case _                                      => bypassValidationFlow
     }
 
+    // ---------
+    // ADD RULES HERE
+    // ----------
     // Add each rule here, this will take care of all configuration needed in the graph below.
     // Each rule MUST be a Flow[A, ValidationError, _], which will emit ZERO elements on success
     val rules: Seq[Flow[A, ValidationError, _]] = Seq(
       checkMessageType(messageType, messageFormat),
       checkOfficeRule,
-      checkLRNForDepartures(messageType, messageFormat)
+      checkLRNForDepartures(messageType, messageFormat),
+      enforceRuleC0467(messageType, messageFormat)
     )
+    // -----------
+    // END ADD RULES HERE
+    // -----------
 
     // This sink ensure we don't error the stream if something goes wrong and take down the whole thing
     // Otherwise, this populates the future returned from the graph

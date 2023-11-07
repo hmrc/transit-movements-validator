@@ -2,7 +2,6 @@
   "n1:CC013C": {
     "preparationDateAndTime": "2007-10-26T07:36:28",
     "TransitOperation": {
-      "LRN": "string",
       "declarationType": "token",
       "additionalDeclarationType": "a",
       "TIRCarnetNumber": "123456",
