@@ -219,7 +219,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-mrn-and-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-both-mrn-and-lrn.json"))
 
         val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Json)
@@ -400,12 +400,12 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
         source.via(flow).runWith(Sink.ignore)
 
         whenReady(preMat.value) {
-          _ mustBe Left(ValidationError.BusinessValidationError("A LRN or MRN must be specified, neither we found (rule C0467)"))
+          _ mustBe Left(ValidationError.BusinessValidationError("A LRN or MRN must be specified, neither were found (rule C0467)"))
         }
       }
 
       "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-mrn-and-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-both-mrn-and-lrn.xml"))
 
         val sut            = new BusinessValidationServiceImpl(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment, MessageFormat.Xml)
