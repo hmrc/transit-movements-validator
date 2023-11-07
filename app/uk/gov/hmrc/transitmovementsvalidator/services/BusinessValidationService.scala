@@ -242,6 +242,17 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
           implicit builder =>
             import GraphDSL.Implicits._
 
+            // This graph looks like the following
+            //
+            //
+            //              ----> get LRN -----|
+            //              |                 \/
+            // input -> broadcast            merge --> output LRN and/or MRN as separate elements
+            //              |                 /\
+            //              ----> get MRN ----|
+            //
+            // As we're only checking that one exists, we can then count the elements later
+
             val broadcast         = builder.add(Broadcast[A](2))
             val checkLrnExistence = builder.add(messageFormat.stringValueFlow(lrnNode))
             val checkMrnExistence = builder.add(messageFormat.stringValueFlow(mrnNode))
@@ -260,9 +271,9 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
           case 1 => None
           case _ => Some(ValidationError.BusinessValidationError("Only an LRN or MRN must be specified, both were found (rule C0467)"))
         }
-        .filter(_.isDefined)
+        .filter(_.isDefined) // these two lines will ensure only a ValidationError will be returned, else nothing
         .map(_.get)
-    } else bypassValidationFlow
+    } else bypassValidationFlow // this condition doesn't apply so we'll return nothing
 
   /** Extracts the office as specified in [[RequestMessageType.routingOfficeNode]]
     *
@@ -398,6 +409,9 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       case _                                      => bypassValidationFlow
     }
 
+    // ---------
+    // ADD RULES HERE
+    // ----------
     // Add each rule here, this will take care of all configuration needed in the graph below.
     // Each rule MUST be a Flow[A, ValidationError, _], which will emit ZERO elements on success
     val rules: Seq[Flow[A, ValidationError, _]] = Seq(
@@ -406,6 +420,9 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
       checkLRNForDepartures(messageType, messageFormat),
       enforceRuleC0467(messageType, messageFormat)
     )
+    // -----------
+    // END ADD RULES HERE
+    // -----------
 
     // This sink ensure we don't error the stream if something goes wrong and take down the whole thing
     // Otherwise, this populates the future returned from the graph
