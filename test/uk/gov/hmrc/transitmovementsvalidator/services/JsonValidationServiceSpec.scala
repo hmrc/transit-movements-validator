@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
-import akka.stream.Materializer
-import akka.stream.scaladsl.FileIO
-import akka.stream.scaladsl.Sink
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl.StreamConverters
-import akka.util.ByteString
-import akka.util.Timeout
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.FileIO
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.stream.scaladsl.StreamConverters
+import org.apache.pekko.util.ByteString
+import org.apache.pekko.util.Timeout
 import cats.data.NonEmptyList
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -234,8 +233,12 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
       whenReady(result.value) {
         e =>
-          e mustBe Left(FailedToParse("""Unexpected close marker '}': expected ']' (for root starting at [line: 1, column: 0])
-              | at [line: 73, column: 2]""".stripMargin))
+          e mustBe Left(
+            FailedToParse(
+              """Unexpected close marker '}': expected ']' (for root starting at [line: 1, column: 0])
+              | at [line: 73, column: 2]""".stripMargin
+            )
+          )
       }
     }
 

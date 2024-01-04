@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
-import akka.stream.scaladsl.FileIO
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.stream.scaladsl.FileIO
+import org.apache.pekko.stream.scaladsl.Sink
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
