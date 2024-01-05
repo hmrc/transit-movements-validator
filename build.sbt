@@ -24,7 +24,14 @@ lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
   .settings(DefaultBuildSettings.itSettings())
-  .settings(libraryDependencies ++= AppDependencies.it)
+  .settings(
+    libraryDependencies ++= AppDependencies.test,
+    Test / fork := true,
+    Test / unmanagedResourceDirectories += baseDirectory.value / "it" / "test" / "resources",
+    javaOptions ++= Seq(
+      "-Djdk.xml.maxOccurLimit=10000",
+    )
+  )
 
 // Settings for the whole build
 lazy val buildSettings = Def.settings(
