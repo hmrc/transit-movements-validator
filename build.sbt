@@ -27,7 +27,6 @@ lazy val it = project
   .settings(
     libraryDependencies ++= AppDependencies.test,
     Test / fork := true,
-    Test / unmanagedResourceDirectories += baseDirectory.value / "it" / "test" / "resources",
     javaOptions ++= Seq(
       "-Djdk.xml.maxOccurLimit=10000",
     )
