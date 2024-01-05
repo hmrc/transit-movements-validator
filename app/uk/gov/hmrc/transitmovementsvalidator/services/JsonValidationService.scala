@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
-import akka.stream.Materializer
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl.StreamConverters
-import akka.util.ByteString
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.stream.scaladsl.StreamConverters
+import org.apache.pekko.util.ByteString
 import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.fasterxml.jackson.core.JsonParseException
@@ -114,6 +114,6 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
   //
   // A test will break if this stops working due to upgrades.
   def stripSource(message: String): String =
-    message.replace("Source: (akka.stream.impl.io.InputStreamAdapter); ", "")
+    message.replace("Source: (org.apache.pekko.stream.impl.io.InputStreamAdapter); ", "")
 
 }

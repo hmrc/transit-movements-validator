@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.base
 
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 
 import java.nio.charset.StandardCharsets
 
