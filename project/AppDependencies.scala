@@ -27,5 +27,7 @@ object AppDependencies {
     "org.typelevel"          %% "discipline-scalatest"   % "2.1.5",
     "com.vladsch.flexmark"    % "flexmark-all"           % "0.62.2",
     "uk.gov.hmrc"            %% "bootstrap-test-play-30" % boostrapPlayVersion
-  ).map(_ % "test, it")
+  ).map(_ % Test)
+
+  var it = Seq.empty
 }
