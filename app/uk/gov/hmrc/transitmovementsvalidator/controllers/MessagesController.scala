@@ -61,7 +61,7 @@ class MessagesController @Inject() (
     }
 
   private def validateMessage(messageType: String, validationService: ValidationService, messageFormat: MessageFormat[_]): Action[Source[ByteString, _]] =
-    Action.stream {
+    Action.async(streamFromMemory) {
       implicit request =>
         (for {
           messageTypeObj <- findMessageType(messageType)
