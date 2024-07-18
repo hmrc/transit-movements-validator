@@ -62,7 +62,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       for {
         saxParser <- parsersByType(messageType)
         xmlString <- source.runFold(ByteString.empty)(_ ++ _).map(_.utf8String)
-        (parser, errorBuffer) = createrParser(saxParser)
+        (parser, errorBuffer) = createParser(saxParser)
         parsedXml             = parseXml(parser, xmlString)
         result                = transformFailures(parsedXml, errorBuffer)
       } yield result
@@ -91,7 +91,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       }
   }
 
-  private def createrParser(saxParser: SAXParserFactory): (Parser, ListBuffer[XmlSchemaValidationError]) = {
+  private def createParser(saxParser: SAXParserFactory): (Parser, ListBuffer[XmlSchemaValidationError]) = {
     val parser      = saxParser.newSAXParser.getParser
     val errorBuffer = new mutable.ListBuffer[XmlSchemaValidationError]
 
