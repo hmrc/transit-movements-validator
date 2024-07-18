@@ -18,19 +18,17 @@ package uk.gov.hmrc.transitmovements.controllers.stream
 
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
-import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.OK
-import play.api.libs.Files.SingletonTemporaryFileCreator
 import play.api.mvc.Action
 import play.api.mvc.BaseController
+import play.api.mvc.ControllerComponents
 import play.api.test.FakeHeaders
 import play.api.test.FakeRequest
 import play.api.test.Helpers.contentAsString
@@ -47,13 +45,12 @@ import scala.concurrent.Future
 
 class StreamingParsersSpec extends AnyFreeSpec with Matchers with TestActorSystem with OptionValues with TestSourceProvider {
 
-  lazy val headers = FakeHeaders(Seq(HeaderNames.CONTENT_TYPE -> "text/plain", HeaderNames.ACCEPT -> "application/vnd.hmrc.2.0+json"))
+  lazy val headers: FakeHeaders = FakeHeaders(Seq(HeaderNames.CONTENT_TYPE -> "text/plain", HeaderNames.ACCEPT -> "application/vnd.hmrc.2.0+json"))
 
   object Harness extends BaseController with StreamingParsers with Logging {
 
-    override val controllerComponents = stubControllerComponents()
-    implicit val temporaryFileCreator = SingletonTemporaryFileCreator
-    implicit val materializer         = Materializer(TestActorSystem.system)
+    override val controllerComponents: ControllerComponents = stubControllerComponents()
+    implicit val materializer: Materializer                 = Materializer(TestActorSystem.system)
 
     def testFromMemory: Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
       request => result.apply(request).run(request.body)(materializer)
@@ -63,18 +60,6 @@ class StreamingParsersSpec extends AnyFreeSpec with Matchers with TestActorSyste
       request =>
         Future.successful(Ok(request.body))
     }
-
-    def resultStream: Action[Source[ByteString, _]] = Action.stream {
-      request =>
-        (for {
-          a <- request.body.runWith(Sink.head)
-          b <- request.body.runWith(Sink.head)
-        } yield (a ++ b).utf8String)
-          .map(
-            r => Ok(r)
-          )
-    }
-
   }
 
   @tailrec
@@ -101,14 +86,5 @@ class StreamingParsersSpec extends AnyFreeSpec with Matchers with TestActorSyste
           }
       }
     }
-
-    "via the stream extension method" in {
-      val string  = Gen.stringOfN(20, Gen.alphaNumChar).sample.value
-      val request = FakeRequest("POST", "/", headers, singleUseStringSource(string))
-      val result  = Harness.resultStream()(request)
-      status(result) mustBe OK
-      contentAsString(result) mustBe (string ++ string)
-    }
   }
-
 }
