@@ -31,6 +31,7 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
+import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -68,7 +69,7 @@ object JsonValidationService {
 @ImplementedBy(classOf[JsonValidationServiceImpl])
 trait JsonValidationService extends ValidationService
 
-class JsonValidationServiceImpl @Inject() extends JsonValidationService {
+class JsonValidationServiceImpl @Inject() extends JsonValidationService with Logging {
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
@@ -93,7 +94,9 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService {
 
           Future.successful(Left(JsonFailedValidation(NonEmptyList.fromListUnsafe(validationErrors.toList))))
         case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
-        case Failure(thr)                     => Future.successful(Left(Unexpected(Some(thr))))
+        case Failure(thr) =>
+          logger
+            .error(s"Validate Json Internal server error occurred : $thr", thr); Future.successful(Left(Unexpected(Some(thr))))
       }
     }
 

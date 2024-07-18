@@ -34,6 +34,7 @@ import org.apache.pekko.util.ByteString
 import cats.data.EitherT
 import com.google.inject.ImplementedBy
 import com.google.inject.Inject
+import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
@@ -102,7 +103,7 @@ trait BusinessValidationService {
   * All rules need to be a Flow of A to ValidationError, which only emits if there is an error.
   * Once created, each rule needs to go into the rules seq in businessValidationFlow.
   */
-class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends BusinessValidationService {
+class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends BusinessValidationService with Logging {
 
   private val gbOffice = "^GB.*$".r
   private val xiOffice = "^XI.*$".r
@@ -429,7 +430,9 @@ class BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends Bus
     val recoverableSink: Sink[ValidationError, Future[Option[ValidationError]]] = Flow
       .apply[ValidationError]
       .recover {
-        case NonFatal(ex) => ValidationError.Unexpected(Some(ex))
+        case NonFatal(ex) =>
+          logger
+            .error(s"Business validation Internal server error occurred : $ex", ex); ValidationError.Unexpected(Some(ex))
       }
       .toMat(Sink.headOption)(Keep.right)
 

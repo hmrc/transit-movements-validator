@@ -27,6 +27,7 @@ import com.google.inject.ImplementedBy
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
+import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
@@ -45,7 +46,7 @@ import scala.util.Using
 @ImplementedBy(classOf[XmlValidationServiceImpl])
 trait XmlValidationService extends ValidationService
 
-class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService {
+class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService with Logging {
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {
@@ -94,11 +95,12 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
                   x => Either.left(XmlFailedValidation(x))
                 )
                 .getOrElse(parseXml)
-          }.toEither
-            .leftMap(
-              thr => ValidationError.Unexpected(Some(thr))
-            )
-            .flatten
+          }.toEither.leftMap {
+            thr =>
+              logger
+                .error(s"Validate xml Internal server error occurred : $thr", thr);
+              ValidationError.Unexpected(Some(thr))
+          }.flatten
       }
     }
 
@@ -116,7 +118,6 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     parser.setNamespaceAware(true)
     parser.setXIncludeAware(false)
     parser.setSchema(schema)
-
     parser
   }
 
