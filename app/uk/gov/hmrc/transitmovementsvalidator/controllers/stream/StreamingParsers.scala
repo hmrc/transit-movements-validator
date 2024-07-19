@@ -16,23 +16,16 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.controllers.stream
 
+import cats.implicits.catsSyntaxEitherId
 import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.FileIO
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
-import cats.implicits.catsSyntaxMonadError
-import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.streams.Accumulator
-import play.api.mvc.Action
-import play.api.mvc.ActionBuilder
 import play.api.mvc.BaseControllerHelpers
 import play.api.mvc.BodyParser
-import play.api.mvc.Request
-import play.api.mvc.Result
 
 import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 
 trait StreamingParsers {
   self: BaseControllerHelpers =>
@@ -48,33 +41,6 @@ trait StreamingParsers {
 
   lazy val streamFromMemory: BodyParser[Source[ByteString, _]] = BodyParser {
     _ =>
-      Accumulator.source[ByteString].map(Right.apply)(materializer.executionContext)
+      Accumulator.source[ByteString].map(_.asRight)(materializer.executionContext)
   }
-
-  implicit class ActionBuilderStreamHelpers(actionBuilder: ActionBuilder[Request, _]) {
-
-    /** Updates the [[Source]] in the [[BodyReplaceableRequest]] with a version that can be used
-      * multiple times via the use of a temporary file.
-      *
-      * @param block The code to use the with the reusable source
-      * @return An [[Action]]
-      */
-    def stream(
-      block: Request[Source[ByteString, _]] => Future[Result]
-    )(implicit temporaryFileCreator: TemporaryFileCreator): Action[Source[ByteString, _]] =
-      actionBuilder.async(streamFromMemory) {
-        request =>
-          val file = temporaryFileCreator.create()
-          (for {
-            _      <- request.body.runWith(FileIO.toPath(file))
-            result <- block(request.withBody(FileIO.fromPath(file)))
-          } yield result)
-            .attemptTap {
-              _ =>
-                file.delete()
-                Future.successful(())
-            }
-      }
-  }
-
 }

@@ -16,32 +16,32 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.services
 
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.scaladsl.StreamConverters
-import org.apache.pekko.util.ByteString
 import cats.data.EitherT
 import cats.data.NonEmptyList
 import cats.syntax.all._
 import com.google.inject.ImplementedBy
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
+import org.xml.sax.Parser
 import org.xml.sax.SAXParseException
 import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
+import java.io.StringReader
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.validation.SchemaFactory
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-import scala.concurrent.duration.DurationInt
-import scala.util.Using
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
 trait XmlValidationService extends ValidationService
@@ -59,52 +59,56 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
-      parsersByType(messageType).map {
-        saxParser =>
-          Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
-            xmlInput =>
-              val parser = saxParser.newSAXParser.getParser
-
-              val errorBuffer: mutable.ListBuffer[XmlSchemaValidationError] =
-                new mutable.ListBuffer[XmlSchemaValidationError]
-
-              parser.setErrorHandler(new ErrorHandler {
-                override def warning(error: SAXParseException): Unit = {}
-
-                override def error(error: SAXParseException): Unit =
-                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
-
-                override def fatalError(error: SAXParseException): Unit =
-                  errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
-              })
-
-              val inputSource = new InputSource(xmlInput)
-
-              val parseXml = Either
-                .catchOnly[SAXParseException] {
-                  parser.parse(inputSource)
-                }
-                .leftMap {
-                  exc =>
-                    XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
-                }
-
-              NonEmptyList
-                .fromList(errorBuffer.toList)
-                .map(
-                  x => Either.left(XmlFailedValidation(x))
-                )
-                .getOrElse(parseXml)
-          }.toEither.leftMap {
-            thr =>
-              logger
-                .error(s"Validate xml Internal server error occurred : $thr", thr);
-              ValidationError.Unexpected(Some(thr))
-          }.flatten
-      }
+      for {
+        saxParser <- parsersByType(messageType)
+        xmlString <- source.runFold(ByteString.empty)(_ ++ _).map(_.utf8String)
+        (parser, errorBuffer) = createParser(saxParser)
+        parsedXml             = parseXml(parser, xmlString)
+        result                = transformFailures(parsedXml, errorBuffer)
+      } yield result
     }
 
-  def buildParser(messageType: MessageType): SAXParserFactory = {
+  private def transformFailures(
+    parsedXml: Either[XmlFailedValidation, Unit],
+    errorBuffer: ListBuffer[XmlSchemaValidationError]
+  ): Either[XmlFailedValidation, Unit] =
+    NonEmptyList
+      .fromList(errorBuffer.toList)
+      .map(
+        x => Either.left(XmlFailedValidation(x))
+      )
+      .getOrElse(parsedXml)
+
+  private def parseXml(parser: Parser, xmlString: String): Either[XmlFailedValidation, Unit] = {
+    val inputSource = new InputSource(new StringReader(xmlString))
+    Either
+      .catchOnly[SAXParseException] {
+        parser.parse(inputSource)
+      }
+      .leftMap {
+        exc =>
+          XmlFailedValidation(NonEmptyList.of(XmlSchemaValidationError.fromSaxParseException(exc)))
+      }
+  }
+
+  private def createParser(saxParser: SAXParserFactory): (Parser, ListBuffer[XmlSchemaValidationError]) = {
+    val parser      = saxParser.newSAXParser.getParser
+    val errorBuffer = new mutable.ListBuffer[XmlSchemaValidationError]
+
+    parser.setErrorHandler(new ErrorHandler {
+      override def warning(error: SAXParseException): Unit = {}
+
+      override def error(error: SAXParseException): Unit =
+        errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+
+      override def fatalError(error: SAXParseException): Unit =
+        errorBuffer += XmlSchemaValidationError.fromSaxParseException(error)
+    })
+
+    (parser, errorBuffer)
+  }
+
+  private def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
     val parser        = SAXParserFactory.newInstance()
     val schemaUrl     = getClass.getResource(messageType.xsdPath)
