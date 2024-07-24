@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.controllers.stream
+package uk.gov.hmrc.transitmovementsvalidator.stream
 
 import cats.implicits.catsSyntaxEitherId
 import org.apache.pekko.stream.Materializer

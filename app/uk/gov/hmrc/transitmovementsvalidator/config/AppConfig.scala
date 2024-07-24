@@ -27,6 +27,8 @@ class AppConfig @Inject() (config: Configuration) {
 
   lazy val appName: String = config.get[String]("appName")
 
+  lazy val versionHeaderKey: String = config.get[String]("version.header.key")
+
   lazy val validateRequestTypesOnly: Boolean = config.getOptional[Boolean]("validate-request-types-only").getOrElse(true)
 
   lazy val validateLrnEnabled: Boolean = config.get[Boolean]("validate-lrn.enabled")

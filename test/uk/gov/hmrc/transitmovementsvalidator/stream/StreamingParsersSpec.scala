@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovements.controllers.stream
+package uk.gov.hmrc.transitmovementsvalidator.stream
 
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.Materializer
@@ -37,7 +37,7 @@ import play.api.test.Helpers.status
 import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
-import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
+import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
 
 import java.nio.charset.StandardCharsets
 import scala.annotation.tailrec

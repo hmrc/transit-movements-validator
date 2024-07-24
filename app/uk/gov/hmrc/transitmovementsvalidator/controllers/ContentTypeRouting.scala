@@ -25,8 +25,8 @@ import play.api.libs.json.Json
 import play.api.mvc.Action
 import play.api.mvc.BaseController
 import play.api.mvc.Request
-import uk.gov.hmrc.transitmovementsvalidator.controllers.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.PresentationError
+import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
 
 import scala.concurrent.Future
 

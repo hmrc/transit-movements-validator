@@ -1,0 +1,59 @@
+<ncts:CC025C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+  <messageSender>token</messageSender>
+  <messageRecipient>token</messageRecipient>
+  <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+  <messageIdentification>token</messageIdentification>
+  <messageType>CC025C</messageType>
+  <!--Optional:-->
+  <correlationIdentifier>token</correlationIdentifier>
+  <TransitOperation>
+    <MRN>27WF9X1FQ9RCKN0TM3</MRN>
+    <releaseDate>2014-06-09</releaseDate>
+    <releaseIndicator>2</releaseIndicator>
+  </TransitOperation>
+  <CustomsOfficeOfDestinationActual>
+    <referenceNumber>AB654321</referenceNumber>
+  </CustomsOfficeOfDestinationActual>
+  <TraderAtDestination>
+    <identificationNumber>string</identificationNumber>
+  </TraderAtDestination>
+  <!--Optional:-->
+  <Consignment>
+    <!--1 to 99 repetitions:-->
+    <HouseConsignment>
+      <sequenceNumber>1</sequenceNumber>
+      <releaseType>2</releaseType>
+      <!--0 to 999 repetitions:-->
+      <ConsignmentItem>
+        <goodsItemNumber>54321</goodsItemNumber>
+        <declarationGoodsItemNumber>100</declarationGoodsItemNumber>
+        <releaseType>4</releaseType>
+        <Commodity>
+          <descriptionOfGoods>string</descriptionOfGoods>
+          <!--Optional:-->
+          <cusCode>987654321</cusCode>
+          <!--Optional:-->
+          <CommodityCode>
+            <harmonizedSystemSubHeadingCode>123456</harmonizedSystemSubHeadingCode>
+            <!--Optional:-->
+            <combinedNomenclatureCode>st</combinedNomenclatureCode>
+          </CommodityCode>
+          <!--0 to 99 repetitions:-->
+          <DangerousGoods>
+            <sequenceNumber>1</sequenceNumber>
+            <UNNumber>4321</UNNumber>
+          </DangerousGoods>
+        </Commodity>
+        <!--1 to 99 repetitions:-->
+        <Packaging>
+          <sequenceNumber>1</sequenceNumber>
+          <typeOfPackages>21</typeOfPackages>
+          <!--Optional:-->
+          <numberOfPackages>100</numberOfPackages>
+          <!--Optional:-->
+          <shippingMarks>string</shippingMarks>
+        </Packaging>
+      </ConsignmentItem>
+    </HouseConsignment>
+  </Consignment>
+</ncts:CC025C>

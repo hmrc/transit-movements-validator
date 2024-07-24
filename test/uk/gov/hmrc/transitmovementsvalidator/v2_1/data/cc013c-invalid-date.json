@@ -1,0 +1,458 @@
+{
+  "n1:CC013C": {
+    "preparationDateAndTime": "2007-10-26T07:36:28",
+    "TransitOperation": {
+      "LRN": "string",
+      "MRN": "29GMFMHYWWCFCWRVJ3",
+      "declarationType": "token",
+      "additionalDeclarationType": "a",
+      "TIRCarnetNumber": "123456",
+      "presentationOfTheGoodsDateAndTime": "2014-06-09T16:15:04",
+      "security": "0",
+      "reducedDatasetIndicator": "1",
+      "specificCircumstanceIndicator": "abc",
+      "communicationLanguageAtDeparture": "GB",
+      "bindingItinerary": "1",
+      "amendmentTypeFlag": "0",
+      "limitDate": "2017-13-15"
+    },
+    "CustomsOfficeOfDeparture": {
+      "referenceNumber": "GB123456"
+    },
+    "Consignment": {
+      "countryOfDispatch": "GB",
+      "countryOfDestination": "XI",
+      "containerIndicator": "1",
+      "inlandModeOfTransport": "0",
+      "modeOfTransportAtTheBorder": "1",
+      "grossMass": 1000,
+      "referenceNumberUCR": "string",
+      "Carrier": {
+        "identificationNumber": "AZ!-",
+        "ContactPerson": {
+          "name": "string",
+          "phoneNumber": "token",
+          "eMailAddress": "string"
+        }
+      },
+      "Consignor": {
+        "identificationNumber": "string",
+        "name": "string",
+        "Address": {
+          "streetAndNumber": "string",
+          "postcode": "string",
+          "city": "string",
+          "country": "GB"
+        },
+        "ContactPerson": {
+          "name": "string",
+          "phoneNumber": "token",
+          "eMailAddress": "string"
+        }
+      },
+      "Consignee": {
+        "identificationNumber": "string",
+        "name": "string",
+        "Address": {
+          "streetAndNumber": "string",
+          "postcode": "string",
+          "city": "string",
+          "country": "GB"
+        }
+      },
+      "AdditionalSupplyChainActor": [
+        {
+          "sequenceNumber": "123",
+          "role": "abc",
+          "identificationNumber": "AB!"
+        }
+      ],
+      "TransportEquipment": [
+        {
+          "sequenceNumber": "123",
+          "containerIdentificationNumber": "string",
+          "numberOfSeals": 100,
+          "Seal": [
+            {
+              "sequenceNumber": "123",
+              "identifier": "string"
+            }
+          ],
+          "GoodsReference": [
+            {
+              "sequenceNumber": "123",
+              "declarationGoodsItemNumber": 100
+            }
+          ]
+        }
+      ],
+      "LocationOfGoods": {
+        "typeOfLocation": "a",
+        "qualifierOfIdentification": "a",
+        "authorisationNumber": "string",
+        "additionalIdentifier": "stri",
+        "UNLocode": "token",
+        "CustomsOffice": {
+          "referenceNumber": "GB123456"
+        },
+        "GNSS": {
+          "latitude": "+1.00000",
+          "longitude": "+1.00000"
+        },
+        "EconomicOperator": {
+          "identificationNumber": "string"
+        },
+        "Address": {
+          "streetAndNumber": "string",
+          "postcode": "string",
+          "city": "string",
+          "country": "GB"
+        },
+        "PostcodeAddress": {
+          "houseNumber": "string",
+          "postcode": "string",
+          "country": "GB"
+        },
+        "ContactPerson": {
+          "name": "string",
+          "phoneNumber": "token",
+          "eMailAddress": "string"
+        }
+      },
+      "DepartureTransportMeans": [
+        {
+          "sequenceNumber": "123",
+          "typeOfIdentification": "12",
+          "identificationNumber": "string",
+          "nationality": "XI"
+        }
+      ],
+      "CountryOfRoutingOfConsignment": [
+        {
+          "sequenceNumber": "123",
+          "country": "GB"
+        }
+      ],
+      "ActiveBorderTransportMeans": [
+        {
+          "sequenceNumber": "123",
+          "customsOfficeAtBorderReferenceNumber": "abcdabcd",
+          "typeOfIdentification": "12",
+          "identificationNumber": "string",
+          "nationality": "GB",
+          "conveyanceReferenceNumber": "string"
+        }
+      ],
+      "PlaceOfLoading": {
+        "UNLocode": "token",
+        "country": "GB",
+        "location": "string"
+      },
+      "PlaceOfUnloading": {
+        "UNLocode": "token",
+        "country": "GB",
+        "location": "string"
+      },
+      "PreviousDocument": [
+        {
+          "sequenceNumber": "123",
+          "type": "abcd",
+          "referenceNumber": "string",
+          "complementOfInformation": "string"
+        }
+      ],
+      "SupportingDocument": [
+        {
+          "sequenceNumber": "123",
+          "type": "abcd",
+          "referenceNumber": "string",
+          "documentLineItemNumber": 100,
+          "complementOfInformation": "string"
+        }
+      ],
+      "TransportDocument": [
+        {
+          "sequenceNumber": "123",
+          "type": "abcd",
+          "referenceNumber": "string"
+        }
+      ],
+      "AdditionalReference": [
+        {
+          "sequenceNumber": "123",
+          "type": "abcd",
+          "referenceNumber": "string"
+        }
+      ],
+      "AdditionalInformation": [
+        {
+          "sequenceNumber": "123",
+          "code": "token",
+          "text": "string"
+        }
+      ],
+      "TransportCharges": {
+        "methodOfPayment": "A"
+      },
+      "HouseConsignment": [
+        {
+          "sequenceNumber": "123",
+          "countryOfDispatch": "st",
+          "grossMass": 1000,
+          "referenceNumberUCR": "string",
+          "Consignor": {
+            "identificationNumber": "string",
+            "name": "string",
+            "Address": {
+              "streetAndNumber": "string",
+              "postcode": "string",
+              "city": "string",
+              "country": "GB"
+            },
+            "ContactPerson": {
+              "name": "string",
+              "phoneNumber": "token",
+              "eMailAddress": "string"
+            }
+          },
+          "Consignee": {
+            "identificationNumber": "string",
+            "name": "string",
+            "Address": {
+              "streetAndNumber": "string",
+              "postcode": "string",
+              "city": "string",
+              "country": "GB"
+            }
+          },
+          "AdditionalSupplyChainActor": [
+            {
+              "sequenceNumber": "123",
+              "role": "abc",
+              "identificationNumber": "AV!---"
+            }
+          ],
+          "DepartureTransportMeans": [
+            {
+              "sequenceNumber": "123",
+              "typeOfIdentification": "12",
+              "identificationNumber": "string",
+              "nationality": "XI"
+            }
+          ],
+          "PreviousDocument": [
+            {
+              "sequenceNumber": "123",
+              "type": "abcd",
+              "referenceNumber": "string",
+              "complementOfInformation": "string"
+            }
+          ],
+          "SupportingDocument": [
+            {
+              "sequenceNumber": "123",
+              "type": "abcd",
+              "referenceNumber": "string",
+              "documentLineItemNumber": 100,
+              "complementOfInformation": "string"
+            }
+          ],
+          "TransportDocument": [
+            {
+              "sequenceNumber": "123",
+              "type": "abcd",
+              "referenceNumber": "string"
+            }
+          ],
+          "AdditionalReference": [
+            {
+              "sequenceNumber": "123",
+              "type": "abcd",
+              "referenceNumber": "string"
+            }
+          ],
+          "AdditionalInformation": [
+            {
+              "sequenceNumber": "123",
+              "code": "token",
+              "text": "string"
+            }
+          ],
+          "TransportCharges": {
+            "methodOfPayment": "A"
+          },
+          "ConsignmentItem": [
+            {
+              "goodsItemNumber": "123",
+              "declarationGoodsItemNumber": 100,
+              "declarationType": "token",
+              "countryOfDispatch": "GB",
+              "countryOfDestination": "XI",
+              "referenceNumberUCR": "string",
+              "Consignee": {
+                "identificationNumber": "string",
+                "name": "string",
+                "Address": {
+                  "streetAndNumber": "string",
+                  "postcode": "string",
+                  "city": "string",
+                  "country": "GB"
+                }
+              },
+              "AdditionalSupplyChainActor": [
+                {
+                  "sequenceNumber": "123",
+                  "role": "abc",
+                  "identificationNumber": "AB!--!"
+                }
+              ],
+              "Commodity": {
+                "descriptionOfGoods": "string",
+                "cusCode": "abcdefghi",
+                "CommodityCode": {
+                  "harmonizedSystemSubHeadingCode": "tokent",
+                  "combinedNomenclatureCode": "st"
+                },
+                "DangerousGoods": [
+                  {
+                    "sequenceNumber": "123",
+                    "UNNumber": "abcd"
+                  }
+                ],
+                "GoodsMeasure": {
+                  "grossMass": 1000,
+                  "netMass": 1000,
+                  "supplementaryUnits": 1000
+                }
+              },
+              "Packaging": [
+                {
+                  "sequenceNumber": "123",
+                  "typeOfPackages": "ab",
+                  "numberOfPackages": 100,
+                  "shippingMarks": "string"
+                }
+              ],
+              "PreviousDocument": [
+                {
+                  "sequenceNumber": "123",
+                  "type": "abcd",
+                  "referenceNumber": "string",
+                  "goodsItemNumber": 100,
+                  "typeOfPackages": "ab",
+                  "numberOfPackages": 100,
+                  "measurementUnitAndQualifier": "a",
+                  "quantity": 1000,
+                  "complementOfInformation": "string"
+                }
+              ],
+              "SupportingDocument": [
+                {
+                  "sequenceNumber": "123",
+                  "type": "abcd",
+                  "referenceNumber": "string",
+                  "documentLineItemNumber": 100,
+                  "complementOfInformation": "string"
+                }
+              ],
+              "TransportDocument": [
+                {
+                  "sequenceNumber": "123",
+                  "type": "abcd",
+                  "referenceNumber": "string"
+                }
+              ],
+              "AdditionalReference": [
+                {
+                  "sequenceNumber": "123",
+                  "type": "abcd",
+                  "referenceNumber": "string"
+                }
+              ],
+              "AdditionalInformation": [
+                {
+                  "sequenceNumber": "123",
+                  "code": "token",
+                  "text": "string"
+                }
+              ],
+              "TransportCharges": {
+                "methodOfPayment": "A"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "CustomsOfficeOfExitForTransitDeclared": [
+      {
+        "sequenceNumber": "123",
+        "referenceNumber": "AB123456"
+      }
+    ],
+    "CustomsOfficeOfTransitDeclared": [
+      {
+        "sequenceNumber": "123",
+        "referenceNumber": "AB123456",
+        "arrivalDateAndTimeEstimated": "2013-12-21T11:32:42"
+      }
+    ],
+    "CustomsOfficeOfDestinationDeclared": {
+      "referenceNumber": "GB123456"
+    },
+    "messageType": "CC013C",
+    "@PhaseID": "NCTS5.0",
+    "correlationIdentifier": "token",
+    "Authorisation": [
+      {
+        "sequenceNumber": "123",
+        "type": "0",
+        "referenceNumber": "string"
+      }
+    ],
+    "messageRecipient": "token",
+    "messageSender": "token",
+    "HolderOfTheTransitProcedure": {
+      "identificationNumber": "string",
+      "TIRHolderIdentificationNumber": "string",
+      "name": "string",
+      "Address": {
+        "streetAndNumber": "string",
+        "postcode": "string",
+        "city": "string",
+        "country": "GB"
+      },
+      "ContactPerson": {
+        "name": "string",
+        "phoneNumber": "token",
+        "eMailAddress": "string"
+      }
+    },
+    "Representative": {
+      "identificationNumber": "string",
+      "status": "0",
+      "ContactPerson": {
+        "name": "string",
+        "phoneNumber": "token",
+        "eMailAddress": "string"
+      }
+    },
+    "messageIdentification": "token",
+    "Guarantee": [
+      {
+        "sequenceNumber": "123",
+        "guaranteeType": "B",
+        "otherGuaranteeReference": "GBP",
+        "GuaranteeReference": [
+          {
+            "sequenceNumber": "123",
+            "GRN": "ABC",
+            "accessCode": "stri",
+            "amountToBeCovered": 1000,
+            "currency": "GBP"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
 import cats.data.NonEmptyList
+import play.api.http.Status.BAD_REQUEST
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.functional.syntax.unlift
 import play.api.libs.json.OWrites
@@ -52,12 +53,8 @@ object PresentationError {
   def schemaValidationError(errors: NonEmptyList[SchemaValidationError]): PresentationError =
     SchemaValidationPresentationError(errors)
 
-  def internalServiceError(
-    message: String = "Internal server error",
-    code: ErrorCode = ErrorCode.InternalServerError,
-    cause: Option[Throwable] = None
-  ): PresentationError =
-    InternalServiceError(message, code, cause)
+  def bindingBadRequestError(message: String): PresentationError =
+    BindingError(message, BAD_REQUEST, ErrorCode.BadRequest)
 
   def businessValidationError(message: String): PresentationError =
     StandardError(message, ErrorCode.BusinessValidationError)
@@ -68,6 +65,8 @@ sealed abstract class PresentationError extends Product with Serializable {
   def message: String
   def code: ErrorCode
 }
+
+case class BindingError(message: String, statusCode: Int, code: ErrorCode) extends PresentationError
 
 case class StandardError(message: String, code: ErrorCode) extends PresentationError
 
