@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,7 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.config
 
-import javax.inject.Inject
-import javax.inject.Singleton
-import play.api.Configuration
-
-import scala.util.matching.Regex
-
-@Singleton
-class AppConfig @Inject() (config: Configuration) {
-
-  lazy val appName: String = config.get[String]("appName")
-
-  lazy val validateRequestTypesOnly: Boolean = config.getOptional[Boolean]("validate-request-types-only").getOrElse(true)
-
-  lazy val validateLrnEnabled: Boolean = config.get[Boolean]("validate-lrn.enabled")
-  lazy val validateLrnRegex: Regex     = config.get[String]("validate-lrn.regex").r
+object Constants {
+  val APIVersionHeaderKey: String        = "APIVersion"
+  val APIVersionFinalHeaderValue: String = "final"
 }

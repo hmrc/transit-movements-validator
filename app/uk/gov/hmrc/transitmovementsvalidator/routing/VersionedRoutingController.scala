@@ -22,10 +22,8 @@ import org.apache.pekko.util.ByteString
 import play.api.mvc.Action
 import play.api.mvc.ControllerComponents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.config.Constants
 import uk.gov.hmrc.transitmovementsvalidator.controllers.{MessagesController => TransitionalMessagesController}
-import uk.gov.hmrc.transitmovementsvalidator.models.Final
-import uk.gov.hmrc.transitmovementsvalidator.models.Transitional
 import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.controllers.{MessagesController => FinalMessagesController}
 
@@ -35,16 +33,16 @@ class VersionedRoutingController @Inject() (
   cc: ControllerComponents,
   transitionalController: TransitionalMessagesController,
   finalController: FinalMessagesController
-)(implicit val materializer: Materializer, appConfig: AppConfig)
+)(implicit val materializer: Materializer)
     extends BackendController(cc)
-    with StreamingParsers
-    with VersionedRouting {
+    with StreamingParsers {
 
   def validate(messageType: String): Action[Source[ByteString, _]] =
-    apiVersionRoute {
-      case Some(Final.value) =>
-        finalController.validate(messageType)
-      case Some(Transitional.value) =>
-        transitionalController.validate(messageType)
+    Action.async(streamFromMemory) {
+      implicit request =>
+        request.headers.get(Constants.APIVersionHeaderKey).map(_.trim.toLowerCase) match {
+          case Some(Constants.APIVersionFinalHeaderValue) => finalController.validate(messageType)(request)
+          case _                                          => transitionalController.validate(messageType)(request)
+        }
     }
 }

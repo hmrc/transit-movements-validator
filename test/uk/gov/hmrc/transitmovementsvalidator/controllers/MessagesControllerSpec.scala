@@ -52,6 +52,7 @@ import play.api.test.StubControllerComponentsFactory
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.config.Constants
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
@@ -92,10 +93,8 @@ class MessagesControllerSpec
   val mockConfig: AppConfig                                    = mock[AppConfig]
   val mockFinalMessagesController: FinalMessagesController     = mock[FinalMessagesController]
 
-  val apiVersionHeader               = "APIVersion"
   val transitionalVersionHeaderValue = "transitional"
 
-  when(mockConfig.versionHeaderKey).thenReturn(apiVersionHeader)
   when(mockConfig.validateRequestTypesOnly).thenReturn(true)
 
   override def beforeEach(): Unit = {
@@ -110,20 +109,6 @@ class MessagesControllerSpec
   "On validate XML" - {
 
     lazy val validXml: NodeSeq = <test></test>
-
-    "return a BAD_REQUEST when the APIVersion is set to an invalid value" in {
-      val messagesController =
-        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
-
-      val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
-      val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
-      val request =
-        FakeRequest("POST", s"/messages/${validCode.code}/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> "invalid")), source)
-      val result = versionedRoutingController.validate(validCode.code)(request)
-
-      status(result) mustBe BAD_REQUEST
-    }
 
     "on a valid XML file, with the application/xml content type, and the APIVersion not set, return No Content'" in forAll(
       Gen.oneOf(MessageType.requestValues)
@@ -141,7 +126,7 @@ class MessagesControllerSpec
           new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
         val versionedRoutingController =
-          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
         val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest("POST", s"/messages/${messageType.code}/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML)), source)
         val result  = versionedRoutingController.validate(messageType.code)(request)
@@ -163,12 +148,12 @@ class MessagesControllerSpec
           new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
         val versionedRoutingController =
-          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
         val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/${messageType.code}/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
         val result = versionedRoutingController.validate(messageType.code)(request)
@@ -181,13 +166,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(invalidCode)(request)
@@ -207,12 +192,12 @@ class MessagesControllerSpec
           new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
         val versionedRoutingController =
-          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
         val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/${responseType.code}/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
         val result = versionedRoutingController.validate(responseType.code)(request)
@@ -240,13 +225,13 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, config)
         val versionedRoutingController =
-          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+          new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
 
         val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/${messageType.code}/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
         val result = versionedRoutingController.validate(messageType.code)(request)
@@ -269,13 +254,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -300,13 +285,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -330,13 +315,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -366,13 +351,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.XML, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -401,13 +386,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -420,13 +405,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(invalidCode)(request)
@@ -457,13 +442,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -479,7 +464,7 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.TEXT)), source)
       val result  = versionedRoutingController.validate(validCode.code)(request)
@@ -502,13 +487,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -536,13 +521,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -570,13 +555,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
@@ -605,13 +590,13 @@ class MessagesControllerSpec
         new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
 
       val versionedRoutingController =
-        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)(implicitly, mockConfig)
+        new VersionedRoutingController(stubControllerComponents(), messagesController, mockFinalMessagesController)
       val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
       val request =
         FakeRequest(
           "POST",
           s"/messages/$validCode/validate/",
-          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, "APIVersion" -> transitionalVersionHeaderValue)),
+          FakeHeaders(Seq(CONTENT_TYPE -> MimeTypes.JSON, Constants.APIVersionHeaderKey -> transitionalVersionHeaderValue)),
           source
         )
       val result = versionedRoutingController.validate(validCode.code)(request)
