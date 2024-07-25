@@ -1,0 +1,17 @@
+<ncts:CC014C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+    <messageSender>token</messageSender>
+    <messageRecipient>token</messageRecipient>
+    <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+    <messageIdentification>token</messageIdentification>
+    <messageType>CC014C</messageType>
+    <TransitOperation>
+    </TransitOperation>
+    <Invalidation>
+        <initiatedByCustoms>1</initiatedByCustoms>
+    </Invalidation>
+    <CustomsOfficeOfDeparture>
+        <referenceNumber>GB123456</referenceNumber>
+    </CustomsOfficeOfDeparture>
+    <HolderOfTheTransitProcedure>
+    </HolderOfTheTransitProcedure>
+</ncts:CC014C>

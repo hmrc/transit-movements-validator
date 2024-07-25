@@ -1,0 +1,210 @@
+<ncts:CC013C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+    <messageSender>token</messageSender>
+    <messageRecipient>NTA.GB</messageRecipient>
+    <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+    <messageIdentification>token</messageIdentification>
+    <messageType>CC013C</messageType>
+    <TransitOperation>
+        <declarationType>token</declarationType>
+        <additionalDeclarationType>A</additionalDeclarationType>
+        <security>0</security>
+        <reducedDatasetIndicator>1</reducedDatasetIndicator>
+        <bindingItinerary>1</bindingItinerary>
+        <amendmentTypeFlag>0</amendmentTypeFlag>
+    </TransitOperation>
+    <!--0 to 9 repetitions:-->
+    <Authorisation>
+        <sequenceNumber>12345</sequenceNumber>
+        <type>tokn</type>
+        <referenceNumber>GB444</referenceNumber>
+    </Authorisation>
+    <CustomsOfficeOfDeparture>
+        <referenceNumber>GB123456</referenceNumber>
+    </CustomsOfficeOfDeparture>
+    <CustomsOfficeOfDestinationDeclared>
+        <referenceNumber>AB123456</referenceNumber>
+    </CustomsOfficeOfDestinationDeclared>
+    <!--0 to 9 repetitions:-->
+    <CustomsOfficeOfTransitDeclared>
+        <sequenceNumber>12345</sequenceNumber>
+        <referenceNumber>AB123456</referenceNumber>
+    </CustomsOfficeOfTransitDeclared>
+    <!--0 to 9 repetitions:-->
+    <CustomsOfficeOfExitForTransitDeclared>
+        <sequenceNumber>12345</sequenceNumber>
+        <referenceNumber>AB123456</referenceNumber>
+    </CustomsOfficeOfExitForTransitDeclared>
+    <HolderOfTheTransitProcedure>
+    </HolderOfTheTransitProcedure>
+    <!--1 to 9 repetitions:-->
+    <Guarantee>
+        <sequenceNumber>12345</sequenceNumber>
+        <!--0 to 99 repetitions:-->
+        <GuaranteeReference>
+            <sequenceNumber>12345</sequenceNumber>
+        </GuaranteeReference>
+    </Guarantee>
+    <Consignment>
+        <grossMass>1000.000000000000</grossMass>
+        <!--0 to 99 repetitions:-->
+        <AdditionalSupplyChainActor>
+            <sequenceNumber>12345</sequenceNumber>
+            <role>ABC</role>
+            <identificationNumber>GB123</identificationNumber>
+        </AdditionalSupplyChainActor>
+        <!--0 to 9999 repetitions:-->
+        <TransportEquipment>
+            <sequenceNumber>12345</sequenceNumber>
+            <numberOfSeals>100</numberOfSeals>
+            <!--0 to 99 repetitions:-->
+            <Seal>
+                <sequenceNumber>12345</sequenceNumber>
+                <identifier>string</identifier>
+            </Seal>
+            <!--0 to 9999 repetitions:-->
+            <GoodsReference>
+                <sequenceNumber>12345</sequenceNumber>
+                <declarationGoodsItemNumber>100</declarationGoodsItemNumber>
+            </GoodsReference>
+        </TransportEquipment>
+        <!--0 to 999 repetitions:-->
+        <DepartureTransportMeans>
+            <sequenceNumber>12345</sequenceNumber>
+        </DepartureTransportMeans>
+        <!--0 to 99 repetitions:-->
+        <CountryOfRoutingOfConsignment>
+            <sequenceNumber>12345</sequenceNumber>
+            <country>GB</country>
+        </CountryOfRoutingOfConsignment>
+        <!--0 to 9 repetitions:-->
+        <ActiveBorderTransportMeans>
+            <sequenceNumber>12345</sequenceNumber>
+        </ActiveBorderTransportMeans>
+        <!--0 to 9999 repetitions:-->
+        <PreviousDocument>
+            <sequenceNumber>12345</sequenceNumber>
+            <type>ABCD</type>
+            <referenceNumber>AB123456</referenceNumber>
+        </PreviousDocument>
+        <!--0 to 99 repetitions:-->
+        <SupportingDocument>
+            <sequenceNumber>12345</sequenceNumber>
+            <type>ABCD</type>
+            <referenceNumber>AB123456</referenceNumber>
+        </SupportingDocument>
+        <!--0 to 99 repetitions:-->
+        <TransportDocument>
+            <sequenceNumber>12345</sequenceNumber>
+            <type>ABCD</type>
+            <referenceNumber>AB123456</referenceNumber>
+        </TransportDocument>
+        <!--0 to 99 repetitions:-->
+        <AdditionalReference>
+            <sequenceNumber>12345</sequenceNumber>
+            <type>ABCD</type>
+        </AdditionalReference>
+        <!--0 to 99 repetitions:-->
+        <AdditionalInformation>
+            <sequenceNumber>12345</sequenceNumber>
+            <code>token</code>
+        </AdditionalInformation>
+        <!--1 to 99 repetitions:-->
+        <HouseConsignment>
+            <sequenceNumber>12345</sequenceNumber>
+            <grossMass>1000.000000000000</grossMass>
+            <!--0 to 99 repetitions:-->
+            <AdditionalSupplyChainActor>
+                <sequenceNumber>12345</sequenceNumber>
+                <role>ABC</role>
+                <identificationNumber>GB123</identificationNumber>
+            </AdditionalSupplyChainActor>
+            <!--0 to 999 repetitions:-->
+            <DepartureTransportMeans>
+                <sequenceNumber>12345</sequenceNumber>
+                <typeOfIdentification>01</typeOfIdentification>
+                <identificationNumber>GB123</identificationNumber>
+                <nationality>GB</nationality>
+            </DepartureTransportMeans>
+            <!--0 to 99 repetitions:-->
+            <PreviousDocument>
+                <sequenceNumber>12345</sequenceNumber>
+                <type>ABCD</type>
+                <referenceNumber>AB123456</referenceNumber>
+            </PreviousDocument>
+            <!--0 to 99 repetitions:-->
+            <SupportingDocument>
+                <sequenceNumber>12345</sequenceNumber>
+                <type>ABCD</type>
+                <referenceNumber>AB123456</referenceNumber>
+            </SupportingDocument>
+            <!--0 to 99 repetitions:-->
+            <TransportDocument>
+                <sequenceNumber>12345</sequenceNumber>
+                <type>ABCD</type>
+                <referenceNumber>AB123456</referenceNumber>
+            </TransportDocument>
+            <!--0 to 99 repetitions:-->
+            <AdditionalReference>
+                <sequenceNumber>12345</sequenceNumber>
+                <type>ABCD</type>
+            </AdditionalReference>
+            <!--0 to 99 repetitions:-->
+            <AdditionalInformation>
+                <sequenceNumber>12345</sequenceNumber>
+                <code>token</code>
+            </AdditionalInformation>
+            <!--1 to 999 repetitions:-->
+            <ConsignmentItem>
+                <goodsItemNumber>12345</goodsItemNumber>
+                <declarationGoodsItemNumber>100</declarationGoodsItemNumber>
+                <!--0 to 99 repetitions:-->
+                <AdditionalSupplyChainActor>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <role>ABC</role>
+                    <identificationNumber>GB123</identificationNumber>
+                </AdditionalSupplyChainActor>
+                <Commodity>
+                    <descriptionOfGoods>string</descriptionOfGoods>
+                    <!--0 to 99 repetitions:-->
+                    <DangerousGoods>
+                        <sequenceNumber>12345</sequenceNumber>
+                        <UNNumber>1234</UNNumber>
+                    </DangerousGoods>
+                </Commodity>
+                <!--1 to 99 repetitions:-->
+                <Packaging>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <typeOfPackages>11</typeOfPackages>
+                </Packaging>
+                <!--0 to 99 repetitions:-->
+                <PreviousDocument>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <type>ABCD</type>
+                    <referenceNumber>AB123456</referenceNumber>
+                </PreviousDocument>
+                <!--0 to 99 repetitions:-->
+                <SupportingDocument>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <type>ABCD</type>
+                    <referenceNumber>AB123456</referenceNumber>
+                </SupportingDocument>
+                <!--0 to 99 repetitions:-->
+                <TransportDocument>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <type>ABCD</type>
+                    <referenceNumber>AB123456</referenceNumber>
+                </TransportDocument>
+                <!--0 to 99 repetitions:-->
+                <AdditionalReference>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <type>ABCD</type>
+                </AdditionalReference>
+                <!--0 to 99 repetitions:-->
+                <AdditionalInformation>
+                    <sequenceNumber>12345</sequenceNumber>
+                    <code>token</code>
+                </AdditionalInformation>
+            </ConsignmentItem>
+        </HouseConsignment>
+    </Consignment>
+</ncts:CC013C>
