@@ -25,7 +25,6 @@ import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
-import org.xml.sax.Parser
 import org.xml.sax.SAXParseException
 import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
@@ -42,6 +41,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.xml.XMLReader
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
 trait XmlValidationService extends ValidationService
@@ -79,7 +79,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       )
       .getOrElse(parsedXml)
 
-  private def parseXml(parser: Parser, xmlString: String): Either[XmlFailedValidation, Unit] = {
+  private def parseXml(parser: XMLReader, xmlString: String): Either[XmlFailedValidation, Unit] = {
     val inputSource = new InputSource(new StringReader(xmlString))
     Either
       .catchOnly[SAXParseException] {
@@ -91,8 +91,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       }
   }
 
-  private def createParser(saxParser: SAXParserFactory): (Parser, ListBuffer[XmlSchemaValidationError]) = {
-    val parser      = saxParser.newSAXParser.getParser
+  private def createParser(saxParser: SAXParserFactory): (XMLReader, ListBuffer[XmlSchemaValidationError]) = {
+    val parser      = saxParser.newSAXParser.getXMLReader
     val errorBuffer = new mutable.ListBuffer[XmlSchemaValidationError]
 
     parser.setErrorHandler(new ErrorHandler {
