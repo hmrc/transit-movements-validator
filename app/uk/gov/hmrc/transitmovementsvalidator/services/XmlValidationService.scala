@@ -49,6 +49,7 @@ trait XmlValidationService extends ValidationService
 class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService with Logging {
 
 
+
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {
       typ =>
