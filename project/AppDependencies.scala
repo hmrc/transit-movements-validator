@@ -4,7 +4,7 @@ import sbt._
 object AppDependencies {
 
   private val catsVersion         = "2.9.0"
-  private val boostrapPlayVersion = "8.3.0"
+  private val boostrapPlayVersion = "9.3.0"
   private val pekkoVersion        = "1.0.1"
 
   val compile = Seq(
