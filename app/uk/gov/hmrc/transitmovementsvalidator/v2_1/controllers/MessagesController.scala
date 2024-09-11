@@ -17,6 +17,7 @@
 package uk.gov.hmrc.transitmovementsvalidator.v2_1.controllers
 
 import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
 import cats.data.EitherT
@@ -51,38 +52,48 @@ class MessagesController @Inject() (
 ) extends BackendController(cc)
     with Logging
     with StreamingParsers
-    with ContentTypeRouting
     with ErrorTranslator {
 
-  def validate(messageType: String): Action[Source[ByteString, _]] =
-    contentTypeRoute {
-      case Some(MimeTypes.XML)  => validateMessage(messageType, xmlValidationService, MessageFormat.Xml)
-      case Some(MimeTypes.JSON) => validateMessage(messageType, jsonValidationService, MessageFormat.Json)
-    }
+  def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
+    implicit request =>
+      request.headers.get(CONTENT_TYPE) match {
+        case Some(MimeTypes.XML) =>
+          validateMessage(messageType, xmlValidationService, MessageFormat.Xml, request)
+        case Some(MimeTypes.JSON) =>
+          validateMessage(messageType, jsonValidationService, MessageFormat.Json, request)
+        case Some(x) =>
+          request.body.runWith(Sink.ignore)
+          Future.successful(UnsupportedMediaType(Json.toJson(PresentationError.unsupportedMediaTypeError(s"Content type $x is not supported."))))
+        case None =>
+          request.body.runWith(Sink.ignore)
+          Future.successful(UnsupportedMediaType(Json.toJson(PresentationError.unsupportedMediaTypeError(s"Content type must be specified."))))
+      }
+  }
 
-  private def validateMessage(messageType: String, validationService: ValidationService, messageFormat: MessageFormat[_]): Action[Source[ByteString, _]] =
-    Action.async(streamFromMemory) {
-      implicit request =>
-        (for {
-          messageTypeObj <- findMessageType(messageType)
+  private def validateMessage(
+    messageType: String,
+    validationService: ValidationService,
+    messageFormat: MessageFormat[_],
+    request: Request[Source[ByteString, _]]
+  ): Future[Result] =
+    (for {
+      messageTypeObj <- findMessageType(messageType)
 
-          // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
-          // business validation at the same time. We get the result from the business rule validation from the
-          // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
-          // the source with the flow attached to the schema validation service and it runs.
-          (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
-          _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
-          _ <- deferredBusinessRulesValidation.asPresentation
-        } yield NoContent)
-          .valueOr {
-            case SchemaValidationPresentationError(errors) =>
-              // We have special cased this as this isn't considered an "error" so much.
-              Ok(Json.toJson(ValidationResponse(errors)))
-            case presentationError =>
-              Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
-          }
-
-    }
+      // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
+      // business validation at the same time. We get the result from the business rule validation from the
+      // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
+      // the source with the flow attached to the schema validation service and it runs.
+      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
+      _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
+      _ <- deferredBusinessRulesValidation.asPresentation
+    } yield NoContent)
+      .valueOr {
+        case SchemaValidationPresentationError(errors) =>
+          // We have special cased this as this isn't considered an "error" so much.
+          Ok(Json.toJson(ValidationResponse(errors)))
+        case presentationError =>
+          Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
+      }
 
   private def findMessageType(messageType: String): EitherT[Future, PresentationError, MessageType] =
     EitherT

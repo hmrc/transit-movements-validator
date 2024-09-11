@@ -461,6 +461,20 @@ class MessagesControllerSpec
       status(result) mustBe UNSUPPORTED_MEDIA_TYPE
     }
 
+    "with no content type header, must return Unsupported Media Type" in {
+      val messagesController =
+        new MessagesController(stubControllerComponents(), mockXmlValidationService, mockJsonValidationService, mockBusinessValidationService, mockConfig)
+
+      val versionedRoutingController =
+        new VersionedRoutingController(stubControllerComponents(), mockTransitionalMessagesController, messagesController)
+      val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+      val request = FakeRequest("POST", s"/messages/$validCode/validate/", FakeHeaders(Seq(Constants.APIVersionHeaderKey -> finalVersionHeaderValue)), source)
+      val result  = versionedRoutingController.validate(validCode.code)(request)
+
+      contentAsJson(result) mustBe Json.obj("code" -> "UNSUPPORTED_MEDIA_TYPE", "message" -> "Content type must be specified.")
+      status(result) mustBe UNSUPPORTED_MEDIA_TYPE
+    }
+
     "on an exception being thrown during json validation, must return Internal Server Error" in {
       val error = new IllegalStateException("Unable to extract schema")
       when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))

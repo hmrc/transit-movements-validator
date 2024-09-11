@@ -22,6 +22,7 @@ import cats.syntax.all._
 import com.google.inject.ImplementedBy
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.stream.scaladsl.StreamConverters
 import org.apache.pekko.util.ByteString
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
@@ -32,7 +33,7 @@ import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.XmlSchemaValidationError
 
-import java.io.StringReader
+import java.io.InputStream
 import javax.inject.Inject
 import javax.xml.XMLConstants
 import javax.xml.parsers.SAXParserFactory
@@ -41,6 +42,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
 import scala.xml.XMLReader
 
 @ImplementedBy(classOf[XmlValidationServiceImpl])
@@ -61,9 +63,9 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
     EitherT {
       for {
         saxParser <- parsersByType(messageType)
-        xmlString <- source.runFold(ByteString.empty)(_ ++ _).map(_.utf8String)
+        inputStream           = source.runWith(StreamConverters.asInputStream(20.seconds))
         (parser, errorBuffer) = createParser(saxParser)
-        parsedXml             = parseXml(parser, xmlString)
+        parsedXml             = parseXml(parser, inputStream)
         result                = transformFailures(parsedXml, errorBuffer)
       } yield result
     }
@@ -79,8 +81,8 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
       )
       .getOrElse(parsedXml)
 
-  private def parseXml(parser: XMLReader, xmlString: String): Either[XmlFailedValidation, Unit] = {
-    val inputSource = new InputSource(new StringReader(xmlString))
+  private def parseXml(parser: XMLReader, inputStream: InputStream): Either[XmlFailedValidation, Unit] = {
+    val inputSource = new InputSource(inputStream)
     Either
       .catchOnly[SAXParseException] {
         parser.parse(inputSource)
