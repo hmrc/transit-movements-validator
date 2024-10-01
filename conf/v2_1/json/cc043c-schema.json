@@ -12862,6 +12862,9 @@
         },
         "sequenceNumber": {
           "$ref": "#/definitions/n1:SequenceNumberContentType"
+        },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
         }
       },
       "required": [

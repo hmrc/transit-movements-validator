@@ -12797,6 +12797,9 @@
         "countryOfDispatch": {
           "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
         },

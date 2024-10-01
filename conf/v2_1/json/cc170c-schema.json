@@ -5034,7 +5034,7 @@
             "$ref": "#/definitions/n1:HouseConsignmentType06"
           },
           "minItems": 1,
-          "maxItems": 1,
+          "maxItems": 1999,
           "type": "array"
         },
         "LocationOfGoods": {

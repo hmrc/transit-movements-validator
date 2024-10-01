@@ -10384,7 +10384,7 @@
           "type": "string"
         },
         "declarationGoodsItemNumber": {
-          "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType"
+          "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
         "sequenceNumber": {
           "$ref": "#/definitions/n1:SequenceNumberContentType"
