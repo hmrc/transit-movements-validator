@@ -16,7 +16,7 @@
         "correlationIdentifier": "token",
         "Authorisation": [
             {
-                "sequenceNumber": "123",
+                "sequenceNumber": 123,
                 "referenceNumber": "token",
                 "type": "3344"
             }
@@ -55,7 +55,7 @@
             },
             "Incident": [
                 {
-                    "sequenceNumber": "12345",
+                    "sequenceNumber": 12345,
                     "code": "1",
                     "text": "token",
                     "Endorsement": {
@@ -76,18 +76,18 @@
                     },
                     "TransportEquipment": [
                         {
-                            "sequenceNumber": "12345",
+                            "sequenceNumber": 12345,
                             "containerIdentificationNumber": "ezv3Z",
                             "numberOfSeals": 2345,
                             "Seal": [
                                 {
-                                    "sequenceNumber": "12345",
+                                    "sequenceNumber": 12345,
                                     "identifier": "token"
                                 }
                             ],
                             "GoodsReference": [
                                 {
-                                    "sequenceNumber": "12345",
+                                    "sequenceNumber": 12345,
                                     "declarationGoodsItemNumber": 12
                                 }
                             ]

@@ -1,0 +1,1144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+    <!--================================================================================-->
+    <!--===== Complex Types                                                                   -->
+    <!--===== DDNTA 5.15.2                                                                    -->
+    <!--===== NCTS P5 Phase Definition                                                        -->
+    <!--===== XSD version 51.8.6_Custom                                                       -->
+    <!--===== Aligned with RFC-List version DDNTA RFC-List.39                                 -->
+    <!--================================================================================-->
+    <!--================================================================================-->
+    <!--===== Customisation Comments:															-->
+    <!--===== This Custom_ctypes.xsd file contains the only changes to the DDNTA ctypes.xsd.	-->
+    <!--===== This file must be place in the folder that contains the "Include-files" folder.	-->
+    <!--===== The ctypes.xsd remains as per the DDNTA, but must be in the "Include-files" folder-->
+    <!--===== This matches exactly the structured on ERMIS and wont change any other IE	messages-->
+    <!--================================================================================-->
+    <!--===== Includes                                                                        -->
+    <!--================================================================================-->
+    <xs:include schemaLocation="../ctypes.xsd" />
+    <xs:complexType name="CUSTOM_CommodityType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC025C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="descriptionOfGoods" type="DescriptionOfGoodsContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Description of goods" />
+                        <format value="an..512" />
+                        <optionality value="R" />
+                        <xsdBaseType value="AlphaNumeric_MAX512" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="cusCode" minOccurs="0" type="CusCodeContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CUS code" />
+                        <codeList code="CL016" type="business" name="CUSCode" />
+                        <format value="an9" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CommodityCode" minOccurs="0" type="CommodityCodeType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="COMMODITY CODE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DangerousGoods" minOccurs="0" maxOccurs="99" type="DangerousGoodsType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="DANGEROUS GOODS" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="GOODS MEASURE" />
+                        <optionality value="O" /> <!--##Changed to Optional (IE025)##-->
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_CommodityType08">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 2/91 messages: CC029C, CC043C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="descriptionOfGoods" type="DescriptionOfGoodsContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Description of goods" />
+                        <format value="an..512" />
+                        <optionality value="R" />
+                        <xsdBaseType value="AlphaNumeric_MAX512" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="cusCode" minOccurs="0" type="CusCodeContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CUS code" />
+                        <codeList code="CL016" type="business" name="CUSCode" />
+                        <format value="an9" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CommodityCode" minOccurs="0" type="CommodityCodeType05">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="COMMODITY CODE" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DangerousGoods" minOccurs="0" maxOccurs="99" type="DangerousGoodsType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="DANGEROUS GOODS" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="GoodsMeasure" minOccurs="0" type="GoodsMeasureType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="GOODS MEASURE" />
+                        <optionality value="O" /> <!--##Changed to Optional (IE029 & IE043)##-->
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_ConsignmentItemType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC025C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="goodsItemNumber" type="GoodsItemNumberContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Goods item number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="NumericWithoutZero_5" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="declarationGoodsItemNumber" type="DeclarationGoodsItemNumberContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Declaration goods item number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="DeclarationGoodsItemNumberType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="releaseType" type="ReleaseTypeContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Release type" />
+                        <codeList code="CL163" type="business" name="ReleaseType" />
+                        <format value="n1" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Commodity" type="CUSTOM_CommodityType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="COMMODITY" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Packaging" maxOccurs="99" type="PackagingType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PACKAGING" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_ConsignmentItemType03">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="goodsItemNumber" type="GoodsItemNumberContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Goods item number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="NumericWithoutZero_5" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="declarationGoodsItemNumber" type="DeclarationGoodsItemNumberContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Declaration goods item number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="DeclarationGoodsItemNumberType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="declarationType" minOccurs="0" type="DeclarationTypeContentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Declaration type" />
+                        <codeList code="CL232" type="business" name="DeclarationTypeItemLevel" />
+                        <format value="an..5" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDispatch" minOccurs="0" type="CountryOfDispatchContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of dispatch" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDestination" minOccurs="0" type="CountryOfDestinationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of destination" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="referenceNumberUCR" minOccurs="0" type="ReferenceNumberUCRContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Reference number UCR" />
+                        <format value="an..35" />
+                        <optionality value="D" />
+                        <xsdBaseType value="UCRReferenceNumber35" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignee" minOccurs="0" type="ConsigneeType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNEE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalSupplyChainActor" minOccurs="0" maxOccurs="99" type="AdditionalSupplyChainActorType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL SUPPLY CHAIN ACTOR" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Commodity" type="CUSTOM_CommodityType08">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="COMMODITY" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Packaging" maxOccurs="99" type="PackagingType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PACKAGING" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PreviousDocument" minOccurs="0" maxOccurs="99" type="PreviousDocumentType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PREVIOUS DOCUMENT" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportingDocument" minOccurs="0" maxOccurs="99" type="SupportingDocumentType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="SUPPORTING DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportDocument" minOccurs="0" maxOccurs="99" type="TransportDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalReference" minOccurs="0" maxOccurs="99" type="AdditionalReferenceType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL REFERENCE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalInformation" minOccurs="0" maxOccurs="99" type="AdditionalInformationType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL INFORMATION" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportCharges" minOccurs="0" type="TransportChargesType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT CHARGES" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_ConsignmentItemType04">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC043C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="goodsItemNumber" type="GoodsItemNumberContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Goods item number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="NumericWithoutZero_5" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="declarationGoodsItemNumber" type="DeclarationGoodsItemNumberContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Declaration goods item number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="DeclarationGoodsItemNumberType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="declarationType" minOccurs="0" type="DeclarationTypeContentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Declaration type" />
+                        <codeList code="CL232" type="business" name="DeclarationTypeItemLevel" />
+                        <format value="an..5" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDestination" minOccurs="0" type="CountryOfDestinationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of destination" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignee" minOccurs="0" type="ConsigneeType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNEE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Commodity" type="CUSTOM_CommodityType08">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="COMMODITY" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Packaging" maxOccurs="99" type="PackagingType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PACKAGING" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PreviousDocument" minOccurs="0" maxOccurs="99" type="PreviousDocumentType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PREVIOUS DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportingDocument" minOccurs="0" maxOccurs="99" type="SupportingDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="SUPPORTING DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportDocument" minOccurs="0" maxOccurs="99" type="TransportDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalReference" minOccurs="0" maxOccurs="99" type="AdditionalReferenceType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL REFERENCE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalInformation" minOccurs="0" maxOccurs="99" type="AdditionalInformationType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL INFORMATION" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_ConsignmentType03">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC025C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="HouseConsignment" maxOccurs="1999" type="CUSTOM_HouseConsignmentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="HOUSE CONSIGNMENT" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_ConsignmentType04">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="countryOfDispatch" minOccurs="0" type="CountryOfDispatchContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of dispatch" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDestination" minOccurs="0" type="CountryOfDestinationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of destination" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="containerIndicator" type="Flag">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Container indicator" />
+                        <codeList code="CL027" type="technical" name="Flag" />
+                        <format value="n1" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="inlandModeOfTransport" minOccurs="0" type="InlandModeOfTransportContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Inland mode of transport" />
+                        <codeList code="CL218" type="business" name="TransportModeCode" />
+                        <format value="n1" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="modeOfTransportAtTheBorder" minOccurs="0" type="ModeOfTransportAtTheBorderContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Mode of transport at the border" />
+                        <codeList code="CL218" type="business" name="TransportModeCode" />
+                        <format value="n1" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="grossMass" type="GrossMassContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Gross mass" />
+                        <format value="n..16,6" />
+                        <optionality value="R" />
+                        <xsdBaseType value="DecimalWithoutZero_16_6" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="referenceNumberUCR" minOccurs="0" type="ReferenceNumberUCRContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Reference number UCR" />
+                        <format value="an..35" />
+                        <optionality value="D" />
+                        <xsdBaseType value="UCRReferenceNumber35" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Carrier" minOccurs="0" type="CarrierType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CARRIER" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignor" minOccurs="0" type="ConsignorType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNOR" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignee" minOccurs="0" type="ConsigneeType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNEE" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalSupplyChainActor" minOccurs="0" maxOccurs="99" type="AdditionalSupplyChainActorType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL SUPPLY CHAIN ACTOR" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportEquipment" minOccurs="0" maxOccurs="9999" type="TransportEquipmentType05">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT EQUIPMENT" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="LocationOfGoods" minOccurs="0" type="LocationOfGoodsType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="LOCATION OF GOODS" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DepartureTransportMeans" minOccurs="0" maxOccurs="999" type="DepartureTransportMeansType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="DEPARTURE TRANSPORT MEANS" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CountryOfRoutingOfConsignment" minOccurs="0" maxOccurs="99" type="CountryOfRoutingOfConsignmentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="COUNTRY OF ROUTING OF CONSIGNMENT" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ActiveBorderTransportMeans" minOccurs="0" maxOccurs="9" type="ActiveBorderTransportMeansType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ACTIVE BORDER TRANSPORT MEANS" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PlaceOfLoading" minOccurs="0" type="PlaceOfLoadingType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PLACE OF LOADING" />
+                        <optionality value="O" /> <!--##Changed to Optional (IE029)##-->
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PlaceOfUnloading" minOccurs="0" type="PlaceOfUnloadingType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PLACE OF UNLOADING" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PreviousDocument" minOccurs="0" maxOccurs="9999" type="PreviousDocumentType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PREVIOUS DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportingDocument" minOccurs="0" maxOccurs="99" type="SupportingDocumentType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="SUPPORTING DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportDocument" minOccurs="0" maxOccurs="99" type="TransportDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalReference" minOccurs="0" maxOccurs="99" type="AdditionalReferenceType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL REFERENCE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalInformation" minOccurs="0" maxOccurs="99" type="AdditionalInformationType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL INFORMATION" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportCharges" minOccurs="0" type="TransportChargesType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT CHARGES" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="HouseConsignment" maxOccurs="1999" type="CUSTOM_HouseConsignmentType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="HOUSE CONSIGNMENT" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_ConsignmentType05">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC043C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="countryOfDestination" minOccurs="0" type="CountryOfDestinationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of destination" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="containerIndicator" type="Flag">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Container indicator" />
+                        <codeList code="CL027" type="technical" name="Flag" />
+                        <format value="n1" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="inlandModeOfTransport" minOccurs="0" type="InlandModeOfTransportContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Inland mode of transport" />
+                        <codeList code="CL218" type="business" name="TransportModeCode" />
+                        <format value="n1" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="grossMass" minOccurs="0" type="GrossMassContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Gross mass" />
+                        <format value="n..16,6" />
+                        <optionality value="D" />
+                        <xsdBaseType value="DecimalWithoutZero_16_6" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignor" minOccurs="0" type="ConsignorType05">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNOR" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignee" minOccurs="0" type="ConsigneeType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNEE" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportEquipment" minOccurs="0" maxOccurs="9999" type="TransportEquipmentType05">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT EQUIPMENT" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DepartureTransportMeans" minOccurs="0" maxOccurs="999" type="DepartureTransportMeansType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="DEPARTURE TRANSPORT MEANS" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PreviousDocument" minOccurs="0" maxOccurs="9999" type="PreviousDocumentType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PREVIOUS DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportingDocument" minOccurs="0" maxOccurs="99" type="SupportingDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="SUPPORTING DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportDocument" minOccurs="0" maxOccurs="99" type="TransportDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalReference" minOccurs="0" maxOccurs="99" type="AdditionalReferenceType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL REFERENCE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalInformation" minOccurs="0" maxOccurs="99" type="AdditionalInformationType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL INFORMATION" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Incident" minOccurs="0" maxOccurs="9" type="IncidentType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="INCIDENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="HouseConsignment" maxOccurs="1999" type="CUSTOM_HouseConsignmentType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="HOUSE CONSIGNMENT" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_HouseConsignmentType02">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC025C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="sequenceNumber" type="SequenceNumberContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Sequence number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="NumericWithoutZero_5" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="releaseType" type="ReleaseTypeContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Release type" />
+                        <codeList code="CL163" type="business" name="ReleaseType" />
+                        <format value="n1" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ConsignmentItem" minOccurs="0" maxOccurs="999" type="CUSTOM_ConsignmentItemType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNMENT ITEM" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_HouseConsignmentType03">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC029C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="sequenceNumber" type="SequenceNumberContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Sequence number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="NumericWithoutZero_5" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDispatch" minOccurs="0" type="CountryOfDispatchContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of dispatch" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDestination" minOccurs="0" type="CountryOfDestinationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of destination" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="grossMass" type="GrossMassContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Gross mass" />
+                        <format value="n..16,6" />
+                        <optionality value="R" />
+                        <xsdBaseType value="DecimalWithoutZero_16_6" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="referenceNumberUCR" minOccurs="0" type="ReferenceNumberUCRContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Reference number UCR" />
+                        <format value="an..35" />
+                        <optionality value="D" />
+                        <xsdBaseType value="UCRReferenceNumber35" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="securityIndicatorFromExportDeclaration" minOccurs="0" type="SecurityIndicatorFromExportDeclarationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Security indicator from export declaration" />
+                        <codeList code="CL217" type="business" name="DeclarationTypeSecurity" />
+                        <format value="n1" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignor" minOccurs="0" type="ConsignorType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNOR" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignee" minOccurs="0" type="ConsigneeType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNEE" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalSupplyChainActor" minOccurs="0" maxOccurs="99" type="AdditionalSupplyChainActorType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL SUPPLY CHAIN ACTOR" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DepartureTransportMeans" minOccurs="0" maxOccurs="999" type="DepartureTransportMeansType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="DEPARTURE TRANSPORT MEANS" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PreviousDocument" minOccurs="0" maxOccurs="99" type="PreviousDocumentType07">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PREVIOUS DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportingDocument" minOccurs="0" maxOccurs="99" type="SupportingDocumentType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="SUPPORTING DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportDocument" minOccurs="0" maxOccurs="99" type="TransportDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalReference" minOccurs="0" maxOccurs="99" type="AdditionalReferenceType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL REFERENCE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalInformation" minOccurs="0" maxOccurs="99" type="AdditionalInformationType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL INFORMATION" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportCharges" minOccurs="0" type="TransportChargesType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT CHARGES" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ConsignmentItem" maxOccurs="999" type="CUSTOM_ConsignmentItemType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNMENT ITEM" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CUSTOM_HouseConsignmentType04">
+        <xs:annotation>
+            <xs:documentation>
+                <usedBy>Used by 1/91 messages: CC043C</usedBy>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="sequenceNumber" type="SequenceNumberContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Sequence number" />
+                        <format value="n..5" />
+                        <optionality value="R" />
+                        <xsdBaseType value="NumericWithoutZero_5" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="countryOfDestination" minOccurs="0" type="CountryOfDestinationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Country of destination" />
+                        <codeList code="CL008" type="business" name="CountryCodesFullList" />
+                        <format value="a2" />
+                        <optionality value="D" />
+                        <xsdBaseType value="CountryCodeType" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="grossMass" type="GrossMassContentType01">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Gross mass" />
+                        <format value="n..16,6" />
+                        <optionality value="R" />
+                        <xsdBaseType value="DecimalWithoutZero_16_6" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="securityIndicatorFromExportDeclaration" minOccurs="0" type="SecurityIndicatorFromExportDeclarationContentType">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="Security indicator from export declaration" />
+                        <codeList code="CL217" type="business" name="DeclarationTypeSecurity" />
+                        <format value="n1" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignor" minOccurs="0" type="ConsignorType06">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNOR" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Consignee" minOccurs="0" type="ConsigneeType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNEE" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DepartureTransportMeans" minOccurs="0" maxOccurs="999" type="DepartureTransportMeansType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="DEPARTURE TRANSPORT MEANS" />
+                        <optionality value="D" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PreviousDocument" minOccurs="0" maxOccurs="99" type="PreviousDocumentType07">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="PREVIOUS DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportingDocument" minOccurs="0" maxOccurs="99" type="SupportingDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="SUPPORTING DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TransportDocument" minOccurs="0" maxOccurs="99" type="TransportDocumentType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="TRANSPORT DOCUMENT" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalReference" minOccurs="0" maxOccurs="99" type="AdditionalReferenceType03">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL REFERENCE" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AdditionalInformation" minOccurs="0" maxOccurs="99" type="AdditionalInformationType02">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="ADDITIONAL INFORMATION" />
+                        <optionality value="O" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ConsignmentItem" maxOccurs="999" type="CUSTOM_ConsignmentItemType04">
+                <xs:annotation>
+                    <xs:documentation>
+                        <description value="CONSIGNMENT ITEM" />
+                        <optionality value="R" />
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

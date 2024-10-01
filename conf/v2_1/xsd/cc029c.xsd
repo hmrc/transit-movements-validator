@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.2" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
   <!--================================================================================-->
   <!--===== IE029: E_REL_TRA                                                                -->
   <!--===== RELEASE FOR TRANSIT                                                             -->
   <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD Version 51.8.2                                                              -->
+  <!--===== XSD Version 51.8.6_Custom                                                       -->
   <!--================================================================================-->
+  <!--================================================================================-->
+  <!--===== Customisation Comments:															-->
+  <!--===== CUSTOM_ConsignmentType04 is the only alteraton in this IE029 XSD.  				-->
+  <!--===== This is a label chang for custom types only as seen in custom_ctypes.xsd.		-->
+  <!--===== GoodsMeasure and PlaceOfLoading have been made Optional for IE025, IE029 & IE045-->
+  <!--===== These files (IE025, IE029 & IE045) should replace their DDNTA versions.			-->
   <!--================================================================================-->
   <!--===== Includes                                                                        -->
   <!--================================================================================-->
-  <xs:include schemaLocation="ctypes.xsd" />
+  <xs:include schemaLocation="include-files/custom_ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
   <!--================================================================================-->
   <!--===== Root Element                                                                    -->
@@ -101,7 +107,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="Consignment" type="ConsignmentType04">
+      <xs:element name="Consignment" type="CUSTOM_ConsignmentType04">
         <xs:annotation>
           <xs:documentation>
             <description value="CONSIGNMENT" />

@@ -86,6 +86,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
         r =>
           r.isRight mustBe true
       }
+
     }
 
     "when valid CC170C JSON is provided for the given message type, return a Right" in {
@@ -146,7 +147,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
                   "#/definitions/n1:PreparationDateAndTimeContentType",
                   "$.n1:CC014C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
                 ),
-                Nil
+                List()
               )
             )
           )
@@ -164,10 +165,31 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:PreparationDateAndTimeContentType",
-                  "$.n1:CC007C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Authorisation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:PreparationDateAndTimeContentType",
+                    "$.n1:CC007C.preparationDateAndTime: does not match the date-time pattern - date or time provided is invalid."
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -206,10 +228,147 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:LimitDateContentType",
-                  "$.n1:CC013C.TransitOperation.limitDate: does not match the date pattern - date provided is invalid."
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC013C.Consignment.HouseConsignment[0].TransportDocument[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.CountryOfRoutingOfConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].Packaging[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Guarantee[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:GoodsItemNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].goodsItemNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Guarantee[0].GuaranteeReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].Commodity.DangerousGoods[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.CustomsOfficeOfExitForTransitDeclared[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.CustomsOfficeOfTransitDeclared[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Authorisation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].TransportDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.ActiveBorderTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:LimitDateContentType",
+                    "$.n1:CC013C.TransitOperation.limitDate: does not match the date pattern - date provided is invalid."
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -221,7 +380,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
       val result = sut.validate(MessageType.DeclarationData, singleUseStringSource("{'ABC':}"))
 
       whenReady(result.value) {
-        case Left(x: FailedToParse) => succeed
+        case Left(_: FailedToParse) => succeed
         case _                      => fail("Expected Left(FailedToPasrse)")
       }
     }
@@ -266,10 +425,28 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:CC007CType/required",
-                  "$.n1:CC007C.messageSender: is missing but it is required"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Authorisation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError("#/definitions/n1:CC007CType/required", "$.n1:CC007C.messageSender: is missing but it is required"),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -287,10 +464,31 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:MessageSenderContentType/pattern",
-                  "$.n1:CC007C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Authorisation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC007C.Consignment.Incident[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:MessageSenderContentType/pattern",
+                    "$.n1:CC007C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  )
+                )
               )
             )
           )
@@ -308,10 +506,144 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:CC013CType/required",
-                  "$.n1:CC013C.messageSender: is missing but it is required"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC013C.Consignment.HouseConsignment[0].TransportDocument[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.CountryOfRoutingOfConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].Packaging[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Guarantee[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:GoodsItemNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].goodsItemNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Guarantee[0].GuaranteeReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].Commodity.DangerousGoods[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.CustomsOfficeOfExitForTransitDeclared[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.CustomsOfficeOfTransitDeclared[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError("#/definitions/n1:CC013CType/required", "$.n1:CC013C.messageSender: is missing but it is required"),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Authorisation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].TransportDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.ActiveBorderTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -329,10 +661,147 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:MessageSenderContentType/pattern",
-                  "$.n1:CC013C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC013C.Consignment.HouseConsignment[0].TransportDocument[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.CountryOfRoutingOfConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].Packaging[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:MessageSenderContentType/pattern",
+                    "$.n1:CC013C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Guarantee[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].SupportingDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:GoodsItemNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].goodsItemNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Guarantee[0].GuaranteeReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].Commodity.DangerousGoods[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.CustomsOfficeOfExitForTransitDeclared[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.CustomsOfficeOfTransitDeclared[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalInformation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].PreviousDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Authorisation[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].TransportDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].ConsignmentItem[0].AdditionalSupplyChainActor[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.ActiveBorderTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.HouseConsignment[0].AdditionalReference[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.TransportDocument[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC013C.Consignment.DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -392,10 +861,27 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:MessageSenderContentType/pattern",
-                  "$.n1:CC015C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC015C.Consignment.HouseConsignment[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:MessageSenderContentType/pattern",
+                    "$.n1:CC015C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC015C.Consignment.HouseConsignment[0].ConsignmentItem[0].Packaging[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC015C.Guarantee[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:GoodsItemNumberContentType/type",
+                    "$.n1:CC015C.Consignment.HouseConsignment[0].ConsignmentItem[0].goodsItemNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -455,10 +941,36 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:CC170CType/required",
-                  "$.n1:CC170C.messageSender: is missing but it is required"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC170C.Consignment.HouseConsignment[0].DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError("#/definitions/n1:CC170CType/required", "$.n1:CC170C.messageSender: is missing but it is required"),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.ActiveBorderTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.HouseConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )
@@ -476,10 +988,39 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
             ValidationError.JsonFailedValidation(
               NonEmptyList(
                 JsonSchemaValidationError(
-                  "#/definitions/n1:MessageSenderContentType/pattern",
-                  "$.n1:CC170C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  "#/definitions/n1:SequenceNumberContentType/type",
+                  "$.n1:CC170C.Consignment.HouseConsignment[0].DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
                 ),
-                Nil
+                List(
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.TransportEquipment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.TransportEquipment[0].Seal[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:MessageSenderContentType/pattern",
+                    "$.n1:CC170C.messageSender: does not match the regex pattern ^([\\w\\D]{1,35})$"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.DepartureTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.ActiveBorderTransportMeans[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.HouseConsignment[0].sequenceNumber: string found, integer expected"
+                  ),
+                  JsonSchemaValidationError(
+                    "#/definitions/n1:SequenceNumberContentType/type",
+                    "$.n1:CC170C.Consignment.TransportEquipment[0].GoodsReference[0].sequenceNumber: string found, integer expected"
+                  )
+                )
               )
             )
           )

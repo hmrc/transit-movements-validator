@@ -20,11 +20,11 @@ import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.hmrc.transitmovementsvalidator.itbase.StreamTestHelpers
-import uk.gov.hmrc.transitmovementsvalidator.itbase.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.itbase.TestObjects
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.StreamTestHelpers
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestObjects
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

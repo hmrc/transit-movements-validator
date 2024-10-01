@@ -3678,7 +3678,7 @@
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType02"
@@ -3722,7 +3722,7 @@
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "releaseType": {
           "$ref": "#/definitions/n1:ReleaseTypeContentType"
@@ -3820,7 +3820,7 @@
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType01"
@@ -3905,7 +3905,7 @@
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         }
       },
       "required": [
@@ -3965,7 +3965,7 @@
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         }
       },
       "required": [
@@ -3999,7 +3999,7 @@
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType01"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         }
       },
       "required": [
@@ -4086,7 +4086,7 @@
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
@@ -4149,7 +4149,7 @@
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
@@ -4244,7 +4244,7 @@
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType02"
@@ -4372,7 +4372,7 @@
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
@@ -4466,7 +4466,7 @@
           "$ref": "#/definitions/n1:DeclarationTypeContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
@@ -10145,16 +10145,11 @@
       "pattern": "^([0-9])$",
       "type": "string"
     },
-    "n1:GoodsItemNumberContentType01": {
-      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
+    "n1:GoodsItemNumberContentType": {
+      "description": "Used by 17/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maximum": 99999,
       "minimum": 1,
       "type": "integer"
-    },
-    "n1:GoodsItemNumberContentType02": {
-      "description": "Used by 16/91 messages: CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
-      "pattern": "^([0-9]{1,5})$",
-      "type": "string"
     },
     "n1:GoodsItemType": {
       "additionalProperties": false,
@@ -15570,7 +15565,7 @@
           "$ref": "#/definitions/n1:Flag"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType01"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumber": {
           "$ref": "#/definitions/n1:ReferenceNumberContentType04"
@@ -15653,7 +15648,7 @@
           "$ref": "#/definitions/n1:ComplementOfInformationContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType01"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "measurementUnitAndQualifier": {
           "$ref": "#/definitions/n1:MeasurementUnitAndQualifierContentType"
@@ -15706,7 +15701,7 @@
           "$ref": "#/definitions/n1:ComplementOfInformationContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType02"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumber": {
           "$ref": "#/definitions/n1:ReferenceNumberContentType02"
@@ -15854,7 +15849,7 @@
           "$ref": "#/definitions/n1:ComplementOfInformationContentType02"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType01"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "measurementUnitAndQualifier": {
           "$ref": "#/definitions/n1:MeasurementUnitAndQualifierContentType"
@@ -15983,7 +15978,7 @@
           "$ref": "#/definitions/n1:ComplementOfInformationContentType01"
         },
         "goodsItemNumber": {
-          "$ref": "#/definitions/n1:GoodsItemNumberContentType01"
+          "$ref": "#/definitions/n1:GoodsItemNumberContentType"
         },
         "referenceNumber": {
           "$ref": "#/definitions/n1:ReferenceNumberContentType02"
@@ -17004,8 +16999,10 @@
     },
     "n1:SequenceNumberContentType": {
       "description": "Used by 50/91 messages: CC007C, CC013C, CC015C, CC017C, CC022C, CC025C, CC029C, CC034C, CC037C, CC042C, CC043C, CC044C, CC048C, CC055C, CC060C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CD001C, CD003C, CD010C, CD012C, CD018C, CD024C, CD038C, CD050C, CD063C, CD070C, CD071C, CD115C, CD144C, CD145C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD971C",
-      "pattern": "^([0-9]{1,5})$",
-      "type": "string"
+      "pattern": "^([1-9][0-9]{0,4})$",
+      "maximum": 99999,
+      "minimum": 1,
+      "type": "integer"
     },
     "n1:SeriesElementsType": {
       "additionalProperties": false,

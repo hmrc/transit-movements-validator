@@ -11709,9 +11709,6 @@
           "$ref": "#/definitions/n1:NameContentType01"
         }
       },
-      "required": [
-        "identificationNumber"
-      ],
       "type": "object"
     },
     "n1:HarmonizedSystemSubHeadingCodeContentType": {
