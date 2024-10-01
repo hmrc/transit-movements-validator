@@ -30,18 +30,18 @@
       "modeOfTransportAtTheBorder": "0",
       "TransportEquipment": [
         {
-          "sequenceNumber": "1234",
+          "sequenceNumber": 1234,
           "containerIdentificationNumber": "string",
           "numberOfSeals": 100,
           "Seal": [
             {
-              "sequenceNumber": "1234",
+              "sequenceNumber": 1234,
               "identifier": "string"
             }
           ],
           "GoodsReference": [
             {
-              "sequenceNumber": "1234",
+              "sequenceNumber": 1234,
               "declarationGoodsItemNumber": 100
             }
           ]
@@ -82,7 +82,7 @@
       },
       "DepartureTransportMeans": [
         {
-          "sequenceNumber": "1234",
+          "sequenceNumber": 1234,
           "typeOfIdentification": "12",
           "identificationNumber": "string",
           "nationality": "GB"
@@ -90,7 +90,7 @@
       ],
       "ActiveBorderTransportMeans": [
         {
-          "sequenceNumber": "1234",
+          "sequenceNumber": 1234,
           "customsOfficeAtBorderReferenceNumber": "GB123456",
           "typeOfIdentification": "12",
           "identificationNumber": "string",
@@ -105,10 +105,10 @@
       },
       "HouseConsignment": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "DepartureTransportMeans": [
             {
-              "sequenceNumber": "1234",
+              "sequenceNumber": 1234,
               "typeOfIdentification": "12",
               "identificationNumber": "string",
               "nationality": "GB"

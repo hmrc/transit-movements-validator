@@ -26,7 +26,7 @@
       "grossMass": 6430669292.48125,
       "HouseConsignment": [
         {
-          "sequenceNumber": "48711",
+          "sequenceNumber": 48711,
           "grossMass": 6430669292.48125,
           "AdditionalSupplyChainActor": [],
           "DepartureTransportMeans": [],
@@ -37,7 +37,7 @@
           "AdditionalInformation": [],
           "ConsignmentItem": [
             {
-              "goodsItemNumber": "18914",
+              "goodsItemNumber": 18914,
               "declarationGoodsItemNumber": 1458,
               "AdditionalSupplyChainActor": [],
               "Commodity": {
@@ -46,7 +46,7 @@
               },
               "Packaging": [
                 {
-                  "sequenceNumber": "48711",
+                  "sequenceNumber": 48711,
                   "typeOfPackages": "Oi"
                 }
               ],
@@ -63,7 +63,7 @@
     "messageIdentification": "6Onxa3En",
     "Guarantee": [
       {
-        "sequenceNumber": "48711",
+        "sequenceNumber": 48711,
         "guaranteeType": "1",
         "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
         "GuaranteeReference": []
