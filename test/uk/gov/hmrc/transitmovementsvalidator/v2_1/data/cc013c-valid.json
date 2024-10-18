@@ -61,25 +61,25 @@
       },
       "AdditionalSupplyChainActor": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "role": "abc",
           "identificationNumber": "AB!"
         }
       ],
       "TransportEquipment": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "containerIdentificationNumber": "string",
           "numberOfSeals": 100,
           "Seal": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "identifier": "string"
             }
           ],
           "GoodsReference": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "declarationGoodsItemNumber": 100
             }
           ]
@@ -120,7 +120,7 @@
       },
       "DepartureTransportMeans": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "typeOfIdentification": "12",
           "identificationNumber": "string",
           "nationality": "XI"
@@ -128,13 +128,13 @@
       ],
       "CountryOfRoutingOfConsignment": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "country": "GB"
         }
       ],
       "ActiveBorderTransportMeans": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "customsOfficeAtBorderReferenceNumber": "abcdabcd",
           "typeOfIdentification": "12",
           "identificationNumber": "string",
@@ -154,7 +154,7 @@
       },
       "PreviousDocument": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "type": "abcd",
           "referenceNumber": "string",
           "complementOfInformation": "string"
@@ -162,7 +162,7 @@
       ],
       "SupportingDocument": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "type": "abcd",
           "referenceNumber": "string",
           "documentLineItemNumber": 100,
@@ -171,21 +171,21 @@
       ],
       "TransportDocument": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "type": "abcd",
           "referenceNumber": "string"
         }
       ],
       "AdditionalReference": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "type": "abcd",
           "referenceNumber": "string"
         }
       ],
       "AdditionalInformation": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "code": "token",
           "text": "string"
         }
@@ -195,7 +195,7 @@
       },
       "HouseConsignment": [
         {
-          "sequenceNumber": "123",
+          "sequenceNumber": 123,
           "countryOfDispatch": "st",
           "grossMass": 1000,
           "referenceNumberUCR": "string",
@@ -226,14 +226,14 @@
           },
           "AdditionalSupplyChainActor": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "role": "abc",
               "identificationNumber": "AV!---"
             }
           ],
           "DepartureTransportMeans": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "typeOfIdentification": "12",
               "identificationNumber": "string",
               "nationality": "XI"
@@ -241,7 +241,7 @@
           ],
           "PreviousDocument": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "type": "abcd",
               "referenceNumber": "string",
               "complementOfInformation": "string"
@@ -249,7 +249,7 @@
           ],
           "SupportingDocument": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "type": "abcd",
               "referenceNumber": "string",
               "documentLineItemNumber": 100,
@@ -258,21 +258,21 @@
           ],
           "TransportDocument": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "type": "abcd",
               "referenceNumber": "string"
             }
           ],
           "AdditionalReference": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "type": "abcd",
               "referenceNumber": "string"
             }
           ],
           "AdditionalInformation": [
             {
-              "sequenceNumber": "123",
+              "sequenceNumber": 123,
               "code": "token",
               "text": "string"
             }
@@ -282,7 +282,7 @@
           },
           "ConsignmentItem": [
             {
-              "goodsItemNumber": "123",
+              "goodsItemNumber": 123,
               "declarationGoodsItemNumber": 100,
               "declarationType": "token",
               "countryOfDispatch": "GB",
@@ -300,7 +300,7 @@
               },
               "AdditionalSupplyChainActor": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "role": "abc",
                   "identificationNumber": "AB!--!"
                 }
@@ -314,7 +314,7 @@
                 },
                 "DangerousGoods": [
                   {
-                    "sequenceNumber": "123",
+                    "sequenceNumber": 123,
                     "UNNumber": "abcd"
                   }
                 ],
@@ -326,7 +326,7 @@
               },
               "Packaging": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "typeOfPackages": "ab",
                   "numberOfPackages": 100,
                   "shippingMarks": "string"
@@ -334,7 +334,7 @@
               ],
               "PreviousDocument": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "type": "abcd",
                   "referenceNumber": "string",
                   "goodsItemNumber": 100,
@@ -347,7 +347,7 @@
               ],
               "SupportingDocument": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "type": "abcd",
                   "referenceNumber": "string",
                   "documentLineItemNumber": 100,
@@ -356,21 +356,21 @@
               ],
               "TransportDocument": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "type": "abcd",
                   "referenceNumber": "string"
                 }
               ],
               "AdditionalReference": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "type": "abcd",
                   "referenceNumber": "string"
                 }
               ],
               "AdditionalInformation": [
                 {
-                  "sequenceNumber": "123",
+                  "sequenceNumber": 123,
                   "code": "token",
                   "text": "string"
                 }
@@ -385,13 +385,13 @@
     },
     "CustomsOfficeOfExitForTransitDeclared": [
       {
-        "sequenceNumber": "123",
+        "sequenceNumber": 123,
         "referenceNumber": "AB123456"
       }
     ],
     "CustomsOfficeOfTransitDeclared": [
       {
-        "sequenceNumber": "123",
+        "sequenceNumber": 123,
         "referenceNumber": "AB123456",
         "arrivalDateAndTimeEstimated": "2013-12-21T11:32:42"
       }
@@ -404,7 +404,7 @@
     "correlationIdentifier": "token",
     "Authorisation": [
       {
-        "sequenceNumber": "123",
+        "sequenceNumber": 123,
         "type": "0",
         "referenceNumber": "string"
       }
@@ -439,12 +439,12 @@
     "messageIdentification": "token",
     "Guarantee": [
       {
-        "sequenceNumber": "123",
+        "sequenceNumber": 123,
         "guaranteeType": "B",
         "otherGuaranteeReference": "GBP",
         "GuaranteeReference": [
           {
-            "sequenceNumber": "123",
+            "sequenceNumber": 123,
             "GRN": "ABC",
             "accessCode": "stri",
             "amountToBeCovered": 1000,

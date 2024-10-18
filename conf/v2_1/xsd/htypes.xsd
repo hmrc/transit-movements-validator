@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.2" vc:minVersion="1.1" targetNamespace="http://ncts.dgtaxud.ec">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1" targetNamespace="http://ncts.dgtaxud.ec">
   <!--=======================================================-->
   <!--============= Message Header Definition  ==============-->
   <!--=======================================================-->
@@ -56,11 +56,11 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <!--================================================================================-->
-  <!--===== MessageIdentification                                                           -->
-  <!--================================================================================-->
+ <!--================================================================================--> 
+ <!--===== MessageIdentification                                                           -->
+ <!--================================================================================-->
   <xs:simpleType name="MessageIdentificationContentType">
-    <xs:restriction base="xs:token">
+      <xs:restriction base="xs:token">
       <xs:pattern value=".{1,35}" />
     </xs:restriction>
   </xs:simpleType>
@@ -68,7 +68,7 @@
   <!--===== MessageRecipient                                                                -->
   <!--================================================================================-->
   <xs:simpleType name="MessageRecipientContentType">
-    <xs:restriction base="xs:token">
+      <xs:restriction base="xs:token">
       <xs:pattern value=".{1,35}" />
     </xs:restriction>
   </xs:simpleType>
