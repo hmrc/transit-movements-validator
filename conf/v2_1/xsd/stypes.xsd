@@ -4183,6 +4183,11 @@
           <xs:documentation>Phase NCTS 5.1</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="NCTS5.1">
+        <xs:annotation>
+          <xs:documentation>Phase NCTS 5.1</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="NCTS5.0">
         <xs:annotation>
           <xs:documentation>Phase NCTS 5.0</xs:documentation>
