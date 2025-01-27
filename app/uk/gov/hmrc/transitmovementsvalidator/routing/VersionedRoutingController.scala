@@ -37,7 +37,7 @@ class VersionedRoutingController @Inject() (
     extends BackendController(cc)
     with StreamingParsers {
 
-  def validate(messageType: String): Action[Source[ByteString, _]] =
+  def validate(messageType: String): Action[Source[ByteString, ?]] =
     Action.async(streamFromMemory) {
       implicit request =>
         request.headers.get(Constants.APIVersionHeaderKey).map(_.trim.toLowerCase) match {

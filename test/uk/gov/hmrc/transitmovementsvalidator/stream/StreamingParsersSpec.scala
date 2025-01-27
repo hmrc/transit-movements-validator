@@ -37,7 +37,6 @@ import play.api.test.Helpers.status
 import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
-import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
 
 import java.nio.charset.StandardCharsets
 import scala.annotation.tailrec
@@ -52,7 +51,7 @@ class StreamingParsersSpec extends AnyFreeSpec with Matchers with TestActorSyste
     override val controllerComponents: ControllerComponents = stubControllerComponents()
     implicit val materializer: Materializer                 = Materializer(TestActorSystem.system)
 
-    def testFromMemory: Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
+    def testFromMemory: Action[Source[ByteString, ?]] = Action.async(streamFromMemory) {
       request => result.apply(request).run(request.body)(materializer)
     }
 
@@ -87,4 +86,5 @@ class StreamingParsersSpec extends AnyFreeSpec with Matchers with TestActorSyste
       }
     }
   }
+
 }

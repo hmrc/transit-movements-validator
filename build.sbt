@@ -1,7 +1,7 @@
 import uk.gov.hmrc.DefaultBuildSettings
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "3.5.2"
 
 val appName = "transit-movements-validator"
 
@@ -13,6 +13,7 @@ lazy val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := 9496,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions += "-Wconf:src=routes/.*:s",
+    scalacOptions ++= Seq("-rewrite", "-source:3.5-migration"),
     javaOptions ++= Seq(
       "-Djdk.xml.maxOccurLimit=100000"
     )
@@ -28,7 +29,7 @@ lazy val it = project
     libraryDependencies ++= AppDependencies.test,
     Test / fork := true,
     javaOptions ++= Seq(
-      "-Djdk.xml.maxOccurLimit=10000",
+      "-Djdk.xml.maxOccurLimit=10000"
     )
   )
 

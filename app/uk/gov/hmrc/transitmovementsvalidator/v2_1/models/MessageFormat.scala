@@ -33,23 +33,28 @@ sealed trait MessageFormat[A] {
 
   /** Formats the [[MessageType]] as the expected root node in the specified format
     *
-    * @param messageType The message type to get the root node from
-    * @return The root node
+    * @param messageType
+    *   The message type to get the root node from
+    * @return
+    *   The root node
     */
   def rootNode(messageType: MessageType): String
 
   /** Parses the stream into tokens of type A, which is format dependent
     *
-    * @return The flow that parses [[ByteString]]s into As
+    * @return
+    *   The flow that parses [[ByteString]]s into As
     */
-  def tokenParser: Flow[ByteString, A, _]
+  def tokenParser: Flow[ByteString, A, ?]
 
   /** Extracts the string value of the node at path.
     *
-    * @param path The path to the value
-    * @return A flow that extracts the value as a string
+    * @param path
+    *   The path to the value
+    * @return
+    *   A flow that extracts the value as a string
     */
-  def stringValueFlow(path: Seq[String]): Flow[A, String, _]
+  def stringValueFlow(path: Seq[String]): Flow[A, String, ?]
 }
 
 object MessageFormat {
@@ -57,7 +62,7 @@ object MessageFormat {
   case object Xml extends MessageFormat[ParseEvent] {
     override def rootNode(messageType: MessageType): String = messageType.rootNode
 
-    override def stringValueFlow(path: Seq[String]): Flow[ParseEvent, String, _] =
+    override def stringValueFlow(path: Seq[String]): Flow[ParseEvent, String, ?] =
       XmlParsing
         .subslice(path)
         .mapConcat {
@@ -72,7 +77,7 @@ object MessageFormat {
 
     override def rootNode(messageType: MessageType): String = s"n1:${messageType.rootNode}"
 
-    override def stringValueFlow(path: Seq[String]): Flow[ByteString, String, _] = {
+    override def stringValueFlow(path: Seq[String]): Flow[ByteString, String, ?] = {
       @tailrec
       def createPath(path: Seq[String], acc: JsonPath.Builder = JsonPath.Builder.start()): JsonPath =
         (path: @unchecked) match { // we know it won't be anything else
@@ -94,7 +99,7 @@ object MessageFormat {
         })
     }
 
-    override val tokenParser: Flow[ByteString, ByteString, _] = Flow[ByteString] // no-op for json
+    override val tokenParser: Flow[ByteString, ByteString, ?] = Flow[ByteString] // no-op for json
   }
 
 }

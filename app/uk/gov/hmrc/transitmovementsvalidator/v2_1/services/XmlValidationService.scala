@@ -56,7 +56,7 @@ class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends
         typ -> Future(buildParser(typ))
     }.toMap
 
-  override def validate(messageType: MessageType, source: Source[ByteString, _])(implicit
+  override def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =

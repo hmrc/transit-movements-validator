@@ -34,7 +34,7 @@ object SchemaValidationError {
     (
       (__ \ "schemaPath").read[String] and
         (__ \ "message").read[String]
-    )(JsonSchemaValidationError.apply _)
+    )(JsonSchemaValidationError.apply)
 
   implicit val jsonValidationErrorWrites: OWrites[JsonSchemaValidationError] =
     (
@@ -47,7 +47,7 @@ object SchemaValidationError {
       (__ \ "lineNumber").read[Int] and
         (__ \ "columnNumber").read[Int] and
         (__ \ "message").read[String]
-    )(XmlSchemaValidationError.apply _)
+    )(XmlSchemaValidationError.apply)
 
   implicit val xmlSchemaValidationErrorWrites: OWrites[XmlSchemaValidationError] =
     (
@@ -62,9 +62,18 @@ sealed trait SchemaValidationError
 
 case class JsonSchemaValidationError(schemaPath: String, message: String) extends SchemaValidationError
 
+object JsonSchemaValidationError {
+
+  def unapply(error: JsonSchemaValidationError): Option[(String, String)] =
+    Some((error.schemaPath, error.message))
+}
+
 case class XmlSchemaValidationError(lineNumber: Int, columnNumber: Int, message: String) extends SchemaValidationError
 
 object XmlSchemaValidationError {
+
+  def unapply(error: XmlSchemaValidationError): Option[(Int, Int, String)] =
+    Some((error.lineNumber, error.columnNumber, error.message))
 
   def fromSaxParseException(ex: SAXParseException) =
     XmlSchemaValidationError(ex.getLineNumber, ex.getColumnNumber, ex.getMessage)

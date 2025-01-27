@@ -79,7 +79,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService with Log
     )
     .toMap
 
-  override def validate(messageType: MessageType, source: Source[ByteString, _])(implicit
+  override def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
@@ -100,7 +100,7 @@ class JsonValidationServiceImpl @Inject() extends JsonValidationService with Log
       }
     }
 
-  private def validateJson(source: Source[ByteString, _], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
+  private def validateJson(source: Source[ByteString, ?], schemaValidator: JsonSchema)(implicit materializer: Materializer): Try[Set[ValidationMessage]] =
     Using(source.runWith(StreamConverters.asInputStream(20.seconds))) {
       jsonInput =>
         val jsonNode: JsonNode = mapper.readTree(jsonInput)
