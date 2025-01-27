@@ -13,7 +13,6 @@ lazy val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := 9496,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions += "-Wconf:src=routes/.*:s",
-    scalacOptions ++= Seq("-rewrite", "-source:3.5-migration"),
     javaOptions ++= Seq(
       "-Djdk.xml.maxOccurLimit=100000"
     )
