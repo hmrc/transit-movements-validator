@@ -28,11 +28,11 @@ object StreamTestHelpers extends StreamTestHelpers
 
 trait StreamTestHelpers {
 
-  def createStream(node: NodeSeq): Source[ByteString, _] = createStream(node.mkString)
+  def createStream(node: NodeSeq): Source[ByteString, ?] = createStream(node.mkString)
 
-  def createStream(jsValue: JsValue): Source[ByteString, _] = createStream(Json.stringify(jsValue))
+  def createStream(jsValue: JsValue): Source[ByteString, ?] = createStream(Json.stringify(jsValue))
 
-  def createStream(string: String): Source[ByteString, _] =
+  def createStream(string: String): Source[ByteString, ?] =
     Source.single(ByteString(string, StandardCharsets.UTF_8))
 
 }
