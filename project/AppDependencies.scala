@@ -1,10 +1,9 @@
-import play.core.PlayVersion.current
 import sbt._
 
 object AppDependencies {
 
   private val catsVersion         = "2.9.0"
-  private val boostrapPlayVersion = "9.3.0"
+  private val boostrapPlayVersion = "9.7.0"
   private val pekkoVersion        = "1.0.1"
 
   val compile = Seq(
@@ -21,8 +20,8 @@ object AppDependencies {
     "org.scalatest"          %% "scalatest"              % "3.2.12",
     "org.typelevel"          %% "cats-core"              % catsVersion,
     "org.pegdown"             % "pegdown"                % "1.6.0",
-    "org.scalatestplus.play" %% "scalatestplus-play"     % "5.1.0",
-    "org.scalatestplus"      %% "mockito-3-2"            % "3.1.2.0",
+    "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.1",
+    "org.scalatestplus"      %% "mockito-5-12"           % "3.2.19.0",
     "org.scalacheck"         %% "scalacheck"             % "1.16.0",
     "org.typelevel"          %% "discipline-scalatest"   % "2.1.5",
     "com.vladsch.flexmark"    % "flexmark-all"           % "0.62.2",

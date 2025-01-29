@@ -114,7 +114,7 @@ class MessagesControllerSpec
       Gen.oneOf(MessageType.requestValues)
     ) {
       messageType =>
-        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
@@ -136,10 +136,11 @@ class MessagesControllerSpec
 
     "on a valid XML file, with the application/xml content type, return No Content" in forAll(Gen.oneOf(MessageType.requestValues)) {
       messageType =>
-        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
+
         when(mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
@@ -211,7 +212,7 @@ class MessagesControllerSpec
 
     "on a valid XML file for a request or response type where response types are enabled, return No Content" in forAll(Gen.oneOf(MessageType.values)) {
       messageType =>
-        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+        when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
@@ -242,7 +243,7 @@ class MessagesControllerSpec
     "on an invalid XML file, return Ok with a list of errors" in {
       val errorList = NonEmptyList(XmlSchemaValidationError(1, 1, "text1"), List(XmlSchemaValidationError(2, 2, "text2")))
 
-      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.leftT[Future, Unit](ValidationError.XmlFailedValidation(errorList))
         )
@@ -273,7 +274,7 @@ class MessagesControllerSpec
 
     "on an exception being thrown during xml schema validation, must return Internal Server Error" in {
       val error = new IllegalStateException("Unable to extract schema")
-      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error)))
         )
@@ -301,7 +302,7 @@ class MessagesControllerSpec
     }
 
     "root node doesn't match messageType in XML file, return BadRequest with an error message" in {
-      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )
@@ -338,7 +339,7 @@ class MessagesControllerSpec
     "on an exception being thrown during xml business validation, must return Internal Server Error" in {
       val error = new IllegalStateException("Unable to extract schema")
 
-      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockXmlValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )
@@ -374,7 +375,7 @@ class MessagesControllerSpec
     lazy val invalidJson: String = "{"
 
     "on a valid JSON file, with the application/json content type, return No Content" in {
-      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )
@@ -429,7 +430,7 @@ class MessagesControllerSpec
         List(JsonSchemaValidationError("IE015C:MessageSender", "MessageSender element not in schema"))
       )
 
-      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.leftT[Future, ValidationError](ValidationError.JsonFailedValidation(errorList))
         )
@@ -489,7 +490,7 @@ class MessagesControllerSpec
 
     "on an exception being thrown during json validation, must return Internal Server Error" in {
       val error = new IllegalStateException("Unable to extract schema")
-      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
         )
@@ -517,7 +518,7 @@ class MessagesControllerSpec
     }
 
     "on an JsonParseException being thrown during json validation, must return Bad Request" in {
-      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ =>
             EitherT.leftT[Future, ValidationError](
@@ -547,7 +548,7 @@ class MessagesControllerSpec
       val result = versionedRoutingController.validate(validCode.code)(request)
 
       contentAsJson(result) mustBe Json.obj(
-        "code"    -> "BAD_REQUEST",
+        "code" -> "BAD_REQUEST",
         "message" -> "Unexpected character (''' (code 39)): was expecting double-quote to start field name\n at [Source: (akka.stream.impl.io.InputStreamAdapter); line: 1, column: 3]"
       )
       status(result) mustBe BAD_REQUEST
@@ -555,7 +556,7 @@ class MessagesControllerSpec
 
     "root node doesn't match messageType in json, return BadRequest with an error message" in {
 
-      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )
@@ -591,7 +592,7 @@ class MessagesControllerSpec
 
     "on an exception being thrown during json business validation, must return Internal Server Error" in {
       val error = new IllegalStateException("Unable to extract schema")
-      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, _]])(any[Materializer], any[ExecutionContext]))
+      when(mockJsonValidationService.validate(eqTo(validCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
         .thenAnswer(
           _ => EitherT.rightT[Future, ValidationError](())
         )

@@ -100,7 +100,7 @@ class VersionedRoutingControllerSpec extends AnyWordSpec with Matchers with Mock
       mockConfig
     )(implicitly, mockFileCreater, implicitly) {
 
-      override def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
+      override def validate(messageType: String): Action[Source[ByteString, ?]] = Action.async(streamFromMemory) {
         _ =>
           Future.successful(Ok("transitional"))
       }
@@ -119,7 +119,7 @@ class VersionedRoutingControllerSpec extends AnyWordSpec with Matchers with Mock
         implicitly
       ) {
 
-        override def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
+        override def validate(messageType: String): Action[Source[ByteString, ?]] = Action.async(streamFromMemory) {
           _ =>
             Future.successful(Ok("final"))
         }

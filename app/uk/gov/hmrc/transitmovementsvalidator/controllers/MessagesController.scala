@@ -54,7 +54,7 @@ class MessagesController @Inject() (
     with StreamingParsers
     with ErrorTranslator {
 
-  def validate(messageType: String): Action[Source[ByteString, _]] = Action.async(streamFromMemory) {
+  def validate(messageType: String): Action[Source[ByteString, ?]] = Action.async(streamFromMemory) {
     implicit request =>
       request.headers.get(CONTENT_TYPE) match {
         case Some(MimeTypes.XML) =>
@@ -73,8 +73,8 @@ class MessagesController @Inject() (
   private def validateMessage(
     messageType: String,
     validationService: ValidationService,
-    messageFormat: MessageFormat[_],
-    request: Request[Source[ByteString, _]]
+    messageFormat: MessageFormat[?],
+    request: Request[Source[ByteString, ?]]
   ): Future[Result] =
     (for {
       messageTypeObj <- findMessageType(messageType)

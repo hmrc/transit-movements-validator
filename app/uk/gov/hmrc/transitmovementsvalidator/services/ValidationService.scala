@@ -28,7 +28,7 @@ import scala.concurrent.Future
 
 trait ValidationService {
 
-  def validate(messageType: MessageType, source: Source[ByteString, _])(implicit
+  def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit]

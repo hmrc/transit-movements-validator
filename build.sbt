@@ -1,7 +1,7 @@
 import uk.gov.hmrc.DefaultBuildSettings
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "3.5.2"
 
 val appName = "transit-movements-validator"
 
@@ -28,7 +28,7 @@ lazy val it = project
     libraryDependencies ++= AppDependencies.test,
     Test / fork := true,
     javaOptions ++= Seq(
-      "-Djdk.xml.maxOccurLimit=10000",
+      "-Djdk.xml.maxOccurLimit=10000"
     )
   )
 
