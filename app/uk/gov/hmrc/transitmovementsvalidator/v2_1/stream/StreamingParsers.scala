@@ -39,7 +39,7 @@ trait StreamingParsers {
   implicit val materializerExecutionContext: ExecutionContext =
     ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
 
-  lazy val streamFromMemory: BodyParser[Source[ByteString, _]] = BodyParser {
+  lazy val streamFromMemory: BodyParser[Source[ByteString, ?]] = BodyParser {
     _ =>
       Accumulator.source[ByteString].map(_.asRight)(materializer.executionContext)
   }

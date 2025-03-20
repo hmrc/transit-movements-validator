@@ -6,9 +6,9 @@ By default, this service will only validate request messages. To enable validati
 
 ## Prerequisites
 
-- Scala 2.13.8
+- Scala 3.5.2
 - Java 21
-- sbt > 1.9.7
+- sbt 1.10.1
 - [Service Manager](https://github.com/hmrc/service-manager)
 
 ## Development Setup
