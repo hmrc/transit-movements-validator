@@ -37,8 +37,6 @@ import play.api.test.Helpers.status
 import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestSourceProvider
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.stream.StreamingParsers
-
 import java.nio.charset.StandardCharsets
 import scala.annotation.tailrec
 import scala.concurrent.Future
