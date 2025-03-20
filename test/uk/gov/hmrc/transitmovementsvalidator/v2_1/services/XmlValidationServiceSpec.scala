@@ -25,7 +25,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.XmlSchemaValidationError

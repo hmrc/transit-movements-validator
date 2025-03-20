@@ -28,13 +28,13 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors._
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services._
-import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.stream.StreamingParsers
 
 import javax.inject.Inject
 import scala.concurrent._
