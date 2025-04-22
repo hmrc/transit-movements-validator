@@ -1,3 +1,3 @@
 # microservice specific routes
 
-POST        /messages/:messageType/validation        uk.gov.hmrc.transitmovementsvalidator.routing.VersionedRoutingController.validate(messageType)
+POST        /messages/:messageType/validation        uk.gov.hmrc.transitmovementsvalidator.v2_1.controllers.MessagesController.validate(messageType: String)
