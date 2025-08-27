@@ -25,8 +25,8 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
