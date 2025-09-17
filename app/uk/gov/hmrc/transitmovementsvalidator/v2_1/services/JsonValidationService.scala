@@ -16,10 +16,6 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
 
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.scaladsl.StreamConverters
-import org.apache.pekko.util.ByteString
 import cats.data.EitherT
 import cats.data.NonEmptyList
 import com.fasterxml.jackson.core.JsonParseException
@@ -31,13 +27,17 @@ import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.ValidationMessage
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.stream.scaladsl.StreamConverters
+import org.apache.pekko.util.ByteString
 import play.api.Logging
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.JsonSchemaValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.FailedToParse
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.JsonFailedValidation
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.Unexpected
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.jsonformats.DateTimeFormat
 
@@ -45,7 +45,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try

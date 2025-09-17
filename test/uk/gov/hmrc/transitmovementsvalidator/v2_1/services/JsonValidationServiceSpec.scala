@@ -16,25 +16,25 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
 
+import cats.data.NonEmptyList
+import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.FileIO
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.stream.scaladsl.StreamConverters
 import org.apache.pekko.util.ByteString
 import org.apache.pekko.util.Timeout
-import cats.data.NonEmptyList
-import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestSourceProvider
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.JsonSchemaValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.FailedToParse
+import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
 
 import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -50,7 +50,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
   lazy val validXml: NodeSeq = <test></test>
 
-  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v2_1/data"
+  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 

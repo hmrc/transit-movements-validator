@@ -28,10 +28,10 @@ import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
 import play.api.Logging
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.XmlFailedValidation
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
 import java.io.InputStream
 import javax.inject.Inject

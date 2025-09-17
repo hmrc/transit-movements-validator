@@ -35,15 +35,15 @@ import cats.data.EitherT
 import com.google.inject.ImplementedBy
 import com.google.inject.Inject
 import play.api.Logging
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.config.AppConfig
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.CustomsOffice
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageFormat
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.RequestMessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.BusinessValidationError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.MissingElementError
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError.TooManyElementsError
+import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.RequestMessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.MissingElementError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.TooManyElementsError
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future

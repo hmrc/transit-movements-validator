@@ -20,11 +20,14 @@ import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.ArrivalNotification
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.StreamTestHelpers
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestObjects
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestObjects.CC007C
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -35,7 +38,7 @@ class ValidatorServiceIntegrationSpec extends AnyFreeSpec with Matchers with Sca
   "Json validation" - {
 
     "validating CC007C valid JSON returns right" in {
-      val result = jsonValidationService.validate(MessageType.ArrivalNotification, createStream(TestObjects.CC007C.jsonValid))
+      val result = jsonValidationService.validate(ArrivalNotification, createStream(CC007C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -45,7 +48,7 @@ class ValidatorServiceIntegrationSpec extends AnyFreeSpec with Matchers with Sca
     "validating CC007C invalid JSON returns JsonFailedValidation error" in {
       val result = jsonValidationService.validate(MessageType.ArrivalNotification, createStream(TestObjects.CC007C.jsonInvalid))
       whenReady(result.value) {
-        either => either.left.getOrElse(()) mustBe a[ValidationError.JsonFailedValidation]
+        either => either.left.getOrElse(()) mustBe a[JsonFailedValidation]
       }
     }
 

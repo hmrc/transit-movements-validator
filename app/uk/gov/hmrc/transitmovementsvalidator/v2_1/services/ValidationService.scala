@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
 
+import cats.data.EitherT
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
-import cats.data.EitherT
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future

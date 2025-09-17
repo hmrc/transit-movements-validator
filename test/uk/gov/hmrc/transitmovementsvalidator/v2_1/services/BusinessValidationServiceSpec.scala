@@ -25,11 +25,11 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.config.AppConfig
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageFormat
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.models.errors.ValidationError
+import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
 import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,7 +38,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
   implicit val timeout: PatienceConfig = PatienceConfig(2.seconds, 2.seconds)
 
-  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v2_1/data"
+  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
 
   def createConfig(lrnValidationEnabled: Boolean = true, lrnValidationRegex: String = "^.{1,35}$"): AppConfig = {
     val config = mock[AppConfig]
