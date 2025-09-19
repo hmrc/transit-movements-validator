@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services.jsonformats
+package uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase
 
-import com.networknt.schema.AbstractFormat
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.Materializer
+import org.scalatest.Suite
 
-import java.time.LocalDate
-import scala.util.Try
+object TestActorSystem {
+  val system: ActorSystem = ActorSystem("test")
+}
 
-object DateFormat extends AbstractFormat("date", "- date provided is invalid.") {
-  override def matches(value: String): Boolean = Try(LocalDate.parse(value)).isSuccess
+trait TestActorSystem { self: Suite =>
+  implicit val system: ActorSystem        = TestActorSystem.system
+  implicit val materializer: Materializer = Materializer(TestActorSystem.system)
 }

@@ -16,34 +16,45 @@
 
 package uk.gov.hmrc.transitmovementsvalidator.controllers
 
+import cats.data.EitherT
+import cats.implicits.catsStdInstancesForFuture
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
-import cats.data.EitherT
-import cats.implicits.catsStdInstancesForFuture
 import play.api.Logging
 import play.api.libs.Files.TemporaryFileCreator
 import play.api.libs.json.Json
-import play.api.mvc._
+import play.api.mvc.*
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.controllers.actions.ValidateAcceptRefiner
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors._
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.*
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services._
-import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.*
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3BusinessValidationService
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3XmlValidationService
 
 import javax.inject.Inject
-import scala.concurrent._
+import scala.concurrent.*
 
 class MessagesController @Inject() (
   cc: ControllerComponents,
-  xmlValidationService: XmlValidationService,
-  jsonValidationService: JsonValidationService,
-  businessValidationService: BusinessValidationService,
+  v2XmlValidationService: V2XmlValidationService,
+  v2JsonValidationService: V2JsonValidationService,
+  v2BusinessValidationService: V2BusinessValidationService,
+  v3XmlValidationService: V3XmlValidationService,
+  v3JsonValidationService: V3JsonValidationService,
+  v3BusinessValidationService: V3BusinessValidationService,
+  validateAcceptRefiner: ValidateAcceptRefiner,
   config: AppConfig
 )(implicit
   val materializer: Materializer,
@@ -54,8 +65,16 @@ class MessagesController @Inject() (
     with StreamingParsers
     with ErrorTranslator {
 
-  def validate(messageType: String): Action[Source[ByteString, ?]] = Action.async(streamFromMemory) {
+  def validate(messageType: String): Action[Source[ByteString, ?]] = validateAcceptRefiner.async(streamFromMemory) {
     implicit request =>
+      val xmlValidationService: ValidationService = request.versionHeader match {
+        case APIVersionHeader.V2_1 => v2XmlValidationService
+        case APIVersionHeader.V3_0 => v3XmlValidationService
+      }
+      val jsonValidationService: ValidationService = request.versionHeader match {
+        case APIVersionHeader.V2_1 => v2JsonValidationService
+        case APIVersionHeader.V3_0 => v3JsonValidationService
+      }
       request.headers.get(CONTENT_TYPE) match {
         case Some(MimeTypes.XML) =>
           validateMessage(messageType, xmlValidationService, MessageFormat.Xml, request)
@@ -83,7 +102,7 @@ class MessagesController @Inject() (
       // business validation at the same time. We get the result from the business rule validation from the
       // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
       // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
+      (deferredBusinessRulesValidation, businessRulesFlow) = v2BusinessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
       _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
       _ <- deferredBusinessRulesValidation.asPresentation
     } yield NoContent)

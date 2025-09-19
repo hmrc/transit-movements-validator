@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
+package uk.gov.hmrc.transitmovementsvalidator.v3_0.services
 
 import cats.data.EitherT
 import cats.data.NonEmptyList
-import cats.syntax.all._
+import cats.syntax.all.*
 import com.google.inject.ImplementedBy
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
@@ -30,6 +30,7 @@ import org.xml.sax.SAXParseException
 import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
+import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
@@ -45,10 +46,10 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.xml.XMLReader
 
-@ImplementedBy(classOf[XmlValidationServiceImpl])
-trait XmlValidationService extends ValidationService
+@ImplementedBy(classOf[V3XmlValidationServiceImpl])
+trait V3XmlValidationService extends ValidationService
 
-class XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends XmlValidationService with Logging {
+class V3XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends V3XmlValidationService with Logging {
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
     MessageType.values.map {

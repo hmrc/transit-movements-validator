@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
+package uk.gov.hmrc.transitmovementsvalidator.v3_0.services
 
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.concurrent.ScalaFutures
@@ -24,16 +24,22 @@ import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.ArrivalNotification
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.StreamTestHelpers
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestObjects
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase.TestObjects.CC007C
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase.StreamTestHelpers
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase.TestObjects
+import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase.TestObjects.CC007C
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ValidatorServiceIntegrationSpec extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience with TestActorSystem with StreamTestHelpers {
-  val jsonValidationService = new JsonValidationServiceImpl()
-  val xmlValidationService  = new XmlValidationServiceImpl()
+class V3ValidatorServiceIntegrationSpec
+    extends AnyFreeSpec
+    with Matchers
+    with ScalaFutures
+    with IntegrationPatience
+    with TestActorSystem
+    with StreamTestHelpers {
+  val jsonValidationService = new V3JsonValidationServiceImpl()
+  val xmlValidationService  = new V3XmlValidationServiceImpl()
 
   "Json validation" - {
 

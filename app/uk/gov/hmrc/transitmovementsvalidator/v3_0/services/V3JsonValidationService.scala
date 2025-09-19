@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
+package uk.gov.hmrc.transitmovementsvalidator.v3_0.services
 
 import cats.data.EitherT
 import cats.data.NonEmptyList
@@ -33,13 +33,14 @@ import org.apache.pekko.stream.scaladsl.StreamConverters
 import org.apache.pekko.util.ByteString
 import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.jsonformats.DateFormat
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.jsonformats.DateTimeFormat
+import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateFormat
+import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateTimeFormat
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -51,7 +52,7 @@ import scala.util.Success
 import scala.util.Try
 import scala.util.Using
 
-object JsonValidationService {
+object V3JsonValidationService {
 
   private lazy val formatOverrides = JsonMetaSchema
     .builder(JsonMetaSchema.getV7.getUri, JsonMetaSchema.getV7)
@@ -66,16 +67,16 @@ object JsonValidationService {
       .build()
 }
 
-@ImplementedBy(classOf[JsonValidationServiceImpl])
-trait JsonValidationService extends ValidationService
+@ImplementedBy(classOf[V3JsonValidationServiceImpl])
+trait V3JsonValidationService extends ValidationService
 
-class JsonValidationServiceImpl @Inject() extends JsonValidationService with Logging {
+class V3JsonValidationServiceImpl @Inject() extends V3JsonValidationService with Logging {
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
   private val schemaValidators = MessageType.values
     .map(
-      msgType => msgType.code -> JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
+      msgType => msgType.code -> V3JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )
     .toMap
 

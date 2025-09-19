@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services
+package uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase
 
-import cats.data.EitherT
-import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
+import java.nio.charset.StandardCharsets
+import scala.xml.NodeSeq
 
-trait ValidationService {
+object StreamTestHelpers extends StreamTestHelpers
 
-  def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): EitherT[Future, ValidationError, Unit]
+trait StreamTestHelpers {
+
+  def createStream(node: NodeSeq): Source[ByteString, ?] = createStream(node.mkString)
+
+  def createStream(jsValue: JsValue): Source[ByteString, ?] = createStream(Json.stringify(jsValue))
+
+  def createStream(string: String): Source[ByteString, ?] =
+    Source.single(ByteString(string, StandardCharsets.UTF_8))
 
 }

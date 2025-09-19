@@ -22,12 +22,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.ArrivalNotification
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.DeclarationAmendment
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.DeclarationData
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.DeclarationInvalidation
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.PresentationNotificationForPreLodgedDec
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.UnloadingRemarks
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.*
 
 class MessageTypeSpec extends AnyFreeSpec with Matchers with MockitoSugar with OptionValues with ScalaCheckDrivenPropertyChecks {
   "MessageType must contain" - {

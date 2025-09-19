@@ -46,6 +46,9 @@ object PresentationError {
   def notFoundError(message: String): PresentationError =
     StandardError(message, ErrorCode.NotFound)
 
+  def notAcceptableError(message: String): PresentationError =
+    StandardError(message, ErrorCode.NotAcceptable)
+
   def unsupportedMediaTypeError(message: String): PresentationError =
     StandardError(message, ErrorCode.UnsupportedMediaType)
 

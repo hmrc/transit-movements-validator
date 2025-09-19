@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.itbase
+package uk.gov.hmrc.transitmovementsvalidator.v3_0.services.itbase
 
 import play.api.libs.json.Json
 
@@ -146,7 +146,7 @@ object TestObjects {
         "correlationIdentifier" -> "token",
         "Authorisation" -> Json.arr(
           Json.obj(
-            "sequenceNumber"  -> "123",
+            "sequenceNumber"  -> 123,
             "referenceNumber" -> "token",
             "type"            -> "3344"
           )
@@ -185,7 +185,7 @@ object TestObjects {
           ),
           "Incident" -> Json.arr(
             Json.obj(
-              "sequenceNumber" -> "12345",
+              "sequenceNumber" -> 12345,
               "code"           -> "1",
               "text"           -> "token",
               "Endorsement" -> Json.obj(
@@ -206,18 +206,18 @@ object TestObjects {
               ),
               "TransportEquipment" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"                -> "12345",
+                  "sequenceNumber"                -> 12345,
                   "containerIdentificationNumber" -> "ezv3Z",
                   "numberOfSeals"                 -> 2345,
                   "Seal" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber" -> "12345",
+                      "sequenceNumber" -> 12345,
                       "identifier"     -> "token"
                     )
                   ),
                   "GoodsReference" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"             -> "12345",
+                      "sequenceNumber"             -> 12345,
                       "declarationGoodsItemNumber" -> 12
                     )
                   )
@@ -534,25 +534,25 @@ object TestObjects {
           ),
           "AdditionalSupplyChainActor" -> Json.arr(
             Json.obj(
-              "sequenceNumber"       -> "123",
+              "sequenceNumber"       -> 123,
               "role"                 -> "abc",
               "identificationNumber" -> "AB!"
             )
           ),
           "TransportEquipment" -> Json.arr(
             Json.obj(
-              "sequenceNumber"                -> "123",
+              "sequenceNumber"                -> 123,
               "containerIdentificationNumber" -> "string",
               "numberOfSeals"                 -> 100,
               "Seal" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber" -> "123",
+                  "sequenceNumber" -> 123,
                   "identifier"     -> "string"
                 )
               ),
               "GoodsReference" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"             -> "123",
+                  "sequenceNumber"             -> 123,
                   "declarationGoodsItemNumber" -> 100
                 )
               )
@@ -593,7 +593,7 @@ object TestObjects {
           ),
           "DepartureTransportMeans" -> Json.arr(
             Json.obj(
-              "sequenceNumber"       -> "123",
+              "sequenceNumber"       -> 123,
               "typeOfIdentification" -> "12",
               "identificationNumber" -> "string",
               "nationality"          -> "XI"
@@ -601,13 +601,13 @@ object TestObjects {
           ),
           "CountryOfRoutingOfConsignment" -> Json.arr(
             Json.obj(
-              "sequenceNumber" -> "123",
+              "sequenceNumber" -> 123,
               "country"        -> "GB"
             )
           ),
           "ActiveBorderTransportMeans" -> Json.arr(
             Json.obj(
-              "sequenceNumber"                       -> "123",
+              "sequenceNumber"                       -> 123,
               "customsOfficeAtBorderReferenceNumber" -> "abcdabcd",
               "typeOfIdentification"                 -> "12",
               "identificationNumber"                 -> "string",
@@ -627,7 +627,7 @@ object TestObjects {
           ),
           "PreviousDocument" -> Json.arr(
             Json.obj(
-              "sequenceNumber"          -> "123",
+              "sequenceNumber"          -> 123,
               "type"                    -> "abcd",
               "referenceNumber"         -> "string",
               "complementOfInformation" -> "string"
@@ -635,7 +635,7 @@ object TestObjects {
           ),
           "SupportingDocument" -> Json.arr(
             Json.obj(
-              "sequenceNumber"          -> "123",
+              "sequenceNumber"          -> 123,
               "type"                    -> "abcd",
               "referenceNumber"         -> "string",
               "documentLineItemNumber"  -> 100,
@@ -644,21 +644,21 @@ object TestObjects {
           ),
           "TransportDocument" -> Json.arr(
             Json.obj(
-              "sequenceNumber"  -> "123",
+              "sequenceNumber"  -> 123,
               "type"            -> "abcd",
               "referenceNumber" -> "string"
             )
           ),
           "AdditionalReference" -> Json.arr(
             Json.obj(
-              "sequenceNumber"  -> "123",
+              "sequenceNumber"  -> 123,
               "type"            -> "abcd",
               "referenceNumber" -> "string"
             )
           ),
           "AdditionalInformation" -> Json.arr(
             Json.obj(
-              "sequenceNumber" -> "123",
+              "sequenceNumber" -> 123,
               "code"           -> "token",
               "text"           -> "string"
             )
@@ -668,7 +668,7 @@ object TestObjects {
           ),
           "HouseConsignment" -> Json.arr(
             Json.obj(
-              "sequenceNumber"     -> "123",
+              "sequenceNumber"     -> 123,
               "countryOfDispatch"  -> "st",
               "grossMass"          -> 1000,
               "referenceNumberUCR" -> "string",
@@ -699,14 +699,14 @@ object TestObjects {
               ),
               "AdditionalSupplyChainActor" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"       -> "123",
+                  "sequenceNumber"       -> 123,
                   "role"                 -> "abc",
                   "identificationNumber" -> "AV!---"
                 )
               ),
               "DepartureTransportMeans" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"       -> "123",
+                  "sequenceNumber"       -> 123,
                   "typeOfIdentification" -> "12",
                   "identificationNumber" -> "string",
                   "nationality"          -> "XI"
@@ -714,7 +714,7 @@ object TestObjects {
               ),
               "PreviousDocument" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"          -> "123",
+                  "sequenceNumber"          -> 123,
                   "type"                    -> "abcd",
                   "referenceNumber"         -> "string",
                   "complementOfInformation" -> "string"
@@ -722,7 +722,7 @@ object TestObjects {
               ),
               "SupportingDocument" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"          -> "123",
+                  "sequenceNumber"          -> 123,
                   "type"                    -> "abcd",
                   "referenceNumber"         -> "string",
                   "documentLineItemNumber"  -> 100,
@@ -731,21 +731,21 @@ object TestObjects {
               ),
               "TransportDocument" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"  -> "123",
+                  "sequenceNumber"  -> 123,
                   "type"            -> "abcd",
                   "referenceNumber" -> "string"
                 )
               ),
               "AdditionalReference" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"  -> "123",
+                  "sequenceNumber"  -> 123,
                   "type"            -> "abcd",
                   "referenceNumber" -> "string"
                 )
               ),
               "AdditionalInformation" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber" -> "123",
+                  "sequenceNumber" -> 123,
                   "code"           -> "token",
                   "text"           -> "string"
                 )
@@ -755,7 +755,7 @@ object TestObjects {
               ),
               "ConsignmentItem" -> Json.arr(
                 Json.obj(
-                  "goodsItemNumber"            -> "123",
+                  "goodsItemNumber"            -> 123,
                   "declarationGoodsItemNumber" -> 100,
                   "declarationType"            -> "token",
                   "countryOfDispatch"          -> "GB",
@@ -773,7 +773,7 @@ object TestObjects {
                   ),
                   "AdditionalSupplyChainActor" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"       -> "123",
+                      "sequenceNumber"       -> 123,
                       "role"                 -> "abc",
                       "identificationNumber" -> "AB!--!"
                     )
@@ -787,7 +787,7 @@ object TestObjects {
                     ),
                     "DangerousGoods" -> Json.arr(
                       Json.obj(
-                        "sequenceNumber" -> "123",
+                        "sequenceNumber" -> 123,
                         "UNNumber"       -> "abcd"
                       )
                     ),
@@ -799,7 +799,7 @@ object TestObjects {
                   ),
                   "Packaging" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"   -> "123",
+                      "sequenceNumber"   -> 123,
                       "typeOfPackages"   -> "ab",
                       "numberOfPackages" -> 100,
                       "shippingMarks"    -> "string"
@@ -807,7 +807,7 @@ object TestObjects {
                   ),
                   "PreviousDocument" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"              -> "123",
+                      "sequenceNumber"              -> 123,
                       "type"                        -> "abcd",
                       "referenceNumber"             -> "string",
                       "goodsItemNumber"             -> 100,
@@ -820,7 +820,7 @@ object TestObjects {
                   ),
                   "SupportingDocument" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"          -> "123",
+                      "sequenceNumber"          -> 123,
                       "type"                    -> "abcd",
                       "referenceNumber"         -> "string",
                       "documentLineItemNumber"  -> 100,
@@ -829,21 +829,21 @@ object TestObjects {
                   ),
                   "TransportDocument" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"  -> "123",
+                      "sequenceNumber"  -> 123,
                       "type"            -> "abcd",
                       "referenceNumber" -> "string"
                     )
                   ),
                   "AdditionalReference" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber"  -> "123",
+                      "sequenceNumber"  -> 123,
                       "type"            -> "abcd",
                       "referenceNumber" -> "string"
                     )
                   ),
                   "AdditionalInformation" -> Json.arr(
                     Json.obj(
-                      "sequenceNumber" -> "123",
+                      "sequenceNumber" -> 123,
                       "code"           -> "token",
                       "text"           -> "string"
                     )
@@ -858,13 +858,13 @@ object TestObjects {
         ),
         "CustomsOfficeOfExitForTransitDeclared" -> Json.arr(
           Json.obj(
-            "sequenceNumber"  -> "123",
+            "sequenceNumber"  -> 123,
             "referenceNumber" -> "AB123456"
           )
         ),
         "CustomsOfficeOfTransitDeclared" -> Json.arr(
           Json.obj(
-            "sequenceNumber"              -> "123",
+            "sequenceNumber"              -> 123,
             "referenceNumber"             -> "AB123456",
             "arrivalDateAndTimeEstimated" -> "2013-12-21T11:32:42"
           )
@@ -877,7 +877,7 @@ object TestObjects {
         "correlationIdentifier" -> "token",
         "Authorisation" -> Json.arr(
           Json.obj(
-            "sequenceNumber"  -> "123",
+            "sequenceNumber"  -> 123,
             "type"            -> "0",
             "referenceNumber" -> "string"
           )
@@ -912,12 +912,12 @@ object TestObjects {
         "messageIdentification" -> "token",
         "Guarantee" -> Json.arr(
           Json.obj(
-            "sequenceNumber"          -> "123",
+            "sequenceNumber"          -> 123,
             "guaranteeType"           -> "B",
             "otherGuaranteeReference" -> "GBP",
             "GuaranteeReference" -> Json.arr(
               Json.obj(
-                "sequenceNumber"    -> "123",
+                "sequenceNumber"    -> 123,
                 "GRN"               -> "ABC",
                 "accessCode"        -> "stri",
                 "amountToBeCovered" -> 1000,
@@ -1113,7 +1113,7 @@ object TestObjects {
             ),
             "Guarantee" -> Json.arr(
               Json.obj(
-                "sequenceNumber"          -> "48711",
+                "sequenceNumber"          -> 48711,
                 "guaranteeType"           -> "1",
                 "otherGuaranteeReference" -> "1qJMA6MbhnnrOJJjHBHX",
                 "GuaranteeReference"      -> Json.arr()
@@ -1123,7 +1123,7 @@ object TestObjects {
               "grossMass" -> 6430669292.48125,
               "HouseConsignment" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"             -> "48711",
+                  "sequenceNumber"             -> 48711,
                   "grossMass"                  -> 6430669292.48125,
                   "AdditionalSupplyChainActor" -> Json.arr(),
                   "DepartureTransportMeans"    -> Json.arr(),
@@ -1134,7 +1134,7 @@ object TestObjects {
                   "AdditionalInformation"      -> Json.arr(),
                   "ConsignmentItem" -> Json.arr(
                     Json.obj(
-                      "goodsItemNumber"            -> "18914",
+                      "goodsItemNumber"            -> 18914,
                       "declarationGoodsItemNumber" -> 1458,
                       "AdditionalSupplyChainActor" -> Json.arr(),
                       "Commodity" -> Json.obj(
@@ -1143,7 +1143,7 @@ object TestObjects {
                       ),
                       "Packaging" -> Json.arr(
                         Json.obj(
-                          "sequenceNumber" -> "48711",
+                          "sequenceNumber" -> 48711,
                           "typeOfPackages" -> "Oi"
                         )
                       ),
@@ -1329,18 +1329,18 @@ object TestObjects {
           "modeOfTransportAtTheBorder" -> "0",
           "TransportEquipment" -> Json.arr(
             Json.obj(
-              "sequenceNumber"                -> "1234",
+              "sequenceNumber"                -> 1234,
               "containerIdentificationNumber" -> "string",
               "numberOfSeals"                 -> 100,
               "Seal" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber" -> "1234",
+                  "sequenceNumber" -> 1234,
                   "identifier"     -> "string"
                 )
               ),
               "GoodsReference" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"             -> "1234",
+                  "sequenceNumber"             -> 1234,
                   "declarationGoodsItemNumber" -> 100
                 )
               )
@@ -1381,7 +1381,7 @@ object TestObjects {
           ),
           "DepartureTransportMeans" -> Json.arr(
             Json.obj(
-              "sequenceNumber"       -> "1234",
+              "sequenceNumber"       -> 1234,
               "typeOfIdentification" -> "12",
               "identificationNumber" -> "string",
               "nationality"          -> "GB"
@@ -1389,7 +1389,7 @@ object TestObjects {
           ),
           "ActiveBorderTransportMeans" -> Json.arr(
             Json.obj(
-              "sequenceNumber"                       -> "1234",
+              "sequenceNumber"                       -> 1234,
               "customsOfficeAtBorderReferenceNumber" -> "GB123456",
               "typeOfIdentification"                 -> "12",
               "identificationNumber"                 -> "string",
@@ -1404,10 +1404,10 @@ object TestObjects {
           ),
           "HouseConsignment" -> Json.arr(
             Json.obj(
-              "sequenceNumber" -> "123",
+              "sequenceNumber" -> 123,
               "DepartureTransportMeans" -> Json.arr(
                 Json.obj(
-                  "sequenceNumber"       -> "1234",
+                  "sequenceNumber"       -> 1234,
                   "typeOfIdentification" -> "12",
                   "identificationNumber" -> "string",
                   "nationality"          -> "GB"

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services.jsonformats
+package uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats
 
 import org.scalacheck.Gen
 import org.scalatest.freespec.AnyFreeSpec

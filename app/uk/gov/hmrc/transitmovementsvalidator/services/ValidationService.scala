@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.itbase
+package uk.gov.hmrc.transitmovementsvalidator.services
 
-import org.apache.pekko.actor.ActorSystem
+import cats.data.EitherT
 import org.apache.pekko.stream.Materializer
-import org.scalatest.Suite
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
-object TestActorSystem {
-  val system: ActorSystem = ActorSystem("test")
-}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
-trait TestActorSystem { self: Suite =>
-  implicit val system: ActorSystem        = TestActorSystem.system
-  implicit val materializer: Materializer = Materializer(TestActorSystem.system)
+trait ValidationService {
+
+  def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
+    materializer: Materializer,
+    ec: ExecutionContext
+  ): EitherT[Future, ValidationError, Unit]
+
 }

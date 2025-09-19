@@ -18,6 +18,7 @@ package uk.gov.hmrc.transitmovementsvalidator.models.errors
 
 import play.api.http.Status.BAD_REQUEST
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.http.Status.NOT_ACCEPTABLE
 import play.api.http.Status.NOT_FOUND
 import play.api.http.Status.OK
 import play.api.http.Status.UNSUPPORTED_MEDIA_TYPE
@@ -33,6 +34,7 @@ object ErrorCode {
   val SchemaValidation: ErrorCode        = ErrorCode("SCHEMA_VALIDATION", OK)
   val UnsupportedMediaType: ErrorCode    = ErrorCode("UNSUPPORTED_MEDIA_TYPE", UNSUPPORTED_MEDIA_TYPE)
   val BusinessValidationError: ErrorCode = ErrorCode("BUSINESS_VALIDATION_ERROR", OK)
+  val NotAcceptable: ErrorCode           = ErrorCode("NOT_ACCEPTABLE", NOT_ACCEPTABLE)
 
   implicit val errorCodeWrites: Writes[ErrorCode] = Writes {
     errorCode => JsString(errorCode.value)

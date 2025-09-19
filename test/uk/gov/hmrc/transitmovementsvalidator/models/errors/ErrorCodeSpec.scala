@@ -30,7 +30,8 @@ class ErrorCodeSpec extends AnyFreeSpec with Matchers with ScalaCheckDrivenPrope
       ErrorCode.NotFound,
       ErrorCode.InternalServerError,
       ErrorCode.SchemaValidation,
-      ErrorCode.UnsupportedMediaType
+      ErrorCode.UnsupportedMediaType,
+      ErrorCode.NotAcceptable
     )
   ) {
     errorCode =>
