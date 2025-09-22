@@ -17,7 +17,6 @@
 package uk.gov.hmrc.transitmovementsvalidator.v3_0.services
 
 import cats.data.EitherT
-import com.google.inject.ImplementedBy
 import com.google.inject.Inject
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.Attributes.LogLevels
@@ -38,26 +37,17 @@ import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.models.RequestMessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.MissingElementError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.TooManyElementsError
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
-import uk.gov.hmrc.transitmovementsvalidator.models.RequestMessageType
+import uk.gov.hmrc.transitmovementsvalidator.services.BusinessValidationService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.util.control.NonFatal
-
-@ImplementedBy(classOf[V3BusinessValidationServiceImpl])
-trait V3BusinessValidationService {
-
-  def businessValidationFlow[A](messageType: MessageType, messageFormat: MessageFormat[A])(implicit
-    materializer: Materializer,
-    ec: ExecutionContext
-  ): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, ?])
-
-}
 
 /** Akka Streams implementation of business validation rules.
   *
@@ -96,7 +86,7 @@ trait V3BusinessValidationService {
   * All rules need to be a Flow of A to ValidationError, which only emits if there is an error. Once created, each rule needs to go into the rules seq in
   * businessValidationFlow.
   */
-class V3BusinessValidationServiceImpl @Inject() (appConfig: AppConfig) extends V3BusinessValidationService with Logging {
+class V3BusinessValidationService @Inject() (appConfig: AppConfig) extends BusinessValidationService with Logging {
 
   private val gbOffice = "^GB.*$".r
   private val xiOffice = "^XI.*$".r

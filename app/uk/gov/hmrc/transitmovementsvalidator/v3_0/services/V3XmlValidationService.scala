@@ -28,6 +28,7 @@ import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
 import play.api.Logging
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
@@ -52,10 +53,13 @@ trait V3XmlValidationService extends ValidationService
 class V3XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends V3XmlValidationService with Logging {
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
-    MessageType.values.map {
-      typ =>
-        typ -> Future(buildParser(typ))
-    }.toMap
+    MessageType
+      .values(APIVersionHeader.V3_0)
+      .map {
+        typ =>
+          typ -> Future(buildParser(typ))
+      }
+      .toMap
 
   override def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,

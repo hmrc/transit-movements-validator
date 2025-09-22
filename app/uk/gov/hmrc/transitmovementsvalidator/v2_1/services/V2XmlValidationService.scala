@@ -32,6 +32,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFa
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 
 import java.io.InputStream
@@ -52,10 +53,13 @@ trait V2XmlValidationService extends ValidationService
 class V2XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends V2XmlValidationService with Logging {
 
   private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
-    MessageType.values.map {
-      typ =>
-        typ -> Future(buildParser(typ))
-    }.toMap
+    MessageType
+      .values(APIVersionHeader.V2_1)
+      .map {
+        typ =>
+          typ -> Future(buildParser(typ))
+      }
+      .toMap
 
   override def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,

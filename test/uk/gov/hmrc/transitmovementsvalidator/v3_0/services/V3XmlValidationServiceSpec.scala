@@ -26,6 +26,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
@@ -39,6 +40,8 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
 
   implicit val timeout: Timeout           = Timeout(5.seconds)
   implicit val materializer: Materializer = Materializer(TestActorSystem.system)
+
+  val apiVersion: APIVersionHeader = APIVersionHeader.V3_0
 
   lazy val validXml: NodeSeq = <test></test>
 
@@ -120,7 +123,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie13File.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.DeclarationAmendment, source)
+        val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -134,7 +137,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie14File.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.DeclarationInvalidation, source)
+        val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -148,7 +151,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.DeclarationData, source)
+        val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -162,7 +165,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.DeclarationData, source)
+        val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -176,7 +179,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie170File.mkString, StandardCharsets.UTF_8)) // exampleIE170XML.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec, source)
+        val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -190,7 +193,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie007File.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.ArrivalNotification, source)
+        val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -204,7 +207,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie044File.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(MessageType.UnloadingRemarks, source)
+        val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -216,7 +219,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
     "when valid message type provided but with unexpected xml, return errors" in {
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val sut    = new V3XmlValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationData, source)
+      val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -229,7 +232,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.ArrivalNotification, source)
+        val result = sut.validate(messageType = MessageType.ArrivalNotification(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -254,7 +257,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.ArrivalNotification, source)
+        val result = sut.validate(messageType = MessageType.ArrivalNotification(apiVersion), source)
 
         whenReady(result.value) {
           r =>
@@ -279,7 +282,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.DeclarationAmendment, source)
+        val result = sut.validate(messageType = MessageType.DeclarationAmendment(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -292,7 +295,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.DeclarationAmendment, source)
+        val result = sut.validate(messageType = MessageType.DeclarationAmendment(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -305,7 +308,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.DeclarationInvalidation, source)
+        val result = sut.validate(messageType = MessageType.DeclarationInvalidation(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -318,7 +321,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.DeclarationInvalidation, source)
+        val result = sut.validate(messageType = MessageType.DeclarationInvalidation(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -331,7 +334,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie15invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.DeclarationData, source)
+        val result = sut.validate(messageType = MessageType.DeclarationData(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -344,7 +347,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.UnloadingRemarks, source)
+        val result = sut.validate(messageType = MessageType.UnloadingRemarks(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -357,7 +360,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.UnloadingRemarks, source)
+        val result = sut.validate(messageType = MessageType.UnloadingRemarks(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -370,7 +373,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec, source)
+        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -383,7 +386,7 @@ class V3XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoS
       try {
         val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new V3XmlValidationServiceImpl
-        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec, source)
+        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true

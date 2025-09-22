@@ -31,6 +31,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -50,6 +51,8 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
 
   lazy val validXml: NodeSeq = <test></test>
 
+  val apiVersion: APIVersionHeader = APIVersionHeader.V3_0
+
   lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
@@ -58,7 +61,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid CC013C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationAmendment, source)
+      val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -69,7 +72,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid CC014C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-valid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationInvalidation, source)
+      val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -80,7 +83,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid CC015C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationData, source)
+      val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -92,7 +95,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid CC170C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-valid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec, source)
+      val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -103,7 +106,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid CC007C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.ArrivalNotification, source)
+      val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -114,7 +117,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid CC044C JSON is provided for the given message type, return a Right" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-valid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.UnloadingRemarks, source)
+      val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -125,7 +128,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when valid message type provided but with schema invalid json, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationData, source)
+      val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -136,7 +139,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC014C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-date-time.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationInvalidation, source)
+      val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -157,7 +160,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC007C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-date-time.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.ArrivalNotification, source)
+      val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -199,7 +202,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC044C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-date-time.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.UnloadingRemarks, source)
+      val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -220,7 +223,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC013C provided with schema invalid date in the limitDate field, return errors" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-date.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationAmendment, source)
+      val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -377,7 +380,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
 
     "when invalid json is provided, returns FailedToParse" in {
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationData, singleUseStringSource("{'ABC':}"))
+      val result = sut.validate(MessageType.DeclarationData(apiVersion), singleUseStringSource("{'ABC':}"))
 
       whenReady(result.value) {
         case Left(_: FailedToParse) => succeed
@@ -388,7 +391,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when invalid json is provided with extra braces, returns an exception" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/invalid-with-extra-braces.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationData, source)
+      val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
       whenReady(result.value) {
         e =>
@@ -417,7 +420,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC007C provided with invalid schema, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.ArrivalNotification, source)
+      val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -456,7 +459,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC007C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-message-sender.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.ArrivalNotification, source)
+      val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -498,7 +501,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC013C provided with invalid schema, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationAmendment, source)
+      val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -653,7 +656,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC013C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-message-sender.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationAmendment, source)
+      val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -811,7 +814,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC014C provided with invalid schema, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationInvalidation, source)
+      val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -832,7 +835,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC014C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-message-sender.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationInvalidation, source)
+      val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -853,7 +856,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC015C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-message-sender.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.DeclarationData, source)
+      val result = sut.validate(MessageType.DeclarationData(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -891,7 +894,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC044C provided with invalid schema, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.UnloadingRemarks, source)
+      val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -912,7 +915,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC044C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-message-sender.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.UnloadingRemarks, source)
+      val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -933,7 +936,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC170C provided with invalid schema, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec, source)
+      val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source)
 
       whenReady(result.value) {
         r =>
@@ -980,7 +983,7 @@ class V3JsonValidationServiceSpec extends AnyFreeSpec with Matchers with Mockito
     "when an invalid CC170C provided with invalid value in messageSender field, return error" in {
       val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid-message-sender.json"))
       val sut    = new V3JsonValidationServiceImpl
-      val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec, source)
+      val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source)
 
       whenReady(result.value) {
         r =>

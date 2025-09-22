@@ -32,15 +32,16 @@ import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.stream.scaladsl.StreamConverters
 import org.apache.pekko.util.ByteString
 import play.api.Logging
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
+import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
-import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
+import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateTimeFormat
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -74,7 +75,8 @@ class V2JsonValidationServiceImpl @Inject() extends V2JsonValidationService with
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
-  private val schemaValidators = MessageType.values
+  private val schemaValidators = MessageType
+    .values(APIVersionHeader.V2_1)
     .map(
       msgType => msgType.code -> V2JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )

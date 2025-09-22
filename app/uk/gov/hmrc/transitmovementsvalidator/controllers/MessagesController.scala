@@ -35,9 +35,9 @@ import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.*
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
+import uk.gov.hmrc.transitmovementsvalidator.services.BusinessValidationService
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.*
 import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3BusinessValidationService
 import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3JsonValidationService
@@ -67,23 +67,19 @@ class MessagesController @Inject() (
 
   def validate(messageType: String): Action[Source[ByteString, ?]] = validateAcceptRefiner.async(streamFromMemory) {
     implicit request =>
-      val xmlValidationService: ValidationService = request.versionHeader match {
-        case APIVersionHeader.V2_1 => v2XmlValidationService
-        case APIVersionHeader.V3_0 => v3XmlValidationService
-      }
-      val jsonValidationService: ValidationService = request.versionHeader match {
-        case APIVersionHeader.V2_1 => v2JsonValidationService
-        case APIVersionHeader.V3_0 => v3JsonValidationService
+      val services: (ValidationService, ValidationService, BusinessValidationService) = request.versionHeader match {
+        case APIVersionHeader.V2_1 => (v2XmlValidationService, v2JsonValidationService, v2BusinessValidationService)
+        case APIVersionHeader.V3_0 => (v3XmlValidationService, v3JsonValidationService, v3BusinessValidationService)
       }
       request.headers.get(CONTENT_TYPE) match {
         case Some(MimeTypes.XML) =>
-          validateMessage(messageType, xmlValidationService, MessageFormat.Xml, request)
+          validateMessage(messageType, services._1, MessageFormat.Xml, services._3, request, request.versionHeader)
         case Some(MimeTypes.JSON) =>
-          validateMessage(messageType, jsonValidationService, MessageFormat.Json, request)
+          validateMessage(messageType, services._2, MessageFormat.Json, services._3, request, request.versionHeader)
         case Some(x) =>
           request.body.runWith(Sink.ignore)
           Future.successful(UnsupportedMediaType(Json.toJson(PresentationError.unsupportedMediaTypeError(s"Content type $x is not supported."))))
-        case None =>
+        case _ =>
           request.body.runWith(Sink.ignore)
           Future.successful(UnsupportedMediaType(Json.toJson(PresentationError.unsupportedMediaTypeError(s"Content type must be specified."))))
       }
@@ -93,16 +89,18 @@ class MessagesController @Inject() (
     messageType: String,
     validationService: ValidationService,
     messageFormat: MessageFormat[?],
-    request: Request[Source[ByteString, ?]]
+    businessValidationService: BusinessValidationService,
+    request: Request[Source[ByteString, ?]],
+    versionHeader: APIVersionHeader
   ): Future[Result] =
     (for {
-      messageTypeObj <- findMessageType(messageType)
+      messageTypeObj <- findMessageType(messageType, versionHeader)
 
       // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
       // business validation at the same time. We get the result from the business rule validation from the
       // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
       // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = v2BusinessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
+      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
       _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
       _ <- deferredBusinessRulesValidation.asPresentation
     } yield NoContent)
@@ -114,9 +112,11 @@ class MessagesController @Inject() (
           Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
       }
 
-  private def findMessageType(messageType: String): EitherT[Future, PresentationError, MessageType] =
+  private def findMessageType(messageType: String, versionHeader: APIVersionHeader): EitherT[Future, PresentationError, MessageType] =
     EitherT
-      .fromEither(MessageType.find(messageType, config.validateRequestTypesOnly).toRight[ValidationError](ValidationError.UnknownMessageType(messageType)))
+      .fromEither(
+        MessageType.find(messageType, config.validateRequestTypesOnly, versionHeader).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))
+      )
       .asPresentation
 
 }
