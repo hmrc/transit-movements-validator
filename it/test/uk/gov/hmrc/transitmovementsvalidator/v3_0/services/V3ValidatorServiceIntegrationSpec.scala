@@ -20,6 +20,7 @@ import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType.ArrivalNotification
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
@@ -41,10 +42,12 @@ class V3ValidatorServiceIntegrationSpec
   val jsonValidationService = new V3JsonValidationServiceImpl()
   val xmlValidationService  = new V3XmlValidationServiceImpl()
 
+  val apiVersion = APIVersionHeader.V3_0
+
   "Json validation" - {
 
     "validating CC007C valid JSON returns right" in {
-      val result = jsonValidationService.validate(ArrivalNotification, createStream(CC007C.jsonValid))
+      val result = jsonValidationService.validate(ArrivalNotification(apiVersion), createStream(CC007C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -52,14 +55,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC007C invalid JSON returns JsonFailedValidation error" in {
-      val result = jsonValidationService.validate(MessageType.ArrivalNotification, createStream(TestObjects.CC007C.jsonInvalid))
+      val result = jsonValidationService.validate(MessageType.ArrivalNotification(apiVersion), createStream(TestObjects.CC007C.jsonInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[JsonFailedValidation]
       }
     }
 
     "validating CC013C valid JSON returns right" in {
-      val result = jsonValidationService.validate(MessageType.DeclarationAmendment, createStream(TestObjects.CC013C.jsonValid))
+      val result = jsonValidationService.validate(MessageType.DeclarationAmendment(apiVersion), createStream(TestObjects.CC013C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -67,14 +70,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC013C invalid JSON returns JsonFailedValidation error" in {
-      val result = jsonValidationService.validate(MessageType.DeclarationAmendment, createStream(TestObjects.CC013C.jsonInvalid))
+      val result = jsonValidationService.validate(MessageType.DeclarationAmendment(apiVersion), createStream(TestObjects.CC013C.jsonInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.JsonFailedValidation]
       }
     }
 
     "validating CC014C valid JSON returns right" in {
-      val result = jsonValidationService.validate(MessageType.DeclarationInvalidation, createStream(TestObjects.CC014C.jsonValid))
+      val result = jsonValidationService.validate(MessageType.DeclarationInvalidation(apiVersion), createStream(TestObjects.CC014C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -82,14 +85,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC014C invalid JSON returns JsonFailedValidation error" in {
-      val result = jsonValidationService.validate(MessageType.DeclarationInvalidation, createStream(TestObjects.CC014C.jsonInvalid))
+      val result = jsonValidationService.validate(MessageType.DeclarationInvalidation(apiVersion), createStream(TestObjects.CC014C.jsonInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.JsonFailedValidation]
       }
     }
 
     "validating CC015C valid JSON returns right" in {
-      val result = jsonValidationService.validate(MessageType.DeclarationData, createStream(TestObjects.CC015C.jsonValid))
+      val result = jsonValidationService.validate(MessageType.DeclarationData(apiVersion), createStream(TestObjects.CC015C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -97,14 +100,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC015C invalid JSON returns JsonFailedValidation error" in {
-      val result = jsonValidationService.validate(MessageType.DeclarationData, createStream(TestObjects.CC015C.jsonInvalid))
+      val result = jsonValidationService.validate(MessageType.DeclarationData(apiVersion), createStream(TestObjects.CC015C.jsonInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.JsonFailedValidation]
       }
     }
 
     "validating CC044C valid JSON returns right" in {
-      val result = jsonValidationService.validate(MessageType.UnloadingRemarks, createStream(TestObjects.CC044C.jsonValid))
+      val result = jsonValidationService.validate(MessageType.UnloadingRemarks(apiVersion), createStream(TestObjects.CC044C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -112,14 +115,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC044C invalid JSON returns JsonFailedValidation error" in {
-      val result = jsonValidationService.validate(MessageType.UnloadingRemarks, createStream(TestObjects.CC044C.jsonInvalid))
+      val result = jsonValidationService.validate(MessageType.UnloadingRemarks(apiVersion), createStream(TestObjects.CC044C.jsonInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.JsonFailedValidation]
       }
     }
 
     "validating CC170C valid JSON returns right" in {
-      val result = jsonValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec, createStream(TestObjects.CC170C.jsonValid))
+      val result = jsonValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), createStream(TestObjects.CC170C.jsonValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -127,7 +130,7 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC170C invalid JSON returns JsonFailedValidation error" in {
-      val result = jsonValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec, createStream(TestObjects.CC170C.jsonInvalid))
+      val result = jsonValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), createStream(TestObjects.CC170C.jsonInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.JsonFailedValidation]
       }
@@ -137,7 +140,7 @@ class V3ValidatorServiceIntegrationSpec
   "Xml validation" - {
 
     "validating CC007C valid XML returns right" in {
-      val result = xmlValidationService.validate(MessageType.ArrivalNotification, createStream(TestObjects.CC007C.xmlValid))
+      val result = xmlValidationService.validate(MessageType.ArrivalNotification(apiVersion), createStream(TestObjects.CC007C.xmlValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -145,14 +148,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC007C invalid XML returns XmlFailedValidation error" in {
-      val result = xmlValidationService.validate(MessageType.ArrivalNotification, createStream(TestObjects.CC007C.xmlInvalid))
+      val result = xmlValidationService.validate(MessageType.ArrivalNotification(apiVersion), createStream(TestObjects.CC007C.xmlInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.XmlFailedValidation]
       }
     }
 
     "validating CC013C valid XML returns right" in {
-      val result = xmlValidationService.validate(MessageType.DeclarationAmendment, createStream(TestObjects.CC013C.xmlValid))
+      val result = xmlValidationService.validate(MessageType.DeclarationAmendment(apiVersion), createStream(TestObjects.CC013C.xmlValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -160,14 +163,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC013C invalid XML returns XmlFailedValidation error" in {
-      val result = xmlValidationService.validate(MessageType.DeclarationAmendment, createStream(TestObjects.CC013C.xmlInvalid))
+      val result = xmlValidationService.validate(MessageType.DeclarationAmendment(apiVersion), createStream(TestObjects.CC013C.xmlInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.XmlFailedValidation]
       }
     }
 
     "validating CC014C valid XML returns right" in {
-      val result = xmlValidationService.validate(MessageType.DeclarationInvalidation, createStream(TestObjects.CC014C.xmlValid))
+      val result = xmlValidationService.validate(MessageType.DeclarationInvalidation(apiVersion), createStream(TestObjects.CC014C.xmlValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -175,14 +178,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC014C invalid XML returns XmlFailedValidation error" in {
-      val result = xmlValidationService.validate(MessageType.DeclarationInvalidation, createStream(TestObjects.CC014C.xmlInvalid))
+      val result = xmlValidationService.validate(MessageType.DeclarationInvalidation(apiVersion), createStream(TestObjects.CC014C.xmlInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.XmlFailedValidation]
       }
     }
 
     "validating CC015C valid XML returns right" in {
-      val result = xmlValidationService.validate(MessageType.DeclarationData, createStream(TestObjects.CC015C.xmlValid))
+      val result = xmlValidationService.validate(MessageType.DeclarationData(apiVersion), createStream(TestObjects.CC015C.xmlValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -190,14 +193,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC015C invalid XML returns XmlFailedValidation error" in {
-      val result = xmlValidationService.validate(MessageType.DeclarationData, createStream(TestObjects.CC015C.xmlInvalid))
+      val result = xmlValidationService.validate(MessageType.DeclarationData(apiVersion), createStream(TestObjects.CC015C.xmlInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.XmlFailedValidation]
       }
     }
 
     "validating CC044C valid XML returns right" in {
-      val result = xmlValidationService.validate(MessageType.UnloadingRemarks, createStream(TestObjects.CC044C.xmlValid))
+      val result = xmlValidationService.validate(MessageType.UnloadingRemarks(apiVersion), createStream(TestObjects.CC044C.xmlValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -205,14 +208,14 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC044C invalid XML returns XmlFailedValidation error" in {
-      val result = xmlValidationService.validate(MessageType.UnloadingRemarks, createStream(TestObjects.CC044C.xmlInvalid))
+      val result = xmlValidationService.validate(MessageType.UnloadingRemarks(apiVersion), createStream(TestObjects.CC044C.xmlInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.XmlFailedValidation]
       }
     }
 
     "validating CC170C valid XML returns right" in {
-      val result = xmlValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec, createStream(TestObjects.CC170C.xmlValid))
+      val result = xmlValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), createStream(TestObjects.CC170C.xmlValid))
       whenReady(result.value) {
         either =>
           either.isRight mustBe true
@@ -220,7 +223,7 @@ class V3ValidatorServiceIntegrationSpec
     }
 
     "validating CC170C invalid XML returns XmlFailedValidation error" in {
-      val result = xmlValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec, createStream(TestObjects.CC170C.xmlInvalid))
+      val result = xmlValidationService.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), createStream(TestObjects.CC170C.xmlInvalid))
       whenReady(result.value) {
         either => either.left.getOrElse(()) mustBe a[ValidationError.XmlFailedValidation]
       }

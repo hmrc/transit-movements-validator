@@ -75,8 +75,10 @@ class V3JsonValidationServiceImpl @Inject() extends V3JsonValidationService with
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
+  private val apiVersion = APIVersionHeader.V3_0
+
   private val schemaValidators = MessageType
-    .values(APIVersionHeader.V3_0)
+    .values(apiVersion)
     .map(
       msgType => msgType.code -> V3JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )

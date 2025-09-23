@@ -31,7 +31,6 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.base.TestSourceProvider
-import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader.V2_1
 import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError

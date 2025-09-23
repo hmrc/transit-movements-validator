@@ -24,4 +24,5 @@ enum APIVersionHeader(val value: String) {
 object APIVersionHeader {
   def fromString(value: String): Option[APIVersionHeader] =
     values.find(_.value == value)
+
 }

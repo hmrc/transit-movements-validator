@@ -35,6 +35,7 @@ import org.apache.pekko.stream.scaladsl.Zip
 import org.apache.pekko.util.ByteString
 import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.CustomsOffice
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
@@ -88,8 +89,9 @@ import scala.util.control.NonFatal
   */
 class V3BusinessValidationService @Inject() (appConfig: AppConfig) extends BusinessValidationService with Logging {
 
-  private val gbOffice = "^GB.*$".r
-  private val xiOffice = "^XI.*$".r
+  private val gbOffice   = "^GB.*$".r
+  private val xiOffice   = "^XI.*$".r
+  private val apiVersion = APIVersionHeader.V3_0
 
   private val bypassValidationFlow: Flow[Any, ValidationError, NotUsed] = Flow.fromSinkAndSource(Sink.ignore, Source.empty[ValidationError])
 
@@ -201,7 +203,7 @@ class V3BusinessValidationService @Inject() (appConfig: AppConfig) extends Busin
     *   A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
     */
   private def checkLRNForDepartures[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, ?] =
-    if (appConfig.validateLrnEnabled && messageType == MessageType.DeclarationData) {
+    if (appConfig.validateLrnEnabled && messageType == MessageType.DeclarationData(apiVersion)) {
       val path = lrnLocation(messageType, messageFormat)
       messageFormat
         .stringValueFlow(path)
@@ -235,7 +237,7 @@ class V3BusinessValidationService @Inject() (appConfig: AppConfig) extends Busin
     *   A [[Flow]]
     */
   private def enforceRuleC0467[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, ?] =
-    if (messageType == MessageType.DeclarationAmendment) {
+    if (messageType == MessageType.DeclarationAmendment(apiVersion)) {
       val lrnNode = lrnLocation(messageType, messageFormat)
       val mrnNode = mrnLocation(messageType, messageFormat)
       Flow
