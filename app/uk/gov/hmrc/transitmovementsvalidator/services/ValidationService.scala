@@ -20,6 +20,7 @@ import cats.data.EitherT
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
+import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 
@@ -28,7 +29,7 @@ import scala.concurrent.Future
 
 trait ValidationService {
 
-  def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
+  def validate(messageType: MessageType, source: Source[ByteString, ?], APIVersionHeader: APIVersionHeader)(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit]

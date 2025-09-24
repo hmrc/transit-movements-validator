@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v3_0.services
+package uk.gov.hmrc.transitmovementsvalidator.services
 
 import cats.data.EitherT
 import cats.data.NonEmptyList
@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.inject.ImplementedBy
 import com.networknt.schema.JsonMetaSchema
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
@@ -39,7 +38,6 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
-import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateTimeFormat
 
@@ -53,7 +51,7 @@ import scala.util.Success
 import scala.util.Try
 import scala.util.Using
 
-object V3JsonValidationService {
+object JsonValidationService {
 
   private lazy val formatOverrides = JsonMetaSchema
     .builder(JsonMetaSchema.getV7.getUri, JsonMetaSchema.getV7)
@@ -68,28 +66,23 @@ object V3JsonValidationService {
       .build()
 }
 
-@ImplementedBy(classOf[V3JsonValidationServiceImpl])
-trait V3JsonValidationService extends ValidationService
-
-class V3JsonValidationServiceImpl @Inject() extends V3JsonValidationService with Logging {
+class JsonValidationService @Inject() extends ValidationService with Logging {
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
-  private val apiVersion = APIVersionHeader.V3_0
-
-  private val schemaValidators = MessageType
-    .values(apiVersion)
+  private def schemaValidators(APIVersionHeader: APIVersionHeader) = MessageType
+    .values(APIVersionHeader)
     .map(
-      msgType => msgType.code -> V3JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
+      msgType => msgType.code -> JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )
     .toMap
 
-  override def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
+  override def validate(messageType: MessageType, source: Source[ByteString, ?], apiVersion: APIVersionHeader)(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
-      val schemaValidator = schemaValidators(messageType.code)
+      val schemaValidator = schemaValidators(apiVersion)(messageType.code)
       validateJson(source, schemaValidator) match {
         case Success(errors) if errors.isEmpty => Future.successful(Right(()))
         case Success(errors) =>
@@ -101,7 +94,8 @@ class V3JsonValidationServiceImpl @Inject() extends V3JsonValidationService with
         case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
         case Failure(thr) =>
           logger
-            .error(s"Validate Json Internal server error occurred : $thr", thr); Future.successful(Left(Unexpected(Some(thr))))
+            .error(s"Validate Json Internal server error occurred : $thr", thr)
+          Future.successful(Left(Unexpected(Some(thr))))
       }
     }
 

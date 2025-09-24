@@ -52,8 +52,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE013",
         "CC013C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc013c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc013c-schema.json"
+        s"/${apiVersion.path}/xsd/cc013c.xsd",
+        s"/${apiVersion.path}/json/cc013c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -62,8 +62,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE014",
         "CC014C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc014c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc014c-schema.json"
+        s"/${apiVersion.path}/xsd/cc014c.xsd",
+        s"/${apiVersion.path}/json/cc014c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -72,8 +72,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE015",
         "CC015C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc015c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc015c-schema.json"
+        s"/${apiVersion.path}/xsd/cc015c.xsd",
+        s"/${apiVersion.path}/json/cc015c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -82,8 +82,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE170",
         "CC170C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc170c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc170c-schema.json"
+        s"/${apiVersion.path}/xsd/cc170c.xsd",
+        s"/${apiVersion.path}/json/cc170c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -103,8 +103,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE007",
         "CC007C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc007c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc007c-schema.json"
+        s"/${apiVersion.path}/xsd/cc007c.xsd",
+        s"/${apiVersion.path}/json/cc007c-schema.json"
       )
       with ArrivalRequestMessageType
 
@@ -113,8 +113,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE044",
         "CC044C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc044c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc044c-schema.json"
+        s"/${apiVersion.path}/xsd/cc044c.xsd",
+        s"/${apiVersion.path}/json/cc044c-schema.json"
       )
       with ArrivalRequestMessageType
 
@@ -131,8 +131,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE004",
         "CC004C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc004c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc004c-schema.json"
+        s"/${apiVersion.path}/xsd/cc004c.xsd",
+        s"/${apiVersion.path}/json/cc004c-schema.json"
       )
       with ResponseMessageType
 
@@ -140,24 +140,24 @@ object MessageType {
       extends DepartureMessageType(
         "IE009",
         "CC009C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc009c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc009c-schema.json"
+        s"/${apiVersion.path}/xsd/cc009c.xsd",
+        s"/${apiVersion.path}/json/cc009c-schema.json"
       )
       with ResponseMessageType
   case class Discrepancies(apiVersion: APIVersionHeader)
       extends DepartureMessageType(
         "IE019",
         "CC019C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc019c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc019c-schema.json"
+        s"/${apiVersion.path}/xsd/cc019c.xsd",
+        s"/${apiVersion.path}/json/cc019c-schema.json"
       )
       with ResponseMessageType
   case class MRNAllocated(apiVersion: APIVersionHeader)
       extends DepartureMessageType(
         "IE028",
         "CC028C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc028c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc028c-schema.json"
+        s"/${apiVersion.path}/xsd/cc028c.xsd",
+        s"/${apiVersion.path}/json/cc028c-schema.json"
       )
       with ResponseMessageType
 
@@ -165,8 +165,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE029",
         "CC029C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc029c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc029c-schema.json"
+        s"/${apiVersion.path}/xsd/cc029c.xsd",
+        s"/${apiVersion.path}/json/cc029c-schema.json"
       )
       with ResponseMessageType
 
@@ -174,8 +174,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE035",
         "CC035C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc035c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc035c-schema.json"
+        s"/${apiVersion.path}/xsd/cc035c.xsd",
+        s"/${apiVersion.path}/json/cc035c-schema.json"
       )
       with ResponseMessageType
 
@@ -183,8 +183,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE045",
         "CC045C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc045c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc045c-schema.json"
+        s"/${apiVersion.path}/xsd/cc045c.xsd",
+        s"/${apiVersion.path}/json/cc045c-schema.json"
       )
       with ResponseMessageType
 
@@ -192,8 +192,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE051",
         "CC051C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc051c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc051c-schema.json"
+        s"/${apiVersion.path}/xsd/cc051c.xsd",
+        s"/${apiVersion.path}/json/cc051c-schema.json"
       )
       with ResponseMessageType
 
@@ -201,8 +201,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE055",
         "CC055C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc055c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc055c-schema.json"
+        s"/${apiVersion.path}/xsd/cc055c.xsd",
+        s"/${apiVersion.path}/json/cc055c-schema.json"
       )
       with ResponseMessageType
 
@@ -210,8 +210,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE056",
         "CC056C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc056c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc056c-schema.json"
+        s"/${apiVersion.path}/xsd/cc056c.xsd",
+        s"/${apiVersion.path}/json/cc056c-schema.json"
       )
       with ResponseMessageType
 
@@ -219,8 +219,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE060",
         "CC060C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc060c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc060c-schema.json"
+        s"/${apiVersion.path}/xsd/cc060c.xsd",
+        s"/${apiVersion.path}/json/cc060c-schema.json"
       )
       with ResponseMessageType
 
@@ -228,16 +228,16 @@ object MessageType {
       extends DepartureMessageType(
         "IE182",
         "CC182C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc182c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc182c-schema.json"
+        s"/${apiVersion.path}/xsd/cc182c.xsd",
+        s"/${apiVersion.path}/json/cc182c-schema.json"
       )
       with ResponseMessageType
   case class FunctionalNack(apiVersion: APIVersionHeader)
       extends DepartureMessageType(
         "IE906",
         "CC906C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc906c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc906c-schema.json"
+        s"/${apiVersion.path}/xsd/cc906c.xsd",
+        s"/${apiVersion.path}/json/cc906c-schema.json"
       )
       with ResponseMessageType
 
@@ -245,8 +245,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE928",
         "CC928C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc928c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc928c-schema.json"
+        s"/${apiVersion.path}/xsd/cc928c.xsd",
+        s"/${apiVersion.path}/json/cc928c-schema.json"
       )
       with ResponseMessageType
 
@@ -275,8 +275,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE025",
         "CC025C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc025c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc025c-schema.json"
+        s"/${apiVersion.path}/xsd/cc025c.xsd",
+        s"/${apiVersion.path}/json/cc025c-schema.json"
       )
       with ResponseMessageType
 
@@ -284,8 +284,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE043",
         "CC043C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc043c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc043c-schema.json"
+        s"/${apiVersion.path}/xsd/cc043c.xsd",
+        s"/${apiVersion.path}/json/cc043c-schema.json"
       )
       with ResponseMessageType
 
@@ -293,8 +293,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE057",
         "CC057C",
-        s"/${MessageType.toPath(apiVersion.value)}/xsd/cc057c.xsd",
-        s"/${MessageType.toPath(apiVersion.value)}/json/cc057c-schema.json"
+        s"/${apiVersion.path}/xsd/cc057c.xsd",
+        s"/${apiVersion.path}/json/cc057c-schema.json"
       )
       with ResponseMessageType
 
@@ -314,5 +314,4 @@ object MessageType {
   def find(code: String, requestOnly: Boolean, apiVersion: APIVersionHeader): Option[MessageType] =
     (if (requestOnly) requestValues(apiVersion) else values(apiVersion)).find(_.code == code)
 
-  def toPath(value: String) = s"v${value.replace('.', '_')}"
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v2_1.services.itbase
+package uk.gov.hmrc.transitmovementsvalidator.services.itbase
 
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString

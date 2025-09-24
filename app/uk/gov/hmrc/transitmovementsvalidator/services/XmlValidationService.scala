@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.v3_0.services
+package uk.gov.hmrc.transitmovementsvalidator.services
 
 import cats.data.EitherT
 import cats.data.NonEmptyList
 import cats.syntax.all.*
-import com.google.inject.ImplementedBy
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.stream.scaladsl.StreamConverters
@@ -31,7 +30,6 @@ import play.api.Logging
 import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
-import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
 
@@ -47,27 +45,24 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.xml.XMLReader
 
-@ImplementedBy(classOf[V3XmlValidationServiceImpl])
-trait V3XmlValidationService extends ValidationService
+class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends ValidationService with Logging {
 
-class V3XmlValidationServiceImpl @Inject() (implicit ec: ExecutionContext) extends V3XmlValidationService with Logging {
-
-  private lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
+  def parsersByType(apiVersion: APIVersionHeader): Map[MessageType, Future[SAXParserFactory]] =
     MessageType
-      .values(APIVersionHeader.V3_0)
+      .values(apiVersion)
       .map {
         typ =>
           typ -> Future(buildParser(typ))
       }
       .toMap
 
-  override def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
+  override def validate(messageType: MessageType, source: Source[ByteString, ?], apiVersion: APIVersionHeader)(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
       for {
-        saxParser <- parsersByType(messageType)
+        saxParser <- parsersByType(apiVersion)(messageType)
         inputStream           = source.runWith(StreamConverters.asInputStream(20.seconds))
         (parser, errorBuffer) = createParser(saxParser)
         parsedXml             = parseXml(parser, inputStream)

@@ -36,24 +36,19 @@ import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.*
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.services.BusinessValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
 import uk.gov.hmrc.transitmovementsvalidator.services.ValidationService
+import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.v2_1.services.*
-import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3BusinessValidationService
-import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3JsonValidationService
-import uk.gov.hmrc.transitmovementsvalidator.v3_0.services.V3XmlValidationService
 
 import javax.inject.Inject
 import scala.concurrent.*
 
 class MessagesController @Inject() (
   cc: ControllerComponents,
-  v2XmlValidationService: V2XmlValidationService,
-  v2JsonValidationService: V2JsonValidationService,
-  v2BusinessValidationService: V2BusinessValidationService,
-  v3XmlValidationService: V3XmlValidationService,
-  v3JsonValidationService: V3JsonValidationService,
-  v3BusinessValidationService: V3BusinessValidationService,
+  xmlValidationService: XmlValidationService,
+  jsonValidationService: JsonValidationService,
+  businessValidationService: BusinessValidationService,
   validateAcceptRefiner: ValidateAcceptRefiner,
   config: AppConfig
 )(implicit
@@ -67,15 +62,11 @@ class MessagesController @Inject() (
 
   def validate(messageType: String): Action[Source[ByteString, ?]] = validateAcceptRefiner.async(streamFromMemory) {
     implicit request =>
-      val services: (ValidationService, ValidationService, BusinessValidationService) = request.versionHeader match {
-        case APIVersionHeader.V2_1 => (v2XmlValidationService, v2JsonValidationService, v2BusinessValidationService)
-        case APIVersionHeader.V3_0 => (v3XmlValidationService, v3JsonValidationService, v3BusinessValidationService)
-      }
       request.headers.get(CONTENT_TYPE) match {
         case Some(MimeTypes.XML) =>
-          validateMessage(messageType, services._1, MessageFormat.Xml, services._3, request, request.versionHeader)
+          validateMessage(messageType, xmlValidationService, MessageFormat.Xml, request, request.versionHeader)
         case Some(MimeTypes.JSON) =>
-          validateMessage(messageType, services._2, MessageFormat.Json, services._3, request, request.versionHeader)
+          validateMessage(messageType, jsonValidationService, MessageFormat.Json, request, request.versionHeader)
         case Some(x) =>
           request.body.runWith(Sink.ignore)
           Future.successful(UnsupportedMediaType(Json.toJson(PresentationError.unsupportedMediaTypeError(s"Content type $x is not supported."))))
@@ -89,7 +80,6 @@ class MessagesController @Inject() (
     messageType: String,
     validationService: ValidationService,
     messageFormat: MessageFormat[?],
-    businessValidationService: BusinessValidationService,
     request: Request[Source[ByteString, ?]],
     versionHeader: APIVersionHeader
   ): Future[Result] =
@@ -100,8 +90,8 @@ class MessagesController @Inject() (
       // business validation at the same time. We get the result from the business rule validation from the
       // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
       // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
-      _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
+      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat, versionHeader)
+      _ <- validationService.validate(messageTypeObj, request.body.via(businessRulesFlow), versionHeader).asPresentation
       _ <- deferredBusinessRulesValidation.asPresentation
     } yield NoContent)
       .valueOr {
