@@ -1,0 +1,73 @@
+{
+  "n1:CC015C": {
+    "preparationDateAndTime": "2022-01-22T07:43:36",
+    "TransitOperation": {
+      "LRN": "qvRcL",
+      "declarationType": "Pbg",
+      "additionalDeclarationType": "O",
+      "security": "8",
+      "reducedDatasetIndicator": "1",
+      "bindingItinerary": "0"
+    },
+    "CustomsOfficeOfDeparture": {
+      "referenceNumber": "GBZ20442"
+    },
+    "CustomsOfficeOfDestinationDeclared": {
+      "referenceNumber": "GBZ20442"
+    },
+    "messageType": "CC015C",
+    "@PhaseID": "NCTS5.0",
+    "messageRecipient": "NTA.GB",
+    "messageSender": "token",
+    "HolderOfTheTransitProcedure": {
+      "identificationNumber": "SFzsisksA"
+    },
+    "Consignment": {
+      "grossMass": 6430669292.48125,
+      "HouseConsignment": [
+        {
+          "sequenceNumber": 48711,
+          "grossMass": 6430669292.48125,
+          "AdditionalSupplyChainActor": [],
+          "DepartureTransportMeans": [],
+          "PreviousDocument": [],
+          "SupportingDocument": [],
+          "TransportDocument": [],
+          "AdditionalReference": [],
+          "AdditionalInformation": [],
+          "ConsignmentItem": [
+            {
+              "goodsItemNumber": 18914,
+              "declarationGoodsItemNumber": 1458,
+              "AdditionalSupplyChainActor": [],
+              "Commodity": {
+                "descriptionOfGoods": "ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe",
+                "DangerousGoods": []
+              },
+              "Packaging": [
+                {
+                  "sequenceNumber": 48711,
+                  "typeOfPackages": "Oi"
+                }
+              ],
+              "PreviousDocument": [],
+              "SupportingDocument": [],
+              "TransportDocument": [],
+              "AdditionalReference": [],
+              "AdditionalInformation": []
+            }
+          ]
+        }
+      ]
+    },
+    "messageIdentification": "6Onxa3En",
+    "Guarantee": [
+      {
+        "sequenceNumber": 48711,
+        "guaranteeType": "1",
+        "otherGuaranteeReference": "1qJMA6MbhnnrOJJjHBHX",
+        "GuaranteeReference": []
+      }
+    ]
+  }
+}
