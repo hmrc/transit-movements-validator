@@ -51,14 +51,15 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
 
   lazy val validXml: NodeSeq = <test></test>
 
-  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
+  lazy val v2TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v2_1/data"
+  lazy val v3TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v3_0/data"
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
   "On Validate for ApiVersion 2.1" - {
     val apiVersion: APIVersionHeader = APIVersionHeader.V2_1
     "when valid CC013C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -69,7 +70,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC014C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc014c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -80,7 +81,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC015C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -92,7 +93,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC170C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc170c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
 
@@ -103,7 +104,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC007C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -114,7 +115,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC044C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc044c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -125,7 +126,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid message type provided but with schema invalid json, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -136,7 +137,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC014C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-date-time.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc014c-invalid-date-time.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -157,7 +158,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC007C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-date-time.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid-date-time.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -199,7 +200,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC044C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-date-time.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc044c-invalid-date-time.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -220,7 +221,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC013C provided with schema invalid date in the limitDate field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-date.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid-date.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -388,7 +389,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when invalid json is provided with extra braces, returns an exception" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/invalid-with-extra-braces.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/invalid-with-extra-braces.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -417,7 +418,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC007C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -456,7 +457,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC007C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -498,7 +499,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC013C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -653,7 +654,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC013C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -811,7 +812,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC014C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc014c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -832,7 +833,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC014C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc014c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -853,7 +854,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC015C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -891,7 +892,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC044C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc044c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -912,7 +913,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC044C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc044c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -933,7 +934,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC170C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc170c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
 
@@ -980,7 +981,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC170C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc170c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
 
@@ -1033,7 +1034,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
   "On Validate for ApiVersion 3.0" - {
     val apiVersion: APIVersionHeader = APIVersionHeader.V3_0
     "when valid CC013C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -1044,7 +1045,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC014C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc014c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -1055,7 +1056,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC015C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -1067,7 +1068,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC170C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc170c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
 
@@ -1078,7 +1079,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC007C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -1089,7 +1090,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid CC044C JSON is provided for the given message type, return a Right" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-valid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc044c-valid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -1100,7 +1101,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when valid message type provided but with schema invalid json, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -1111,7 +1112,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC014C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-date-time.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc014c-invalid-date-time.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -1132,7 +1133,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC007C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-date-time.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid-date-time.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -1174,7 +1175,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC044C provided with schema invalid datetime in the preparationDateAndTime field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-date-time.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc044c-invalid-date-time.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -1195,7 +1196,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC013C provided with schema invalid date in the limitDate field, return errors" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-date.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid-date.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -1363,7 +1364,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when invalid json is provided with extra braces, returns an exception" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/invalid-with-extra-braces.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/invalid-with-extra-braces.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -1392,7 +1393,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC007C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -1431,7 +1432,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC007C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
 
@@ -1473,7 +1474,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC013C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -1628,7 +1629,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC013C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
 
@@ -1786,7 +1787,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC014C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc014c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -1807,7 +1808,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC014C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc014c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc014c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
 
@@ -1828,7 +1829,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC015C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
 
@@ -1866,7 +1867,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC044C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc044c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -1887,7 +1888,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC044C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc044c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc044c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
 
@@ -1908,7 +1909,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC170C provided with invalid schema, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc170c-invalid.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
 
@@ -1955,7 +1956,7 @@ class JsonValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSu
     }
 
     "when an invalid CC170C provided with invalid value in messageSender field, return error" in {
-      val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc170c-invalid-message-sender.json"))
+      val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc170c-invalid-message-sender.json"))
       val sut    = new JsonValidationService
       val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
 

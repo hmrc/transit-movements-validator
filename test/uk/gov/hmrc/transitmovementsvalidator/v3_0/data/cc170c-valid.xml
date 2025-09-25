@@ -1,0 +1,62 @@
+<ncts:CC170C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
+    <messageSender>token</messageSender>
+    <messageRecipient>token</messageRecipient>
+    <preparationDateAndTime>2007-10-26T07:36:28</preparationDateAndTime>
+    <messageIdentification>token</messageIdentification>
+    <messageType>CC170C</messageType>
+    <TransitOperation>
+        <LRN>string</LRN>
+    </TransitOperation>
+    <CustomsOfficeOfDeparture>
+        <referenceNumber>GB123456</referenceNumber>
+    </CustomsOfficeOfDeparture>
+    <HolderOfTheTransitProcedure>
+    </HolderOfTheTransitProcedure>
+    <Consignment>
+        <!--0 to 9999 repetitions:-->
+        <TransportEquipment>
+            <sequenceNumber>12345</sequenceNumber>
+            <numberOfSeals>100</numberOfSeals>
+            <!--0 to 99 repetitions:-->
+            <Seal>
+                <sequenceNumber>12345</sequenceNumber>
+                <identifier>string</identifier>
+            </Seal>
+            <!--0 to 9999 repetitions:-->
+            <GoodsReference>
+                <sequenceNumber>12345</sequenceNumber>
+                <declarationGoodsItemNumber>100</declarationGoodsItemNumber>
+            </GoodsReference>
+        </TransportEquipment>
+        <LocationOfGoods>
+            <typeOfLocation>A</typeOfLocation>
+            <qualifierOfIdentification>B</qualifierOfIdentification>
+        </LocationOfGoods>
+        <!--0 to 999 repetitions:-->
+        <DepartureTransportMeans>
+            <sequenceNumber>12345</sequenceNumber>
+            <typeOfIdentification>00</typeOfIdentification>
+            <identificationNumber>string</identificationNumber>
+            <nationality>GB</nationality>
+        </DepartureTransportMeans>
+        <!--0 to 9 repetitions:-->
+        <ActiveBorderTransportMeans>
+            <sequenceNumber>12345</sequenceNumber>
+            <customsOfficeAtBorderReferenceNumber>12345678</customsOfficeAtBorderReferenceNumber>
+            <typeOfIdentification>00</typeOfIdentification>
+            <identificationNumber>string</identificationNumber>
+            <nationality>GB</nationality>
+        </ActiveBorderTransportMeans>
+        <!--1 to 99 repetitions:-->
+        <HouseConsignment>
+            <sequenceNumber>12345</sequenceNumber>
+            <!--0 to 999 repetitions:-->
+            <DepartureTransportMeans>
+                <sequenceNumber>12345</sequenceNumber>
+                <typeOfIdentification>00</typeOfIdentification>
+                <identificationNumber>string</identificationNumber>
+                <nationality>GB</nationality>
+            </DepartureTransportMeans>
+        </HouseConsignment>
+    </Consignment>
+</ncts:CC170C>

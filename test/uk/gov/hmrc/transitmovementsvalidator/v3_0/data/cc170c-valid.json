@@ -1,0 +1,131 @@
+{
+  "n1:CC170C": {
+    "preparationDateAndTime": "2007-10-26T07:36:28",
+    "TransitOperation": {
+      "LRN": "string",
+      "limitDate": "2014-06-09"
+    },
+    "CustomsOfficeOfDeparture": {
+      "referenceNumber": "GB123456"
+    },
+    "messageType": "CC170C",
+    "@PhaseID": "NCTS5.0",
+    "correlationIdentifier": "token",
+    "messageRecipient": "token",
+    "messageSender": "token",
+    "HolderOfTheTransitProcedure": {
+      "identificationNumber": "string",
+      "TIRHolderIdentificationNumber": "string",
+      "name": "string",
+      "Address": {
+        "streetAndNumber": "string",
+        "postcode": "string",
+        "city": "string",
+        "country": "GB"
+      }
+    },
+    "Consignment": {
+      "containerIndicator": "1",
+      "inlandModeOfTransport": "0",
+      "modeOfTransportAtTheBorder": "0",
+      "TransportEquipment": [
+        {
+          "sequenceNumber": 1234,
+          "containerIdentificationNumber": "string",
+          "numberOfSeals": 100,
+          "Seal": [
+            {
+              "sequenceNumber": 1234,
+              "identifier": "string"
+            }
+          ],
+          "GoodsReference": [
+            {
+              "sequenceNumber": 1234,
+              "declarationGoodsItemNumber": 100
+            }
+          ]
+        }
+      ],
+      "LocationOfGoods": {
+        "typeOfLocation": "b",
+        "qualifierOfIdentification": "a",
+        "authorisationNumber": "string",
+        "additionalIdentifier": "stri",
+        "UNLocode": "token",
+        "CustomsOffice": {
+          "referenceNumber": "AB123456"
+        },
+        "GNSS": {
+          "latitude": "+1.00000",
+          "longitude": "+1.00000"
+        },
+        "EconomicOperator": {
+          "identificationNumber": "string"
+        },
+        "Address": {
+          "streetAndNumber": "string",
+          "postcode": "string",
+          "city": "string",
+          "country": "GB"
+        },
+        "PostcodeAddress": {
+          "houseNumber": "string",
+          "postcode": "string",
+          "country": "GB"
+        },
+        "ContactPerson": {
+          "name": "string",
+          "phoneNumber": "token",
+          "eMailAddress": "string"
+        }
+      },
+      "DepartureTransportMeans": [
+        {
+          "sequenceNumber": 1234,
+          "typeOfIdentification": "12",
+          "identificationNumber": "string",
+          "nationality": "GB"
+        }
+      ],
+      "ActiveBorderTransportMeans": [
+        {
+          "sequenceNumber": 1234,
+          "customsOfficeAtBorderReferenceNumber": "GB123456",
+          "typeOfIdentification": "12",
+          "identificationNumber": "string",
+          "nationality": "GB",
+          "conveyanceReferenceNumber": "string"
+        }
+      ],
+      "PlaceOfLoading": {
+        "UNLocode": "token",
+        "country": "GB",
+        "location": "string"
+      },
+      "HouseConsignment": [
+        {
+          "sequenceNumber": 123,
+          "DepartureTransportMeans": [
+            {
+              "sequenceNumber": 1234,
+              "typeOfIdentification": "12",
+              "identificationNumber": "string",
+              "nationality": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    "Representative": {
+      "identificationNumber": "string",
+      "status": "0",
+      "ContactPerson": {
+        "name": "string",
+        "phoneNumber": "token",
+        "eMailAddress": "string"
+      }
+    },
+    "messageIdentification": "token"
+  }
+}

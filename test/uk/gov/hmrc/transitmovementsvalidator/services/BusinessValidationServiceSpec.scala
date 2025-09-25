@@ -39,7 +39,8 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
   implicit val timeout: PatienceConfig = PatienceConfig(2.seconds, 2.seconds)
 
-  lazy val testDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/data"
+  lazy val v2TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v2_1/data"
+  lazy val v3TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v3_0/data"
 
   def createConfig(lrnValidationEnabled: Boolean = true, lrnValidationRegex: String = "^.{1,35}$"): AppConfig = {
     val config = mock[AppConfig]
@@ -55,7 +56,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
     "when we validate the message recipient" - {
 
       "when messageRecipient is invalid" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-recipient.json"))
+        val source         = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid-recipient.json"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
 
@@ -73,7 +74,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the office country does not match the messageRecipient country (XI office for GB recipient)" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-ref-office.json"))
+        val source         = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid-ref-office.json"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
 
@@ -91,7 +92,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+        val source         = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-reference-departure.json"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
 
@@ -109,7 +110,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for GB, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-valid.json"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
@@ -122,7 +123,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for XI, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid-xi.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-valid-xi.json"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
@@ -138,7 +139,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "when we validate the LRN" - {
       "when the LRN is 'invalid' and the LRN validation is disabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
@@ -151,7 +152,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'invalid' and the LRN validation is enabled, an error is returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
@@ -168,7 +169,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'valid' and the LRN validation is enabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-valid.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
@@ -183,7 +184,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "IE013" - {
       "when we have a valid IE013 using an LRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-valid.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -196,7 +197,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have a valid IE013 using an MRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid-mrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-valid-mrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -209,7 +210,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 without a LRN or MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-no-mrn-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid-no-mrn-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -222,7 +223,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-both-mrn-and-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid-both-mrn-and-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -242,7 +243,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
     "when we validate the message recipient" - {
 
       "when messageRecipient is invalid" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-recipient.json"))
+        val source         = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid-recipient.json"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
 
@@ -260,7 +261,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the office country does not match the messageRecipient country (XI office for GB recipient)" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-ref-office.json"))
+        val source         = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid-ref-office.json"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
 
@@ -278,7 +279,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.json"))
+        val source         = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-reference-departure.json"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
 
@@ -296,7 +297,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for GB, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-valid.json"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
@@ -309,7 +310,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for XI, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid-xi.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-valid-xi.json"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Json, apiVersion)
@@ -325,7 +326,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "when we validate the LRN" - {
       "when the LRN is 'invalid' and the LRN validation is disabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
@@ -338,7 +339,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'invalid' and the LRN validation is enabled, an error is returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
@@ -355,7 +356,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'valid' and the LRN validation is enabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-valid.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Json, apiVersion)
@@ -370,7 +371,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "IE013" - {
       "when we have a valid IE013 using an LRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-valid.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -383,7 +384,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have a valid IE013 using an MRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid-mrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-valid-mrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -396,7 +397,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 without a LRN or MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-no-mrn-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid-no-mrn-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -409,7 +410,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-both-mrn-and-lrn.json"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid-both-mrn-and-lrn.json"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Json, apiVersion)
@@ -427,7 +428,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
     val apiVersion: APIVersionHeader = APIVersionHeader.V2_1
     "when we validate the message recipient" - {
       "when messageRecipient is invalid" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-recipient.xml"))
+        val source         = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid-recipient.xml"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
 
@@ -445,7 +446,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the office country does not match the messageRecipient country (XI office for GB recipient)" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-ref-office.xml"))
+        val source         = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-invalid-ref-office.xml"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
 
@@ -463,7 +464,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.xml"))
+        val source         = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-reference-departure.xml"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
 
@@ -481,7 +482,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for GB, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-valid.xml"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
@@ -494,7 +495,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for XI, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid-xi.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc007c-valid-xi.xml"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
@@ -510,7 +511,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "when we validate the LRN" - {
       "when the LRN is 'invalid' and the LRN validation is disabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
@@ -523,7 +524,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'invalid' and the LRN validation is enabled, an error is returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-invalid-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
@@ -540,7 +541,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'valid' and the LRN validation is enabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc015c-valid.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
@@ -555,7 +556,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "IE013" - {
       "when we have a valid IE013 using an LRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-valid.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -568,7 +569,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have a valid IE013 using an MRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid-mrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-valid-mrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -581,7 +582,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 without an LRN or MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-no-mrn-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid-no-mrn-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -594,7 +595,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-both-mrn-and-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v2TestDataPath/cc013c-invalid-both-mrn-and-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -611,7 +612,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
     val apiVersion: APIVersionHeader = APIVersionHeader.V3_0
     "when we validate the message recipient" - {
       "when messageRecipient is invalid" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-recipient.xml"))
+        val source         = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid-recipient.xml"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
 
@@ -629,7 +630,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the office country does not match the messageRecipient country (XI office for GB recipient)" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-invalid-ref-office.xml"))
+        val source         = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-invalid-ref-office.xml"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
 
@@ -647,7 +648,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when referenceNumber node doesn't start with GB or XI for Departure, return BusinessValidationError" in {
-        val source         = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-reference-departure.xml"))
+        val source         = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-reference-departure.xml"))
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
 
@@ -665,7 +666,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for GB, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-valid.xml"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
@@ -678,7 +679,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when message is business rule valid for XI, return a Right" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc007c-valid-xi.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc007c-valid-xi.xml"))
 
         val sut            = new BusinessValidationService(createConfig())
         val (preMat, flow) = sut.businessValidationFlow(MessageType.ArrivalNotification(apiVersion), MessageFormat.Xml, apiVersion)
@@ -694,7 +695,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "when we validate the LRN" - {
       "when the LRN is 'invalid' and the LRN validation is disabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
@@ -707,7 +708,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'invalid' and the LRN validation is enabled, an error is returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-invalid-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-invalid-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
@@ -724,7 +725,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when the LRN is 'valid' and the LRN validation is enabled, no errors are returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc015c-valid.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc015c-valid.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationRegex = "^[a-zA-Z]{1,35}$"))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationData(apiVersion), MessageFormat.Xml, apiVersion)
@@ -739,7 +740,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
 
     "IE013" - {
       "when we have a valid IE013 using an LRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-valid.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -752,7 +753,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have a valid IE013 using an MRN, Unit must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-valid-mrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-valid-mrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -765,7 +766,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 without an LRN or MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-no-mrn-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid-no-mrn-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
@@ -778,7 +779,7 @@ class BusinessValidationServiceSpec extends AnyFreeSpec with Matchers with Scala
       }
 
       "when we have an invalid IE013 with both a LRN and a MRN, a validation error must be returned" in {
-        val source = FileIO.fromPath(Paths.get(s"$testDataPath/cc013c-invalid-both-mrn-and-lrn.xml"))
+        val source = FileIO.fromPath(Paths.get(s"$v3TestDataPath/cc013c-invalid-both-mrn-and-lrn.xml"))
 
         val sut            = new BusinessValidationService(createConfig(lrnValidationEnabled = false))
         val (preMat, flow) = sut.businessValidationFlow(MessageType.DeclarationAmendment(apiVersion), MessageFormat.Xml, apiVersion)
