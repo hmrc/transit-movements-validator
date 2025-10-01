@@ -291,7 +291,7 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
         Flow.fromFunction[String, Either[BusinessValidationError, CustomsOffice]] {
           case gbOffice() => Right(CustomsOffice.Gb)
           case xiOffice() => Right(CustomsOffice.Xi)
-          case string =>
+          case string     =>
             Left(
               BusinessValidationError(
                 s"The customs office specified for ${messageType.routingOfficeNode} must be a customs office located in the United Kingdom ($string was specified)"
@@ -321,7 +321,7 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
         Flow.fromFunction[String, Either[BusinessValidationError, CustomsOffice]] {
           case "NTA.GB" => Right(CustomsOffice.Gb)
           case "NTA.XI" => Right(CustomsOffice.Xi)
-          case string =>
+          case string   =>
             Left(
               BusinessValidationError(
                 s"The message recipient must be either NTA.GB or NTA.XI ($string was specified)"
@@ -374,7 +374,7 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
             val zip       = builder.add(Zip[Either[ValidationError, CustomsOffice], Either[ValidationError, CustomsOffice]]())
             val office    = builder.add(officeFlow(messageType, messageFormat))
             val recipient = builder.add(recipientFlow(messageType, messageFormat))
-            val process =
+            val process   =
               builder.add(Flow.fromFunction[(Either[ValidationError, CustomsOffice], Either[ValidationError, CustomsOffice]), Option[ValidationError]] {
                 case (Right(left), Right(right)) =>
                   if (left == right) None

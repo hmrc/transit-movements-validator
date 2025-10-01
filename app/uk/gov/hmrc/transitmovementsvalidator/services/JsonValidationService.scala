@@ -85,14 +85,14 @@ class JsonValidationService @Inject() extends ValidationService with Logging {
       val schemaValidator = schemaValidators(apiVersion)(messageType.code)
       validateJson(source, schemaValidator) match {
         case Success(errors) if errors.isEmpty => Future.successful(Right(()))
-        case Success(errors) =>
+        case Success(errors)                   =>
           val validationErrors = errors.map(
             e => JsonSchemaValidationError(e.getSchemaPath, e.getMessage)
           )
 
           Future.successful(Left(JsonFailedValidation(NonEmptyList.fromListUnsafe(validationErrors.toList))))
         case Failure(thr: JsonParseException) => Future.successful(Left(FailedToParse(stripSource(thr.getMessage))))
-        case Failure(thr) =>
+        case Failure(thr)                     =>
           logger
             .error(s"Validate Json Internal server error occurred : $thr", thr)
           Future.successful(Left(Unexpected(Some(thr))))
