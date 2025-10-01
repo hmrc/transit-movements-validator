@@ -121,7 +121,7 @@ class MessagesControllerSpec
 
     "return NOT_ACCEPTABLE when APIVersion is None" in {
 
-      val messageType = Gen.alphaNumStr.sample.getOrElse("messageType")
+      val messageType        = Gen.alphaNumStr.sample.getOrElse("messageType")
       val messagesController =
         new MessagesController(
           stubControllerComponents(),
@@ -146,8 +146,8 @@ class MessagesControllerSpec
     }
     "return UNSUPPORTED_MEDIA_TYPE_ERROR when the APIVersion is invalid or not supported" in {
 
-      val invalidAPIVersion = Gen.alphaNumStr.sample.getOrElse("invalidAPIVersion")
-      val messageType       = Gen.alphaNumStr.sample.getOrElse("messageType")
+      val invalidAPIVersion  = Gen.alphaNumStr.sample.getOrElse("invalidAPIVersion")
+      val messageType        = Gen.alphaNumStr.sample.getOrElse("messageType")
       val messagesController =
         new MessagesController(
           stubControllerComponents(),
@@ -172,8 +172,8 @@ class MessagesControllerSpec
     }
     "return UNSUPPORTED_MEDIA_TYPE_ERROR when the APIVersion is empty" in {
 
-      val emptyAPIVersion = ""
-      val messageType     = Gen.alphaNumStr.sample.getOrElse("messageType")
+      val emptyAPIVersion    = ""
+      val messageType        = Gen.alphaNumStr.sample.getOrElse("messageType")
       val messagesController =
         new MessagesController(
           stubControllerComponents(),
@@ -226,7 +226,7 @@ class MessagesControllerSpec
               mockConfig
             )
 
-          val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+          val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
           val request =
             FakeRequest(
               "POST",
@@ -250,7 +250,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
@@ -279,7 +279,7 @@ class MessagesControllerSpec
               new ValidateAcceptRefiner(stubControllerComponents()),
               mockConfig
             )
-          val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+          val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
           val request =
             FakeRequest(
               "POST",
@@ -324,7 +324,7 @@ class MessagesControllerSpec
               config
             )
 
-          val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+          val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
           val request =
             FakeRequest(
               "POST",
@@ -358,7 +358,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -393,7 +393,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -430,7 +430,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -470,7 +470,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -509,7 +509,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -532,7 +532,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
@@ -573,7 +573,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -599,7 +599,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -651,7 +651,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -689,7 +689,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -730,7 +730,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -769,7 +769,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v2ValidCode/validate/",
@@ -813,7 +813,7 @@ class MessagesControllerSpec
               mockConfig
             )
 
-          val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+          val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
           val request =
             FakeRequest(
               "POST",
@@ -837,7 +837,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
@@ -866,7 +866,7 @@ class MessagesControllerSpec
               new ValidateAcceptRefiner(stubControllerComponents()),
               mockConfig
             )
-          val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+          val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
           val request =
             FakeRequest(
               "POST",
@@ -911,7 +911,7 @@ class MessagesControllerSpec
               config
             )
 
-          val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+          val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
           val request =
             FakeRequest(
               "POST",
@@ -945,7 +945,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -980,7 +980,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1017,7 +1017,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1057,7 +1057,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1096,7 +1096,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1119,7 +1119,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
@@ -1160,7 +1160,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(invalidJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1186,7 +1186,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1238,7 +1238,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1276,7 +1276,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1317,7 +1317,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",
@@ -1356,7 +1356,7 @@ class MessagesControllerSpec
             mockConfig
           )
 
-        val source = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
+        val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
           s"/messages/$v3ValidCode/validate/",

@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 object AppDependencies {
 
@@ -19,7 +19,6 @@ object AppDependencies {
     "org.mockito"             % "mockito-core"           % "3.9.0",
     "org.scalatest"          %% "scalatest"              % "3.2.12",
     "org.typelevel"          %% "cats-core"              % catsVersion,
-    "org.pegdown"             % "pegdown"                % "1.6.0",
     "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.1",
     "org.scalatestplus"      %% "mockito-5-12"           % "3.2.19.0",
     "org.scalacheck"         %% "scalacheck"             % "1.16.0",
