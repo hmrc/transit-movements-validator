@@ -48,16 +48,20 @@ import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
 import uk.gov.hmrc.transitmovementsvalidator.config.AppConfig
 import uk.gov.hmrc.transitmovementsvalidator.controllers.actions.ValidateAcceptRefiner
-import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageFormat
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
-import uk.gov.hmrc.transitmovementsvalidator.services.BusinessValidationService
-import uk.gov.hmrc.transitmovementsvalidator.services.JsonValidationService
-import uk.gov.hmrc.transitmovementsvalidator.services.XmlValidationService
 import uk.gov.hmrc.transitmovementsvalidator.utils.NonEmptyListFormat
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services.JsonValidationService as V2JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services.XmlValidationService as V2XmlValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services.BusinessValidationService as V2BusinessValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.JsonValidationService as V3JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.XmlValidationService as V3XmlValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.BusinessValidationService as V3BusinessValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.models.MessageType as V2MessageType
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageType as V3MessageType
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.models.MessageFormat as V2MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageFormat as V3MessageFormat
 
 import java.nio.charset.StandardCharsets
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -81,9 +85,13 @@ class MessagesControllerSpec
   implicit val materializer: Materializer                 = Materializer(TestActorSystem.system)
   implicit val temporaryFileCreator: TemporaryFileCreator = SingletonTemporaryFileCreator
 
-  val mockJsonValidationService: JsonValidationService         = mock[JsonValidationService]
-  val mockXmlValidationService: XmlValidationService           = mock[XmlValidationService]
-  val mockBusinessValidationService: BusinessValidationService = mock[BusinessValidationService]
+  val mockV2JsonValidationService: V2JsonValidationService         = mock[V2JsonValidationService]
+  val mockV2XmlValidationService: V2XmlValidationService           = mock[V2XmlValidationService]
+  val mockV2BusinessValidationService: V2BusinessValidationService = mock[V2BusinessValidationService]
+
+  val mockV3JsonValidationService: V3JsonValidationService         = mock[V3JsonValidationService]
+  val mockV3XmlValidationService: V3XmlValidationService           = mock[V3XmlValidationService]
+  val mockV3BusinessValidationService: V3BusinessValidationService = mock[V3BusinessValidationService]
 
   val mockConfig: AppConfig = mock[AppConfig]
   when(mockConfig.validateRequestTypesOnly).thenReturn(true)
@@ -91,15 +99,18 @@ class MessagesControllerSpec
   val finalVersionHeaderValue = "final"
 
   override def beforeEach(): Unit = {
-    reset(mockJsonValidationService)
-    reset(mockXmlValidationService)
-    reset(mockBusinessValidationService)
+    reset(mockV2JsonValidationService)
+    reset(mockV2XmlValidationService)
+    reset(mockV2BusinessValidationService)
+    reset(mockV3JsonValidationService)
+    reset(mockV3XmlValidationService)
+    reset(mockV3BusinessValidationService)
     super.beforeEach()
   }
 
-  val v2ValidCode: MessageType = MessageType.DeclarationData(APIVersionHeader.V2_1)
-  val v3ValidCode: MessageType = MessageType.DeclarationData(APIVersionHeader.V3_0)
-  val invalidCode              = "dummy"
+  val v2ValidCode: V2MessageType = V2MessageType.DeclarationData
+  val v3ValidCode: V3MessageType = V3MessageType.DeclarationData
+  val invalidCode                = "dummy"
 
   "when APIVersion is invalid or missing" - {
     lazy val validXml: NodeSeq = <test></test>
@@ -125,9 +136,12 @@ class MessagesControllerSpec
       val messagesController =
         new MessagesController(
           stubControllerComponents(),
-          mockXmlValidationService,
-          mockJsonValidationService,
-          mockBusinessValidationService,
+          mockV2XmlValidationService,
+          mockV3XmlValidationService,
+          mockV2JsonValidationService,
+          mockV3JsonValidationService,
+          mockV2BusinessValidationService,
+          mockV3BusinessValidationService,
           new ValidateAcceptRefiner(stubControllerComponents()),
           mockConfig
         )
@@ -151,9 +165,12 @@ class MessagesControllerSpec
       val messagesController =
         new MessagesController(
           stubControllerComponents(),
-          mockXmlValidationService,
-          mockJsonValidationService,
-          mockBusinessValidationService,
+          mockV2XmlValidationService,
+          mockV3XmlValidationService,
+          mockV2JsonValidationService,
+          mockV3JsonValidationService,
+          mockV2BusinessValidationService,
+          mockV3BusinessValidationService,
           new ValidateAcceptRefiner(stubControllerComponents()),
           mockConfig
         )
@@ -177,9 +194,12 @@ class MessagesControllerSpec
       val messagesController =
         new MessagesController(
           stubControllerComponents(),
-          mockXmlValidationService,
-          mockJsonValidationService,
-          mockBusinessValidationService,
+          mockV2XmlValidationService,
+          mockV3XmlValidationService,
+          mockV2JsonValidationService,
+          mockV3JsonValidationService,
+          mockV2BusinessValidationService,
+          mockV3BusinessValidationService,
           new ValidateAcceptRefiner(stubControllerComponents()),
           mockConfig
         )
@@ -198,19 +218,17 @@ class MessagesControllerSpec
     }
   }
   "when APIVersion is 2.1" - {
-    val apiVersion = APIVersionHeader.V2_1
     "On validate XML" - {
-
       lazy val validXml: NodeSeq = <test></test>
 
-      "on a valid XML file, with the application/xml content type, return No Content" in forAll(Gen.oneOf(MessageType.requestValues(apiVersion))) {
+      "on a valid XML file, with the application/xml content type, return No Content" in forAll(Gen.oneOf(V2MessageType.requestValues)) {
         messageType =>
-          when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+          when(mockV2XmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
             .thenAnswer(
               _ => EitherT.rightT[Future, ValidationError](())
             )
           when(
-            mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext])
+            mockV2BusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(V2MessageFormat.Xml))(any[Materializer], any[ExecutionContext])
           )
             .thenAnswer(
               _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
@@ -219,9 +237,12 @@ class MessagesControllerSpec
           val messagesController =
             new MessagesController(
               stubControllerComponents(),
-              mockXmlValidationService,
-              mockJsonValidationService,
-              mockBusinessValidationService,
+              mockV2XmlValidationService,
+              mockV3XmlValidationService,
+              mockV2JsonValidationService,
+              mockV3JsonValidationService,
+              mockV2BusinessValidationService,
+              mockV3BusinessValidationService,
               new ValidateAcceptRefiner(stubControllerComponents()),
               mockConfig
             )
@@ -243,9 +264,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -267,15 +291,18 @@ class MessagesControllerSpec
       }
 
       "on a valid XML file for a response type where response types are not enabled, return BadRequest with an error message" in forAll(
-        Gen.oneOf(MessageType.responseValues(apiVersion))
+        Gen.oneOf(V2MessageType.responseValues)
       ) {
         responseType =>
           val messagesController =
             new MessagesController(
               stubControllerComponents(),
-              mockXmlValidationService,
-              mockJsonValidationService,
-              mockBusinessValidationService,
+              mockV2XmlValidationService,
+              mockV3XmlValidationService,
+              mockV2JsonValidationService,
+              mockV3JsonValidationService,
+              mockV2BusinessValidationService,
+              mockV3BusinessValidationService,
               new ValidateAcceptRefiner(stubControllerComponents()),
               mockConfig
             )
@@ -297,15 +324,15 @@ class MessagesControllerSpec
       }
 
       "on a valid XML file for a request or response type where response types are enabled, return No Content" in forAll(
-        Gen.oneOf(MessageType.values(apiVersion))
+        Gen.oneOf(V2MessageType.values)
       ) {
         messageType =>
-          when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+          when(mockV2XmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
             .thenAnswer(
               _ => EitherT.rightT[Future, ValidationError](())
             )
           when(
-            mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext])
+            mockV2BusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(V2MessageFormat.Xml))(any[Materializer], any[ExecutionContext])
           )
             .thenAnswer(
               _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
@@ -317,9 +344,12 @@ class MessagesControllerSpec
           val messagesController =
             new MessagesController(
               stubControllerComponents(),
-              mockXmlValidationService,
-              mockJsonValidationService,
-              mockBusinessValidationService,
+              mockV2XmlValidationService,
+              mockV3XmlValidationService,
+              mockV2JsonValidationService,
+              mockV3JsonValidationService,
+              mockV2BusinessValidationService,
+              mockV3BusinessValidationService,
               new ValidateAcceptRefiner(stubControllerComponents()),
               config
             )
@@ -340,20 +370,23 @@ class MessagesControllerSpec
       "on an invalid XML file, return Ok with a list of errors" in {
         val errorList = NonEmptyList(XmlSchemaValidationError(1, 1, "text1"), List(XmlSchemaValidationError(2, 2, "text2")))
 
-        when(mockXmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2XmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, Unit](ValidationError.XmlFailedValidation(errorList))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -375,20 +408,23 @@ class MessagesControllerSpec
 
       "on an exception being thrown during xml schema validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
-        when(mockXmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2XmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error)))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -407,11 +443,11 @@ class MessagesControllerSpec
       }
 
       "root node doesn't match messageType in XML file, return BadRequest with an error message" in {
-        when(mockXmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2XmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ =>
               (
@@ -423,9 +459,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -451,11 +490,11 @@ class MessagesControllerSpec
       "on an exception being thrown during xml business validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
 
-        when(mockXmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2XmlValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error))), Flow[ByteString])
           )
@@ -463,9 +502,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -491,20 +533,23 @@ class MessagesControllerSpec
       lazy val invalidJson: String = "{"
 
       "on a valid JSON file, with the application/json content type, return No Content" in {
-        when(mockJsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2JsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -525,9 +570,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -554,11 +602,11 @@ class MessagesControllerSpec
           List(JsonSchemaValidationError("IE015C:MessageSender", "MessageSender element not in schema"))
         )
 
-        when(mockJsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2JsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, ValidationError](ValidationError.JsonFailedValidation(errorList))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
@@ -566,9 +614,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -592,9 +643,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -616,9 +670,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -633,20 +690,23 @@ class MessagesControllerSpec
 
       "on an exception being thrown during json validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
-        when(mockJsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2JsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -665,7 +725,7 @@ class MessagesControllerSpec
       }
 
       "on an JsonParseException being thrown during json validation, must return Bad Request" in {
-        when(mockJsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2JsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ =>
               EitherT.leftT[Future, ValidationError](
@@ -674,7 +734,7 @@ class MessagesControllerSpec
                 )
               )
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
@@ -682,9 +742,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -707,11 +770,11 @@ class MessagesControllerSpec
 
       "root node doesn't match messageType in json, return BadRequest with an error message" in {
 
-        when(mockJsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2JsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ =>
               (
@@ -723,9 +786,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -750,11 +816,11 @@ class MessagesControllerSpec
 
       "on an exception being thrown during json business validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
-        when(mockJsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2JsonValidationService.validate(eqTo(v2ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV2BusinessValidationService.businessValidationFlow(eqTo(v2ValidCode), eqTo(V2MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error))), Flow[ByteString])
           )
@@ -762,9 +828,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -785,19 +854,17 @@ class MessagesControllerSpec
     }
   }
   "when APIVersion is 3.0" - {
-    val apiVersion = APIVersionHeader.V3_0
     "On validate XML" - {
-
       lazy val validXml: NodeSeq = <test></test>
 
-      "on a valid XML file, with the application/xml content type, return No Content" in forAll(Gen.oneOf(MessageType.requestValues(apiVersion))) {
+      "on a valid XML file, with the application/xml content type, return No Content" in forAll(Gen.oneOf(V3MessageType.requestValues)) {
         messageType =>
-          when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+          when(mockV3XmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
             .thenAnswer(
               _ => EitherT.rightT[Future, ValidationError](())
             )
           when(
-            mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext])
+            mockV3BusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(V3MessageFormat.Xml))(any[Materializer], any[ExecutionContext])
           )
             .thenAnswer(
               _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
@@ -806,9 +873,12 @@ class MessagesControllerSpec
           val messagesController =
             new MessagesController(
               stubControllerComponents(),
-              mockXmlValidationService,
-              mockJsonValidationService,
-              mockBusinessValidationService,
+              mockV2XmlValidationService,
+              mockV3XmlValidationService,
+              mockV2JsonValidationService,
+              mockV3JsonValidationService,
+              mockV2BusinessValidationService,
+              mockV3BusinessValidationService,
               new ValidateAcceptRefiner(stubControllerComponents()),
               mockConfig
             )
@@ -830,9 +900,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -854,15 +927,18 @@ class MessagesControllerSpec
       }
 
       "on a valid XML file for a response type where response types are not enabled, return BadRequest with an error message" in forAll(
-        Gen.oneOf(MessageType.responseValues(apiVersion))
+        Gen.oneOf(V2MessageType.responseValues)
       ) {
         responseType =>
           val messagesController =
             new MessagesController(
               stubControllerComponents(),
-              mockXmlValidationService,
-              mockJsonValidationService,
-              mockBusinessValidationService,
+              mockV2XmlValidationService,
+              mockV3XmlValidationService,
+              mockV2JsonValidationService,
+              mockV3JsonValidationService,
+              mockV2BusinessValidationService,
+              mockV3BusinessValidationService,
               new ValidateAcceptRefiner(stubControllerComponents()),
               mockConfig
             )
@@ -884,15 +960,15 @@ class MessagesControllerSpec
       }
 
       "on a valid XML file for a request or response type where response types are enabled, return No Content" in forAll(
-        Gen.oneOf(MessageType.values(apiVersion))
+        Gen.oneOf(V3MessageType.values)
       ) {
         messageType =>
-          when(mockXmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+          when(mockV3XmlValidationService.validate(eqTo(messageType), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
             .thenAnswer(
               _ => EitherT.rightT[Future, ValidationError](())
             )
           when(
-            mockBusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext])
+            mockV3BusinessValidationService.businessValidationFlow(eqTo(messageType), eqTo(V3MessageFormat.Xml))(any[Materializer], any[ExecutionContext])
           )
             .thenAnswer(
               _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
@@ -904,9 +980,12 @@ class MessagesControllerSpec
           val messagesController =
             new MessagesController(
               stubControllerComponents(),
-              mockXmlValidationService,
-              mockJsonValidationService,
-              mockBusinessValidationService,
+              mockV2XmlValidationService,
+              mockV3XmlValidationService,
+              mockV2JsonValidationService,
+              mockV3JsonValidationService,
+              mockV2BusinessValidationService,
+              mockV3BusinessValidationService,
               new ValidateAcceptRefiner(stubControllerComponents()),
               config
             )
@@ -927,20 +1006,23 @@ class MessagesControllerSpec
       "on an invalid XML file, return Ok with a list of errors" in {
         val errorList = NonEmptyList(XmlSchemaValidationError(1, 1, "text1"), List(XmlSchemaValidationError(2, 2, "text2")))
 
-        when(mockXmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3XmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, Unit](ValidationError.XmlFailedValidation(errorList))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -948,11 +1030,11 @@ class MessagesControllerSpec
         val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
-          s"/messages/$v3ValidCode/validate/",
+          s"/messages/$v2ValidCode/validate/",
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.XML)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj(
           "validationErrors" -> Json.toJson(errorList)
@@ -962,20 +1044,23 @@ class MessagesControllerSpec
 
       "on an exception being thrown during xml schema validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
-        when(mockXmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3XmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error)))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -983,22 +1068,22 @@ class MessagesControllerSpec
         val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
-          s"/messages/$v3ValidCode/validate/",
+          s"/messages/$v2ValidCode/validate/",
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.XML)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
 
       "root node doesn't match messageType in XML file, return BadRequest with an error message" in {
-        when(mockXmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3XmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ =>
               (
@@ -1010,9 +1095,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1020,11 +1108,11 @@ class MessagesControllerSpec
         val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
-          s"/messages/$v3ValidCode/validate/",
+          s"/messages/$v2ValidCode/validate/",
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.XML)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         status(result) mustBe OK
 
@@ -1038,11 +1126,11 @@ class MessagesControllerSpec
       "on an exception being thrown during xml business validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
 
-        when(mockXmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3XmlValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Xml), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Xml))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error))), Flow[ByteString])
           )
@@ -1050,9 +1138,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1060,11 +1151,11 @@ class MessagesControllerSpec
         val source  = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
-          s"/messages/$v3ValidCode/validate/",
+          s"/messages/$v2ValidCode/validate/",
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.XML)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
         status(result) mustBe INTERNAL_SERVER_ERROR
@@ -1078,20 +1169,23 @@ class MessagesControllerSpec
       lazy val invalidJson: String = "{"
 
       "on a valid JSON file, with the application/json content type, return No Content" in {
-        when(mockJsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3JsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1103,7 +1197,7 @@ class MessagesControllerSpec
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         status(result) mustBe NO_CONTENT
       }
@@ -1112,9 +1206,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1123,7 +1220,7 @@ class MessagesControllerSpec
         val request = FakeRequest(
           "POST",
           s"/messages/$invalidCode/validate/",
-          FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
+          FakeHeaders(Seq("APIVersion" -> "2.1", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
         val result = messagesController.validate(invalidCode)(request)
@@ -1141,11 +1238,11 @@ class MessagesControllerSpec
           List(JsonSchemaValidationError("IE015C:MessageSender", "MessageSender element not in schema"))
         )
 
-        when(mockJsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3JsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, ValidationError](ValidationError.JsonFailedValidation(errorList))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
@@ -1153,9 +1250,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1167,7 +1267,7 @@ class MessagesControllerSpec
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj(
           "validationErrors" -> Json.toJson(errorList)
@@ -1179,9 +1279,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1189,11 +1292,11 @@ class MessagesControllerSpec
         val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
         val request = FakeRequest(
           "POST",
-          s"/messages/$v3ValidCode/validate/",
-          FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.TEXT)),
+          s"/messages/$v2ValidCode/validate/",
+          FakeHeaders(Seq("APIVersion" -> "2.1", CONTENT_TYPE -> MimeTypes.TEXT)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj("code" -> "UNSUPPORTED_MEDIA_TYPE", "message" -> "Content type text/plain is not supported.")
         status(result) mustBe UNSUPPORTED_MEDIA_TYPE
@@ -1203,16 +1306,19 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
 
         val source  = Source.single(ByteString(validJson, StandardCharsets.UTF_8))
-        val request = FakeRequest("POST", s"/messages/$v3ValidCode/validate/", FakeHeaders(Seq("APIVersion" -> "3.0")), source)
-        val result  = messagesController.validate(v3ValidCode.code)(request)
+        val request = FakeRequest("POST", s"/messages/$v2ValidCode/validate/", FakeHeaders(Seq("APIVersion" -> "2.1")), source)
+        val result  = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj("code" -> "UNSUPPORTED_MEDIA_TYPE", "message" -> "Content type must be specified.")
         status(result) mustBe UNSUPPORTED_MEDIA_TYPE
@@ -1220,20 +1326,23 @@ class MessagesControllerSpec
 
       "on an exception being thrown during json validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
-        when(mockJsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3JsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.leftT[Future, ValidationError](ValidationError.Unexpected(Some(error)))
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1245,14 +1354,14 @@ class MessagesControllerSpec
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
 
       "on an JsonParseException being thrown during json validation, must return Bad Request" in {
-        when(mockJsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3JsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ =>
               EitherT.leftT[Future, ValidationError](
@@ -1261,7 +1370,7 @@ class MessagesControllerSpec
                 )
               )
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.rightT[Future, ValidationError](()), Flow[ByteString])
           )
@@ -1269,9 +1378,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1283,7 +1395,7 @@ class MessagesControllerSpec
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj(
           "code" -> "BAD_REQUEST",
@@ -1294,11 +1406,11 @@ class MessagesControllerSpec
 
       "root node doesn't match messageType in json, return BadRequest with an error message" in {
 
-        when(mockJsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3JsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ =>
               (
@@ -1310,9 +1422,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1324,7 +1439,7 @@ class MessagesControllerSpec
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         status(result) mustBe OK
 
@@ -1337,11 +1452,11 @@ class MessagesControllerSpec
 
       "on an exception being thrown during json business validation, must return Internal Server Error" in {
         val error = new IllegalStateException("Unable to extract schema")
-        when(mockJsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]], any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3JsonValidationService.validate(eqTo(v3ValidCode), any[Source[ByteString, ?]])(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => EitherT.rightT[Future, ValidationError](())
           )
-        when(mockBusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(MessageFormat.Json), any())(any[Materializer], any[ExecutionContext]))
+        when(mockV3BusinessValidationService.businessValidationFlow(eqTo(v3ValidCode), eqTo(V3MessageFormat.Json))(any[Materializer], any[ExecutionContext]))
           .thenAnswer(
             _ => (EitherT.leftT[Future, Unit](ValidationError.Unexpected(Some(error))), Flow[ByteString])
           )
@@ -1349,9 +1464,12 @@ class MessagesControllerSpec
         val messagesController =
           new MessagesController(
             stubControllerComponents(),
-            mockXmlValidationService,
-            mockJsonValidationService,
-            mockBusinessValidationService,
+            mockV2XmlValidationService,
+            mockV3XmlValidationService,
+            mockV2JsonValidationService,
+            mockV3JsonValidationService,
+            mockV2BusinessValidationService,
+            mockV3BusinessValidationService,
             new ValidateAcceptRefiner(stubControllerComponents()),
             mockConfig
           )
@@ -1363,7 +1481,7 @@ class MessagesControllerSpec
           FakeHeaders(Seq("APIVersion" -> "3.0", CONTENT_TYPE -> MimeTypes.JSON)),
           source
         )
-        val result = messagesController.validate(v3ValidCode.code)(request)
+        val result = messagesController.validate(v2ValidCode.code)(request)
 
         contentAsJson(result) mustBe Json.obj("code" -> "INTERNAL_SERVER_ERROR", "message" -> "Internal server error")
         status(result) mustBe INTERNAL_SERVER_ERROR
@@ -1371,4 +1489,5 @@ class MessagesControllerSpec
 
     }
   }
+
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.services
+package uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services
 
 import cats.data.EitherT
 import cats.data.NonEmptyList
@@ -31,8 +31,6 @@ import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.stream.scaladsl.StreamConverters
 import org.apache.pekko.util.ByteString
 import play.api.Logging
-import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.JsonSchemaValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.FailedToParse
@@ -40,6 +38,7 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.JsonF
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.Unexpected
 import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateFormat
 import uk.gov.hmrc.transitmovementsvalidator.utils.jsonformats.DateTimeFormat
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.models.MessageType
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -66,23 +65,22 @@ object JsonValidationService {
       .build()
 }
 
-class JsonValidationService @Inject() extends ValidationService with Logging {
+class JsonValidationService @Inject() extends Logging {
 
   private val mapper = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 
-  private def schemaValidators(APIVersionHeader: APIVersionHeader) = MessageType
-    .values(APIVersionHeader)
+  private val schemaValidators = MessageType.values
     .map(
       msgType => msgType.code -> JsonValidationService.factory.getSchema(getClass.getResourceAsStream(msgType.jsonSchemaPath))
     )
     .toMap
 
-  override def validate(messageType: MessageType, source: Source[ByteString, ?], apiVersion: APIVersionHeader)(implicit
+  def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
     EitherT {
-      val schemaValidator = schemaValidators(apiVersion)(messageType.code)
+      val schemaValidator = schemaValidators(messageType.code)
       validateJson(source, schemaValidator) match {
         case Success(errors) if errors.isEmpty => Future.successful(Right(()))
         case Success(errors)                   =>

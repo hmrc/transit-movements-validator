@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.services
+package uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services
 
 import cats.data.EitherT
 import cats.data.NonEmptyList
@@ -27,11 +27,10 @@ import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
 import play.api.Logging
-import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.XmlFailedValidation
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageType
 
 import java.io.InputStream
 import javax.inject.Inject
@@ -45,24 +44,22 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.xml.XMLReader
 
-class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends ValidationService with Logging {
+class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends Logging {
 
-  def parsersByType(apiVersion: APIVersionHeader): Map[MessageType, Future[SAXParserFactory]] =
-    MessageType
-      .values(apiVersion)
-      .map {
-        typ =>
-          typ -> Future(buildParser(typ))
-      }
-      .toMap
+  lazy val parsersByType: Map[MessageType, Future[SAXParserFactory]] =
+    MessageType.values.map {
+      typ =>
+        typ -> Future(buildParser(typ))
+    }.toMap
 
-  override def validate(messageType: MessageType, source: Source[ByteString, ?], apiVersion: APIVersionHeader)(implicit
+  def validate(messageType: MessageType, source: Source[ByteString, ?])(implicit
     materializer: Materializer,
     ec: ExecutionContext
   ): EitherT[Future, ValidationError, Unit] =
+
     EitherT {
       for {
-        saxParser <- parsersByType(apiVersion)(messageType)
+        saxParser <- parsersByType(messageType)
         inputStream           = source.runWith(StreamConverters.asInputStream(20.seconds))
         (parser, errorBuffer) = createParser(saxParser)
         parsedXml             = parseXml(parser, inputStream)
@@ -70,7 +67,7 @@ class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends Val
       } yield result
     }
 
-  private def transformFailures(
+  def transformFailures(
     parsedXml: Either[XmlFailedValidation, Unit],
     errorBuffer: ListBuffer[XmlSchemaValidationError]
   ): Either[XmlFailedValidation, Unit] =
@@ -81,7 +78,7 @@ class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends Val
       )
       .getOrElse(parsedXml)
 
-  private def parseXml(parser: XMLReader, inputStream: InputStream): Either[XmlFailedValidation, Unit] = {
+  def parseXml(parser: XMLReader, inputStream: InputStream): Either[XmlFailedValidation, Unit] = {
     val inputSource = new InputSource(inputStream)
     Either
       .catchOnly[SAXParseException] {
@@ -93,7 +90,7 @@ class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends Val
       }
   }
 
-  private def createParser(saxParser: SAXParserFactory): (XMLReader, ListBuffer[XmlSchemaValidationError]) = {
+  def createParser(saxParser: SAXParserFactory): (XMLReader, ListBuffer[XmlSchemaValidationError]) = {
     val parser      = saxParser.newSAXParser.getXMLReader
     val errorBuffer = new mutable.ListBuffer[XmlSchemaValidationError]
 
@@ -110,7 +107,7 @@ class XmlValidationService @Inject() (implicit ec: ExecutionContext) extends Val
     (parser, errorBuffer)
   }
 
-  private def buildParser(messageType: MessageType): SAXParserFactory = {
+  def buildParser(messageType: MessageType): SAXParserFactory = {
     val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
     val parser        = SAXParserFactory.newInstance()
     val schemaUrl     = getClass.getResource(messageType.xsdPath)

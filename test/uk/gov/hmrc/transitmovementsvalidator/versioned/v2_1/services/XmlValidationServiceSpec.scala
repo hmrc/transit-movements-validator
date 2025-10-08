@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.services
+package uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services
 
 import cats.data.NonEmptyList
 import org.apache.pekko.stream.Materializer
@@ -26,10 +26,9 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.transitmovementsvalidator.base.TestActorSystem
-import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
-import uk.gov.hmrc.transitmovementsvalidator.models.MessageType
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.XmlSchemaValidationError
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.models.MessageType
 
 import java.nio.charset.StandardCharsets
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -110,21 +109,18 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       </Consignment>
     </ncts:CC015C>
 
-  lazy val v2TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v2_1/data"
-  lazy val v3TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/v3_0/data"
+  lazy val v2TestDataPath = "./test/uk/gov/hmrc/transitmovementsvalidator/versioned/v2_1/data"
 
   implicit override val patienceConfig: PatienceConfig = PatienceConfig(15.seconds, 15.millis)
 
   "On Validate XML for ApiVersion 2.1" - {
-
-    val apiVersion: APIVersionHeader = APIVersionHeader.V2_1
 
     "when valid XML IE013 is provided for the given message type, return a Right" in {
       val ie13File = scala.io.Source.fromFile(v2TestDataPath + "/cc013c-valid.xml")
       try {
         val source = Source.single(ByteString(ie13File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.DeclarationAmendment, source)
 
         whenReady(result.value) {
           r =>
@@ -138,7 +134,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie14File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.DeclarationInvalidation, source)
 
         whenReady(result.value) {
           r =>
@@ -152,7 +148,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.DeclarationData, source)
 
         whenReady(result.value) {
           r =>
@@ -166,7 +162,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.DeclarationData, source)
 
         whenReady(result.value) {
           r =>
@@ -180,7 +176,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie170File.mkString, StandardCharsets.UTF_8)) // exampleIE170XML.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec, source)
 
         whenReady(result.value) {
           r =>
@@ -194,7 +190,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie007File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.ArrivalNotification, source)
 
         whenReady(result.value) {
           r =>
@@ -208,7 +204,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie044File.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
+        val result = sut.validate(MessageType.UnloadingRemarks, source)
 
         whenReady(result.value) {
           r =>
@@ -220,7 +216,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
     "when valid message type provided but with unexpected xml, return errors" in {
       val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
       val sut    = new XmlValidationService
-      val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
+      val result = sut.validate(MessageType.DeclarationData, source)
 
       whenReady(result.value) {
         r =>
@@ -233,7 +229,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.ArrivalNotification(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.ArrivalNotification, source)
 
         whenReady(result.value) {
           r =>
@@ -258,7 +254,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.ArrivalNotification(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.ArrivalNotification, source)
 
         whenReady(result.value) {
           r =>
@@ -283,7 +279,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.DeclarationAmendment, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -296,7 +292,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.DeclarationAmendment, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -309,7 +305,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.DeclarationInvalidation, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -322,7 +318,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.DeclarationInvalidation, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -335,7 +331,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie15invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationData(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.DeclarationData, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -348,7 +344,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.UnloadingRemarks, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -361,7 +357,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.UnloadingRemarks, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -374,7 +370,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true
@@ -387,288 +383,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
       try {
         val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
         val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie170invalidFile.close()
-    }
-
-  }
-  "On Validate XML for ApiVersion 3.0" - {
-
-    val apiVersion: APIVersionHeader = APIVersionHeader.V3_0
-
-    "when valid XML IE013 is provided for the given message type, return a Right" in {
-      val ie13File = scala.io.Source.fromFile(v3TestDataPath + "/cc013c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie13File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie13File.close
-    }
-
-    "when valid XML IE014 is provided for the given message type, return a Right" in {
-      val ie14File = scala.io.Source.fromFile(v3TestDataPath + "/cc014c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie14File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie14File.close
-    }
-
-    "when valid XML IE015 is provided for the given message type, return a Right" in {
-      val ie15File = scala.io.Source.fromFile(v3TestDataPath + "/cc015c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie15File.close
-    }
-
-    "when valid XML IE015 with additional namespaces is provided for the given message type, return a Right" in {
-      val ie15File = scala.io.Source.fromFile(v3TestDataPath + "/cc015c-valid-2.xml")
-      try {
-        val source = Source.single(ByteString(ie15File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie15File.close
-    }
-
-    "when valid XML IE170 is provided for the given message type, return a Right" in {
-      val ie170File = scala.io.Source.fromFile(v3TestDataPath + "/cc170c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie170File.mkString, StandardCharsets.UTF_8)) // exampleIE170XML.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie170File.close()
-    }
-
-    "when valid XML IE007 is provided for the given message type, return a Right" in {
-      val ie007File = scala.io.Source.fromFile(v3TestDataPath + "/cc007c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie007File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.ArrivalNotification(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie007File.close()
-    }
-
-    "when valid XML IE044 is provided for the given message type, return a Right" in {
-      val ie044File = scala.io.Source.fromFile(v3TestDataPath + "/cc044c-valid.xml")
-      try {
-        val source = Source.single(ByteString(ie044File.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r.isRight mustBe true
-        }
-      } finally ie044File.close()
-    }
-
-    "when valid message type provided but with unexpected xml, return errors" in {
-      val source = Source.single(ByteString(validXml.mkString, StandardCharsets.UTF_8))
-      val sut    = new XmlValidationService
-      val result = sut.validate(MessageType.DeclarationData(apiVersion), source, apiVersion)
-
-      whenReady(result.value) {
-        r =>
-          r.left.getOrElse(fail("Expected a Left but got a Right")).isInstanceOf[ValidationError.XmlFailedValidation]
-      }
-    }
-
-    "when invalid XML IE007 is provided, return XmlSchemaValidationError" in {
-      val ie7invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc007c-invalid.xml")
-      try {
-        val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.ArrivalNotification(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r mustBe Left(
-              ValidationError.XmlFailedValidation(
-                NonEmptyList(
-                  XmlSchemaValidationError(
-                    2,
-                    23,
-                    "cvc-complex-type.2.4.a: Invalid content was found starting with element 'messageRecipient'. One of '{messageSender}' is expected."
-                  ),
-                  Nil
-                )
-              )
-            )
-        }
-      } finally ie7invalidFile.close()
-    }
-
-    "when invalid XML IE007 is provided with invalid value for messageSender, return XmlSchemaValidationError" in {
-      val ie7invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc007c-invalid-message-sender.xml")
-      try {
-        val source = Source.single(ByteString(ie7invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.ArrivalNotification(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r =>
-            r mustBe Left(
-              ValidationError.XmlFailedValidation(
-                NonEmptyList(
-                  XmlSchemaValidationError(
-                    2,
-                    36,
-                    "cvc-pattern-valid: Value '' is not facet-valid with respect to pattern '.{1,35}' for type 'MessageSenderContentType'."
-                  ),
-                  List(XmlSchemaValidationError(2, 36, "cvc-type.3.1.3: The value '' of element 'messageSender' is not valid."))
-                )
-              )
-            )
-        }
-      } finally ie7invalidFile.close()
-    }
-
-    "when invalid XML IE013 is provided, return left" in {
-      val ie13invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc013c-invalid.xml")
-      try {
-        val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie13invalidFile.close()
-    }
-
-    "when invalid XML IE013 is provided with invalid value for messageSender, return left" in {
-      val ie13invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc013c-invalid-message-sender.xml")
-      try {
-        val source = Source.single(ByteString(ie13invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationAmendment(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie13invalidFile.close()
-    }
-
-    "when invalid XML IE014 is provided, return left" in {
-      val ie14invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc014c-invalid.xml")
-      try {
-        val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie14invalidFile.close()
-    }
-
-    "when invalid XML IE014 is provided with invalid value for messageSender, return left" in {
-      val ie14invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc014c-invalid-message-sender.xml")
-      try {
-        val source = Source.single(ByteString(ie14invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationInvalidation(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie14invalidFile.close()
-    }
-
-    "when invalid XML IE015 is provided with invalid value for messageSender, return left" in {
-      val ie15invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc015c-invalid-message-sender.xml")
-      try {
-        val source = Source.single(ByteString(ie15invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.DeclarationData(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie15invalidFile.close()
-    }
-
-    "when invalid XML IE044 is provided, return left" in {
-      val ie44invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc044c-invalid.xml")
-      try {
-        val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie44invalidFile.close()
-    }
-
-    "when invalid XML IE044 is provided with invalid value for messageSender, return left" in {
-      val ie44invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc044c-invalid-message-sender.xml")
-      try {
-        val source = Source.single(ByteString(ie44invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.UnloadingRemarks(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie44invalidFile.close()
-    }
-
-    "when invalid XML IE170 is provided, return left" in {
-      val ie170invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc170c-invalid.xml")
-      try {
-        val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
-
-        whenReady(result.value) {
-          r => r.isLeft mustBe true
-        }
-      } finally ie170invalidFile.close()
-    }
-
-    "when invalid XML IE170 is provided with invalid value for messageSender, return left" in {
-      val ie170invalidFile = scala.io.Source.fromFile(v3TestDataPath + "/cc170c-invalid-message-sender.xml")
-      try {
-        val source = Source.single(ByteString(ie170invalidFile.mkString, StandardCharsets.UTF_8))
-        val sut    = new XmlValidationService
-        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec(apiVersion), source, apiVersion)
+        val result = sut.validate(messageType = MessageType.PresentationNotificationForPreLodgedDec, source)
 
         whenReady(result.value) {
           r => r.isLeft mustBe true

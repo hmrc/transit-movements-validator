@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.models
+package uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models
 
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.connectors.json.scaladsl.JsonReader
@@ -24,8 +24,8 @@ import org.apache.pekko.stream.connectors.xml.scaladsl.XmlParsing
 import org.apache.pekko.stream.scaladsl.Flow
 import org.apache.pekko.util.ByteString
 import org.jsfr.json.path.JsonPath
-import play.api.libs.json.{Json => PlayJson}
 import play.api.libs.json.JsString
+import play.api.libs.json.Json as PlayJson
 
 import scala.annotation.tailrec
 
