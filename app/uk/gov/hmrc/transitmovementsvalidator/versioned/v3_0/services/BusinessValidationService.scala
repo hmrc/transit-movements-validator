@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.transitmovementsvalidator.services
+package uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services
 
 import cats.data.EitherT
 import com.google.inject.Inject
@@ -40,6 +40,9 @@ import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.BusinessValidationError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.MissingElementError
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.ValidationError.TooManyElementsError
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.RequestMessageType
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -196,8 +199,8 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
     * @return
     *   A flow that returns a [[ValidationError]] if there is a validation error, else does not emit anything
     */
-  private def checkLRNForDepartures[A](messageType: MessageType, messageFormat: MessageFormat[A], apiVersion: APIVersionHeader): Flow[A, ValidationError, ?] =
-    if (appConfig.validateLrnEnabled && messageType == MessageType.DeclarationData(apiVersion)) {
+  private def checkLRNForDepartures[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, ?] =
+    if (appConfig.validateLrnEnabled && messageType == MessageType.DeclarationData) {
       val path = lrnLocation(messageType, messageFormat)
       messageFormat
         .stringValueFlow(path)
@@ -230,8 +233,8 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
     * @return
     *   A [[Flow]]
     */
-  private def enforceRuleC0467[A](messageType: MessageType, messageFormat: MessageFormat[A], apiVersion: APIVersionHeader): Flow[A, ValidationError, ?] =
-    if (messageType == MessageType.DeclarationAmendment(apiVersion)) {
+  private def enforceRuleC0467[A](messageType: MessageType, messageFormat: MessageFormat[A]): Flow[A, ValidationError, ?] =
+    if (messageType == MessageType.DeclarationAmendment) {
       val lrnNode = lrnLocation(messageType, messageFormat)
       val mrnNode = mrnLocation(messageType, messageFormat)
       Flow
@@ -414,8 +417,7 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
     */
   def businessValidationFlow[A](
     messageType: MessageType,
-    messageFormat: MessageFormat[A],
-    apiVersion: APIVersionHeader
+    messageFormat: MessageFormat[A]
   )(implicit materializer: Materializer, ec: ExecutionContext): (EitherT[Future, ValidationError, Unit], Flow[ByteString, ByteString, ?]) = {
     // The rule selected here is controlled by configuration and is only applicable for messages from the Trader
     val checkOfficeRule = messageType match {
@@ -431,8 +433,8 @@ class BusinessValidationService @Inject() (appConfig: AppConfig) extends Logging
     val rules: Seq[Flow[A, ValidationError, ?]] = Seq(
       checkMessageType(messageType, messageFormat),
       checkOfficeRule,
-      checkLRNForDepartures(messageType, messageFormat, apiVersion),
-      enforceRuleC0467(messageType, messageFormat, apiVersion)
+      checkLRNForDepartures(messageType, messageFormat),
+      enforceRuleC0467(messageType, messageFormat)
     )
     // -----------
     // END ADD RULES HERE

@@ -131,7 +131,7 @@ object TestObjects {
     lazy val jsonValid = Json.obj(
       "n1:CC007C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
-        "TransitOperation" -> Json.obj(
+        "TransitOperation"       -> Json.obj(
           "MRN"                            -> "27WF9X1FQ9RCKN0TM3",
           "arrivalNotificationDateAndTime" -> "2022-07-02T03:11:04",
           "simplifiedProcedure"            -> "1",
@@ -144,7 +144,7 @@ object TestObjects {
         "messageType"           -> "CC007C",
         "@PhaseID"              -> "NCTS5.0",
         "correlationIdentifier" -> "token",
-        "Authorisation" -> Json.arr(
+        "Authorisation"         -> Json.arr(
           Json.obj(
             "sequenceNumber"  -> 123,
             "referenceNumber" -> "token",
@@ -153,14 +153,14 @@ object TestObjects {
         ),
         "messageSender"    -> "token",
         "messageRecipient" -> "token",
-        "Consignment" -> Json.obj(
+        "Consignment"      -> Json.obj(
           "LocationOfGoods" -> Json.obj(
             "typeOfLocation"            -> "A",
             "qualifierOfIdentification" -> "A",
             "authorisationNumber"       -> "token",
             "additionalIdentifier"      -> "1234",
             "UNLocode"                  -> "token",
-            "CustomsOffice" -> Json.obj(
+            "CustomsOffice"             -> Json.obj(
               "referenceNumber" -> "AB123456"
             ),
             "EconomicOperator" -> Json.obj(
@@ -188,7 +188,7 @@ object TestObjects {
               "sequenceNumber" -> 12345,
               "code"           -> "1",
               "text"           -> "token",
-              "Endorsement" -> Json.obj(
+              "Endorsement"    -> Json.obj(
                 "date"      -> "2022-07-02",
                 "authority" -> "token",
                 "place"     -> "token",
@@ -198,7 +198,7 @@ object TestObjects {
                 "qualifierOfIdentification" -> "A",
                 "UNLocode"                  -> "token",
                 "country"                   -> "SA",
-                "Address" -> Json.obj(
+                "Address"                   -> Json.obj(
                   "streetAndNumber" -> "token",
                   "postcode"        -> "token",
                   "city"            -> "token"
@@ -209,7 +209,7 @@ object TestObjects {
                   "sequenceNumber"                -> 12345,
                   "containerIdentificationNumber" -> "ezv3Z",
                   "numberOfSeals"                 -> 2345,
-                  "Seal" -> Json.arr(
+                  "Seal"                          -> Json.arr(
                     Json.obj(
                       "sequenceNumber" -> 12345,
                       "identifier"     -> "token"
@@ -225,7 +225,7 @@ object TestObjects {
               ),
               "Transhipment" -> Json.obj(
                 "containerIndicator" -> "0",
-                "TransportMeans" -> Json.obj(
+                "TransportMeans"     -> Json.obj(
                   "typeOfIdentification" -> "12",
                   "identificationNumber" -> "ezv3Z",
                   "nationality"          -> "GB"
@@ -234,7 +234,7 @@ object TestObjects {
             )
           )
         ),
-        "messageIdentification" -> "token",
+        "messageIdentification"            -> "token",
         "CustomsOfficeOfDestinationActual" -> Json.obj(
           "referenceNumber" -> "GB123456"
         )
@@ -473,7 +473,7 @@ object TestObjects {
     lazy val jsonValid = Json.obj(
       "n1:CC013C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
-        "TransitOperation" -> Json.obj(
+        "TransitOperation"       -> Json.obj(
           "LRN"                               -> "string",
           "MRN"                               -> "29GMFMHYWWCFCWRVJ3",
           "declarationType"                   -> "token",
@@ -499,9 +499,9 @@ object TestObjects {
           "modeOfTransportAtTheBorder" -> "1",
           "grossMass"                  -> 1000,
           "referenceNumberUCR"         -> "string",
-          "Carrier" -> Json.obj(
+          "Carrier"                    -> Json.obj(
             "identificationNumber" -> "AZ!-",
-            "ContactPerson" -> Json.obj(
+            "ContactPerson"        -> Json.obj(
               "name"         -> "string",
               "phoneNumber"  -> "token",
               "eMailAddress" -> "string"
@@ -510,7 +510,7 @@ object TestObjects {
           "Consignor" -> Json.obj(
             "identificationNumber" -> "string",
             "name"                 -> "string",
-            "Address" -> Json.obj(
+            "Address"              -> Json.obj(
               "streetAndNumber" -> "string",
               "postcode"        -> "string",
               "city"            -> "string",
@@ -525,7 +525,7 @@ object TestObjects {
           "Consignee" -> Json.obj(
             "identificationNumber" -> "string",
             "name"                 -> "string",
-            "Address" -> Json.obj(
+            "Address"              -> Json.obj(
               "streetAndNumber" -> "string",
               "postcode"        -> "string",
               "city"            -> "string",
@@ -544,7 +544,7 @@ object TestObjects {
               "sequenceNumber"                -> 123,
               "containerIdentificationNumber" -> "string",
               "numberOfSeals"                 -> 100,
-              "Seal" -> Json.arr(
+              "Seal"                          -> Json.arr(
                 Json.obj(
                   "sequenceNumber" -> 123,
                   "identifier"     -> "string"
@@ -564,7 +564,7 @@ object TestObjects {
             "authorisationNumber"       -> "string",
             "additionalIdentifier"      -> "stri",
             "UNLocode"                  -> "token",
-            "CustomsOffice" -> Json.obj(
+            "CustomsOffice"             -> Json.obj(
               "referenceNumber" -> "GB123456"
             ),
             "GNSS" -> Json.obj(
@@ -672,10 +672,10 @@ object TestObjects {
               "countryOfDispatch"  -> "st",
               "grossMass"          -> 1000,
               "referenceNumberUCR" -> "string",
-              "Consignor" -> Json.obj(
+              "Consignor"          -> Json.obj(
                 "identificationNumber" -> "string",
                 "name"                 -> "string",
-                "Address" -> Json.obj(
+                "Address"              -> Json.obj(
                   "streetAndNumber" -> "string",
                   "postcode"        -> "string",
                   "city"            -> "string",
@@ -690,7 +690,7 @@ object TestObjects {
               "Consignee" -> Json.obj(
                 "identificationNumber" -> "string",
                 "name"                 -> "string",
-                "Address" -> Json.obj(
+                "Address"              -> Json.obj(
                   "streetAndNumber" -> "string",
                   "postcode"        -> "string",
                   "city"            -> "string",
@@ -761,10 +761,10 @@ object TestObjects {
                   "countryOfDispatch"          -> "GB",
                   "countryOfDestination"       -> "XI",
                   "referenceNumberUCR"         -> "string",
-                  "Consignee" -> Json.obj(
+                  "Consignee"                  -> Json.obj(
                     "identificationNumber" -> "string",
                     "name"                 -> "string",
-                    "Address" -> Json.obj(
+                    "Address"              -> Json.obj(
                       "streetAndNumber" -> "string",
                       "postcode"        -> "string",
                       "city"            -> "string",
@@ -781,7 +781,7 @@ object TestObjects {
                   "Commodity" -> Json.obj(
                     "descriptionOfGoods" -> "string",
                     "cusCode"            -> "abcdefghi",
-                    "CommodityCode" -> Json.obj(
+                    "CommodityCode"      -> Json.obj(
                       "harmonizedSystemSubHeadingCode" -> "tokent",
                       "combinedNomenclatureCode"       -> "st"
                     ),
@@ -875,20 +875,20 @@ object TestObjects {
         "messageType"           -> "CC013C",
         "@PhaseID"              -> "NCTS5.0",
         "correlationIdentifier" -> "token",
-        "Authorisation" -> Json.arr(
+        "Authorisation"         -> Json.arr(
           Json.obj(
             "sequenceNumber"  -> 123,
             "type"            -> "0",
             "referenceNumber" -> "string"
           )
         ),
-        "messageRecipient" -> "token",
-        "messageSender"    -> "token",
+        "messageRecipient"            -> "token",
+        "messageSender"               -> "token",
         "HolderOfTheTransitProcedure" -> Json.obj(
           "identificationNumber"          -> "string",
           "TIRHolderIdentificationNumber" -> "string",
           "name"                          -> "string",
-          "Address" -> Json.obj(
+          "Address"                       -> Json.obj(
             "streetAndNumber" -> "string",
             "postcode"        -> "string",
             "city"            -> "string",
@@ -903,19 +903,19 @@ object TestObjects {
         "Representative" -> Json.obj(
           "identificationNumber" -> "string",
           "status"               -> "0",
-          "ContactPerson" -> Json.obj(
+          "ContactPerson"        -> Json.obj(
             "name"         -> "string",
             "phoneNumber"  -> "token",
             "eMailAddress" -> "string"
           )
         ),
         "messageIdentification" -> "token",
-        "Guarantee" -> Json.arr(
+        "Guarantee"             -> Json.arr(
           Json.obj(
             "sequenceNumber"          -> 123,
             "guaranteeType"           -> "B",
             "otherGuaranteeReference" -> "GBP",
-            "GuaranteeReference" -> Json.arr(
+            "GuaranteeReference"      -> Json.arr(
               Json.obj(
                 "sequenceNumber"    -> 123,
                 "GRN"               -> "ABC",
@@ -969,23 +969,23 @@ object TestObjects {
     lazy val jsonValid = Json.obj(
       "n1:CC014C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
-        "TransitOperation" -> Json.obj(
+        "TransitOperation"       -> Json.obj(
           "LRN" -> "string",
           "MRN" -> "29GMFMHYWWCFCWRVJ3"
         ),
         "CustomsOfficeOfDeparture" -> Json.obj(
           "referenceNumber" -> "GB123456"
         ),
-        "messageType"           -> "CC014C",
-        "@PhaseID"              -> "NCTS5.0",
-        "correlationIdentifier" -> "token",
-        "messageRecipient"      -> "token",
-        "messageSender"         -> "token",
+        "messageType"                 -> "CC014C",
+        "@PhaseID"                    -> "NCTS5.0",
+        "correlationIdentifier"       -> "token",
+        "messageRecipient"            -> "token",
+        "messageSender"               -> "token",
         "HolderOfTheTransitProcedure" -> Json.obj(
           "identificationNumber"          -> "string",
           "TIRHolderIdentificationNumber" -> "string",
           "name"                          -> "string",
-          "Address" -> Json.obj(
+          "Address"                       -> Json.obj(
             "streetAndNumber" -> "string",
             "postcode"        -> "string",
             "city"            -> "string",
@@ -1094,7 +1094,7 @@ object TestObjects {
             "preparationDateAndTime" -> "2022-01-22T07:43:36",
             "messageIdentification"  -> "6Onxa3En",
             "messageType"            -> "CC015C",
-            "TransitOperation" -> Json.obj(
+            "TransitOperation"       -> Json.obj(
               "LRN"                       -> "qvRcL",
               "declarationType"           -> "Pbg",
               "additionalDeclarationType" -> "O",
@@ -1120,7 +1120,7 @@ object TestObjects {
               )
             ),
             "Consignment" -> Json.obj(
-              "grossMass" -> 6430669292.48125,
+              "grossMass"        -> 6430669292.48125,
               "HouseConsignment" -> Json.arr(
                 Json.obj(
                   "sequenceNumber"             -> 48711,
@@ -1132,12 +1132,12 @@ object TestObjects {
                   "TransportDocument"          -> Json.arr(),
                   "AdditionalReference"        -> Json.arr(),
                   "AdditionalInformation"      -> Json.arr(),
-                  "ConsignmentItem" -> Json.arr(
+                  "ConsignmentItem"            -> Json.arr(
                     Json.obj(
                       "goodsItemNumber"            -> 18914,
                       "declarationGoodsItemNumber" -> 1458,
                       "AdditionalSupplyChainActor" -> Json.arr(),
-                      "Commodity" -> Json.obj(
+                      "Commodity"                  -> Json.obj(
                         "descriptionOfGoods" -> "ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe",
                         "DangerousGoods" -> Json.arr()
                       ),
@@ -1194,7 +1194,7 @@ object TestObjects {
     lazy val jsonValid = Json.obj(
       "n1:CC044C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
-        "TransitOperation" -> Json.obj(
+        "TransitOperation"       -> Json.obj(
           "MRN" -> "27WF9X1FQ9RCKN0TM3"
         ),
         "TraderAtDestination" -> Json.obj(
@@ -1205,11 +1205,11 @@ object TestObjects {
           "unloadingCompletion" -> "0",
           "unloadingDate"       -> "2018-11-01"
         ),
-        "messageType"           -> "CC044C",
-        "@PhaseID"              -> "NCTS5.0",
-        "messageRecipient"      -> "token",
-        "messageSender"         -> "token",
-        "messageIdentification" -> "token",
+        "messageType"                      -> "CC044C",
+        "@PhaseID"                         -> "NCTS5.0",
+        "messageRecipient"                 -> "token",
+        "messageSender"                    -> "token",
+        "messageIdentification"            -> "token",
         "CustomsOfficeOfDestinationActual" -> Json.obj(
           "referenceNumber" -> "GB123456"
         )
@@ -1300,23 +1300,23 @@ object TestObjects {
     lazy val jsonValid = Json.obj(
       "n1:CC170C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
-        "TransitOperation" -> Json.obj(
+        "TransitOperation"       -> Json.obj(
           "LRN"       -> "string",
           "limitDate" -> "2014-06-09"
         ),
         "CustomsOfficeOfDeparture" -> Json.obj(
           "referenceNumber" -> "GB123456"
         ),
-        "messageType"           -> "CC170C",
-        "@PhaseID"              -> "NCTS5.0",
-        "correlationIdentifier" -> "token",
-        "messageRecipient"      -> "token",
-        "messageSender"         -> "token",
+        "messageType"                 -> "CC170C",
+        "@PhaseID"                    -> "NCTS5.0",
+        "correlationIdentifier"       -> "token",
+        "messageRecipient"            -> "token",
+        "messageSender"               -> "token",
         "HolderOfTheTransitProcedure" -> Json.obj(
           "identificationNumber"          -> "string",
           "TIRHolderIdentificationNumber" -> "string",
           "name"                          -> "string",
-          "Address" -> Json.obj(
+          "Address"                       -> Json.obj(
             "streetAndNumber" -> "string",
             "postcode"        -> "string",
             "city"            -> "string",
@@ -1327,12 +1327,12 @@ object TestObjects {
           "containerIndicator"         -> "1",
           "inlandModeOfTransport"      -> "0",
           "modeOfTransportAtTheBorder" -> "0",
-          "TransportEquipment" -> Json.arr(
+          "TransportEquipment"         -> Json.arr(
             Json.obj(
               "sequenceNumber"                -> 1234,
               "containerIdentificationNumber" -> "string",
               "numberOfSeals"                 -> 100,
-              "Seal" -> Json.arr(
+              "Seal"                          -> Json.arr(
                 Json.obj(
                   "sequenceNumber" -> 1234,
                   "identifier"     -> "string"
@@ -1352,7 +1352,7 @@ object TestObjects {
             "authorisationNumber"       -> "string",
             "additionalIdentifier"      -> "stri",
             "UNLocode"                  -> "token",
-            "CustomsOffice" -> Json.obj(
+            "CustomsOffice"             -> Json.obj(
               "referenceNumber" -> "AB123456"
             ),
             "GNSS" -> Json.obj(
@@ -1404,7 +1404,7 @@ object TestObjects {
           ),
           "HouseConsignment" -> Json.arr(
             Json.obj(
-              "sequenceNumber" -> 123,
+              "sequenceNumber"          -> 123,
               "DepartureTransportMeans" -> Json.arr(
                 Json.obj(
                   "sequenceNumber"       -> 1234,
@@ -1419,7 +1419,7 @@ object TestObjects {
         "Representative" -> Json.obj(
           "identificationNumber" -> "string",
           "status"               -> "0",
-          "ContactPerson" -> Json.obj(
+          "ContactPerson"        -> Json.obj(
             "name"         -> "string",
             "phoneNumber"  -> "token",
             "eMailAddress" -> "string"
