@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== Modification Type                                                               -->
-  <!--===== Format: a1                                                                      -->
-  <!--===== CL024                                                                           -->
+  <!--===== Modification Type                                                         -->
+  <!--===== Format: a1                                                                -->
+  <!--===== CL024                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="ModificationType">
     <xs:annotation>
@@ -28,13 +28,13 @@
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== Month of Year                                                                   -->
-  <!--===== Format: an2                                                                     -->
-  <!--===== CL026                                                                           -->
+  <!--===== Month of Year                                                             -->
+  <!--===== Format: an2                                                               -->
+  <!--===== CL026                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="MonthOfYear">
     <xs:annotation>
-      <xs:documentation />
+      <xs:documentation>The list of codes to specify the month of the year.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:token">
       <xs:enumeration value="01">
@@ -100,9 +100,9 @@
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== Flag                                                                            -->
-  <!--===== Format: n1                                                                      -->
-  <!--===== CL027                                                                           -->
+  <!--===== Flag                                                                      -->
+  <!--===== Format: n1                                                                -->
+  <!--===== CL027                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="Flag">
     <xs:annotation>
@@ -122,9 +122,9 @@
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== XML Error Codes                                                                 -->
-  <!--===== Format: n2                                                                      -->
-  <!--===== CL030                                                                           -->
+  <!--===== XML Error Codes                                                           -->
+  <!--===== Format: n2                                                                -->
+  <!--===== CL030                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="XmlErrorCodes">
     <xs:annotation>
@@ -209,9 +209,9 @@
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== Message Types                                                                   -->
-  <!--===== Format: an..6                                                                   -->
-  <!--===== CL060                                                                           -->
+  <!--===== Message Types                                                             -->
+  <!--===== Format: an..6                                                             -->
+  <!--===== CL060                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="MessageTypes">
     <xs:annotation>
@@ -223,12 +223,22 @@
           <xs:documentation>Amendment Acceptance</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CC004D">
+        <xs:annotation>
+          <xs:documentation>Amendment Acceptance</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CC007C">
         <xs:annotation>
           <xs:documentation>Arrival Notification</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CC009C">
+        <xs:annotation>
+          <xs:documentation>Invalidation Decision</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CC009D">
         <xs:annotation>
           <xs:documentation>Invalidation Decision</xs:documentation>
         </xs:annotation>
@@ -283,6 +293,11 @@
           <xs:documentation>MRN ALLOCATED</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CC028D">
+        <xs:annotation>
+          <xs:documentation>MRN Allocated</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CC029C">
         <xs:annotation>
           <xs:documentation>RELEASE FOR TRANSIT</xs:documentation>
@@ -316,6 +331,11 @@
       <xs:enumeration value="CC043C">
         <xs:annotation>
           <xs:documentation>UNLOADING PERMISSION</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CC043D">
+        <xs:annotation>
+          <xs:documentation>Unloading Permission</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CC044C">
@@ -353,14 +373,34 @@
           <xs:documentation>REJECTION FROM OFFICE OF DEPARTURE</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CC056D">
+        <xs:annotation>
+          <xs:documentation>Rejection From Office of Departure</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CC057C">
         <xs:annotation>
           <xs:documentation>REJECTION FROM OFFICE OF DESTINATION</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CC058D">
+        <xs:annotation>
+          <xs:documentation>Rejection From Office of Transit</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CC060C">
         <xs:annotation>
           <xs:documentation>CONTROL DECISION NOTIFICATION</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CC060D">
+        <xs:annotation>
+          <xs:documentation>Control Decision Notification</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CC117D">
+        <xs:annotation>
+          <xs:documentation>Arrival Notification at Office of Transit</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CC140C">
@@ -433,6 +473,51 @@
           <xs:documentation>POSITIVE ACKNOWLEDGE</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CC928D">
+        <xs:annotation>
+          <xs:documentation>Positive Acknowledge</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA13D">
+        <xs:annotation>
+          <xs:documentation>Declaration Amendment</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA15D">
+        <xs:annotation>
+          <xs:documentation>Declaration Data</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA28D">
+        <xs:annotation>
+          <xs:documentation>Re-Entry ENS MRN Allocated</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA29D">
+        <xs:annotation>
+          <xs:documentation>Release For Transit</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA64D">
+        <xs:annotation>
+          <xs:documentation>Control Decision Notification to AEO From Office Of Transit</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA70D">
+        <xs:annotation>
+          <xs:documentation>Referral Request</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA71D">
+        <xs:annotation>
+          <xs:documentation>Referral Response</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CCA91D">
+        <xs:annotation>
+          <xs:documentation>ENS Particulars Incomplete Notification</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CD001C">
         <xs:annotation>
           <xs:documentation>AAR</xs:documentation>
@@ -448,9 +533,19 @@
           <xs:documentation>AAR Response</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CD004D">
+        <xs:annotation>
+          <xs:documentation>Amendment Acceptance ENS</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CD006C">
         <xs:annotation>
           <xs:documentation>ARRIVAL ADVICE</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CD009D">
+        <xs:annotation>
+          <xs:documentation>Invalidation Decision ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CD010C">
@@ -458,9 +553,9 @@
           <xs:documentation>CANCELLATION NOTIFICATION</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="CD012C">
+      <xs:enumeration value="CD014D">
         <xs:annotation>
-          <xs:documentation>AAR-TIR-SPEED</xs:documentation>
+          <xs:documentation>Declaration Invalidation Request ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CD018C">
@@ -493,9 +588,19 @@
           <xs:documentation>ANTICIPATED TRANSIT RECORD</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CD056D">
+        <xs:annotation>
+          <xs:documentation>Rejection From Office of Departure ENS</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CD059C">
         <xs:annotation>
           <xs:documentation>CANCEL ENQUIRY NOTIFICATION</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CD060D">
+        <xs:annotation>
+          <xs:documentation>Control Decision Notification ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CD063C">
@@ -538,9 +643,19 @@
           <xs:documentation>ANTICIPATED TRANSIT RECORD RESPONSE</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CD117D">
+        <xs:annotation>
+          <xs:documentation>Arrival Notification ENS</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CD118C">
         <xs:annotation>
           <xs:documentation>NOTIFICATION CROSSING FRONTIER</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CD119D">
+        <xs:annotation>
+          <xs:documentation>Rejection Crossing Frontier</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CD142C">
@@ -653,9 +768,29 @@
           <xs:documentation>FUNCTIONAL NACK</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="CD906D">
+        <xs:annotation>
+          <xs:documentation>Functional NACK</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="CD917C">
         <xs:annotation>
           <xs:documentation>XML NACK</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CD917D">
+        <xs:annotation>
+          <xs:documentation>XML NACK</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CD927D">
+        <xs:annotation>
+          <xs:documentation>Positive Validation ENS</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CD928D">
+        <xs:annotation>
+          <xs:documentation>Positive Acknowledge ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
       <xs:enumeration value="CD971C">
@@ -673,214 +808,47 @@
           <xs:documentation>NCA Availability response</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <!--================================================================================-->
-  <!--===== Country Codes (Customs Office Lists)                                            -->
-  <!--===== Format: a2                                                                      -->
-  <!--===== CL070                                                                           -->
-  <!--================================================================================-->
-  <xs:simpleType name="CountryCodesCustomsOfficeLists">
-    <xs:annotation>
-      <xs:documentation>This Codelist includes the countries who are maintaining their Customs Offices in CS/RD2. It lists the country codes used as the first two characters of the Customs Office Reference Number. It corresponds to the content of the code list CL009 excluding 'AX', 'GF', 'GG', 'GP', 'IM', 'JE', 'LI', 'MC', 'MF', 'MQ', 'RE', 'SJ', 'XS' and 'YT'. This codelist is used for the Customs Office List. The values of this codelist are also available and updated in CS/RD2.</xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:token">
-      <xs:enumeration value="AD">
+      <xs:enumeration value="CDA13D">
         <xs:annotation>
-          <xs:documentation>Andorra</xs:documentation>
+          <xs:documentation>Declaration Amendment ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="AT">
+      <xs:enumeration value="CDA15D">
         <xs:annotation>
-          <xs:documentation>Austria</xs:documentation>
+          <xs:documentation>Declaration Data ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="BE">
+      <xs:enumeration value="CDA52D">
         <xs:annotation>
-          <xs:documentation>Belgium</xs:documentation>
+          <xs:documentation>Office of Entry Notification ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="BG">
+      <xs:enumeration value="CDA64D">
         <xs:annotation>
-          <xs:documentation>Bulgaria</xs:documentation>
+          <xs:documentation>Control Decision Notification to Office Of Transit ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="CH">
+      <xs:enumeration value="CDA70D">
         <xs:annotation>
-          <xs:documentation>Switzerland</xs:documentation>
+          <xs:documentation>Referral Request ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="CY">
+      <xs:enumeration value="CDA71D">
         <xs:annotation>
-          <xs:documentation>Cyprus</xs:documentation>
+          <xs:documentation>Referral Response ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="CZ">
+      <xs:enumeration value="CDA93D">
         <xs:annotation>
-          <xs:documentation>Czech Republic</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="DE">
-        <xs:annotation>
-          <xs:documentation>Germany</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="DK">
-        <xs:annotation>
-          <xs:documentation>Denmark</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="EE">
-        <xs:annotation>
-          <xs:documentation>Estonia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="ES">
-        <xs:annotation>
-          <xs:documentation>Spain</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="FI">
-        <xs:annotation>
-          <xs:documentation>Finland</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="FR">
-        <xs:annotation>
-          <xs:documentation>France</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="GB">
-        <xs:annotation>
-          <xs:documentation>United Kingdom</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="GR">
-        <xs:annotation>
-          <xs:documentation>Greece</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="HR">
-        <xs:annotation>
-          <xs:documentation>Croatia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="HU">
-        <xs:annotation>
-          <xs:documentation>Hungary</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="IE">
-        <xs:annotation>
-          <xs:documentation>Ireland</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="IS">
-        <xs:annotation>
-          <xs:documentation>Iceland</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="IT">
-        <xs:annotation>
-          <xs:documentation>Italy</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="LT">
-        <xs:annotation>
-          <xs:documentation>Lithuania</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="LU">
-        <xs:annotation>
-          <xs:documentation>Luxembourg</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="LV">
-        <xs:annotation>
-          <xs:documentation>Latvia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="MK">
-        <xs:annotation>
-          <xs:documentation>North Macedonia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="MT">
-        <xs:annotation>
-          <xs:documentation>Malta</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="NL">
-        <xs:annotation>
-          <xs:documentation>Netherlands</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="NO">
-        <xs:annotation>
-          <xs:documentation>Norway</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PL">
-        <xs:annotation>
-          <xs:documentation>Poland</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PT">
-        <xs:annotation>
-          <xs:documentation>Portugal</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="RO">
-        <xs:annotation>
-          <xs:documentation>Romania</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="RS">
-        <xs:annotation>
-          <xs:documentation>Serbia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="SE">
-        <xs:annotation>
-          <xs:documentation>Sweden</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="SI">
-        <xs:annotation>
-          <xs:documentation>Slovenia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="SK">
-        <xs:annotation>
-          <xs:documentation>Slovakia</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="SM">
-        <xs:annotation>
-          <xs:documentation>San Marino</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="TR">
-        <xs:annotation>
-          <xs:documentation>Turkey</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UA">
-        <xs:annotation>
-          <xs:documentation>Ukraine</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="XI">
-        <xs:annotation>
-          <xs:documentation>United Kingdom (Northern Ireland)</xs:documentation>
+          <xs:documentation>Assessment Complete Notification ENS</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== System Unavailability Type                                                      -->
-  <!--===== Format: a1                                                                      -->
-  <!--===== CL079                                                                           -->
+  <!--===== System Unavailability Type                                                -->
+  <!--===== Format: a1                                                                -->
+  <!--===== CL079                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="SystemUnavailabilityType">
     <xs:annotation>
@@ -905,9 +873,9 @@
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== AES/NCTS P5 Functional Error Codes                                              -->
-  <!--===== Format: n2                                                                      -->
-  <!--===== CL180                                                                           -->
+  <!--===== AES/NCTS P5 Functional Error Codes                                        -->
+  <!--===== Format: n2                                                                -->
+  <!--===== CL180                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="AesNctsP5FunctionalErrorCodes">
     <xs:annotation>
