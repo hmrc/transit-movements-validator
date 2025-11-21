@@ -16,7 +16,7 @@
     <!--0 to 9 repetitions:-->
     <Authorisation>
         <sequenceNumber>12345</sequenceNumber>
-        <type>AEOF</type>
+        <type>tokn</type>
         <referenceNumber>GB444</referenceNumber>
     </Authorisation>
     <CustomsOfficeOfDeparture>
@@ -49,7 +49,7 @@
         </GuaranteeReference>
     </Guarantee>
     <Consignment>
-        <grossMass>1000.000000</grossMass>
+        <grossMass>1000.000000000000</grossMass>
         <!--0 to 99 repetitions:-->
         <AdditionalSupplyChainActor>
             <sequenceNumber>12345</sequenceNumber>
@@ -122,7 +122,7 @@
         <!--1 to 99 repetitions:-->
         <HouseConsignment>
             <sequenceNumber>12345</sequenceNumber>
-            <grossMass>1000.000000</grossMass>
+            <grossMass>1000.000000000000</grossMass>
             <!--0 to 99 repetitions:-->
             <AdditionalSupplyChainActor>
                 <sequenceNumber>12345</sequenceNumber>
