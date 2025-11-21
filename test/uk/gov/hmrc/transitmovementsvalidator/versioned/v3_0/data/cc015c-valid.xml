@@ -36,6 +36,13 @@
                 <declarationGoodsItemNumber>25</declarationGoodsItemNumber>
                 <Commodity>
                     <descriptionOfGoods>fds9YFrlk6DX7pnwQNgJmksfZ4z9uGjDy6Kaucb13r3kEleTuLHD5zKtbAKUU005AaZeVdTgdAnJKzuGliZGRb1E83Y0Z8IuyeFfnXgT7NwX81eGFb3vRXAWUFswwwprqZBcffnBLwLObF45W7evl7C6J4Tihj1d1a2ZKcAU6ttLNy</descriptionOfGoods>
+                    <DangerousGoods>
+                        <sequenceNumber>12345</sequenceNumber>
+                        <UNNumber>1234</UNNumber>
+                    </DangerousGoods>
+                    <GoodsMeasure>
+                        <grossMass>1000.000000</grossMass>
+                    </GoodsMeasure>
                 </Commodity>
                 <Packaging>
                     <sequenceNumber>66710</sequenceNumber>
