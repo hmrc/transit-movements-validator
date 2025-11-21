@@ -16,7 +16,7 @@
     <!--0 to 9 repetitions:-->
     <Authorisation>
         <sequenceNumber>12345</sequenceNumber>
-        <type>tokn</type>
+        <type>AEOF</type>
         <referenceNumber>GB444</referenceNumber>
     </Authorisation>
     <CustomsOfficeOfDeparture>
@@ -40,13 +40,16 @@
     <!--1 to 9 repetitions:-->
     <Guarantee>
         <sequenceNumber>12345</sequenceNumber>
-        <!--0 to 99 repetitions:-->
+        <guaranteeType>1</guaranteeType>
         <GuaranteeReference>
             <sequenceNumber>12345</sequenceNumber>
+            <GRN>24GBABCDEF1234567</GRN>
+            <amountToBeCovered>10000.00</amountToBeCovered>
+            <currency>GBP</currency>
         </GuaranteeReference>
     </Guarantee>
     <Consignment>
-        <grossMass>1000.000000000000</grossMass>
+        <grossMass>1000.000000</grossMass>
         <!--0 to 99 repetitions:-->
         <AdditionalSupplyChainActor>
             <sequenceNumber>12345</sequenceNumber>
@@ -70,7 +73,10 @@
         </TransportEquipment>
         <!--0 to 999 repetitions:-->
         <DepartureTransportMeans>
-            <sequenceNumber>12345</sequenceNumber>
+            <sequenceNumber>1</sequenceNumber>
+            <typeOfIdentification>01</typeOfIdentification>
+            <identificationNumber>GB123</identificationNumber>
+            <nationality>GB</nationality>
         </DepartureTransportMeans>
         <!--0 to 99 repetitions:-->
         <CountryOfRoutingOfConsignment>
@@ -79,7 +85,11 @@
         </CountryOfRoutingOfConsignment>
         <!--0 to 9 repetitions:-->
         <ActiveBorderTransportMeans>
-            <sequenceNumber>12345</sequenceNumber>
+            <sequenceNumber>1</sequenceNumber>
+            <customsOfficeAtBorderReferenceNumber>GB000060</customsOfficeAtBorderReferenceNumber>
+            <typeOfIdentification>01</typeOfIdentification>
+            <identificationNumber>ABC1234</identificationNumber>
+            <nationality>GB</nationality>
         </ActiveBorderTransportMeans>
         <!--0 to 9999 repetitions:-->
         <PreviousDocument>
@@ -112,7 +122,7 @@
         <!--1 to 99 repetitions:-->
         <HouseConsignment>
             <sequenceNumber>12345</sequenceNumber>
-            <grossMass>1000.000000000000</grossMass>
+            <grossMass>1000.000000</grossMass>
             <!--0 to 99 repetitions:-->
             <AdditionalSupplyChainActor>
                 <sequenceNumber>12345</sequenceNumber>
@@ -171,6 +181,9 @@
                         <sequenceNumber>12345</sequenceNumber>
                         <UNNumber>1234</UNNumber>
                     </DangerousGoods>
+                    <GoodsMeasure>
+                        <grossMass>1000.000000</grossMass>
+                    </GoodsMeasure>
                 </Commodity>
                 <!--1 to 99 repetitions:-->
                 <Packaging>
@@ -189,12 +202,6 @@
                     <type>ABCD</type>
                     <referenceNumber>AB123456</referenceNumber>
                 </SupportingDocument>
-                <!--0 to 99 repetitions:-->
-                <TransportDocument>
-                    <sequenceNumber>12345</sequenceNumber>
-                    <type>ABCD</type>
-                    <referenceNumber>AB123456</referenceNumber>
-                </TransportDocument>
                 <!--0 to 99 repetitions:-->
                 <AdditionalReference>
                     <sequenceNumber>12345</sequenceNumber>

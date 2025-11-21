@@ -52,8 +52,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE013",
         "CC013C",
-        s"/v2_1/xsd/cc013c.xsd",
-        s"/v2_1/json/cc013c-schema.json"
+        s"/v3_0/xsd/cc013c.xsd",
+        s"/v3_0/json/cc013c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -62,8 +62,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE014",
         "CC014C",
-        s"/v2_1/xsd/cc014c.xsd",
-        s"/v2_1/json/cc014c-schema.json"
+        s"/v3_0/xsd/cc014c.xsd",
+        s"/v3_0/json/cc014c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -72,8 +72,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE015",
         "CC015C",
-        s"/v2_1/xsd/cc015c.xsd",
-        s"/v2_1/json/cc015c-schema.json"
+        s"/v3_0/xsd/cc015c.xsd",
+        s"/v3_0/json/cc015c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -82,8 +82,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE170",
         "CC170C",
-        s"/v2_1/xsd/cc170c.xsd",
-        s"/v2_1/json/cc170c-schema.json"
+        s"/v3_0/xsd/cc170c.xsd",
+        s"/v3_0/json/cc170c-schema.json"
       )
       with DepartureRequestMessageType
 
@@ -103,8 +103,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE007",
         "CC007C",
-        s"/v2_1/xsd/cc007c.xsd",
-        s"/v2_1/json/cc007c-schema.json"
+        s"/v3_0/xsd/cc007c.xsd",
+        s"/v3_0/json/cc007c-schema.json"
       )
       with ArrivalRequestMessageType
 
@@ -113,8 +113,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE044",
         "CC044C",
-        s"/v2_1/xsd/cc044c.xsd",
-        s"/v2_1/json/cc044c-schema.json"
+        s"/v3_0/xsd/cc044c.xsd",
+        s"/v3_0/json/cc044c-schema.json"
       )
       with ArrivalRequestMessageType
 
@@ -131,8 +131,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE004",
         "CC004C",
-        s"/v2_1/xsd/cc004c.xsd",
-        s"/v2_1/json/cc004c-schema.json"
+        s"/v3_0/xsd/cc004c.xsd",
+        s"/v3_0/json/cc004c-schema.json"
       )
       with ResponseMessageType
 
@@ -140,24 +140,24 @@ object MessageType {
       extends DepartureMessageType(
         "IE009",
         "CC009C",
-        s"/v2_1/xsd/cc009c.xsd",
-        s"/v2_1/json/cc009c-schema.json"
+        s"/v3_0/xsd/cc009c.xsd",
+        s"/v3_0/json/cc009c-schema.json"
       )
       with ResponseMessageType
   case object Discrepancies
       extends DepartureMessageType(
         "IE019",
         "CC019C",
-        s"/v2_1/xsd/cc019c.xsd",
-        s"/v2_1/json/cc019c-schema.json"
+        s"/v3_0/xsd/cc019c.xsd",
+        s"/v3_0/json/cc019c-schema.json"
       )
       with ResponseMessageType
   case object MRNAllocated
       extends DepartureMessageType(
         "IE028",
         "CC028C",
-        s"/v2_1/xsd/cc028c.xsd",
-        s"/v2_1/json/cc028c-schema.json"
+        s"/v3_0/xsd/cc028c.xsd",
+        s"/v3_0/json/cc028c-schema.json"
       )
       with ResponseMessageType
 
@@ -165,8 +165,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE029",
         "CC029C",
-        s"/v2_1/xsd/cc029c.xsd",
-        s"/v2_1/json/cc029c-schema.json"
+        s"/v3_0/xsd/cc029c.xsd",
+        s"/v3_0/json/cc029c-schema.json"
       )
       with ResponseMessageType
 
@@ -174,8 +174,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE035",
         "CC035C",
-        s"/v2_1/xsd/cc035c.xsd",
-        s"/v2_1/json/cc035c-schema.json"
+        s"/v3_0/xsd/cc035c.xsd",
+        s"/v3_0/json/cc035c-schema.json"
       )
       with ResponseMessageType
 
@@ -183,8 +183,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE045",
         "CC045C",
-        s"/v2_1/xsd/cc045c.xsd",
-        s"/v2_1/json/cc045c-schema.json"
+        s"/v3_0/xsd/cc045c.xsd",
+        s"/v3_0/json/cc045c-schema.json"
       )
       with ResponseMessageType
 
@@ -192,8 +192,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE051",
         "CC051C",
-        s"/v2_1/xsd/cc051c.xsd",
-        s"/v2_1/json/cc051c-schema.json"
+        s"/v3_0/xsd/cc051c.xsd",
+        s"/v3_0/json/cc051c-schema.json"
       )
       with ResponseMessageType
 
@@ -201,8 +201,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE055",
         "CC055C",
-        s"/v2_1/xsd/cc055c.xsd",
-        s"/v2_1/json/cc055c-schema.json"
+        s"/v3_0/xsd/cc055c.xsd",
+        s"/v3_0/json/cc055c-schema.json"
       )
       with ResponseMessageType
 
@@ -210,8 +210,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE056",
         "CC056C",
-        s"/v2_1/xsd/cc056c.xsd",
-        s"/v2_1/json/cc056c-schema.json"
+        s"/v3_0/xsd/cc056c.xsd",
+        s"/v3_0/json/cc056c-schema.json"
       )
       with ResponseMessageType
 
@@ -219,8 +219,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE060",
         "CC060C",
-        s"/v2_1/xsd/cc060c.xsd",
-        s"/v2_1/json/cc060c-schema.json"
+        s"/v3_0/xsd/cc060c.xsd",
+        s"/v3_0/json/cc060c-schema.json"
       )
       with ResponseMessageType
 
@@ -228,16 +228,16 @@ object MessageType {
       extends DepartureMessageType(
         "IE182",
         "CC182C",
-        s"/v2_1/xsd/cc182c.xsd",
-        s"/v2_1/json/cc182c-schema.json"
+        s"/v3_0/xsd/cc182c.xsd",
+        s"/v3_0/json/cc182c-schema.json"
       )
       with ResponseMessageType
   case object FunctionalNack
       extends DepartureMessageType(
         "IE906",
         "CC906C",
-        s"/v2_1/xsd/cc906c.xsd",
-        s"/v2_1/json/cc906c-schema.json"
+        s"/v3_0/xsd/cc906c.xsd",
+        s"/v3_0/json/cc906c-schema.json"
       )
       with ResponseMessageType
 
@@ -245,8 +245,8 @@ object MessageType {
       extends DepartureMessageType(
         "IE928",
         "CC928C",
-        s"/v2_1/xsd/cc928c.xsd",
-        s"/v2_1/json/cc928c-schema.json"
+        s"/v3_0/xsd/cc928c.xsd",
+        s"/v3_0/json/cc928c-schema.json"
       )
       with ResponseMessageType
 
@@ -275,8 +275,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE025",
         "CC025C",
-        s"/v2_1/xsd/cc025c.xsd",
-        s"/v2_1/json/cc025c-schema.json"
+        s"/v3_0/xsd/cc025c.xsd",
+        s"/v3_0/json/cc025c-schema.json"
       )
       with ResponseMessageType
 
@@ -284,8 +284,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE043",
         "CC043C",
-        s"/v2_1/xsd/cc043c.xsd",
-        s"/v2_1/json/cc043c-schema.json"
+        s"/v3_0/xsd/cc043c.xsd",
+        s"/v3_0/json/cc043c-schema.json"
       )
       with ResponseMessageType
 
@@ -293,8 +293,8 @@ object MessageType {
       extends ArrivalMessageType(
         "IE057",
         "CC057C",
-        s"/v2_1/xsd/cc057c.xsd",
-        s"/v2_1/json/cc057c-schema.json"
+        s"/v3_0/xsd/cc057c.xsd",
+        s"/v3_0/json/cc057c-schema.json"
       )
       with ResponseMessageType
 
