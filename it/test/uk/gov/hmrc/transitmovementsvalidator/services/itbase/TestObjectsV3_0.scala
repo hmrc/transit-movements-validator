@@ -18,7 +18,7 @@ package uk.gov.hmrc.transitmovementsvalidator.services.itbase
 
 import play.api.libs.json.Json
 
-object TestObjects {
+object TestObjectsV3_0 {
 
   object CC007C {
     lazy val xmlValid = <ncts:CC007C PhaseID="NCTS5.0" xmlns:ncts="http://ncts.dgtaxud.ec">
@@ -32,7 +32,6 @@ object TestObjects {
         <MRN>27WF9X1FQ9RCKN0TM3</MRN>
         <arrivalNotificationDateAndTime>2022-07-02T03:11:04</arrivalNotificationDateAndTime>
         <simplifiedProcedure>1</simplifiedProcedure>
-        <incidentFlag>1</incidentFlag>
       </TransitOperation>
       <Authorisation>
         <sequenceNumber>123</sequenceNumber>
@@ -77,49 +76,6 @@ object TestObjects {
             <eMailAddress>sandeep@gmail.com</eMailAddress>
           </ContactPerson>
         </LocationOfGoods>
-        <Incident>
-          <sequenceNumber>12345</sequenceNumber>
-          <code>1</code>
-          <text>token</text>
-          <Endorsement>
-            <date>2022-07-02</date>
-            <authority>token</authority>
-            <place>token</place>
-            <country>GB</country>
-          </Endorsement>
-          <Location>
-            <qualifierOfIdentification>A</qualifierOfIdentification>
-            <UNLocode>token</UNLocode>
-            <country>SA</country>
-
-            <Address>
-              <streetAndNumber>token</streetAndNumber>
-              <postcode>token</postcode>
-              <city>token</city>
-            </Address>
-          </Location>
-          <TransportEquipment>
-            <sequenceNumber>12345</sequenceNumber>
-            <containerIdentificationNumber>ezv3Z</containerIdentificationNumber>
-            <numberOfSeals>2345</numberOfSeals>
-            <Seal>
-              <sequenceNumber>12345</sequenceNumber>
-              <identifier>token</identifier>
-            </Seal>
-            <GoodsReference>
-              <sequenceNumber>12345</sequenceNumber>
-              <declarationGoodsItemNumber>12</declarationGoodsItemNumber>
-            </GoodsReference>
-          </TransportEquipment>
-          <Transhipment>
-            <containerIndicator>0</containerIndicator>
-            <TransportMeans>
-              <typeOfIdentification>12</typeOfIdentification>
-              <identificationNumber>ezv3Z</identificationNumber>
-              <nationality>GB</nationality>
-            </TransportMeans>
-          </Transhipment>
-        </Incident>
       </Consignment>
     </ncts:CC007C>
 
@@ -181,56 +137,6 @@ object TestObjects {
               "name"         -> "token",
               "phoneNumber"  -> "token",
               "eMailAddress" -> "xxxx@gmail.com"
-            )
-          ),
-          "Incident" -> Json.arr(
-            Json.obj(
-              "sequenceNumber" -> 12345,
-              "code"           -> "1",
-              "text"           -> "token",
-              "Endorsement"    -> Json.obj(
-                "date"      -> "2022-07-02",
-                "authority" -> "token",
-                "place"     -> "token",
-                "country"   -> "GB"
-              ),
-              "Location" -> Json.obj(
-                "qualifierOfIdentification" -> "A",
-                "UNLocode"                  -> "token",
-                "country"                   -> "SA",
-                "Address"                   -> Json.obj(
-                  "streetAndNumber" -> "token",
-                  "postcode"        -> "token",
-                  "city"            -> "token"
-                )
-              ),
-              "TransportEquipment" -> Json.arr(
-                Json.obj(
-                  "sequenceNumber"                -> 12345,
-                  "containerIdentificationNumber" -> "ezv3Z",
-                  "numberOfSeals"                 -> 2345,
-                  "Seal"                          -> Json.arr(
-                    Json.obj(
-                      "sequenceNumber" -> 12345,
-                      "identifier"     -> "token"
-                    )
-                  ),
-                  "GoodsReference" -> Json.arr(
-                    Json.obj(
-                      "sequenceNumber"             -> 12345,
-                      "declarationGoodsItemNumber" -> 12
-                    )
-                  )
-                )
-              ),
-              "Transhipment" -> Json.obj(
-                "containerIndicator" -> "0",
-                "TransportMeans"     -> Json.obj(
-                  "typeOfIdentification" -> "12",
-                  "identificationNumber" -> "ezv3Z",
-                  "nationality"          -> "GB"
-                )
-              )
             )
           )
         ),
@@ -295,9 +201,13 @@ object TestObjects {
       <!--1 to 9 repetitions:-->
       <Guarantee>
         <sequenceNumber>12345</sequenceNumber>
+        <guaranteeType>1</guaranteeType>
         <!--0 to 99 repetitions:-->
         <GuaranteeReference>
           <sequenceNumber>12345</sequenceNumber>
+          <GRN>24GBABCDEF1234567</GRN>
+          <amountToBeCovered>10000.00</amountToBeCovered>
+          <currency>GBP</currency>
         </GuaranteeReference>
       </Guarantee>
       <Consignment>
@@ -326,6 +236,9 @@ object TestObjects {
         <!--0 to 999 repetitions:-->
         <DepartureTransportMeans>
           <sequenceNumber>12345</sequenceNumber>
+          <typeOfIdentification>01</typeOfIdentification>
+          <identificationNumber>GB123</identificationNumber>
+          <nationality>GB</nationality>
         </DepartureTransportMeans>
         <!--0 to 99 repetitions:-->
         <CountryOfRoutingOfConsignment>
@@ -335,6 +248,10 @@ object TestObjects {
         <!--0 to 9 repetitions:-->
         <ActiveBorderTransportMeans>
           <sequenceNumber>12345</sequenceNumber>
+          <customsOfficeAtBorderReferenceNumber>GB000060</customsOfficeAtBorderReferenceNumber>
+          <typeOfIdentification>01</typeOfIdentification>
+          <identificationNumber>ABC1234</identificationNumber>
+          <nationality>GB</nationality>
         </ActiveBorderTransportMeans>
         <!--0 to 9999 repetitions:-->
         <PreviousDocument>
@@ -426,6 +343,9 @@ object TestObjects {
                 <sequenceNumber>12345</sequenceNumber>
                 <UNNumber>1234</UNNumber>
               </DangerousGoods>
+              <GoodsMeasure>
+                <grossMass>1000.000000</grossMass>
+              </GoodsMeasure>
             </Commodity>
             <!--1 to 99 repetitions:-->
             <Packaging>
@@ -444,12 +364,6 @@ object TestObjects {
               <type>ABCD</type>
               <referenceNumber>AB123456</referenceNumber>
             </SupportingDocument>
-            <!--0 to 99 repetitions:-->
-            <TransportDocument>
-              <sequenceNumber>12345</sequenceNumber>
-              <type>ABCD</type>
-              <referenceNumber>AB123456</referenceNumber>
-            </TransportDocument>
             <!--0 to 99 repetitions:-->
             <AdditionalReference>
               <sequenceNumber>12345</sequenceNumber>
@@ -1064,6 +978,13 @@ object TestObjects {
             <declarationGoodsItemNumber>1458</declarationGoodsItemNumber>
             <Commodity>
               <descriptionOfGoods>ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe</descriptionOfGoods>
+              <DangerousGoods>
+                <sequenceNumber>12345</sequenceNumber>
+                <UNNumber>1234</UNNumber>
+              </DangerousGoods>
+              <GoodsMeasure>
+                <grossMass>1000.000000</grossMass>
+              </GoodsMeasure>
             </Commodity>
             <Packaging>
               <sequenceNumber>48711</sequenceNumber>
