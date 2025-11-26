@@ -9,7 +9,6 @@
         <MRN>27WF9X1FQ9RCKN0TM3</MRN>
         <arrivalNotificationDateAndTime>2022-07-02T03:11:04</arrivalNotificationDateAndTime>
         <simplifiedProcedure>1</simplifiedProcedure>
-        <incidentFlag>1</incidentFlag>
     </TransitOperation>
     <Authorisation>
         <sequenceNumber>123</sequenceNumber>
@@ -54,48 +53,5 @@
                 <eMailAddress>sandeep@gmail.com</eMailAddress>
             </ContactPerson>
         </LocationOfGoods>
-        <Incident>
-            <sequenceNumber>12345</sequenceNumber>
-            <code>1</code>
-            <text>token</text>
-            <Endorsement>
-                <date>2022-07-02</date>
-                <authority>token</authority>
-                <place>token</place>
-                <country>GB</country>
-            </Endorsement>
-            <Location>
-                <qualifierOfIdentification>A</qualifierOfIdentification>
-                <UNLocode>token</UNLocode>
-                <country>SA</country>
-
-                <Address>
-                    <streetAndNumber>token</streetAndNumber>
-                    <postcode>token</postcode>
-                    <city>token</city>
-                </Address>
-            </Location>
-            <TransportEquipment>
-                <sequenceNumber>12345</sequenceNumber>
-                <containerIdentificationNumber>ezv3Z</containerIdentificationNumber>
-                <numberOfSeals>2345</numberOfSeals>
-                <Seal>
-                    <sequenceNumber>12345</sequenceNumber>
-                    <identifier>token</identifier>
-                </Seal>
-                <GoodsReference>
-                    <sequenceNumber>12345</sequenceNumber>
-                    <declarationGoodsItemNumber>12</declarationGoodsItemNumber>
-                </GoodsReference>
-            </TransportEquipment>
-            <Transhipment>
-                <containerIndicator>0</containerIndicator>
-                <TransportMeans>
-                    <typeOfIdentification>12</typeOfIdentification>
-                    <identificationNumber>ezv3Z</identificationNumber>
-                    <nationality>GB</nationality>
-                </TransportMeans>
-            </Transhipment>
-        </Incident>
     </Consignment>
 </ncts:CC007C>

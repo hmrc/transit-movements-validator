@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== IE045: E_WRT_NOT                                                                -->
-  <!--===== WRITE-OFF NOTIFICATION                                                          -->
-  <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD Version 51.8.6                                                              -->
+  <!--===== IE045: E_WRT_NOT                                                          -->
+  <!--===== WRITE-OFF NOTIFICATION                                                    -->
+  <!--===== NCTS Phase 6 - DDNTA-6.4.1-v1.00                                          -->
+  <!--===== XSD Version 60.4.16                                                       -->
   <!--================================================================================-->
   <!--================================================================================-->
-  <!--===== Includes                                                                        -->
+  <!--===== Includes                                                                  -->
   <!--================================================================================-->
   <xs:include schemaLocation="ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
   <!--================================================================================-->
-  <!--===== Root Element                                                                    -->
+  <!--===== Root Element                                                              -->
   <!--================================================================================-->
   <xs:element name="CC045C" type="CC045CType" />
   <!--================================================================================-->
-  <!--===== Root Element Content                                                            -->
+  <!--===== Root Element Content                                                      -->
   <!--================================================================================-->
   <xs:complexType name="CC045CType">
     <xs:sequence>
       <xs:group ref="MESSAGE" />
-      <xs:element name="TransitOperation" type="TransitOperationType16">
+      <xs:element name="TransitOperation" type="TransitOperationType12">
         <xs:annotation>
           <xs:documentation>
             <description value="TRANSIT OPERATION" />
@@ -29,7 +29,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="CustomsOfficeOfDeparture" type="CustomsOfficeOfDepartureType03">
+      <xs:element name="CustomsOfficeOfDeparture" type="CustomsOfficeOfDepartureType05">
         <xs:annotation>
           <xs:documentation>
             <description value="CUSTOMS OFFICE OF DEPARTURE" />
@@ -37,7 +37,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="HolderOfTheTransitProcedure" type="HolderOfTheTransitProcedureType20">
+      <xs:element name="HolderOfTheTransitProcedure" type="HolderOfTheTransitProcedureType13">
         <xs:annotation>
           <xs:documentation>
             <description value="HOLDER OF THE TRANSIT PROCEDURE" />
