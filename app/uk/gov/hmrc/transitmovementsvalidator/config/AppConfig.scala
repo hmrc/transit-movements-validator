@@ -30,4 +30,5 @@ class AppConfig @Inject() (config: Configuration) {
 
   lazy val validateLrnEnabled: Boolean = config.get[Boolean]("validate-lrn.enabled")
   lazy val validateLrnRegex: Regex     = config.get[String]("validate-lrn.regex").r
+  lazy val errorLogging: Boolean       = config.get[Boolean]("error.logging")
 }
