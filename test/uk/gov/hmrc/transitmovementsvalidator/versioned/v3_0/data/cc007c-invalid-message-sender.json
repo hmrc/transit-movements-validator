@@ -2,10 +2,9 @@
     "n1:CC007C": {
         "preparationDateAndTime": "2007-10-26T07:36:28",
         "TransitOperation": {
-            "MRN": "27WF9X1FQ9RCKN0TM3",
+            "MRN": "2AB1234567890ABJ5",
             "arrivalNotificationDateAndTime": "2022-07-02T03:11:04",
-            "simplifiedProcedure": "1",
-            "incidentFlag": "1"
+            "simplifiedProcedure": "1"
         },
         "TraderAtDestination": {
             "identificationNumber": "ezv3Z",
@@ -52,57 +51,7 @@
                     "phoneNumber": "token",
                     "eMailAddress": "xxxx@gmail.com"
                 }
-            },
-            "Incident": [
-                {
-                    "sequenceNumber": "12345",
-                    "code": "1",
-                    "text": "token",
-                    "Endorsement": {
-                        "date": "2022-07-02",
-                        "authority": "token",
-                        "place": "token",
-                        "country": "GB"
-                    },
-                    "Location": {
-                        "qualifierOfIdentification": "A",
-                        "UNLocode": "token",
-                        "country": "SA",
-                        "Address": {
-                            "streetAndNumber": "token",
-                            "postcode": "token",
-                            "city": "token"
-                        }
-                    },
-                    "TransportEquipment": [
-                        {
-                            "sequenceNumber": "12345",
-                            "containerIdentificationNumber": "ezv3Z",
-                            "numberOfSeals": 2345,
-                            "Seal": [
-                                {
-                                    "sequenceNumber": "12345",
-                                    "identifier": "token"
-                                }
-                            ],
-                            "GoodsReference": [
-                                {
-                                    "sequenceNumber": "12345",
-                                    "declarationGoodsItemNumber": 12
-                                }
-                            ]
-                        }
-                    ],
-                    "Transhipment": {
-                        "containerIndicator": "0",
-                        "TransportMeans": {
-                            "typeOfIdentification": "12",
-                            "identificationNumber": "ezv3Z",
-                            "nationality": "GB"
-                        }
-                    }
-                }
-            ]
+            }
         },
         "messageIdentification": "token",
         "CustomsOfficeOfDestinationActual": {
