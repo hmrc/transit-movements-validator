@@ -196,7 +196,6 @@
       "HouseConsignment": [
         {
           "sequenceNumber": 123,
-          "countryOfDispatch": "st",
           "grossMass": 1000,
           "referenceNumberUCR": "string",
           "Consignor": {
@@ -212,16 +211,6 @@
               "name": "string",
               "phoneNumber": "token",
               "eMailAddress": "string"
-            }
-          },
-          "Consignee": {
-            "identificationNumber": "string",
-            "name": "string",
-            "Address": {
-              "streetAndNumber": "string",
-              "postcode": "string",
-              "city": "string",
-              "country": "GB"
             }
           },
           "AdditionalSupplyChainActor": [
@@ -256,13 +245,6 @@
               "complementOfInformation": "string"
             }
           ],
-          "TransportDocument": [
-            {
-              "sequenceNumber": 123,
-              "type": "abcd",
-              "referenceNumber": "string"
-            }
-          ],
           "AdditionalReference": [
             {
               "sequenceNumber": 123,
@@ -277,9 +259,6 @@
               "text": "string"
             }
           ],
-          "TransportCharges": {
-            "methodOfPayment": "A"
-          },
           "ConsignmentItem": [
             {
               "goodsItemNumber": 123,
@@ -288,16 +267,6 @@
               "countryOfDispatch": "GB",
               "countryOfDestination": "XI",
               "referenceNumberUCR": "string",
-              "Consignee": {
-                "identificationNumber": "string",
-                "name": "string",
-                "Address": {
-                  "streetAndNumber": "string",
-                  "postcode": "string",
-                  "city": "string",
-                  "country": "GB"
-                }
-              },
               "AdditionalSupplyChainActor": [
                 {
                   "sequenceNumber": 123,
@@ -354,13 +323,6 @@
                   "complementOfInformation": "string"
                 }
               ],
-              "TransportDocument": [
-                {
-                  "sequenceNumber": 123,
-                  "type": "abcd",
-                  "referenceNumber": "string"
-                }
-              ],
               "AdditionalReference": [
                 {
                   "sequenceNumber": 123,
@@ -374,10 +336,7 @@
                   "code": "token",
                   "text": "string"
                 }
-              ],
-              "TransportCharges": {
-                "methodOfPayment": "A"
-              }
+              ]
             }
           ]
         }

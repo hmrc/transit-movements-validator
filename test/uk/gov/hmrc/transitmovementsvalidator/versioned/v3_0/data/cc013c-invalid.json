@@ -3,7 +3,7 @@
     "preparationDateAndTime": "2007-10-26T07:36:28",
     "TransitOperation": {
       "LRN": "string",
-      "MRN": "29GMFMHYWWCFCWRVJ3",
+      "MRN": "2AB1234567890ABJ5",
       "declarationType": "token",
       "additionalDeclarationType": "a",
       "TIRCarnetNumber": "123456",
@@ -197,7 +197,7 @@
       "HouseConsignment": [
         {
           "sequenceNumber": "123",
-          "countryOfDispatch": "st",
+          "countryOfDispatch": "ST",
           "grossMass": 1000,
           "referenceNumberUCR": "string",
           "Consignor": {
@@ -289,16 +289,6 @@
               "countryOfDispatch": "GB",
               "countryOfDestination": "XI",
               "referenceNumberUCR": "string",
-              "Consignee": {
-                "identificationNumber": "string",
-                "name": "string",
-                "Address": {
-                  "streetAndNumber": "string",
-                  "postcode": "string",
-                  "city": "string",
-                  "country": "GB"
-                }
-              },
               "AdditionalSupplyChainActor": [
                 {
                   "sequenceNumber": "123",
@@ -355,13 +345,6 @@
                   "complementOfInformation": "string"
                 }
               ],
-              "TransportDocument": [
-                {
-                  "sequenceNumber": "123",
-                  "type": "abcd",
-                  "referenceNumber": "string"
-                }
-              ],
               "AdditionalReference": [
                 {
                   "sequenceNumber": "123",
@@ -375,10 +358,7 @@
                   "code": "token",
                   "text": "string"
                 }
-              ],
-              "TransportCharges": {
-                "methodOfPayment": "A"
-              }
+              ]
             }
           ]
         }

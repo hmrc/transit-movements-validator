@@ -88,10 +88,9 @@ object TestObjectsV3_0 {
       "n1:CC007C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
-          "MRN"                            -> "27WF9X1FQ9RCKN0TM3",
+          "MRN"                            -> "2AB1234567890ABJ5",
           "arrivalNotificationDateAndTime" -> "2022-07-02T03:11:04",
-          "simplifiedProcedure"            -> "1",
-          "incidentFlag"                   -> "1"
+          "simplifiedProcedure"            -> "1"
         ),
         "TraderAtDestination" -> Json.obj(
           "identificationNumber"               -> "ezv3Z",
@@ -389,7 +388,7 @@ object TestObjectsV3_0 {
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
           "LRN"                               -> "string",
-          "MRN"                               -> "29GMFMHYWWCFCWRVJ3",
+          "MRN"                               -> "2AB1234567890ABJ5",
           "declarationType"                   -> "token",
           "additionalDeclarationType"         -> "a",
           "TIRCarnetNumber"                   -> "123456",
@@ -583,7 +582,7 @@ object TestObjectsV3_0 {
           "HouseConsignment" -> Json.arr(
             Json.obj(
               "sequenceNumber"     -> 123,
-              "countryOfDispatch"  -> "st",
+              "countryOfDispatch"  -> "ST",
               "grossMass"          -> 1000,
               "referenceNumberUCR" -> "string",
               "Consignor"          -> Json.obj(
@@ -599,16 +598,6 @@ object TestObjectsV3_0 {
                   "name"         -> "string",
                   "phoneNumber"  -> "token",
                   "eMailAddress" -> "string"
-                )
-              ),
-              "Consignee" -> Json.obj(
-                "identificationNumber" -> "string",
-                "name"                 -> "string",
-                "Address"              -> Json.obj(
-                  "streetAndNumber" -> "string",
-                  "postcode"        -> "string",
-                  "city"            -> "string",
-                  "country"         -> "GB"
                 )
               ),
               "AdditionalSupplyChainActor" -> Json.arr(
@@ -664,9 +653,6 @@ object TestObjectsV3_0 {
                   "text"           -> "string"
                 )
               ),
-              "TransportCharges" -> Json.obj(
-                "methodOfPayment" -> "A"
-              ),
               "ConsignmentItem" -> Json.arr(
                 Json.obj(
                   "goodsItemNumber"            -> 123,
@@ -675,16 +661,6 @@ object TestObjectsV3_0 {
                   "countryOfDispatch"          -> "GB",
                   "countryOfDestination"       -> "XI",
                   "referenceNumberUCR"         -> "string",
-                  "Consignee"                  -> Json.obj(
-                    "identificationNumber" -> "string",
-                    "name"                 -> "string",
-                    "Address"              -> Json.obj(
-                      "streetAndNumber" -> "string",
-                      "postcode"        -> "string",
-                      "city"            -> "string",
-                      "country"         -> "GB"
-                    )
-                  ),
                   "AdditionalSupplyChainActor" -> Json.arr(
                     Json.obj(
                       "sequenceNumber"       -> 123,
@@ -741,13 +717,6 @@ object TestObjectsV3_0 {
                       "complementOfInformation" -> "string"
                     )
                   ),
-                  "TransportDocument" -> Json.arr(
-                    Json.obj(
-                      "sequenceNumber"  -> 123,
-                      "type"            -> "abcd",
-                      "referenceNumber" -> "string"
-                    )
-                  ),
                   "AdditionalReference" -> Json.arr(
                     Json.obj(
                       "sequenceNumber"  -> 123,
@@ -761,9 +730,6 @@ object TestObjectsV3_0 {
                       "code"           -> "token",
                       "text"           -> "string"
                     )
-                  ),
-                  "TransportCharges" -> Json.obj(
-                    "methodOfPayment" -> "A"
                   )
                 )
               )
@@ -885,7 +851,7 @@ object TestObjectsV3_0 {
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
           "LRN" -> "string",
-          "MRN" -> "29GMFMHYWWCFCWRVJ3"
+          "MRN" -> "2AB1234567890ABJ5"
         ),
         "CustomsOfficeOfDeparture" -> Json.obj(
           "referenceNumber" -> "GB123456"
@@ -1060,7 +1026,8 @@ object TestObjectsV3_0 {
                       "AdditionalSupplyChainActor" -> Json.arr(),
                       "Commodity"                  -> Json.obj(
                         "descriptionOfGoods" -> "ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe",
-                        "DangerousGoods" -> Json.arr()
+                        "DangerousGoods" -> Json.arr(),
+                        "GoodsMeasure"   -> Json.obj("grossMass" -> 10.0)
                       ),
                       "Packaging" -> Json.arr(
                         Json.obj(
@@ -1070,7 +1037,6 @@ object TestObjectsV3_0 {
                       ),
                       "PreviousDocument"      -> Json.arr(),
                       "SupportingDocument"    -> Json.arr(),
-                      "TransportDocument"     -> Json.arr(),
                       "AdditionalReference"   -> Json.arr(),
                       "AdditionalInformation" -> Json.arr()
                     )
@@ -1116,7 +1082,7 @@ object TestObjectsV3_0 {
       "n1:CC044C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
-          "MRN" -> "27WF9X1FQ9RCKN0TM3"
+          "MRN" -> "2AB1234567890ABJ5"
         ),
         "TraderAtDestination" -> Json.obj(
           "identificationNumber" -> "ezv3Z"

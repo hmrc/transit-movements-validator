@@ -67,6 +67,13 @@ class MessagesController @Inject() (
     with StreamingParsers
     with ErrorTranslator {
 
+  private def logError(response: ValidationResponse): ValidationResponse = {
+    if (config.errorLogging) {
+      logger.warn(Json.toJson(response).toString)
+    }
+    response
+  }
+
   def validate(messageType: String): Action[Source[ByteString, ?]] = validateAcceptRefiner.async(streamFromMemory) {
     implicit request =>
       (request.headers.get(CONTENT_TYPE), request.versionHeader) match {
@@ -102,6 +109,7 @@ class MessagesController @Inject() (
       .valueOr {
         case SchemaValidationPresentationError(errors) =>
           // We have special cased this as this isn't considered an "error" so much.
+          logError(ValidationResponse(errors))
           Ok(Json.toJson(ValidationResponse(errors)))
         case presentationError =>
           Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
@@ -126,6 +134,7 @@ class MessagesController @Inject() (
       .valueOr {
         case SchemaValidationPresentationError(errors) =>
           // We have special cased this as this isn't considered an "error" so much.
+          logError(ValidationResponse(errors))
           Ok(Json.toJson(ValidationResponse(errors)))
         case presentationError =>
           Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
@@ -149,6 +158,7 @@ class MessagesController @Inject() (
     } yield NoContent)
       .valueOr {
         case SchemaValidationPresentationError(errors) =>
+          logError(ValidationResponse(errors))
           // We have special cased this as this isn't considered an "error" so much.
           Ok(Json.toJson(ValidationResponse(errors)))
         case presentationError =>
@@ -174,6 +184,7 @@ class MessagesController @Inject() (
       .valueOr {
         case SchemaValidationPresentationError(errors) =>
           // We have special cased this as this isn't considered an "error" so much.
+          logError(ValidationResponse(errors))
           Ok(Json.toJson(ValidationResponse(errors)))
         case presentationError =>
           Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))

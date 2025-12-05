@@ -42,7 +42,10 @@
               "AdditionalSupplyChainActor": [],
               "Commodity": {
                 "descriptionOfGoods": "ZMyM5HTSTnLqT5FT9aHXwScqXKC1VitlWeO5gs91cVXBXOB8xBdXG5aGhG9VFjjDGiraIETFfbQWeA7VUokO7ngDOrKZ23ccKKMA6C3GpXciUTt9nS2pzCFFFeg4BXdkIe",
-                "DangerousGoods": []
+                "DangerousGoods": [],
+                "GoodsMeasure": {
+                  "grossMass": 10
+                }
               },
               "Packaging": [
                 {
@@ -52,7 +55,6 @@
               ],
               "PreviousDocument": [],
               "SupportingDocument": [],
-              "TransportDocument": [],
               "AdditionalReference": [],
               "AdditionalInformation": []
             }
