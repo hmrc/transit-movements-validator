@@ -9,6 +9,7 @@
   <!--================================================================================-->
   <!--===== Includes                                                                        -->
   <!--================================================================================-->
+  <xs:include schemaLocation="ermis-types.xsd" />
   <xs:include schemaLocation="ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
   <!--================================================================================-->
@@ -21,7 +22,8 @@
   <xs:complexType name="CC928CType">
     <xs:sequence>
       <xs:group ref="MESSAGE" />
-      <xs:element name="TransitOperation" type="TransitOperationType26">
+      <!-- Original type was: TransitOperationType26 -->
+      <xs:element name="TransitOperation" type="TransitOperationTypeErmisIE928">
         <xs:annotation>
           <xs:documentation>
             <description value="TRANSIT OPERATION" />

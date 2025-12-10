@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:extensions="urn:eds:datamodel:EDS:EDS_EXTENSIONS:1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
   <!--================================================================================-->
   <!--===== IE170: E_PRE_NOT                                                                -->
   <!--===== PRESENTATION NOTIFICATION FOR THE PRE-LODGED DECLARATION                        -->
@@ -9,6 +9,9 @@
   <!--================================================================================-->
   <!--===== Includes                                                                        -->
   <!--================================================================================-->
+  <xs:import namespace="urn:eds:datamodel:EDS:EDS_EXTENSIONS:1" schemaLocation="../EDS/EDS_EXTENSIONS.xsd"/>
+  <xs:include schemaLocation="ermis-types.xsd" />
+  <xs:include schemaLocation="ermis-types.xsd" />
   <xs:include schemaLocation="ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
   <!--================================================================================-->
@@ -20,8 +23,10 @@
   <!--================================================================================-->
   <xs:complexType name="CC170CType">
     <xs:sequence>
+      <xs:element name="Extensions" type="extensions:ExtensionType" minOccurs="0" maxOccurs="unbounded"/>
       <xs:group ref="MESSAGE" />
-      <xs:element name="TransitOperation" type="TransitOperationType24">
+      <!-- Original type was: TransitOperationType24 -->
+      <xs:element name="TransitOperation" type="TransitOperationTypeErmisIE170">
         <xs:annotation>
           <xs:documentation>
             <description value="TRANSIT OPERATION" />
