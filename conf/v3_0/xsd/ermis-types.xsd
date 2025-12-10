@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://ncts.dgtaxud.ec"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    targetNamespace="http://ncts.dgtaxud.ec"
+    elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.2" vc:minVersion="1.1">
+  <!--================================================================================-->
+  <!--===== Ermis Custom Complex Types                                                                 -->
+  <!--===== DDNTA 5.15.1                                                                    -->
+  <!--===== NCTS P5 Phase Definition                                                        -->
+  <!--===== XSD version 51.8.2                                                              -->
+  <!--===== Aligned with RFC-List version DDNTA RFC-List.37                                 -->
+  <!--================================================================================-->
+  <!--================================================================================-->
+  <!--===== Includes                                                                        -->
+  <!--================================================================================-->
+  <!--<xs:include schemaLocation="doc.xsd" />-->
+  <xs:include schemaLocation="stypes.xsd"/>
+  <xs:include schemaLocation="ctypes.xsd"/>
+  <!--<xs:include schemaLocation="tcl.xsd"/>-->
+
+  <!--================================================================================-->
+  <!--===== TransitOperation                                                                -->
+  <!--================================================================================-->
+
+  <!-- TransitOperationErmisIE928 extends TransitOperation26 -->
+  <xs:complexType name="TransitOperationTypeErmisIE928">
+    <xs:annotation>
+      <xs:documentation>
+        <usedBy>Used by 1/91 messages: CC928C</usedBy>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="TransitOperationType26">
+        <xs:sequence>
+          <xs:element name="MRN"  minOccurs="0" type="MrnContentTypeNL">
+            <xs:annotation>
+              <xs:documentation>
+                <description value="MRN"/>
+                <format value="an18"/>
+                <optionality value="D"/>
+                <xsdBaseType value="MRNType"/>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- TransitOperationErmisIE170 extends TransitOperation24 -->
+  <xs:complexType name="TransitOperationTypeErmisIE170">
+    <xs:annotation>
+      <xs:documentation>
+        <usedBy>Used by 1/91 messages: CC170C</usedBy>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="TransitOperationType24">
+        <xs:sequence>
+          <xs:element name="MRN"  minOccurs="0" type="MrnContentTypeNL">
+            <xs:annotation>
+              <xs:documentation>
+                <description value="MRN"/>
+                <format value="an18"/>
+                <optionality value="D"/>
+                <xsdBaseType value="MRNType"/>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <!--================================================================================-->
+  <!--===== Mrn                                                                             -->
+  <!--================================================================================-->
+
+  <xs:simpleType name="MrnContentTypeNL">
+    <xs:annotation>
+      <xs:documentation>
+        <usedBy>Used by 2/91 messages: CC170C, CC928C</usedBy>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="MRNType"/>
+  </xs:simpleType>
+
+</xs:schema>
