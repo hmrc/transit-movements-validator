@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1" targetNamespace="http://ncts.dgtaxud.ec">
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1" targetNamespace="http://ncts.dgtaxud.ec">
   <!--=======================================================-->
   <!--============= Message Header Definition  ==============-->
   <!--=======================================================-->
-  <xs:include schemaLocation="doc.xsd"/>
-  <xs:include schemaLocation="tcl.xsd"/>
-  <xs:include schemaLocation="stypes.xsd"/>
+  <xs:include schemaLocation="doc.xsd" />
+  <xs:include schemaLocation="tcl.xsd" />
+  <xs:include schemaLocation="stypes.xsd" />
   <xs:group name="MESSAGE">
     <xs:annotation>
       <xs:documentation>Used by all messages</xs:documentation>
@@ -14,109 +14,86 @@
       <xs:element name="messageSender" type="MessageSenderContentType">
         <xs:annotation>
           <xs:documentation>
-            <description value="Message sender"/>
+            <description value="Message sender" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="messageRecipient" type="MessageRecipientContentType">
         <xs:annotation>
           <xs:documentation>
-            <description value="Message recipient"/>
+            <description value="Message recipient" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="preparationDateAndTime" type="PreparationDateAndTimeContentType">
         <xs:annotation>
           <xs:documentation>
-            <description value="Preparation date and time"/>
+            <description value="Preparation date and time" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="messageIdentification" type="MessageIdentificationContentType">
         <xs:annotation>
           <xs:documentation>
-            <description value="Message identification"/>
+            <description value="Message identification" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="messageType" type="MessageTypes">
         <xs:annotation>
           <xs:documentation>
-            <description value="Message type"/>
-            <codeList name="MessageTypes"/>
+            <description value="Message type" />
+            <codeList name="MessageTypes" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="correlationIdentifier" type="CorrelationIdentifierContentType" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            <description value="Correlation identifier"/>
+            <description value="Correlation identifier" />
           </xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
   </xs:group>
-<!--================================================================================-->
-  <!--===== MessageIdentification                                                     -->
-  <!--================================================================================-->
+ <!--================================================================================--> 
+ <!--===== MessageIdentification                                                           -->
+ <!--================================================================================-->
   <xs:simpleType name="MessageIdentificationContentType">
-    <xs:annotation>
-      <xs:documentation>
-        <usedBy>Used by 124/124 messages: CC004C, CC004D, CC007C, CC009C, CC009D, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC028D, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC056D, CC057C, CC058D, CC060C, CC060D, CC117D, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CC928D, CCA13D, CCA15D, CCA28D, CCA29D, CCA64D, CCA70D, CCA71D, CCA91D, CD001C, CD002C, CD003C, CD004D, CD006C, CD009D, CD010C, CD014D, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD056D, CD059C, CD060D, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD117D, CD118C, CD119D, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD906D, CD917C, CD917D, CD927D, CD928D, CD971C, CD974C, CD975C, CDA13D, CDA15D, CDA52D, CDA64D, CDA70D, CDA71D, CDA93D</usedBy>
-      </xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:token">
-      <xs:pattern value=".{1,35}"/>
+      <xs:restriction base="xs:token">
+      <xs:pattern value=".{1,35}" />
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== MessageRecipient                                                          -->
+  <!--===== MessageRecipient                                                                -->
   <!--================================================================================-->
   <xs:simpleType name="MessageRecipientContentType">
-    <xs:annotation>
-      <xs:documentation>
-        <usedBy>Used by 124/124 messages: CC004C, CC004D, CC007C, CC009C, CC009D, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC028D, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC056D, CC057C, CC058D, CC060C, CC060D, CC117D, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CC928D, CCA13D, CCA15D, CCA28D, CCA29D, CCA64D, CCA70D, CCA71D, CCA91D, CD001C, CD002C, CD003C, CD004D, CD006C, CD009D, CD010C, CD014D, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD056D, CD059C, CD060D, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD117D, CD118C, CD119D, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD906D, CD917C, CD917D, CD927D, CD928D, CD971C, CD974C, CD975C, CDA13D, CDA15D, CDA52D, CDA64D, CDA70D, CDA71D, CDA93D</usedBy>
-      </xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="xs:token">
-      <xs:pattern value=".{1,35}"/>
+      <xs:restriction base="xs:token">
+      <xs:pattern value=".{1,35}" />
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== MessageSender                                                             -->
+  <!--===== MessageSender                                                                   -->
   <!--================================================================================-->
   <xs:simpleType name="MessageSenderContentType">
-    <xs:annotation>
-      <xs:documentation>
-        <usedBy>Used by 124/124 messages: CC004C, CC004D, CC007C, CC009C, CC009D, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC028D, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC056D, CC057C, CC058D, CC060C, CC060D, CC117D, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CC928D, CCA13D, CCA15D, CCA28D, CCA29D, CCA64D, CCA70D, CCA71D, CCA91D, CD001C, CD002C, CD003C, CD004D, CD006C, CD009D, CD010C, CD014D, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD056D, CD059C, CD060D, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD117D, CD118C, CD119D, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD906D, CD917C, CD917D, CD927D, CD928D, CD971C, CD974C, CD975C, CDA13D, CDA15D, CDA52D, CDA64D, CDA70D, CDA71D, CDA93D</usedBy>
-      </xs:documentation>
-    </xs:annotation>
     <xs:restriction base="xs:token">
-      <xs:pattern value=".{1,35}"/>
+      <xs:pattern value=".{1,35}" />
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== CorrelationIdentifier                                                     -->
+  <!--===== CorrelationIdentifier                                                           -->
   <!--================================================================================-->
   <xs:simpleType name="CorrelationIdentifierContentType">
-    <xs:annotation>
-      <xs:documentation>
-        <usedBy>Used by 124/124 messages: CC004C, CC004D, CC007C, CC009C, CC009D, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC028D, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC056D, CC057C, CC058D, CC060C, CC060D, CC117D, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CC928D, CCA13D, CCA15D, CCA28D, CCA29D, CCA64D, CCA70D, CCA71D, CCA91D, CD001C, CD002C, CD003C, CD004D, CD006C, CD009D, CD010C, CD014D, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD056D, CD059C, CD060D, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD117D, CD118C, CD119D, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD906D, CD917C, CD917D, CD927D, CD928D, CD971C, CD974C, CD975C, CDA13D, CDA15D, CDA52D, CDA64D, CDA70D, CDA71D, CDA93D</usedBy>
-      </xs:documentation>
-    </xs:annotation>
     <xs:restriction base="xs:token">
-      <xs:pattern value=".{1,35}"/>
+      <xs:pattern value=".{1,35}" />
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== PreparationDateAndTime                                                    -->
+  <!--===== PreparationDateAndTime                                                          -->
   <!--================================================================================-->
   <xs:simpleType name="PreparationDateAndTimeContentType">
-    <xs:annotation>
-      <xs:documentation>
-        <usedBy>Used by 124/124 messages: CC004C, CC004D, CC007C, CC009C, CC009D, CC013C, CC014C, CC015C, CC017C, CC019C, CC022C, CC023C, CC025C, CC026C, CC028C, CC028D, CC029C, CC034C, CC035C, CC037C, CC040C, CC042C, CC043C, CC044C, CC045C, CC048C, CC051C, CC054C, CC055C, CC056C, CC056D, CC057C, CC058D, CC060C, CC060D, CC117D, CC140C, CC141C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CC229C, CC231C, CC906C, CC917C, CC928C, CC928D, CCA13D, CCA15D, CCA28D, CCA29D, CCA64D, CCA70D, CCA71D, CCA91D, CD001C, CD002C, CD003C, CD004D, CD006C, CD009D, CD010C, CD014D, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD056D, CD059C, CD060D, CD063C, CD070C, CD071C, CD078C, CD094C, CD095C, CD114C, CD115C, CD117D, CD118C, CD119D, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD903D, CD906C, CD906D, CD917C, CD917D, CD927D, CD928D, CD971C, CD974C, CD975C, CDA13D, CDA15D, CDA52D, CDA64D, CDA70D, CDA71D, CDA93D</usedBy>
-      </xs:documentation>
-    </xs:annotation>
-    <xs:restriction base="DateTimeType"/>
+    <xs:restriction base="xs:dateTime">
+      <xs:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}" />
+    </xs:restriction>
   </xs:simpleType>
-  </xs:schema>
+</xs:schema>
