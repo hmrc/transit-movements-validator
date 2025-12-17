@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== IE190: N_XFT_REQ                                                                -->
-  <!--===== TRANSIT PRESENTATION NOTIFICATION                                               -->
-  <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD Version 51.8.6                                                              -->
+  <!--===== IE190: N_XFT_REQ                                                          -->
+  <!--===== TRANSIT PRESENTATION NOTIFICATION                                         -->
+  <!--===== NCTS Phase 6 - DDNTA-6.4.1-v1.00                                          -->
+  <!--===== XSD Version 60.4.16                                                       -->
   <!--================================================================================-->
   <!--================================================================================-->
-  <!--===== Includes                                                                        -->
+  <!--===== Includes                                                                  -->
   <!--================================================================================-->
   <xs:include schemaLocation="ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
   <!--================================================================================-->
-  <!--===== Root Element                                                                    -->
+  <!--===== Root Element                                                              -->
   <!--================================================================================-->
   <xs:element name="CC190C" type="CC190CType" />
   <!--================================================================================-->
-  <!--===== Root Element Content                                                            -->
+  <!--===== Root Element Content                                                      -->
   <!--================================================================================-->
   <xs:complexType name="CC190CType">
     <xs:sequence>

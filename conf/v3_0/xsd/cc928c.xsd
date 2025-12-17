@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== IE928: E_POS_ACK                                                                -->
-  <!--===== POSITIVE ACKNOWLEDGE                                                            -->
-  <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD Version 51.8.6                                                              -->
+  <!--===== IE928: E_POS_ACK                                                          -->
+  <!--===== POSITIVE ACKNOWLEDGE                                                      -->
+  <!--===== NCTS Phase 6 - DDNTA-6.4.1-v1.00                                          -->
+  <!--===== XSD Version 60.4.16                                                       -->
   <!--================================================================================-->
   <!--================================================================================-->
-  <!--===== Includes                                                                        -->
+  <!--===== Includes                                                                  -->
   <!--================================================================================-->
   <xs:include schemaLocation="ermis-types.xsd" />
   <xs:include schemaLocation="ctypes.xsd" />
   <xs:include schemaLocation="htypes.xsd" />
   <!--================================================================================-->
-  <!--===== Root Element                                                                    -->
+  <!--===== Root Element                                                              -->
   <!--================================================================================-->
   <xs:element name="CC928C" type="CC928CType" />
   <!--================================================================================-->
-  <!--===== Root Element Content                                                            -->
+  <!--===== Root Element Content                                                      -->
   <!--================================================================================-->
   <xs:complexType name="CC928CType">
     <xs:sequence>
