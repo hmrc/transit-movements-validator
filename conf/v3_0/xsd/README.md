@@ -4,8 +4,9 @@ The XSDs and Zip files in this directory are schema definitions for messages sen
 
 The following resources will be helpful in understanding how to use these XSDs further:
 
-* [NCTS Phase 5 Technical Interface Specification](https://developer.service.hmrc.gov.uk/guides/ctc-traders-phase5-tis/)
-* [CTC Traders API phase 5 service guide](https://developer.service.hmrc.gov.uk/guides/ctc-traders-phase5-service-guide)
+* [NCTS Technical Interface Specification](https://developer.service.hmrc.gov.uk/guides/ctc-traders-tis/)
+* [CTC Traders API service guide](https://developer.service.hmrc.gov.uk/guides/ctc-traders-service-guide)
+* 
 
 The XSDs are also contained in the ALL_CTC_XSDs_v60.4.16.zip file.
 
