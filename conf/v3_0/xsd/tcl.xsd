@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== Modification Type                                                               -->
-  <!--===== Format: a1                                                                      -->
-  <!--===== CL024                                                                           -->
+  <!--===== Modification Type                                                         -->
+  <!--===== Format: a1                                                                -->
+  <!--===== CL024                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="ModificationType">
     <xs:annotation>
@@ -28,9 +28,9 @@
     </xs:restriction>
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== Month of Year                                                                   -->
-  <!--===== Format: an2                                                                     -->
-  <!--===== CL026                                                                           -->
+  <!--===== Month of Year                                                             -->
+  <!--===== Format: an2                                                               -->
+  <!--===== CL026                                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="MonthOfYear">
     <xs:annotation>

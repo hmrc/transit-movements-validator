@@ -3,13 +3,13 @@
     xmlns="http://ncts.dgtaxud.ec"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
     targetNamespace="http://ncts.dgtaxud.ec"
-    elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.2" vc:minVersion="1.1">
+    elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
   <!--===== Ermis Custom Complex Types                                                                 -->
-  <!--===== DDNTA 5.15.1                                                                    -->
-  <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD version 51.8.2                                                              -->
-  <!--===== Aligned with RFC-List version DDNTA RFC-List.37                                 -->
+  <!--===== DDNTA 6.4.1-v1.00                                                                    -->
+  <!--===== NCTS Phase 6 - DDNTA-6.4.1-v1.00                                                -->
+  <!--===== XSD version 60.4.16                                                              -->
+  <!--===== Aligned with RFC-List version DDNTA_RFC-List.44                                 -->
   <!--================================================================================-->
   <!--================================================================================-->
   <!--===== Includes                                                                        -->

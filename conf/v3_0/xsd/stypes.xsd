@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== Simple Types                                                                    -->
-  <!--===== DDNTA 5.15.2                                                                    -->
-  <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD version 51.8.6                                                              -->
-  <!--===== Aligned with RFC-List version DDNTA RFC-List.39                                 -->
-  <!--================================================================================-->
-  <!--================================================================================-->
-  <!--===== Data Item Types                                                                 -->
+  <!--===== Simple Types                                                              -->
+  <!--===== DDNTA-6.4.1-v1.00                                                         -->
+  <!--===== NCTS-P6 Phase Definition                                                  -->
+  <!--===== XSD version 60.4.16                                                       -->
+  <!--===== Aligned with DDNTA_RFC-List.44                                            -->
   <!--================================================================================-->
   <!--================================================================================-->
-  <!--===== AcceptanceDateAndTime                                                           -->
+  <!--===== Data Item Types                                                           -->
+  <!--================================================================================-->
+  <!--================================================================================-->
+  <!--===== AcceptanceDateAndTime                                                     -->
   <!--================================================================================-->
   <xs:simpleType name="AcceptanceDateAndTimeContentType">
     <xs:annotation>
@@ -22,7 +22,7 @@
     <xs:restriction base="DateTimeType" />
   </xs:simpleType>
   <!--================================================================================-->
-  <!--===== AccessCode                                                                      -->
+  <!--===== AccessCode                                                                -->
   <!--================================================================================-->
   <xs:simpleType name="AccessCodeContentType01">
     <xs:annotation>
@@ -4230,14 +4230,14 @@
           <xs:documentation>Phase NCTS 5.1</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value=" NCTS5.1">
-        <xs:annotation>
-          <xs:documentation>Phase NCTS 5.1</xs:documentation>
-        </xs:annotation>
-      </xs:enumeration>
       <xs:enumeration value="NCTS5.0">
         <xs:annotation>
           <xs:documentation>Phase NCTS 5.0</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="NCTS6">
+        <xs:annotation>
+          <xs:documentation>Phase NCTS 6</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
     </xs:restriction>

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="51.8.6" vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://ncts.dgtaxud.ec" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="http://ncts.dgtaxud.ec" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="60.4.16" vc:minVersion="1.1">
   <!--================================================================================-->
-  <!--===== Complex Types                                                                   -->
-  <!--===== DDNTA 5.15.2                                                                    -->
-  <!--===== NCTS P5 Phase Definition                                                        -->
-  <!--===== XSD version 51.8.6                                                              -->
-  <!--===== Aligned with RFC-List version DDNTA RFC-List.39                                 -->
+  <!--===== Complex Types                                                             -->
+  <!--===== DDNTA-6.4.1-v1.00                                                         -->
+  <!--===== NCTS-P6 Phase Definition                                                  -->
+  <!--===== XSD version 60.4.16                                                       -->
+  <!--===== Aligned with DDNTA_RFC-List.44                                            -->
   <!--================================================================================-->
   <!--================================================================================-->
-  <!--===== Includes                                                                        -->
+  <!--===== Includes                                                                  -->
   <!--================================================================================-->
   <xs:include schemaLocation="doc.xsd" />
   <xs:include schemaLocation="stypes.xsd" />
   <xs:include schemaLocation="tcl.xsd" />
   <xs:include schemaLocation="ermis-types.xsd" />
   <!--================================================================================-->
-  <!--===== Data Group Types                                                                -->
+  <!--===== Data Group Types                                                          -->
   <!--================================================================================-->
   <!--================================================================================-->
-  <!--===== AESResults                                                                      -->
+  <!--===== AESResults                                                                -->
   <!--================================================================================-->
   <xs:complexType name="AESResultsType">
     <xs:annotation>
