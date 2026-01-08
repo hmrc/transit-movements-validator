@@ -120,10 +120,10 @@
     "n1:AES-P1_MRNType": {
       "anyOf": [
         {
-          "pattern": "^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$"
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
         },
         {
-          "pattern": "^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[A-E][0-9]$"
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[A-E][0-9])$"
         }
       ],
       "description": "MRN (format: an18), (alias: MRNType)",
@@ -159,6 +159,7 @@
           "items": {
             "$ref": "#/definitions/n1:ExportOperationType05"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -179,9 +180,8 @@
     },
     "n1:AcceptanceDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:AccessCodeContentType01": {
       "description": "Used by 3/91 messages: CC029C, CD200C, CD203C",
@@ -284,6 +284,7 @@
           "items": {
             "$ref": "#/definitions/n1:UnavailabilityType"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -635,7 +636,7 @@
     },
     "n1:AdditionalReferenceType02": {
       "additionalProperties": false,
-      "description": "Used by 1/91 messages: CD018C",
+      "description": "Used by 10/91 messages: CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -662,7 +663,8 @@
         }
       },
       "required": [
-        "sequenceNumber"
+        "sequenceNumber",
+        "type"
       ],
       "type": "object"
     },
@@ -702,7 +704,7 @@
     },
     "n1:AdditionalReferenceType04": {
       "additionalProperties": false,
-      "description": "Used by 10/91 messages: CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
+      "description": "Used by 2/91 messages: CC013C, CC015C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -719,7 +721,7 @@
           "type": "string"
         },
         "referenceNumber": {
-          "$ref": "#/definitions/n1:ReferenceNumberContentType02"
+          "$ref": "#/definitions/n1:ReferenceNumberContentType04"
         },
         "sequenceNumber": {
           "$ref": "#/definitions/n1:SequenceNumberContentType"
@@ -769,73 +771,6 @@
       "type": "object"
     },
     "n1:AdditionalReferenceType06": {
-      "additionalProperties": false,
-      "description": "Used by 2/91 messages: CC013C, CC015C",
-      "patternProperties": {
-        "^@xmlns(:\\w+)?$": {
-          "type": "string"
-        },
-        "^@xsi:\\w+$": {
-          "type": "string"
-        },
-        "^\\?\\w+$": {
-          "type": "string"
-        }
-      },
-      "properties": {
-        "#": {
-          "type": "string"
-        },
-        "referenceNumber": {
-          "$ref": "#/definitions/n1:ReferenceNumberContentType04"
-        },
-        "sequenceNumber": {
-          "$ref": "#/definitions/n1:SequenceNumberContentType"
-        },
-        "type": {
-          "$ref": "#/definitions/n1:TypeContentType02"
-        }
-      },
-      "required": [
-        "sequenceNumber",
-        "type"
-      ],
-      "type": "object"
-    },
-    "n1:AdditionalReferenceType07": {
-      "additionalProperties": false,
-      "description": "Used by 2/91 messages: CC017C, CC044C",
-      "patternProperties": {
-        "^@xmlns(:\\w+)?$": {
-          "type": "string"
-        },
-        "^@xsi:\\w+$": {
-          "type": "string"
-        },
-        "^\\?\\w+$": {
-          "type": "string"
-        }
-      },
-      "properties": {
-        "#": {
-          "type": "string"
-        },
-        "referenceNumber": {
-          "$ref": "#/definitions/n1:ReferenceNumberContentType04"
-        },
-        "sequenceNumber": {
-          "$ref": "#/definitions/n1:SequenceNumberContentType"
-        },
-        "type": {
-          "$ref": "#/definitions/n1:TypeContentType02"
-        }
-      },
-      "required": [
-        "sequenceNumber"
-      ],
-      "type": "object"
-    },
-    "n1:AdditionalReferenceType08": {
       "additionalProperties": false,
       "description": "Used by 2/91 messages: CC017C, CC044C",
       "patternProperties": {
@@ -1819,7 +1754,7 @@
       "type": "string"
     },
     "n1:AlphaType": {
-      "description": "Base class for all aN and a..N\n\t\t\t\ttypes",
+      "description": "Base class for all aN and a..N\n        types",
       "type": "string"
     },
     "n1:Alpha_1": {
@@ -2080,21 +2015,18 @@
     },
     "n1:AmendmentAcceptanceDateAndTimeContentType": {
       "description": "Used by 2/91 messages: CC004C, CC190C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:AmendmentNotificationDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC022C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:AmendmentSubmissionDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC004C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:AmendmentTypeFlagContentType": {
       "description": "Used by 1/91 messages: CC013C",
@@ -2115,27 +2047,23 @@
     },
     "n1:ArrivalDateAndTimeActualContentType": {
       "description": "Used by 3/91 messages: CD006C, CD024C, CD209C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ArrivalDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ArrivalDateAndTimeEstimatedContentType": {
       "description": "Used by 11/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD050C, CD115C, CD160C, CD165C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ArrivalNotificationDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC007C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:AuthorisationNumberContentType01": {
       "description": "Used by 2/91 messages: CC029C, CC190C",
@@ -2316,12 +2244,14 @@
           "items": {
             "$ref": "#/definitions/n1:CustomsOfficeOfExitForTransitDeclaredType02"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "CustomsOfficeOfTransitDeclared": {
           "items": {
-            "$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType03"
+            "$ref": "#/definitions/n1:CustomsOfficeOfTransitDeclaredType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "HolderOfTheTransitProcedure": {
@@ -2364,7 +2294,7 @@
       "type": "object"
     },
     "n1:CORefNumType": {
-      "description": "Customs Office Reference Number\n\t\t\t\t(format:an8)",
+      "description": "Customs Office Reference Number\n        (format:an8)",
       "maxLength": 8,
       "minLength": 8,
       "pattern": "^([A-Z]{2,2}[0-9A-Z]{6,6})$",
@@ -2399,9 +2329,8 @@
     },
     "n1:CancelEnquiryNotificationDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CD059C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:CancelEnquiryNotificationTextContentType": {
       "description": "Used by 1/91 messages: CD059C",
@@ -2523,6 +2452,36 @@
       ],
       "type": "object"
     },
+    "n1:CarrierType05": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CC117D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "SafetyAndSecurityIdentificationNumber": {
+          "$ref": "#/definitions/n1:SafetyAndSecurityIdentificationNumberType02"
+        },
+        "identificationNumber": {
+          "$ref": "#/definitions/n1:IdentificationNumberContentType01"
+        }
+      },
+      "required": [
+        "identificationNumber"
+      ],
+      "type": "object"
+    },
     "n1:CityContentType01": {
       "description": "Used by 32/91 messages: CC004C, CC009C, CC019C, CC023C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 35,
@@ -2542,7 +2501,7 @@
       "type": "string"
     },
     "n1:CityType": {
-      "description": "Trader City (format:\n\t\t\t\tan..35)",
+      "description": "Trader City (format:\n        an..35)",
       "maxLength": 35,
       "pattern": "^([\\w\\D]{1,35})$",
       "type": "string"
@@ -2588,9 +2547,8 @@
     },
     "n1:CollectionDateContentType": {
       "description": "Used by 1/91 messages: CD152C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:CombinedNomenclatureCodeContentType01": {
       "description": "Used by 15/91 messages: CC025C, CC029C, CC043C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C",
@@ -2728,7 +2686,7 @@
     },
     "n1:CommodityCodeType05": {
       "additionalProperties": false,
-      "description": "Used by 5/91 messages: CD012C, CD050C, CD115C, CD160C, CD165C",
+      "description": "Used by 5/91 messages: CC029C, CC043C, CD001C, CD003C, CD038C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -2758,7 +2716,7 @@
     },
     "n1:CommodityCodeType06": {
       "additionalProperties": false,
-      "description": "Used by 6/91 messages: CC025C, CC029C, CC043C, CD001C, CD003C, CD038C",
+      "description": "Used by 6/91 messages: CC025C, CD012C, CD050C, CD115C, CD160C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -2811,6 +2769,7 @@
           "items": {
             "$ref": "#/definitions/n1:DangerousGoodsType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "GoodsMeasure": {
@@ -2826,6 +2785,50 @@
       "type": "object"
     },
     "n1:CommodityType02": {
+      "additionalProperties": false,
+      "description": "Used by 1/91 messages: CC025C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "CommodityCode": {
+          "$ref": "#/definitions/n1:CommodityCodeType06"
+        },
+        "DangerousGoods": {
+          "items": {
+            "$ref": "#/definitions/n1:DangerousGoodsType01"
+          },
+          "maxItems": 99,
+          "type": "array"
+        },
+        "GoodsMeasure": {
+          "$ref": "#/definitions/n1:GoodsMeasureType03"
+        },
+        "cusCode": {
+          "$ref": "#/definitions/n1:CusCodeContentType"
+        },
+        "descriptionOfGoods": {
+          "$ref": "#/definitions/n1:DescriptionOfGoodsContentType01"
+        }
+      },
+      "required": [
+        "GoodsMeasure",
+        "descriptionOfGoods"
+      ],
+      "type": "object"
+    },
+    "n1:CommodityType03": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CC044C",
       "patternProperties": {
@@ -2858,7 +2861,7 @@
       },
       "type": "object"
     },
-    "n1:CommodityType03": {
+    "n1:CommodityType04": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CC190C",
       "patternProperties": {
@@ -2889,7 +2892,7 @@
       ],
       "type": "object"
     },
-    "n1:CommodityType04": {
+    "n1:CommodityType05": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CD012C",
       "patternProperties": {
@@ -2908,12 +2911,13 @@
           "type": "string"
         },
         "CommodityCode": {
-          "$ref": "#/definitions/n1:CommodityCodeType05"
+          "$ref": "#/definitions/n1:CommodityCodeType06"
         },
         "DangerousGoods": {
           "items": {
             "$ref": "#/definitions/n1:DangerousGoodsType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "GoodsMeasure": {
@@ -2931,7 +2935,7 @@
       ],
       "type": "object"
     },
-    "n1:CommodityType05": {
+    "n1:CommodityType06": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CD018C",
       "patternProperties": {
@@ -2956,6 +2960,7 @@
           "items": {
             "$ref": "#/definitions/n1:DangerousGoodsType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "GoodsMeasure": {
@@ -2970,7 +2975,7 @@
       },
       "type": "object"
     },
-    "n1:CommodityType06": {
+    "n1:CommodityType07": {
       "additionalProperties": false,
       "description": "Used by 2/91 messages: CC013C, CC015C",
       "patternProperties": {
@@ -2995,6 +3000,7 @@
           "items": {
             "$ref": "#/definitions/n1:DangerousGoodsType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "GoodsMeasure": {
@@ -3012,7 +3018,51 @@
       ],
       "type": "object"
     },
-    "n1:CommodityType07": {
+    "n1:CommodityType08": {
+      "additionalProperties": false,
+      "description": "Used by 2/91 messages: CC029C, CC043C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "CommodityCode": {
+          "$ref": "#/definitions/n1:CommodityCodeType05"
+        },
+        "DangerousGoods": {
+          "items": {
+            "$ref": "#/definitions/n1:DangerousGoodsType01"
+          },
+          "maxItems": 99,
+          "type": "array"
+        },
+        "GoodsMeasure": {
+          "$ref": "#/definitions/n1:GoodsMeasureType03"
+        },
+        "cusCode": {
+          "$ref": "#/definitions/n1:CusCodeContentType"
+        },
+        "descriptionOfGoods": {
+          "$ref": "#/definitions/n1:DescriptionOfGoodsContentType01"
+        }
+      },
+      "required": [
+        "GoodsMeasure",
+        "descriptionOfGoods"
+      ],
+      "type": "object"
+    },
+    "n1:CommodityType09": {
       "additionalProperties": false,
       "description": "Used by 2/91 messages: CD200C, CD203C",
       "patternProperties": {
@@ -3042,94 +3092,9 @@
       ],
       "type": "object"
     },
-    "n1:CommodityType08": {
-      "additionalProperties": false,
-      "description": "Used by 3/91 messages: CC025C, CC029C, CC043C",
-      "patternProperties": {
-        "^@xmlns(:\\w+)?$": {
-          "type": "string"
-        },
-        "^@xsi:\\w+$": {
-          "type": "string"
-        },
-        "^\\?\\w+$": {
-          "type": "string"
-        }
-      },
-      "properties": {
-        "#": {
-          "type": "string"
-        },
-        "CommodityCode": {
-          "$ref": "#/definitions/n1:CommodityCodeType06"
-        },
-        "DangerousGoods": {
-          "items": {
-            "$ref": "#/definitions/n1:DangerousGoodsType01"
-          },
-          "type": "array"
-        },
-        "GoodsMeasure": {
-          "$ref": "#/definitions/n1:GoodsMeasureType03"
-        },
-        "cusCode": {
-          "$ref": "#/definitions/n1:CusCodeContentType"
-        },
-        "descriptionOfGoods": {
-          "$ref": "#/definitions/n1:DescriptionOfGoodsContentType01"
-        }
-      },
-      "required": [
-        "GoodsMeasure",
-        "descriptionOfGoods"
-      ],
-      "type": "object"
-    },
-    "n1:CommodityType09": {
-      "additionalProperties": false,
-      "description": "Used by 3/91 messages: CD001C, CD003C, CD038C",
-      "patternProperties": {
-        "^@xmlns(:\\w+)?$": {
-          "type": "string"
-        },
-        "^@xsi:\\w+$": {
-          "type": "string"
-        },
-        "^\\?\\w+$": {
-          "type": "string"
-        }
-      },
-      "properties": {
-        "#": {
-          "type": "string"
-        },
-        "CommodityCode": {
-          "$ref": "#/definitions/n1:CommodityCodeType06"
-        },
-        "DangerousGoods": {
-          "items": {
-            "$ref": "#/definitions/n1:DangerousGoodsType01"
-          },
-          "type": "array"
-        },
-        "GoodsMeasure": {
-          "$ref": "#/definitions/n1:GoodsMeasureType05"
-        },
-        "cusCode": {
-          "$ref": "#/definitions/n1:CusCodeContentType"
-        },
-        "descriptionOfGoods": {
-          "$ref": "#/definitions/n1:DescriptionOfGoodsContentType01"
-        }
-      },
-      "required": [
-        "descriptionOfGoods"
-      ],
-      "type": "object"
-    },
     "n1:CommodityType10": {
       "additionalProperties": false,
-      "description": "Used by 4/91 messages: CD050C, CD115C, CD160C, CD165C",
+      "description": "Used by 3/91 messages: CD001C, CD003C, CD038C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -3152,6 +3117,50 @@
           "items": {
             "$ref": "#/definitions/n1:DangerousGoodsType01"
           },
+          "maxItems": 99,
+          "type": "array"
+        },
+        "GoodsMeasure": {
+          "$ref": "#/definitions/n1:GoodsMeasureType05"
+        },
+        "cusCode": {
+          "$ref": "#/definitions/n1:CusCodeContentType"
+        },
+        "descriptionOfGoods": {
+          "$ref": "#/definitions/n1:DescriptionOfGoodsContentType01"
+        }
+      },
+      "required": [
+        "descriptionOfGoods"
+      ],
+      "type": "object"
+    },
+    "n1:CommodityType11": {
+      "additionalProperties": false,
+      "description": "Used by 4/91 messages: CD050C, CD115C, CD160C, CD165C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "CommodityCode": {
+          "$ref": "#/definitions/n1:CommodityCodeType06"
+        },
+        "DangerousGoods": {
+          "items": {
+            "$ref": "#/definitions/n1:DangerousGoodsType01"
+          },
+          "maxItems": 99,
           "type": "array"
         },
         "GoodsMeasure": {
@@ -3173,11 +3182,18 @@
       "description": "Used by 3/91 messages: CC013C, CC015C, CC029C",
       "maxLength": 2,
       "minLength": 2,
-      "pattern": "^([A-Z]{2,2})$",
+      "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
     "n1:CommunicationLanguageAtDestinationContentType": {
       "description": "Used by 1/91 messages: CC007C",
+      "maxLength": 2,
+      "minLength": 2,
+      "pattern": "^([A-Za-z]{2,2})$",
+      "type": "string"
+    },
+    "n1:CommunicationLanguageAtTransitContentType": {
+      "description": "Used by 2/124 messages: CC117D, CD117D",
       "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
@@ -3280,6 +3296,7 @@
           "items": {
             "$ref": "#/definitions/n1:ValidityLimitationType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "currency": {
@@ -3301,7 +3318,7 @@
           "$ref": "#/definitions/n1:NumberOfCertificatesContentType"
         },
         "percentageOfReferenceAmount": {
-          "$ref": "#/definitions/n1:PercentageOfReferenceAmountContentType01"
+          "$ref": "#/definitions/n1:PercentageOfReferenceAmountContentType02"
         },
         "referenceAmount": {
           "$ref": "#/definitions/n1:ReferenceAmountContentType"
@@ -3638,18 +3655,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType07"
+            "$ref": "#/definitions/n1:AdditionalReferenceType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
@@ -3662,18 +3682,21 @@
           "items": {
             "$ref": "#/definitions/n1:PackagingType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -3683,6 +3706,7 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
@@ -3729,12 +3753,13 @@
           "type": "string"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType08"
+          "$ref": "#/definitions/n1:CommodityType02"
         },
         "Packaging": {
           "items": {
             "$ref": "#/definitions/n1:PackagingType02"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -3779,30 +3804,31 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType03"
+            "$ref": "#/definitions/n1:AdditionalReferenceType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
           "$ref": "#/definitions/n1:CommodityType08"
         },
-        "Consignee": {
-          "$ref": "#/definitions/n1:ConsigneeType03"
-        },
         "Packaging": {
           "items": {
             "$ref": "#/definitions/n1:PackagingType02"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -3810,21 +3836,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
-          "type": "array"
-        },
-        "TransportCharges": {
-          "$ref": "#/definitions/n1:TransportChargesType"
-        },
-        "TransportDocument": {
-          "items": {
-            "$ref": "#/definitions/n1:TransportDocumentType02"
-          },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
@@ -3876,12 +3895,14 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType03"
+            "$ref": "#/definitions/n1:AdditionalReferenceType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
@@ -3894,6 +3915,7 @@
           "items": {
             "$ref": "#/definitions/n1:PackagingType02"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -3901,18 +3923,21 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
@@ -3926,6 +3951,9 @@
         },
         "goodsItemNumber": {
           "$ref": "#/definitions/n1:GoodsItemNumberContentType"
+        },
+        "referenceNumberUCR": {
+          "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
         }
       },
       "required": [
@@ -3956,29 +3984,33 @@
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType07"
+            "$ref": "#/definitions/n1:AdditionalReferenceType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType02"
+          "$ref": "#/definitions/n1:CommodityType03"
         },
         "Packaging": {
           "items": {
             "$ref": "#/definitions/n1:PackagingType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
-            "$ref": "#/definitions/n1:TransportDocumentType04"
+            "$ref": "#/definitions/n1:TransportDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "declarationGoodsItemNumber": {
@@ -3986,6 +4018,9 @@
         },
         "goodsItemNumber": {
           "$ref": "#/definitions/n1:GoodsItemNumberContentType"
+        },
+        "referenceNumberUCR": {
+          "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
         }
       },
       "required": [
@@ -4013,7 +4048,7 @@
           "type": "string"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType03"
+          "$ref": "#/definitions/n1:CommodityType04"
         },
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
@@ -4051,22 +4086,25 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType03"
+            "$ref": "#/definitions/n1:AdditionalReferenceType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType04"
+          "$ref": "#/definitions/n1:CommodityType05"
         },
         "Consignee": {
           "$ref": "#/definitions/n1:ConsigneeType06"
@@ -4075,6 +4113,7 @@
           "items": {
             "$ref": "#/definitions/n1:PackagingType02"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -4082,18 +4121,21 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType11"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
@@ -4142,27 +4184,31 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalReferenceType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType05"
+          "$ref": "#/definitions/n1:CommodityType06"
         },
         "Packaging": {
           "items": {
             "$ref": "#/definitions/n1:PackagingType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "declarationGoodsItemNumber": {
@@ -4203,30 +4249,31 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType05"
+            "$ref": "#/definitions/n1:AdditionalReferenceType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType06"
-        },
-        "Consignee": {
-          "$ref": "#/definitions/n1:ConsigneeType02"
+          "$ref": "#/definitions/n1:CommodityType07"
         },
         "Packaging": {
           "items": {
             "$ref": "#/definitions/n1:PackagingType03"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -4234,21 +4281,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType08"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType05"
           },
-          "type": "array"
-        },
-        "TransportCharges": {
-          "$ref": "#/definitions/n1:TransportChargesType"
-        },
-        "TransportDocument": {
-          "items": {
-            "$ref": "#/definitions/n1:TransportDocumentType04"
-          },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
@@ -4297,7 +4337,7 @@
           "type": "string"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType07"
+          "$ref": "#/definitions/n1:CommodityType09"
         },
         "sequenceNumber": {
           "$ref": "#/definitions/n1:SequenceNumberContentType"
@@ -4311,7 +4351,7 @@
     },
     "n1:ConsignmentItemType11": {
       "additionalProperties": false,
-      "description": "Used by 3/91 messages: CD001C, CD003C, CD038C",
+      "description": "Used by 3/91 messages: CD001C, CD050C, CD160C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -4331,30 +4371,31 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType03"
+            "$ref": "#/definitions/n1:AdditionalReferenceType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType09"
-        },
-        "Consignee": {
-          "$ref": "#/definitions/n1:ConsigneeType06"
+          "$ref": "#/definitions/n1:CommodityType10"
         },
         "Packaging": {
           "items": {
             "$ref": "#/definitions/n1:PackagingType02"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -4362,21 +4403,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType11"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
-          "type": "array"
-        },
-        "TransportCharges": {
-          "$ref": "#/definitions/n1:TransportChargesType"
-        },
-        "TransportDocument": {
-          "items": {
-            "$ref": "#/definitions/n1:TransportDocumentType02"
-          },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
@@ -4408,7 +4442,7 @@
     },
     "n1:ConsignmentItemType12": {
       "additionalProperties": false,
-      "description": "Used by 4/91 messages: CD050C, CD115C, CD160C, CD165C",
+      "description": "Used by 3/91 messages: CD003C, CD115C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -4428,22 +4462,25 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType03"
+            "$ref": "#/definitions/n1:AdditionalReferenceType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Commodity": {
-          "$ref": "#/definitions/n1:CommodityType10"
+          "$ref": "#/definitions/n1:CommodityType11"
         },
         "Consignee": {
           "$ref": "#/definitions/n1:ConsigneeType06"
@@ -4452,6 +4489,7 @@
           "items": {
             "$ref": "#/definitions/n1:PackagingType02"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -4459,12 +4497,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType11"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -4474,10 +4514,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDestination": {
           "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "declarationGoodsItemNumber": {
           "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
@@ -4518,12 +4562,6 @@
         "#": {
           "type": "string"
         },
-        "Incident": {
-          "items": {
-            "$ref": "#/definitions/n1:IncidentType01"
-          },
-          "type": "array"
-        },
         "LocationOfGoods": {
           "$ref": "#/definitions/n1:LocationOfGoodsType01"
         }
@@ -4555,24 +4593,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType03"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType08"
+            "$ref": "#/definitions/n1:AdditionalReferenceType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -4588,21 +4630,22 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType04"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType01"
           },
-          "type": "array",
           "maxItems": 1999,
-          "minItems": 0
+          "type": "array"
         },
         "PlaceOfLoading": {
           "$ref": "#/definitions/n1:PlaceOfLoadingType01"
@@ -4614,12 +4657,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType02"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -4629,12 +4674,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType02"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -4687,6 +4734,7 @@
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType02"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         }
@@ -4718,24 +4766,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType01"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -4751,18 +4803,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType03"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -4779,12 +4834,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -4794,12 +4851,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -4854,12 +4913,14 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -4868,16 +4929,25 @@
         "Consignor": {
           "$ref": "#/definitions/n1:ConsignorType05"
         },
+        "CountryOfRoutingOfConsignment": {
+          "items": {
+            "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
+          },
+          "maxItems": 99,
+          "type": "array"
+        },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType04"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -4885,30 +4955,35 @@
           "items": {
             "$ref": "#/definitions/n1:IncidentType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -4922,6 +4997,9 @@
         },
         "inlandModeOfTransport": {
           "$ref": "#/definitions/n1:InlandModeOfTransportContentType"
+        },
+        "referenceNumberUCR": {
+          "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
         }
       },
       "required": [
@@ -4950,42 +5028,58 @@
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType08"
+            "$ref": "#/definitions/n1:AdditionalReferenceType06"
           },
+          "maxItems": 99,
+          "type": "array"
+        },
+        "CountryOfRoutingOfConsignment": {
+          "items": {
+            "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType03"
+          },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType04"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType05"
           },
+          "maxItems": 1999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType03"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType02"
+        },
+        "referenceNumberUCR": {
+          "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
         }
       },
       "type": "object"
@@ -5039,18 +5133,21 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType03"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType05"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType06"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -5064,6 +5161,7 @@
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5114,7 +5212,7 @@
     },
     "n1:ConsignmentType10": {
       "additionalProperties": false,
-      "description": "Used by 1/91 messages: CD001C",
+      "description": "Used by 3/91 messages: CD001C, CD050C, CD160C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -5134,24 +5232,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -5167,18 +5269,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType12"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -5192,12 +5297,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -5207,12 +5314,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5246,7 +5355,7 @@
     },
     "n1:ConsignmentType11": {
       "additionalProperties": false,
-      "description": "Used by 1/91 messages: CD003C",
+      "description": "Used by 3/91 messages: CD003C, CD115C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -5266,24 +5375,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -5299,18 +5412,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
-            "$ref": "#/definitions/n1:HouseConsignmentType12"
+            "$ref": "#/definitions/n1:HouseConsignmentType13"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -5318,6 +5434,7 @@
           "items": {
             "$ref": "#/definitions/n1:IncidentType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "PlaceOfLoading": {
@@ -5330,12 +5447,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -5345,12 +5464,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5404,18 +5525,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -5428,18 +5552,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType08"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -5447,24 +5574,28 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5516,44 +5647,51 @@
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType02"
+            "$ref": "#/definitions/n1:AdditionalReferenceType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "CountryOfRoutingOfConsignment": {
           "items": {
-            "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType02"
+            "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType01"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType09"
           },
+          "maxItems": 1999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType04"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "grossMass": {
@@ -5587,24 +5725,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -5620,18 +5762,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
-            "$ref": "#/definitions/n1:HouseConsignmentType12"
+            "$ref": "#/definitions/n1:HouseConsignmentType13"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -5639,6 +5784,7 @@
           "items": {
             "$ref": "#/definitions/n1:IncidentType02"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "PlaceOfLoading": {
@@ -5651,12 +5797,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -5666,12 +5814,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5725,24 +5875,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -5758,18 +5912,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
-            "$ref": "#/definitions/n1:HouseConsignmentType13"
+            "$ref": "#/definitions/n1:HouseConsignmentType12"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -5783,12 +5940,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -5798,12 +5957,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5811,6 +5972,9 @@
         },
         "countryOfDestination": {
           "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
@@ -5854,24 +6018,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -5887,18 +6055,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType13"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -5906,6 +6077,7 @@
           "items": {
             "$ref": "#/definitions/n1:IncidentType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "PlaceOfLoading": {
@@ -5918,12 +6090,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -5933,12 +6107,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -5946,6 +6122,9 @@
         },
         "countryOfDestination": {
           "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
@@ -6016,24 +6195,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -6049,18 +6232,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
-            "$ref": "#/definitions/n1:HouseConsignmentType13"
+            "$ref": "#/definitions/n1:HouseConsignmentType12"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -6074,12 +6260,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -6089,12 +6277,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -6102,6 +6292,9 @@
         },
         "countryOfDestination": {
           "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
@@ -6145,24 +6338,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -6178,18 +6375,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType06"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType13"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -6197,6 +6397,7 @@
           "items": {
             "$ref": "#/definitions/n1:IncidentType04"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "PlaceOfLoading": {
@@ -6209,12 +6410,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -6224,12 +6427,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType05"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -6237,6 +6442,9 @@
         },
         "countryOfDestination": {
           "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
@@ -6280,24 +6488,28 @@
           "items": {
             "$ref": "#/definitions/n1:ActiveBorderTransportMeansType02"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "AdditionalInformation": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType06"
+            "$ref": "#/definitions/n1:AdditionalReferenceType05"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Carrier": {
@@ -6313,18 +6525,21 @@
           "items": {
             "$ref": "#/definitions/n1:CountryOfRoutingOfConsignmentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType03"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "HouseConsignment": {
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType10"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         },
@@ -6341,12 +6556,14 @@
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType09"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType05"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -6356,12 +6573,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportEquipment": {
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType06"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "containerIndicator": {
@@ -6414,6 +6633,7 @@
           "items": {
             "$ref": "#/definitions/n1:HouseConsignmentType11"
           },
+          "maxItems": 1999,
           "minItems": 1,
           "type": "array"
         }
@@ -6445,6 +6665,7 @@
           "items": {
             "$ref": "#/definitions/n1:IncidentType03"
           },
+          "maxItems": 9,
           "minItems": 1,
           "type": "array"
         }
@@ -6452,6 +6673,57 @@
       "required": [
         "Incident"
       ],
+      "type": "object"
+    },
+    "n1:ConsignmentType23": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CC117D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "Carrier": {
+          "$ref": "#/definitions/n1:CarrierType05"
+        }
+      },
+      "required": [
+        "Carrier"
+      ],
+      "type": "object"
+    },
+    "n1:ConsignmentType24": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CC058D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "Carrier": {
+          "$ref": "#/definitions/n1:CarrierType01"
+        }
+      },
       "type": "object"
     },
     "n1:ConsignorType01": {
@@ -7031,9 +7303,8 @@
     },
     "n1:ControlNotificationDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC060C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ControlResultType01": {
       "additionalProperties": false,
@@ -7286,7 +7557,7 @@
     },
     "n1:ControlledByContentType01": {
       "description": "Used by 1/91 messages: CC017C",
-      "maxLength": 35,
+      "maxLength": 70,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
@@ -7398,6 +7669,7 @@
         "SK",
         "SM",
         "TR",
+        "UA",
         "XI"
       ],
       "type": "string"
@@ -7442,14 +7714,16 @@
     },
     "n1:CountryOfDestinationContentType": {
       "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
-      "pattern": "^([A-Z]{2})$",
+      "maxLength": 2,
+      "minLength": 2,
+      "pattern": "^([A-Z]{2,2})$",
       "type": "string"
     },
     "n1:CountryOfDispatchContentType": {
-      "description": "Used by 8/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C",
+      "description": "Used by 12/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "maxLength": 2,
       "minLength": 2,
-      "pattern": "^([A-Za-z]{2,2})$",
+      "pattern": "^([A-Z]{2,2})$",
       "type": "string"
     },
     "n1:CountryOfRoutingOfConsignmentType01": {
@@ -7485,7 +7759,7 @@
     },
     "n1:CountryOfRoutingOfConsignmentType02": {
       "additionalProperties": false,
-      "description": "Used by 2/91 messages: CC017C, CD018C",
+      "description": "Used by 1/91 messages: CC017C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -7514,6 +7788,36 @@
       ],
       "type": "object"
     },
+    "n1:CountryOfRoutingOfConsignmentType03": {
+      "additionalProperties": false,
+      "description": "Used by 2/124 messages: CC044C, CD018C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/definitions/n1:CountryContentType"
+        },
+        "sequenceNumber": {
+          "$ref": "#/definitions/n1:SequenceNumberContentType"
+        }
+      },
+      "required": [
+        "sequenceNumber"
+      ],
+      "type": "object"
+    },
     "n1:CountryType01": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CD971C",
@@ -7536,6 +7840,7 @@
           "items": {
             "$ref": "#/definitions/n1:ActionType"
           },
+          "maxItems": 9,
           "minItems": 1,
           "type": "array"
         },
@@ -7575,6 +7880,7 @@
           "items": {
             "$ref": "#/definitions/n1:ActionType"
           },
+          "maxItems": 9,
           "minItems": 1,
           "type": "array"
         },
@@ -7798,7 +8104,34 @@
     },
     "n1:CustomsOfficeOfDestinationDeclaredType02": {
       "additionalProperties": false,
-      "description": "Used by 6/91 messages: CD003C, CD038C, CD115C, CD165C, CD200C, CD203C",
+      "description": "Used by 2/91 messages: CD200C, CD203C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "referenceNumber": {
+          "$ref": "#/definitions/n1:ReferenceNumberContentType05"
+        }
+      },
+      "required": [
+        "referenceNumber"
+      ],
+      "type": "object"
+    },
+    "n1:CustomsOfficeOfDestinationDeclaredType03": {
+      "additionalProperties": false,
+      "description": "Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -8025,7 +8358,38 @@
     },
     "n1:CustomsOfficeOfExitForTransitDeclaredType02": {
       "additionalProperties": false,
-      "description": "Used by 14/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD010C, CD024C, CD038C, CD050C, CD063C, CD115C, CD165C, CD181C",
+      "description": "Used by 10/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD010C, CD024C, CD050C, CD063C, CD181C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "referenceNumber": {
+          "$ref": "#/definitions/n1:ReferenceNumberContentType05"
+        },
+        "sequenceNumber": {
+          "$ref": "#/definitions/n1:SequenceNumberContentType"
+        }
+      },
+      "required": [
+        "referenceNumber",
+        "sequenceNumber"
+      ],
+      "type": "object"
+    },
+    "n1:CustomsOfficeOfExitForTransitDeclaredType03": {
+      "additionalProperties": false,
+      "description": "Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -8420,7 +8784,7 @@
     },
     "n1:CustomsOfficeOfRequestType01": {
       "additionalProperties": false,
-      "description": "Used by 4/91 messages: CD027C, CD038C, CD059C, CD142C",
+      "description": "Used by 2/91 messages: CD027C, CD038C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -8446,6 +8810,33 @@
       "type": "object"
     },
     "n1:CustomsOfficeOfRequestType02": {
+      "additionalProperties": false,
+      "description": "Used by 2/91 messages: CD059C, CD142C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "referenceNumber": {
+          "$ref": "#/definitions/n1:ReferenceNumberContentType05"
+        }
+      },
+      "required": [
+        "referenceNumber"
+      ],
+      "type": "object"
+    },
+    "n1:CustomsOfficeOfRequestType03": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CD143C",
       "patternProperties": {
@@ -8600,6 +8991,40 @@
     },
     "n1:CustomsOfficeOfTransitDeclaredType02": {
       "additionalProperties": false,
+      "description": "Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "arrivalDateAndTimeEstimated": {
+          "$ref": "#/definitions/n1:ArrivalDateAndTimeEstimatedContentType"
+        },
+        "referenceNumber": {
+          "$ref": "#/definitions/n1:ReferenceNumberContentType05"
+        },
+        "sequenceNumber": {
+          "$ref": "#/definitions/n1:SequenceNumberContentType"
+        }
+      },
+      "required": [
+        "referenceNumber",
+        "sequenceNumber"
+      ],
+      "type": "object"
+    },
+    "n1:CustomsOfficeOfTransitDeclaredType03": {
+      "additionalProperties": false,
       "description": "Used by 4/91 messages: CD010C, CD024C, CD063C, CD181C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
@@ -8629,9 +9054,9 @@
       ],
       "type": "object"
     },
-    "n1:CustomsOfficeOfTransitDeclaredType03": {
+    "n1:CustomsOfficeOfTransitDeclaredType04": {
       "additionalProperties": false,
-      "description": "Used by 9/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C, CD003C, CD038C, CD115C, CD165C",
+      "description": "Used by 5/91 messages: CC013C, CC015C, CC017C, CC029C, CD001C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -8807,27 +9232,17 @@
     },
     "n1:DateContentType": {
       "description": "Used by 18/91 messages: CC007C, CC017C, CC029C, CC042C, CC043C, CC182C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD142C, CD160C, CD165C, CD180C, CD181C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:DateTimeType": {
       "description": "The date is in the Common Era (minus sign in years is not permitted) and time zone although not included UTC is implied",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:DateType": {
       "description": "Calendar dates are represented yyyy-mm-dd format, following ISO 8601. This is a W3C XML Schema date type, but without the optional timezone data.",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
-    },
-    "n1:DayInTheMonthType": {
-      "description": "Day in the Month (format:\n\t\t\t\tDD)",
-      "maxLength": 2,
-      "minLength": 2,
-      "pattern": "^([0]|[1-9]|[1-2]|[0-9]|[3][0-1])$",
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
       "type": "string"
     },
     "n1:DecType": {
@@ -8865,15 +9280,13 @@
     },
     "n1:DecisionDateAndTimeContentType": {
       "description": "Used by 3/91 messages: CC009C, CC014C, CD010C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:DeclarationAcceptanceDateContentType": {
       "description": "Used by 17/91 messages: CC023C, CC028C, CC029C, CC035C, CC043C, CC055C, CC190C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD200C, CD203C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:DeclarationGoodsItemNumberContentType01": {
       "description": "Used by 22/91 messages: CC007C, CC013C, CC015C, CC017C, CC025C, CC029C, CC043C, CC044C, CC170C, CC182C, CC190C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C, CD180C, CD181C",
@@ -8899,9 +9312,8 @@
     },
     "n1:DeclarationSubmissionDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC051C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:DeclarationTypeContentType01": {
       "description": "Used by 1/91 messages: CC042C",
@@ -9156,9 +9568,8 @@
     },
     "n1:DiscrepanciesNotificationDateContentType": {
       "description": "Used by 1/91 messages: CC019C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:DiscrepanciesNotificationTextContentType": {
       "description": "Used by 1/91 messages: CC019C",
@@ -9206,6 +9617,43 @@
       ],
       "description": "Used by 4/91 messages: CC007C, CC013C, CC015C, CC170C",
       "maxLength": 256,
+      "type": "string"
+    },
+    "n1:ENSMRNContentType": {
+      "description": "Used by 25/124 messages: CC004D, CC009D, CC028D, CC056D, CC060D, CC117D, CC928D, CCA13D, CCA28D, CCA64D, CCA70D, CCA71D, CD004D, CD009D, CD014D, CD056D, CD060D, CD117D, CD928D, CDA13D, CDA52D, CDA64D, CDA70D, CDA71D, CDA93D",
+      "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{11,11}[C][T][0-9])$",
+      "type": "string"
+    },
+    "n1:ENSOperationType01": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CC117D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "ENSMRN": {
+          "$ref": "#/definitions/n1:ENSMRNContentType"
+        }
+      },
+      "required": [
+        "ENSMRN"
+      ],
+      "type": "object"
+    },
+    "n1:ENS_MRNType": {
+      "description": "ENS MRN (format: an18), (alias: ENS_MRNType)",
+      "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{11,11}[C][T][0-9])$",
       "type": "string"
     },
     "n1:EconomicOperatorType01": {
@@ -9315,9 +9763,8 @@
     },
     "n1:EndDateAndTimeContentType": {
       "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:EndorsementType01": {
       "additionalProperties": false,
@@ -9436,15 +9883,13 @@
     },
     "n1:EnquiryRequestDateContentType": {
       "description": "Used by 2/91 messages: CD144C, CD145C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:EnquiryResponseDateContentType": {
       "description": "Used by 1/91 messages: CD143C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:EnquiryType01": {
       "additionalProperties": false,
@@ -9605,6 +10050,12 @@
       ],
       "type": "object"
     },
+    "n1:ErmisControlledByContentType01": {
+      "description": "Used by: CaptureResultsOfControlEvent",
+      "maxLength": 70,
+      "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
+      "type": "string"
+    },
     "n1:ErrorCodeContentType": {
       "description": "Used by 7/91 messages: CC022C, CC056C, CC057C, CC906C, CC917C, CD906C, CD917C",
       "pattern": "^([0-9]{2,2})$",
@@ -9678,9 +10129,8 @@
     },
     "n1:ExpiryDateContentType": {
       "description": "Used by 2/91 messages: CC037C, CC224C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ExplanationContentType": {
       "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
@@ -9870,7 +10320,7 @@
     "n1:ExposureCounterContentType": {
       "description": "Used by 1/91 messages: CC037C",
       "maximum": 99999999,
-      "minimum": 1,
+      "minimum": 0,
       "type": "integer"
     },
     "n1:ExposureType": {
@@ -10114,12 +10564,12 @@
     },
     "n1:GNSSLatitude": {
       "description": "GNSS Latitude (format: an..17)",
-      "pattern": "^[+-]?([0-8]?[0-9]\\.[0-9]{5,7}|90.000000?0?)$",
+      "pattern": "^([\\+\\-]?([0-8]?|[0-9]|\\.|[0-9]{5,7}|90[\\w\\D]000000?0?))$",
       "type": "string"
     },
     "n1:GNSSLongitude": {
       "description": "GNSS Longitude (format: an..17)",
-      "pattern": "^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7}|180.000000?0?)$",
+      "pattern": "^([\\+\\-]?((0?|[0-9]?|1[0-7])|[0-9]|\\.|[0-9]{5,7}|180[\\w\\D]000000?0?))$",
       "type": "string"
     },
     "n1:GNSSType": {
@@ -10156,7 +10606,10 @@
     "n1:GRNType": {
       "anyOf": [
         {
-          "pattern": "^([0-9]{2,2}[A-Z]{2,2}[0-9A-Z]{12,12}[0-9]([A-Z][0-9]{6,6})?)"
+          "pattern": "^([0-9]{2,2}[A-Z]{2,2}[0-9A-Z]{12,12}[0-9]([A-Z][0-9]{6,6})?)$"
+        },
+        {
+          "pattern": "^([0-9A-Z]*)$"
         }
       ],
       "description": "GRN (format: an..24)",
@@ -10354,7 +10807,7 @@
     },
     "n1:GoodsReferenceType01": {
       "additionalProperties": false,
-      "description": "Used by 12/91 messages: CC007C, CC017C, CC043C, CC044C, CC182C, CD003C, CD018C, CD038C, CD115C, CD165C, CD180C, CD181C",
+      "description": "Used by 11/91 messages: CC007C, CC017C, CC043C, CC044C, CC182C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -10414,6 +10867,36 @@
       ],
       "type": "object"
     },
+    "n1:GoodsReferenceType03": {
+      "additionalProperties": false,
+      "description": "Used by 2/124 messages: CC044C, CD018C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "declarationGoodsItemNumber": {
+          "$ref": "#/definitions/n1:DeclarationGoodsItemNumberContentType01"
+        },
+        "sequenceNumber": {
+          "$ref": "#/definitions/n1:SequenceNumberContentType"
+        }
+      },
+      "required": [
+        "sequenceNumber"
+      ],
+      "type": "object"
+    },
     "n1:GoodsShipmentType": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CC191C",
@@ -10436,6 +10919,7 @@
           "items": {
             "$ref": "#/definitions/n1:GoodsItemType"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         }
@@ -10458,7 +10942,7 @@
       "type": "string"
     },
     "n1:GrossMassContentType01": {
-      "description": "Used by 15/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CC044C, CD001C, CD003C, CD012C, CD018C, CD038C, CD050C, CD115C, CD160C, CD165C",
+      "description": "Used by 13/91 messages: CC013C, CC015C, CC017C, CC029C, CC043C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C",
       "type": "number"
     },
     "n1:GrossMassContentType02": {
@@ -10820,6 +11304,7 @@
           "items": {
             "$ref": "#/definitions/n1:UsageType"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "acceptanceDateAndTime": {
@@ -10867,7 +11352,12 @@
           "$ref": "#/definitions/n1:GrnContentType"
         },
         "InvalidGuaranteeReason": {
-          "$ref": "#/definitions/n1:InvalidGuaranteeReasonType01"
+          "items": {
+            "$ref": "#/definitions/n1:InvalidGuaranteeReasonType01"
+          },
+          "maxItems": 9,
+          "minItems": 1,
+          "type": "array"
         },
         "sequenceNumber": {
           "$ref": "#/definitions/n1:SequenceNumberContentType"
@@ -11133,12 +11623,14 @@
           "items": {
             "$ref": "#/definitions/n1:InvalidGuaranteeReasonType02"
           },
+          "maxItems": 9,
           "type": "array"
         },
         "ValidityLimitation": {
           "items": {
             "$ref": "#/definitions/n1:ValidityLimitationType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "sequenceNumber": {
@@ -11208,6 +11700,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "guaranteeType": {
@@ -11221,6 +11714,7 @@
         }
       },
       "required": [
+        "guaranteeType",
         "sequenceNumber"
       ],
       "type": "object"
@@ -11247,6 +11741,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "guaranteeType": {
@@ -11287,6 +11782,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "guaranteeType": {
@@ -11327,6 +11823,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType15"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -11366,6 +11863,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType15"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -11405,6 +11903,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType04"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -11444,6 +11943,7 @@
           "items": {
             "$ref": "#/definitions/n1:GuaranteeReferenceType14"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -11470,9 +11970,8 @@
     },
     "n1:GuarantorNotificationDateContentType": {
       "description": "Used by 1/91 messages: CC023C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:GuarantorNotificationTextContentType": {
       "description": "Used by 1/91 messages: CC023C",
@@ -11543,7 +12042,6 @@
       },
       "required": [
         "Address",
-        "identificationNumber",
         "name"
       ],
       "type": "object"
@@ -11718,9 +12216,6 @@
           "$ref": "#/definitions/n1:NameContentType01"
         }
       },
-      "required": [
-        "identificationNumber"
-      ],
       "type": "object"
     },
     "n1:HarmonizedSystemSubHeadingCodeContentType": {
@@ -12571,6 +13066,45 @@
       },
       "type": "object"
     },
+    "n1:HolderOfTheTransitProcedureType21": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CC117D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "Address": {
+          "$ref": "#/definitions/n1:AddressType16"
+        },
+        "ContactPerson": {
+          "$ref": "#/definitions/n1:ContactPersonType05"
+        },
+        "SafetyAndSecurityIdentificationNumber": {
+          "$ref": "#/definitions/n1:SafetyAndSecurityIdentificationNumberType02"
+        },
+        "identificationNumber": {
+          "$ref": "#/definitions/n1:IdentificationNumberContentType03"
+        },
+        "name": {
+          "$ref": "#/definitions/n1:NameContentType01"
+        }
+      },
+      "required": [
+        "identificationNumber"
+      ],
+      "type": "object"
+    },
     "n1:HouseConsignmentType01": {
       "additionalProperties": false,
       "description": "Used by 1/91 messages: CC017C",
@@ -12593,18 +13127,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType08"
+            "$ref": "#/definitions/n1:AdditionalReferenceType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -12614,6 +13151,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType01"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "Consignor": {
@@ -12623,18 +13161,21 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType04"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType10"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -12644,13 +13185,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
-        },
-        "countryOfDispatch": {
-          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "countryOfDestination": {
           "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
@@ -12692,6 +13234,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "releaseType": {
@@ -12729,18 +13272,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -12750,6 +13296,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType03"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -12760,18 +13307,21 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType07"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -12781,7 +13331,11 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
+        },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
         },
         "countryOfDispatch": {
           "$ref": "#/definitions/n1:CountryOfDispatchContentType"
@@ -12828,12 +13382,14 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -12843,6 +13399,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType04"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -12853,28 +13410,38 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType07"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
+        },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
+        },
+        "referenceNumberUCR": {
+          "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
         },
         "securityIndicatorFromExportDeclaration": {
           "$ref": "#/definitions/n1:SecurityIndicatorFromExportDeclarationContentType"
@@ -12910,36 +13477,44 @@
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType08"
+            "$ref": "#/definitions/n1:AdditionalReferenceType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "ConsignmentItem": {
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType05"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType04"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "grossMass": {
-          "$ref": "#/definitions/n1:GrossMassContentType01"
+          "$ref": "#/definitions/n1:GrossMassContentType02"
+        },
+        "referenceNumberUCR": {
+          "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
         },
         "sequenceNumber": {
           "$ref": "#/definitions/n1:SequenceNumberContentType"
@@ -12972,6 +13547,7 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType05"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "sequenceNumber": {
@@ -13005,6 +13581,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType06"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         }
@@ -13036,18 +13613,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -13057,6 +13637,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType07"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -13067,24 +13648,28 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType07"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "countryOfDispatch": {
@@ -13127,36 +13712,41 @@
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType02"
+            "$ref": "#/definitions/n1:AdditionalReferenceType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "ConsignmentItem": {
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType08"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "DepartureTransportMeans": {
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType01"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportDocument": {
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "grossMass": {
-          "$ref": "#/definitions/n1:GrossMassContentType01"
+          "$ref": "#/definitions/n1:GrossMassContentType02"
         },
         "referenceNumberUCR": {
           "$ref": "#/definitions/n1:ReferenceNumberUCRContentType03"
@@ -13192,18 +13782,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType06"
+            "$ref": "#/definitions/n1:AdditionalReferenceType05"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -13213,6 +13806,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType09"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -13223,18 +13817,21 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType05"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType10"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType05"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -13244,7 +13841,11 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType04"
           },
+          "maxItems": 99,
           "type": "array"
+        },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
         },
         "countryOfDispatch": {
           "$ref": "#/definitions/n1:CountryOfDispatchContentType"
@@ -13288,6 +13889,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType10"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -13303,7 +13905,7 @@
     },
     "n1:HouseConsignmentType12": {
       "additionalProperties": false,
-      "description": "Used by 3/91 messages: CD001C, CD003C, CD038C",
+      "description": "Used by 3/91 messages: CD001C, CD050C, CD160C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -13323,18 +13925,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -13344,6 +13949,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType11"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -13354,18 +13960,21 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType07"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -13375,7 +13984,11 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
+        },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
         },
         "countryOfDispatch": {
           "$ref": "#/definitions/n1:CountryOfDispatchContentType"
@@ -13402,7 +14015,7 @@
     },
     "n1:HouseConsignmentType13": {
       "additionalProperties": false,
-      "description": "Used by 4/91 messages: CD050C, CD115C, CD160C, CD165C",
+      "description": "Used by 3/91 messages: CD003C, CD115C, CD165C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -13422,18 +14035,21 @@
           "items": {
             "$ref": "#/definitions/n1:AdditionalInformationType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalReference": {
           "items": {
-            "$ref": "#/definitions/n1:AdditionalReferenceType04"
+            "$ref": "#/definitions/n1:AdditionalReferenceType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "AdditionalSupplyChainActor": {
           "items": {
             "$ref": "#/definitions/n1:AdditionalSupplyChainActorType"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "Consignee": {
@@ -13443,6 +14059,7 @@
           "items": {
             "$ref": "#/definitions/n1:ConsignmentItemType12"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -13453,18 +14070,21 @@
           "items": {
             "$ref": "#/definitions/n1:DepartureTransportMeansType02"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "PreviousDocument": {
           "items": {
             "$ref": "#/definitions/n1:PreviousDocumentType07"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "SupportingDocument": {
           "items": {
             "$ref": "#/definitions/n1:SupportingDocumentType06"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "TransportCharges": {
@@ -13474,7 +14094,14 @@
           "items": {
             "$ref": "#/definitions/n1:TransportDocumentType02"
           },
+          "maxItems": 99,
           "type": "array"
+        },
+        "countryOfDestination": {
+          "$ref": "#/definitions/n1:CountryOfDestinationContentType"
+        },
+        "countryOfDispatch": {
+          "$ref": "#/definitions/n1:CountryOfDispatchContentType"
         },
         "grossMass": {
           "$ref": "#/definitions/n1:GrossMassContentType01"
@@ -13571,9 +14198,8 @@
     },
     "n1:IncidentNotificationDateAndTimeContentType": {
       "description": "Used by 3/91 messages: CC182C, CD180C, CD181C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:IncidentType01": {
       "additionalProperties": false,
@@ -13606,6 +14232,7 @@
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType01"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "code": {
@@ -13657,6 +14284,7 @@
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType07"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "code": {
@@ -13708,6 +14336,7 @@
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType07"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "code": {
@@ -13759,6 +14388,7 @@
           "items": {
             "$ref": "#/definitions/n1:TransportEquipmentType07"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "code": {
@@ -13904,12 +14534,16 @@
         "code": {
           "$ref": "#/definitions/n1:CodeContentType04"
         },
+        "sequenceNumber": {
+          "$ref": "#/definitions/n1:SequenceNumberContentType"
+        },
         "text": {
           "$ref": "#/definitions/n1:TextContentType01"
         }
       },
       "required": [
-        "code"
+        "code",
+        "sequenceNumber"
       ],
       "type": "object"
     },
@@ -14051,9 +14685,8 @@
     },
     "n1:InvalidityDateContentType": {
       "description": "Used by 4/91 messages: CC225C, CC228C, CC229C, CC231C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:InvalidityReasonCodeContentType": {
       "description": "Used by 3/91 messages: CC037C, CC225C, CC231C",
@@ -14068,9 +14701,8 @@
     },
     "n1:IssueDateContentType": {
       "description": "Used by 2/91 messages: CC037C, CC224C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:JustificationContentType01": {
       "description": "Used by 1/91 messages: CC009C",
@@ -14100,37 +14732,33 @@
       "description": "Language Code (format: a2)",
       "maxLength": 2,
       "minLength": 2,
-      "pattern": "^([A-Z]{2,2})$",
+      "pattern": "^([A-Za-z]{2,2})$",
       "type": "string"
     },
     "n1:LatitudeContentType": {
       "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
-      "pattern": "^[+-]?([0-8]?[0-9]\\.[0-9]{5,7}|90.000000?0?)$",
+      "pattern": "^([\\+\\-]?([0-8]?|[0-9]|\\.|[0-9]{5,7}|90[\\w\\D]000000?0?))$",
       "type": "string"
     },
     "n1:LiabilityLiberationDateContentType": {
       "description": "Used by 2/91 messages: CC037C, CC228C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:LimitDateContentType": {
       "description": "Used by 3/91 messages: CC013C, CC015C, CC170C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:LimitForResponseDateContentType": {
       "description": "Used by 1/91 messages: CC140C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:LimitForTheEnquiryResponseDateContentType": {
       "description": "Used by 1/91 messages: CD142C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:LocationContentType01": {
       "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC170C",
@@ -14516,13 +15144,12 @@
     },
     "n1:LockDateContentType": {
       "description": "Used by 1/91 messages: CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:LongitudeContentType": {
       "description": "Used by 14/91 messages: CC007C, CC013C, CC015C, CC029C, CC043C, CC170C, CC182C, CC190C, CD003C, CD038C, CD115C, CD165C, CD180C, CD181C",
-      "pattern": "^[+-]?((0?[0-9]?|1[0-7])[0-9]\\.[0-9]{5,7}|180.000000?0?)$",
+      "pattern": "^([\\+\\-]?((0?|[0-9]?|1[0-7])|[0-9]|\\.|[0-9]{5,7}|180[\\w\\D]000000?0?))$",
       "type": "string"
     },
     "n1:LrnContentType02": {
@@ -14545,10 +15172,10 @@
     "n1:MRNContentType03": {
       "anyOf": [
         {
-          "pattern": "^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$"
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
         },
         {
-          "pattern": "^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[A-E][0-9]$"
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[A-E][0-9])$"
         }
       ],
       "description": "Used by 5/91 messages: CC042C, CC048C, CC190C, CC191C, CD078C",
@@ -14557,10 +15184,10 @@
     "n1:MRNContentType04": {
       "anyOf": [
         {
-          "pattern": "^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$"
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
         },
         {
-          "pattern": "^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]$"
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
         }
       ],
       "description": "Used by 6/91 messages: CC040C, CC042C, CC048C, CC190C, CC191C, CD078C",
@@ -14569,10 +15196,10 @@
     "n1:MRNType": {
       "anyOf": [
         {
-          "pattern": "^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$"
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
         },
         {
-          "pattern": "^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]$"
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
         }
       ],
       "description": "MRN (format: an18), (alias: MRNType)",
@@ -14637,7 +15264,10 @@
         "CC055C",
         "CC056C",
         "CC057C",
+        "CC058D",
         "CC060C",
+        "CC061C",
+        "CC117D",
         "CC140C",
         "CC141C",
         "CC170C",
@@ -14674,6 +15304,7 @@
         "CD114C",
         "CD115C",
         "CD118C",
+        "CD119D",
         "CD142C",
         "CD143C",
         "CD144C",
@@ -14749,13 +15380,25 @@
     "n1:MrnContentType05": {
       "anyOf": [
         {
-          "pattern": "^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$"
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
         },
         {
-          "pattern": "^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]$"
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
         }
       ],
       "description": "Used by 68/91 messages: CC004C, CC007C, CC009C, CC013C, CC014C, CC017C, CC019C, CC022C, CC023C, CC025C, CC028C, CC029C, CC035C, CC037C, CC043C, CC044C, CC045C, CC051C, CC054C, CC055C, CC056C, CC057C, CC060C, CC140C, CC141C, CC182C, CC906C, CD001C, CD002C, CD003C, CD006C, CD010C, CD012C, CD018C, CD024C, CD027C, CD038C, CD049C, CD050C, CD059C, CD063C, CD094C, CD095C, CD114C, CD115C, CD118C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C, CD160C, CD164C, CD165C, CD168C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD906C, CD974C, CD975C",
+      "type": "string"
+    },
+    "n1:MrnContentTypeNL": {
+      "anyOf": [
+        {
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
+        },
+        {
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
+        }
+      ],
+      "description": "Used by 2/91 messages: CC170C, CC928C",
       "type": "string"
     },
     "n1:NCTS-P5_DeclarationGoodsItemNumberType": {
@@ -14766,10 +15409,10 @@
     "n1:NCTS-P5_MRNType": {
       "anyOf": [
         {
-          "pattern": "^([0-1][0-9]|[2][0-4])[A-Z]{2}[A-Z0-9]{13}[0-9]$"
+          "pattern": "^(([0-1]|[0-9]|[2][0-4])[A-Z]{2,2}[0-9A-Z]{13,13}[0-9])$"
         },
         {
-          "pattern": "^([2][4-9]|[3-9][0-9])[A-Z]{2}[A-Z0-9]{12}[J-M][0-9]$"
+          "pattern": "^(([2]|[4-9]|[3-9][0-9])[A-Z]{2,2}[0-9A-Z]{12,12}[J-M][0-9])$"
         }
       ],
       "description": "MRN (format: an18), (alias: MRNType)",
@@ -14815,7 +15458,7 @@
       "type": "string"
     },
     "n1:NumType": {
-      "description": "Base class for all nN and n..N\n\t\t\t\ttypes",
+      "description": "Base class for all nN and n..N\n        types",
       "type": "string"
     },
     "n1:NumberOfCertificatesContentType": {
@@ -14841,47 +15484,6 @@
       "maximum": 9999,
       "minimum": 0,
       "type": "integer"
-    },
-    "n1:Numeric2": {
-      "maxLength": 2,
-      "minLength": 2,
-      "pattern": "^([0-9]{2,2})$",
-      "type": "string"
-    },
-    "n1:Numeric2Max": {
-      "maxLength": 8,
-      "pattern": "^([0-9]{1,2})$",
-      "type": "string"
-    },
-    "n1:Numeric3": {
-      "maxLength": 3,
-      "minLength": 3,
-      "pattern": "^([0-9]{3,3})$",
-      "type": "string"
-    },
-    "n1:Numeric4": {
-      "maxLength": 4,
-      "minLength": 4,
-      "pattern": "^([0-9]{4,4})$",
-      "type": "string"
-    },
-    "n1:Numeric6Max": {
-      "maxLength": 8,
-      "pattern": "^([0-9]{1,6})$",
-      "type": "string"
-    },
-    "n1:Numeric8Max": {
-      "maxLength": 8,
-      "pattern": "^([0-9]{1,8})$",
-      "type": "string"
-    },
-    "n1:NumericMin4Max8": {
-      "pattern": "^([0-9]{4,8})$",
-      "type": "string"
-    },
-    "n1:NumericMin4Max8Type": {
-      "pattern": "^([0-9]{4,8})$",
-      "type": "string"
     },
     "n1:NumericWithZero_3": {
       "maximum": 999,
@@ -14923,70 +15525,6 @@
       "minimum": 1,
       "type": "integer"
     },
-    "n1:Numeric_1": {
-      "maxLength": 1,
-      "minLength": 1,
-      "pattern": "^([0-9])$",
-      "type": "string"
-    },
-    "n1:Numeric_2": {
-      "maxLength": 2,
-      "minLength": 2,
-      "pattern": "^([0-9]{2,2})$",
-      "type": "string"
-    },
-    "n1:Numeric_3": {
-      "maxLength": 3,
-      "minLength": 3,
-      "pattern": "^([0-9]{3,3})$",
-      "type": "string"
-    },
-    "n1:Numeric_4": {
-      "maxLength": 4,
-      "minLength": 4,
-      "pattern": "^([0-9]{4,4})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max11": {
-      "maxLength": 11,
-      "pattern": "^([0-9]{1,11})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max2": {
-      "maxLength": 2,
-      "pattern": "^([0-9]{1,2})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max3": {
-      "maxLength": 3,
-      "pattern": "^([0-9]{1,3})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max4": {
-      "maxLength": 4,
-      "pattern": "^([0-9]{1,4})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max5": {
-      "maxLength": 5,
-      "pattern": "^([0-9]{1,5})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max6": {
-      "maxLength": 6,
-      "pattern": "^([0-9]{1,6})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max7": {
-      "maxLength": 7,
-      "pattern": "^([0-9]{1,7})$",
-      "type": "string"
-    },
-    "n1:Numeric_Max9": {
-      "maxLength": 9,
-      "pattern": "^([0-9]{1,9})$",
-      "type": "string"
-    },
     "n1:OperationContentType": {
       "description": "Used by 4/91 messages: CD070C, CD071C, CD411D, CD971C",
       "pattern": "^([A-Za-z])$",
@@ -15000,7 +15538,9 @@
     },
     "n1:OtherCountryContentType": {
       "description": "Used by 1/91 messages: CD411D",
-      "pattern": "^([A-Za-z]{2,2})$",
+      "maxLength": 2,
+      "minLength": 2,
+      "pattern": "^([A-Z]{2,2})$",
       "type": "string"
     },
     "n1:OtherGuaranteeReferenceContentType01": {
@@ -15237,9 +15777,18 @@
     },
     "n1:PassageDateContentType": {
       "description": "Used by 2/91 messages: CD118C, CD168C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
+    },
+    "n1:PassageRefusalDateContentType": {
+      "description": "Used by 1/124 messages: CD119D",
+      "pattern": "^([\\w\\D]{10,10})$",
+      "type": "string"
+    },
+    "n1:PassageRefusalReasonCodeContentType": {
+      "description": "Used by 1/124 messages: CD119D",
+      "pattern": "^([0-9]{1,2})$",
+      "type": "string"
     },
     "n1:PercentageOfReferenceAmountContentType01": {
       "description": "Used by 1/91 messages: CC037C",
@@ -15255,15 +15804,13 @@
     },
     "n1:PeriodFromDateContentType": {
       "description": "Used by 2/91 messages: CC034C, CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:PeriodToDateContentType": {
       "description": "Used by 2/91 messages: CC034C, CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:PhoneNumberContentType01": {
       "description": "Used by 11/91 messages: CC029C, CC037C, CC051C, CC190C, CD142C, CD143C, CD144C, CD145C, CD150C, CD151C, CD152C",
@@ -15545,7 +16092,7 @@
     "n1:PostcodeContentType01": {
       "description": "Used by 36/91 messages: CC004C, CC009C, CC014C, CC019C, CC022C, CC023C, CC026C, CC028C, CC029C, CC035C, CC037C, CC043C, CC045C, CC051C, CC055C, CC056C, CC060C, CC140C, CC182C, CC190C, CC228C, CC229C, CC928C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD142C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C",
       "maxLength": 17,
-      "pattern": "^([\\w\\D]{1,17})$",
+      "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
       "type": "string"
     },
     "n1:PostcodeContentType02": {
@@ -15556,14 +16103,12 @@
     },
     "n1:PreparationDateAndTimeContentType": {
       "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
-      "type": "string",
-      "format": "date-time"
+      "type": "string"
     },
     "n1:PresentationOfTheGoodsDateAndTimeContentType": {
       "description": "Used by 2/91 messages: CC013C, CC015C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:PreviousDocumentType01": {
       "additionalProperties": false,
@@ -16038,22 +16583,18 @@
     },
     "n1:RecoveryAcceptanceContentType": {
       "description": "Used by 1/91 messages: CD151C",
-      "maxLength": 1,
-      "minLength": 1,
       "pattern": "^([0-9])$",
       "type": "string"
     },
     "n1:RecoveryCommunicationDateContentType": {
       "description": "Used by 4/91 messages: CC048C, CD063C, CD150C, CD151C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:RecoveryNotificationDateContentType": {
       "description": "Used by 1/91 messages: CC035C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:RecoveryNotificationTextContentType": {
       "description": "Used by 1/91 messages: CC035C",
@@ -16261,9 +16802,8 @@
     },
     "n1:RejectionDateAndTimeContentType": {
       "description": "Used by 2/91 messages: CC056C, CC057C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:RejectionReasonContentType": {
       "description": "Used by 2/91 messages: CC056C, CC057C",
@@ -16273,9 +16813,8 @@
     },
     "n1:ReleaseDateContentType": {
       "description": "Used by 12/91 messages: CC025C, CC029C, CC037C, CD001C, CD003C, CD012C, CD038C, CD050C, CD115C, CD160C, CD165C, CD204C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ReleaseIndicatorContentType": {
       "description": "Used by 1/91 messages: CC025C",
@@ -16284,9 +16823,8 @@
     },
     "n1:ReleaseRequestDateAndTimeContentType": {
       "description": "Used by 2/91 messages: CC017C, CC054C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ReleaseRequestedContentType": {
       "description": "Used by 2/91 messages: CC017C, CC054C",
@@ -16467,17 +17005,42 @@
       ],
       "type": "object"
     },
+    "n1:RepresentativeType06": {
+      "additionalProperties": false,
+      "description": "Used by 9/124 messages: CC117D, CCA70D, CCA71D, CD004D, CD009D, CD014D, CD117D, CDA70D, CDA71D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "identificationNumber": {
+          "$ref": "#/definitions/n1:IdentificationNumberContentType03"
+        }
+      },
+      "required": [
+        "identificationNumber"
+      ],
+      "type": "object"
+    },
     "n1:RequestDateAndTimeContentType": {
       "description": "Used by 2/91 messages: CC009C, CC014C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:RequestOnNonArrivedMovementDateContentType": {
       "description": "Used by 1/91 messages: CC140C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:RequestRejectionReasonCodeContentType": {
       "description": "Used by 4/91 messages: CD003C, CD038C, CD115C, CD165C",
@@ -16621,9 +17184,8 @@
     },
     "n1:ResponseDateAndTimeContentType": {
       "description": "Used by 1/91 messages: CC191C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ResponseInformationType": {
       "additionalProperties": false,
@@ -16676,9 +17238,8 @@
     },
     "n1:ReturnCopyReturnedDateContentType": {
       "description": "Used by 1/91 messages: CD143C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:RiskAnalysisIdentificationType": {
       "additionalProperties": false,
@@ -16702,6 +17263,7 @@
           "items": {
             "$ref": "#/definitions/n1:RiskAnalysisType"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "code": {
@@ -16785,6 +17347,7 @@
           "items": {
             "$ref": "#/definitions/n1:RiskAnalysisResultType"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -16815,6 +17378,68 @@
       "description": "Used by 2/91 messages: CC034C, CC037C",
       "pattern": "^([0-9])$",
       "type": "string"
+    },
+    "n1:SafetyAndSecurityIdentificationNumberType01": {
+      "additionalProperties": false,
+      "description": "Used by 2/124 messages: CDA13D, CDA15D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/definitions/n1:CountryContentType"
+        },
+        "identificationNumber": {
+          "$ref": "#/definitions/n1:IdentificationNumberContentType01"
+        }
+      },
+      "required": [
+        "country",
+        "identificationNumber"
+      ],
+      "type": "object"
+    },
+    "n1:SafetyAndSecurityIdentificationNumberType02": {
+      "additionalProperties": false,
+      "description": "Used by 4/124 messages: CC117D, CCA13D, CCA15D, CCA29D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/definitions/n1:CountryContentType"
+        },
+        "identificationNumber": {
+          "$ref": "#/definitions/n1:IdentificationNumberContentType01"
+        }
+      },
+      "required": [
+        "country",
+        "identificationNumber"
+      ],
+      "type": "object"
     },
     "n1:SealType01": {
       "additionalProperties": false,
@@ -16872,7 +17497,6 @@
         }
       },
       "required": [
-        "identifier",
         "sequenceNumber"
       ],
       "type": "object"
@@ -17001,6 +17625,7 @@
           "items": {
             "$ref": "#/definitions/n1:SystemApplicabilityType"
           },
+          "maxItems": 99,
           "minItems": 1,
           "type": "array"
         },
@@ -17024,7 +17649,6 @@
     },
     "n1:SequenceNumberContentType": {
       "description": "Used by 50/91 messages: CC007C, CC013C, CC015C, CC017C, CC022C, CC025C, CC029C, CC034C, CC037C, CC042C, CC043C, CC044C, CC048C, CC055C, CC060C, CC170C, CC182C, CC190C, CC191C, CC224C, CC225C, CC228C, CD001C, CD003C, CD010C, CD012C, CD018C, CD024C, CD038C, CD050C, CD063C, CD070C, CD071C, CD115C, CD144C, CD145C, CD150C, CD151C, CD160C, CD165C, CD180C, CD181C, CD200C, CD201C, CD203C, CD204C, CD205C, CD209C, CD411D, CD971C",
-      "pattern": "^([1-9][0-9]{0,4})$",
       "maximum": 99999,
       "minimum": 1,
       "type": "integer"
@@ -17087,9 +17711,8 @@
     },
     "n1:StartDateAndTimeContentType": {
       "description": "Used by 3/91 messages: CD070C, CD071C, CD971C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date-time"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}T[\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:StateOfSealsContentType": {
       "description": "Used by 2/91 messages: CC044C, CD018C",
@@ -17118,6 +17741,7 @@
           "items": {
             "$ref": "#/definitions/n1:SeriesElementsType"
           },
+          "maxItems": 999,
           "type": "array"
         },
         "operation": {
@@ -17450,6 +18074,7 @@
           "items": {
             "$ref": "#/definitions/n1:StatisticalCharacteristicsType"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -17483,9 +18108,8 @@
     },
     "n1:TC11DeliveryDateContentType": {
       "description": "Used by 2/91 messages: CC141C, CD142C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:TINNewType": {
       "description": "EORI or TCUI Number (format: an..17)",
@@ -17503,7 +18127,7 @@
           "pattern": "^([\\s\\u0000-\\u0008\\v-\\f\\u000e-\\u001f\\!-\\u007f]+)$"
         }
       ],
-      "description": "Trader Identification Number (format:\n\t\t\t\tan..17)",
+      "description": "Trader Identification Number (format:\n        an..17)",
       "maxLength": 17,
       "minLength": 3,
       "type": "string"
@@ -17554,11 +18178,6 @@
       "description": "Used by 5/91 messages: CC007C, CC013C, CC015C, CC017C, CC141C",
       "maxLength": 512,
       "pattern": "^([\\w\\D]([\\w\\D]*[\\w\\D])?)$",
-      "type": "string"
-    },
-    "n1:TimeType": {
-      "description": "The time zone although not included UTC is implied",
-      "pattern": "^([\\d]{2,2}\\:[\\d]{2,2}\\:[\\d]{2,2}(\\.[\\d]+)?)$",
       "type": "string"
     },
     "n1:TradNameType": {
@@ -17780,9 +18399,6 @@
         "arrivalNotificationDateAndTime": {
           "$ref": "#/definitions/n1:ArrivalNotificationDateAndTimeContentType"
         },
-        "incidentFlag": {
-          "$ref": "#/definitions/n1:Flag"
-        },
         "simplifiedProcedure": {
           "$ref": "#/definitions/n1:Flag"
         }
@@ -17790,7 +18406,6 @@
       "required": [
         "MRN",
         "arrivalNotificationDateAndTime",
-        "incidentFlag",
         "simplifiedProcedure"
       ],
       "type": "object"
@@ -19604,6 +20219,7 @@
           "items": {
             "$ref": "#/definitions/n1:ExportOperationType02"
           },
+          "maxItems": 999,
           "minItems": 1,
           "type": "array"
         },
@@ -19626,6 +20242,183 @@
       "required": [
         "AESCommunicationPurpose",
         "ExportOperation"
+      ],
+      "type": "object"
+    },
+    "n1:TransitOperationType50": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CD119D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "MRN": {
+          "$ref": "#/definitions/n1:MrnContentType05"
+        },
+        "passageRefusalDate": {
+          "$ref": "#/definitions/n1:PassageRefusalDateContentType"
+        },
+        "passageRefusalReasonCode": {
+          "$ref": "#/definitions/n1:PassageRefusalReasonCodeContentType"
+        },
+        "text": {
+          "$ref": "#/definitions/n1:TextContentType02"
+        }
+      },
+      "required": [
+        "MRN",
+        "passageRefusalDate",
+        "passageRefusalReasonCode"
+      ],
+      "type": "object"
+    },
+    "n1:TransitOperationType51": {
+      "additionalProperties": false,
+      "description": "Used by 1/124 messages: CC058D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "MRN": {
+          "$ref": "#/definitions/n1:MrnContentType05"
+        },
+        "businessRejectionType": {
+          "$ref": "#/definitions/n1:BusinessRejectionTypeContentType"
+        },
+        "rejectionCode": {
+          "$ref": "#/definitions/n1:RejectionCodeContentType"
+        },
+        "rejectionDateAndTime": {
+          "$ref": "#/definitions/n1:RejectionDateAndTimeContentType"
+        },
+        "rejectionReason": {
+          "$ref": "#/definitions/n1:RejectionReasonContentType"
+        }
+      },
+      "required": [
+        "MRN",
+        "businessRejectionType",
+        "rejectionCode",
+        "rejectionDateAndTime"
+      ],
+      "type": "object"
+    },
+    "n1:TransitOperationType52": {
+      "additionalProperties": false,
+      "description": "Used by 2/124 messages: CC117D, CD117D",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "MRN": {
+          "$ref": "#/definitions/n1:MrnContentType05"
+        },
+        "arrivalNotificationDateAndTime": {
+          "$ref": "#/definitions/n1:ArrivalNotificationDateAndTimeContentType"
+        },
+        "communicationLanguageAtTransit": {
+          "$ref": "#/definitions/n1:CommunicationLanguageAtTransitContentType"
+        }
+      },
+      "required": [
+        "MRN",
+        "arrivalNotificationDateAndTime"
+      ],
+      "type": "object"
+    },
+    "n1:TransitOperationTypeErmisIE170": {
+      "additionalProperties": false,
+      "description": "Used by 1/91 messages: CC170C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "LRN": {
+          "$ref": "#/definitions/n1:LRNContentType03"
+        },
+        "MRN": {
+          "$ref": "#/definitions/n1:MrnContentTypeNL"
+        },
+        "limitDate": {
+          "$ref": "#/definitions/n1:LimitDateContentType"
+        }
+      },
+      "required": [
+        "LRN"
+      ],
+      "type": "object"
+    },
+    "n1:TransitOperationTypeErmisIE928": {
+      "additionalProperties": false,
+      "description": "Used by 1/91 messages: CC928C",
+      "patternProperties": {
+        "^@xmlns(:\\w+)?$": {
+          "type": "string"
+        },
+        "^@xsi:\\w+$": {
+          "type": "string"
+        },
+        "^\\?\\w+$": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "#": {
+          "type": "string"
+        },
+        "LRN": {
+          "$ref": "#/definitions/n1:LrnContentType02"
+        },
+        "MRN": {
+          "$ref": "#/definitions/n1:MrnContentTypeNL"
+        }
+      },
+      "required": [
+        "LRN"
       ],
       "type": "object"
     },
@@ -19764,7 +20557,7 @@
     },
     "n1:TransportDocumentType04": {
       "additionalProperties": false,
-      "description": "Used by 4/91 messages: CC013C, CC015C, CC017C, CC044C",
+      "description": "Used by 3/91 messages: CC013C, CC015C, CC017C",
       "patternProperties": {
         "^@xmlns(:\\w+)?$": {
           "type": "string"
@@ -19819,12 +20612,14 @@
           "items": {
             "$ref": "#/definitions/n1:GoodsReferenceType01"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType05"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -19864,12 +20659,14 @@
           "items": {
             "$ref": "#/definitions/n1:GoodsReferenceType01"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType01"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -19907,14 +20704,16 @@
         },
         "GoodsReference": {
           "items": {
-            "$ref": "#/definitions/n1:GoodsReferenceType01"
+            "$ref": "#/definitions/n1:GoodsReferenceType03"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType02"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -19952,14 +20751,16 @@
         },
         "GoodsReference": {
           "items": {
-            "$ref": "#/definitions/n1:GoodsReferenceType01"
+            "$ref": "#/definitions/n1:GoodsReferenceType03"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType03"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -19999,12 +20800,14 @@
           "items": {
             "$ref": "#/definitions/n1:GoodsReferenceType02"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -20045,12 +20848,14 @@
           "items": {
             "$ref": "#/definitions/n1:GoodsReferenceType02"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType05"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -20091,12 +20896,14 @@
           "items": {
             "$ref": "#/definitions/n1:GoodsReferenceType01"
           },
+          "maxItems": 9999,
           "type": "array"
         },
         "Seal": {
           "items": {
             "$ref": "#/definitions/n1:SealType04"
           },
+          "maxItems": 99,
           "type": "array"
         },
         "containerIdentificationNumber": {
@@ -20343,9 +21150,8 @@
     },
     "n1:UnloadingDateContentType": {
       "description": "Used by 1/91 messages: CC044C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:UnloadingRemarkContentType": {
       "description": "Used by 1/91 messages: CC044C",
@@ -20396,9 +21202,8 @@
     },
     "n1:UsageCancellationDateContentType": {
       "description": "Used by 1/91 messages: CD204C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:UsageType": {
       "additionalProperties": false,
@@ -20451,15 +21256,13 @@
     },
     "n1:ValidityDateContentType": {
       "description": "Used by 1/91 messages: CC225C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ValidityEndDateContentType": {
       "description": "Used by 1/91 messages: CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:ValidityLimitationType": {
       "additionalProperties": false,
@@ -20494,9 +21297,8 @@
     },
     "n1:ValidityStartDateContentType": {
       "description": "Used by 1/91 messages: CC037C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:VoucherAmountContentType": {
       "description": "Used by 2/91 messages: CC037C, CC224C",
@@ -20515,9 +21317,8 @@
     },
     "n1:WriteOffDateContentType": {
       "description": "Used by 2/91 messages: CC045C, CD049C",
-      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2}(\\.[\\d]+)?)$",
-      "type": "string",
-      "format": "date"
+      "pattern": "^([\\d]{4,4}\\-[\\d]{2,2}\\-[\\d]{2,2})$",
+      "type": "string"
     },
     "n1:XMLErrorType": {
       "additionalProperties": false,
@@ -20614,12 +21415,13 @@
     "n1:phaseIDtype": {
       "enum": [
         "NCTS5.1",
-        "NCTS5.0"
+        "NCTS5.0",
+        "NCTS6"
       ],
       "type": "string"
     }
   },
-  "description": "JSON Schema generated by XMLSpy v2022 rel. 2 (x64) (http://www.altova.com)",
+  "description": "Generated JSON Schema from XSDs",
   "patternProperties": {
     "^\\?\\w+$": {
       "type": "string"
