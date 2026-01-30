@@ -239,7 +239,7 @@ class XmlValidationServiceSpec extends AnyFreeSpec with Matchers with MockitoSug
                   XmlSchemaValidationError(
                     2,
                     23,
-                    "cvc-complex-type.2.4.a: Invalid content was found starting with element 'messageRecipient'. One of '{messageSender}' is expected."
+                    "cvc-complex-type.2.4.a: Invalid content was found starting with element 'messageRecipient'. One of '{Extensions, messageSender}' is expected."
                   ),
                   Nil
                 )
