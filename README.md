@@ -27,7 +27,7 @@ Run from the console using: `sbt run`
 
 ## Related API documentation
 
-- [Common Transit Convention Traders API specifications](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/common-transit-convention-traders/1.0)
+- [CTC Traders API specifications](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/common-transit-convention-traders/2.1)
 
 ## Helpful information
 
