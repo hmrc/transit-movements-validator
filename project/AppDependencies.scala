@@ -16,14 +16,14 @@ object AppDependencies {
   )
 
   val test = Seq(
-    "org.mockito"             % "mockito-core"           % "3.9.0",
-    "org.scalatest"          %% "scalatest"              % "3.2.12",
+    "org.mockito"             % "mockito-core"           % "5.23.0",
+    "org.scalatest"          %% "scalatest"              % "3.2.20",
     "org.typelevel"          %% "cats-core"              % catsVersion,
-    "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.1",
+    "org.scalatestplus.play" %% "scalatestplus-play"     % "7.0.2",
     "org.scalatestplus"      %% "mockito-5-12"           % "3.2.19.0",
-    "org.scalacheck"         %% "scalacheck"             % "1.16.0",
-    "org.typelevel"          %% "discipline-scalatest"   % "2.1.5",
-    "com.vladsch.flexmark"    % "flexmark-all"           % "0.62.2",
+    "org.scalacheck"         %% "scalacheck"             % "1.19.0",
+    "org.typelevel"          %% "discipline-scalatest"   % "2.3.0",
+    "com.vladsch.flexmark"    % "flexmark-all"           % "0.64.8",
     "uk.gov.hmrc"            %% "bootstrap-test-play-30" % boostrapPlayVersion
   ).map(_ % Test)
 }
