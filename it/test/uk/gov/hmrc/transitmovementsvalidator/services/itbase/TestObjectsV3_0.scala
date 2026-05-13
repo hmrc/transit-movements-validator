@@ -88,7 +88,7 @@ object TestObjectsV3_0 {
       "n1:CC007C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
-          "MRN"                            -> "2AB1234567890ABJ5",
+          "MRN"                            -> "27WF9X1FQ9RCKN0TM3",
           "arrivalNotificationDateAndTime" -> "2022-07-02T03:11:04",
           "simplifiedProcedure"            -> "1"
         ),
