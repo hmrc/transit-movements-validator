@@ -388,7 +388,7 @@ object TestObjectsV3_0 {
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
           "LRN"                               -> "string",
-          "MRN"                               -> "2AB1234567890ABJ5",
+          "MRN"                               -> "29GMFMHYWWCFCWRVJ3",
           "declarationType"                   -> "token",
           "additionalDeclarationType"         -> "a",
           "TIRCarnetNumber"                   -> "123456",
@@ -851,7 +851,7 @@ object TestObjectsV3_0 {
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
           "LRN" -> "string",
-          "MRN" -> "2AB1234567890ABJ5"
+          "MRN" -> "29GMFMHYWWCFCWRVJ3"
         ),
         "CustomsOfficeOfDeparture" -> Json.obj(
           "referenceNumber" -> "GB123456"
@@ -1082,7 +1082,7 @@ object TestObjectsV3_0 {
       "n1:CC044C" -> Json.obj(
         "preparationDateAndTime" -> "2007-10-26T07:36:28",
         "TransitOperation"       -> Json.obj(
-          "MRN" -> "2AB1234567890ABJ5"
+          "MRN" -> "27WF9X1FQ9RCKN0TM3"
         ),
         "TraderAtDestination" -> Json.obj(
           "identificationNumber" -> "ezv3Z"
