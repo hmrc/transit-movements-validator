@@ -223,6 +223,11 @@
           <xs:documentation>Amendment Acceptance</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+        <xs:enumeration value="CC006C">
+            <xs:annotation>
+                <xs:documentation>ARRIVAL ADVICE</xs:documentation>
+            </xs:annotation>
+        </xs:enumeration>
       <xs:enumeration value="CC007C">
         <xs:annotation>
           <xs:documentation>Arrival Notification</xs:documentation>
