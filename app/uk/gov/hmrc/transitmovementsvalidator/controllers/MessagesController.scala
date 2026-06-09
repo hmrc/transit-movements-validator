@@ -34,28 +34,20 @@ import uk.gov.hmrc.transitmovementsvalidator.models.APIVersionHeader
 import uk.gov.hmrc.transitmovementsvalidator.models.errors.*
 import uk.gov.hmrc.transitmovementsvalidator.models.response.ValidationResponse
 import uk.gov.hmrc.transitmovementsvalidator.stream.StreamingParsers
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.models.MessageFormat as V2MessageFormat
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.models.MessageType as V2MessageType
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageFormat as V3MessageFormat
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageType as V3MessageType
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services.BusinessValidationService as V2BusinessValidationService
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services.JsonValidationService as V2JsonValidationService
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v2_1.services.XmlValidationService as V2XmlValidationService
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.BusinessValidationService as V3BusinessValidationService
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.JsonValidationService as V3JsonValidationService
-import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.XmlValidationService as V3XmlValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageFormat
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.models.MessageType
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.BusinessValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.JsonValidationService
+import uk.gov.hmrc.transitmovementsvalidator.versioned.v3_0.services.XmlValidationService
 
 import javax.inject.Inject
 import scala.concurrent.*
 
 class MessagesController @Inject() (
   cc: ControllerComponents,
-  v2xmlValidationService: V2XmlValidationService,
-  v3xmlValidationService: V3XmlValidationService,
-  v2jsonValidationService: V2JsonValidationService,
-  v3jsonValidationService: V3JsonValidationService,
-  v2businessValidationService: V2BusinessValidationService,
-  v3businessValidationService: V3BusinessValidationService,
+  xmlValidationService: XmlValidationService,
+  jsonValidationService: JsonValidationService,
+  businessValidationService: BusinessValidationService,
   validateAcceptRefiner: ValidateAcceptRefiner,
   config: AppConfig
 )(implicit
@@ -77,10 +69,8 @@ class MessagesController @Inject() (
   def validate(messageType: String): Action[Source[ByteString, ?]] = validateAcceptRefiner.async(streamFromMemory) {
     implicit request =>
       (request.headers.get(CONTENT_TYPE), request.versionHeader) match {
-        case (Some(MimeTypes.XML), APIVersionHeader.V2_1)  => validateV2XmlMessage(messageType, V2MessageFormat.Xml, request)
-        case (Some(MimeTypes.JSON), APIVersionHeader.V2_1) => validateV2JsonMessage(messageType, V2MessageFormat.Json, request)
-        case (Some(MimeTypes.XML), APIVersionHeader.V3_0)  => validateV3XmlMessage(messageType, V3MessageFormat.Xml, request)
-        case (Some(MimeTypes.JSON), APIVersionHeader.V3_0) => validateV3JsonMessage(messageType, V3MessageFormat.Json, request)
+        case (Some(MimeTypes.XML), APIVersionHeader.V3_0)  => validateXmlMessage(messageType, MessageFormat.Xml, request)
+        case (Some(MimeTypes.JSON), APIVersionHeader.V3_0) => validateJsonMessage(messageType, MessageFormat.Json, request)
         case (Some(x), _)                                  =>
           request.body.runWith(Sink.ignore)
           Future.successful(UnsupportedMediaType(Json.toJson(PresentationError.unsupportedMediaTypeError(s"Content type $x is not supported."))))
@@ -90,20 +80,20 @@ class MessagesController @Inject() (
       }
   }
 
-  private def validateV3JsonMessage(
+  private def validateJsonMessage(
     messageType: String,
-    messageFormat: V3MessageFormat[?],
+    messageFormat: MessageFormat[?],
     request: Request[Source[ByteString, ?]]
   ) =
     (for {
-      messageTypeObj <- findV3MessageType(messageType)
+      messageTypeObj <- findMessageType(messageType)
 
       // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
       // business validation at the same time. We get the result from the business rule validation from the
       // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
       // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = v3businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
-      _ <- v3jsonValidationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
+      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
+      _ <- jsonValidationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
       _ <- deferredBusinessRulesValidation.asPresentation
     } yield NoContent)
       .valueOr {
@@ -115,20 +105,20 @@ class MessagesController @Inject() (
           Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
       }
 
-  private def validateV2JsonMessage(
+  private def validateXmlMessage(
     messageType: String,
-    messageFormat: V2MessageFormat[?],
+    messageFormat: MessageFormat[?],
     request: Request[Source[ByteString, ?]]
   ): Future[Result] =
     (for {
-      messageTypeObj <- findV2MessageType(messageType)
+      messageTypeObj <- findMessageType(messageType)
 
       // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
       // business validation at the same time. We get the result from the business rule validation from the
       // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
       // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = v2businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
-      _ <- v2jsonValidationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
+      (deferredBusinessRulesValidation, businessRulesFlow) = businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
+      _ <- xmlValidationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
       _ <- deferredBusinessRulesValidation.asPresentation
     } yield NoContent)
       .valueOr {
@@ -140,67 +130,10 @@ class MessagesController @Inject() (
           Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
       }
 
-  private def validateV2XmlMessage(
-    messageType: String,
-    messageFormat: V2MessageFormat[?],
-    request: Request[Source[ByteString, ?]]
-  ): Future[Result] =
-    (for {
-      messageTypeObj <- findV2MessageType(messageType)
-
-      // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
-      // business validation at the same time. We get the result from the business rule validation from the
-      // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
-      // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = v2businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
-      _ <- v2xmlValidationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
-      _ <- deferredBusinessRulesValidation.asPresentation
-    } yield NoContent)
-      .valueOr {
-        case SchemaValidationPresentationError(errors) =>
-          logError(ValidationResponse(errors))
-          // We have special cased this as this isn't considered an "error" so much.
-          Ok(Json.toJson(ValidationResponse(errors)))
-        case presentationError =>
-          Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
-      }
-
-  private def validateV3XmlMessage(
-    messageType: String,
-    messageFormat: V3MessageFormat[?],
-    request: Request[Source[ByteString, ?]]
-  ): Future[Result] =
-    (for {
-      messageTypeObj <- findV3MessageType(messageType)
-
-      // We create a Flow that we can attach to request.body, which allows us to perform the schema validation and
-      // business validation at the same time. We get the result from the business rule validation from the
-      // deferredBusinessRulesValidation EitherT[Future, ValidationError, Unit], which completes when we pass
-      // the source with the flow attached to the schema validation service and it runs.
-      (deferredBusinessRulesValidation, businessRulesFlow) = v3businessValidationService.businessValidationFlow(messageTypeObj, messageFormat)
-      _ <- v3xmlValidationService.validate(messageTypeObj, request.body.via(businessRulesFlow)).asPresentation
-      _ <- deferredBusinessRulesValidation.asPresentation
-    } yield NoContent)
-      .valueOr {
-        case SchemaValidationPresentationError(errors) =>
-          // We have special cased this as this isn't considered an "error" so much.
-          logError(ValidationResponse(errors))
-          Ok(Json.toJson(ValidationResponse(errors)))
-        case presentationError =>
-          Status(presentationError.code.statusCode)(Json.toJson(presentationError)(PresentationError.presentationErrorWrites))
-      }
-
-  private def findV2MessageType(messageType: String): EitherT[Future, PresentationError, V2MessageType] =
+  private def findMessageType(messageType: String): EitherT[Future, PresentationError, MessageType] =
     EitherT
       .fromEither(
-        V2MessageType.find(messageType, config.validateRequestTypesOnly).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))
-      )
-      .asPresentation
-
-  private def findV3MessageType(messageType: String): EitherT[Future, PresentationError, V3MessageType] =
-    EitherT
-      .fromEither(
-        V3MessageType.find(messageType, config.validateRequestTypesOnly).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))
+        MessageType.find(messageType, config.validateRequestTypesOnly).toRight[ValidationError](ValidationError.UnknownMessageType(messageType))
       )
       .asPresentation
 
