@@ -10,7 +10,7 @@ object AppDependencies {
     "uk.gov.hmrc"               %% "bootstrap-backend-play-30"       % boostrapPlayVersion,
     "org.typelevel"             %% "cats-core"                       % catsVersion,
     "com.networknt"              % "json-schema-validator"           % "1.0.70" exclude ("org.slf4j", "slf4j-api"),
-    "com.fasterxml.jackson.core" % "jackson-databind"                % "2.12.6",
+    "com.fasterxml.jackson.core" % "jackson-databind"                % "2.23.0",
     "org.apache.pekko"          %% "pekko-connectors-xml"            % pekkoVersion,
     "org.apache.pekko"          %% "pekko-connectors-json-streaming" % pekkoVersion
   )
